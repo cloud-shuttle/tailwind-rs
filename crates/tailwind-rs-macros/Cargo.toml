@@ -1,0 +1,27 @@
+[package]
+name = "tailwind-rs-macros"
+version.workspace = true
+edition = "2024"
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Procedural macros for tailwind-rs"
+
+[lib]
+proc-macro = true
+name = "tailwind_rs_macros"
+path = "src/lib.rs"
+
+[dependencies]
+proc-macro2 = "1.0"
+quote = "1.0"
+syn = { version = "2.0", features = ["full"] }
+tailwind-rs-core = { workspace = true }
+
+[dev-dependencies]
+tailwind-rs-testing = { workspace = true }
+

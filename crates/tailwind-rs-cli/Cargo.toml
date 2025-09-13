@@ -1,0 +1,54 @@
+[package]
+name = "tailwind-rs-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "CLI tool for Tailwind-rs build system and utilities"
+rust-version = "1.89.0"
+
+[[bin]]
+name = "tailwind-rs"
+path = "src/main.rs"
+
+[dependencies]
+# Core dependencies
+tailwind-rs-core = { workspace = true }
+tailwind-rs-macros = { workspace = true }
+
+# CLI dependencies
+clap = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+glob = { workspace = true }
+
+# File system and process dependencies
+walkdir = "2.4"
+notify = "6.1"
+tempfile = "3.8"
+env_logger = "0.10"
+
+[dev-dependencies]
+# Testing dependencies
+tempfile = "3.8"
+assert_cmd = "2.0"
+predicates = "3.0"
+
+# Development tools
+cargo-watch = { workspace = true }
+cargo-tarpaulin = { workspace = true }
+
+[features]
+default = ["build", "watch", "optimize"]
+build = []
+watch = []
+optimize = []

@@ -1,0 +1,33 @@
+{
+  "name": "tailwind-rs-wasm",
+  "version": "1.0.0",
+  "description": "WASM-optimized Tailwind-RS demo with comprehensive Playwright testing",
+  "main": "playwright.config.js",
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:watch": "playwright test --watch",
+    "playwright:install": "playwright install",
+    "playwright:install-deps": "playwright install-deps",
+    "serve": "python3 -m http.server 8080",
+    "dev": "concurrently \"pnpm run serve\" \"pnpm run test:watch\""
+  },
+  "keywords": ["tailwind", "css", "rust", "wasm", "playwright", "testing"],
+  "author": "Tailwind-RS Team",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "concurrently": "^8.2.2"
+  }
+}

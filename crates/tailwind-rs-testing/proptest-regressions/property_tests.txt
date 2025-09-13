@@ -1,0 +1,9 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc c60a3b1880b4d865ac26401a96e0edabaf4343143f81188c56cf87b0617bbdc8 # shrinks to classes = ["block"], html_content = "<div>Test content</div>"
+cc c0e80da6bafa3f029a64904c2e06cc359e8fe29a6d90ed95f8ce3d52220389e4 # shrinks to classes = ["px-2", "p-7"], html_content = "<div>Test content</div>"
+cc 94204b50ad2596dedd08eaba1282bfc596005381feb98e260ef169a0420865e2 # shrinks to classes = ["block"], html_content = "<div>Test content</div>", css_properties = [("r", "A"), ("r", " ")]

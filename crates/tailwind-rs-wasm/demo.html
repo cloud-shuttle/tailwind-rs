@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind-RS WASM Demo</title>
+    <meta name="description" content="Interactive demo showcasing Tailwind-RS WASM capabilities">
+    
+    <!-- Tailwind CSS CDN for demo purposes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom styles for the demo -->
+    <style>
+        /* Custom animations and styles */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .demo-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .demo-container {
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="demo-container" data-testid="app">
+        <!-- Loading indicator -->
+        <div id="loading" class="flex items-center justify-center min-h-screen">
+            <div class="text-center">
+                <div class="loading mx-auto mb-4"></div>
+                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                    Loading Tailwind-RS WASM Demo...
+                </h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-2">
+                    Initializing WASM runtime and Tailwind-RS
+                </p>
+            </div>
+        </div>
+        
+        <!-- Error handling -->
+        <div id="error" class="hidden flex items-center justify-center min-h-screen">
+            <div class="text-center max-w-md mx-auto p-6">
+                <div class="text-red-500 text-6xl mb-4">⚠️</div>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    Failed to Load Demo
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    There was an error loading the Tailwind-RS WASM demo. Please check the console for details.
+                </p>
+                <button 
+                    onclick="location.reload()" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                    Reload Page
+                </button>
+            </div>
+        </div>
+        
+        <!-- Demo content (hidden initially) -->
+        <div id="demo-content" class="hidden">
+            <div class="container mx-auto px-4 py-8">
+                <!-- Header -->
+                <header class="text-center mb-12">
+                    <h1 class="text-5xl font-bold mb-6 gradient-text">
+                        🎨 Tailwind-RS WASM Demo
+                    </h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+                        Experience the power of Rust-native Tailwind CSS with type safety, 
+                        performance, and seamless WASM integration.
+                    </p>
+                </header>
+                
+                <!-- Interactive Demo Section -->
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                🚀 WASM Class Builder Demo
+                            </h3>
+                        </div>
+                        <div class="px-6 py-4">
+                            <!-- Live Preview -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Live Preview
+                                </label>
+                                <div id="preview" class="w-full h-32 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center text-center bg-blue-500 text-white p-4 rounded-lg">
+                                    <span class="text-lg font-medium">
+                                        Dynamic Styling Preview
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Class Input -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    CSS Classes (Generated by WASM)
+                                </label>
+                                <input
+                                    id="class-input"
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                                    value="bg-blue-500 text-white p-4 rounded-lg"
+                                    placeholder="Enter Tailwind classes"
+                                />
+                            </div>
+                            
+                            <!-- Preset Buttons -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Preset Styles
+                                </label>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    <button
+                                        class="preset-btn px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
+                                        data-classes="bg-blue-500 text-white p-4 rounded-lg"
+                                    >
+                                        Blue Card
+                                    </button>
+                                    <button
+                                        class="preset-btn px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
+                                        data-classes="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-xl"
+                                    >
+                                        Gradient
+                                    </button>
+                                    <button
+                                        class="preset-btn px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
+                                        data-classes="bg-gray-100 dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 p-4 rounded"
+                                    >
+                                        Bordered
+                                    </button>
+                                    <button
+                                        class="preset-btn px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
+                                        data-classes="bg-yellow-400 text-black p-4 rounded-full shadow-lg"
+                                    >
+                                        Yellow Circle
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- WASM Info -->
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    🦀 WASM Information:
+                                </h4>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                    <p><strong>Module:</strong> <span id="wasm-module">Loading...</span></p>
+                                    <p><strong>Class Builder:</strong> <span id="wasm-builder">Loading...</span></p>
+                                    <p><strong>Status:</strong> <span id="wasm-builder-status">Loading...</span></p>
+                                    <p><strong>Classes Count:</strong> <span id="wasm-classes-count">0</span></p>
+                                    <p><strong>Generated Classes:</strong> <code id="generated-classes" class="font-mono">Loading...</code></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Feature Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                    🚀 Performance
+                                </h3>
+                            </div>
+                            <div class="px-6 py-4">
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    Optimized for speed with tree-shaking, minimal bundles, and efficient runtime class generation.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                    🛡️ Type Safety
+                                </h3>
+                            </div>
+                            <div class="px-6 py-4">
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    Compile-time validation ensures you never use invalid classes or break your design system.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                    🎨 Dynamic Styling
+                                </h3>
+                            </div>
+                            <div class="px-6 py-4">
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    Generate classes at runtime with reactive signals and state management integration.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script>
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Demo error:', e.error);
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+        });
+        
+        // WASM loading indicator
+        console.log('🚀 Starting Tailwind-RS WASM Demo...');
+        
+        // Hide loading when WASM is ready
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                if (loading && !loading.classList.contains('hidden')) {
+                    loading.classList.add('hidden');
+                }
+            }, 2000);
+        });
+    </script>
+    
+    <!-- Load the WASM module -->
+    <script type="module">
+        import init, { WasmClassBuilder } from './pkg/tailwind_rs_wasm.js';
+        
+        async function run() {
+            try {
+                console.log('📦 Loading WASM module...');
+                await init();
+                console.log('✅ WASM module loaded successfully');
+                
+                // Update WASM info
+                document.getElementById('wasm-module').textContent = 'tailwind_rs_wasm.js';
+                document.getElementById('wasm-builder').textContent = 'WasmClassBuilder';
+                
+                // Create a class builder instance
+                const builder = new WasmClassBuilder();
+                console.log('✅ WasmClassBuilder created');
+                
+                // Set up event listeners
+                const classInput = document.getElementById('class-input');
+                const preview = document.getElementById('preview');
+                const generatedClasses = document.getElementById('generated-classes');
+                const presetButtons = document.querySelectorAll('.preset-btn');
+                
+                // Update preview function using WASM
+                function updatePreview(classes) {
+                    // Use WASM to process the classes
+                    const wasmBuilder = new WasmClassBuilder();
+                    wasmBuilder.add_classes(classes);
+                    const processedClasses = wasmBuilder.build();
+                    
+                    // Apply the WASM-processed classes
+                    preview.className = `w-full h-32 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center text-center ${processedClasses}`;
+                    generatedClasses.textContent = processedClasses;
+                    
+                    // Update WASM info
+                    document.getElementById('wasm-classes-count').textContent = wasmBuilder.len();
+                    document.getElementById('wasm-builder-status').textContent = wasmBuilder.is_empty() ? 'Empty' : 'Active';
+                }
+                
+                // Handle input changes
+                classInput.addEventListener('input', function(e) {
+                    updatePreview(e.target.value);
+                });
+                
+                // Handle preset button clicks
+                presetButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const classes = this.dataset.classes;
+                        classInput.value = classes;
+                        updatePreview(classes);
+                    });
+                });
+                
+                // Initialize with default classes
+                updatePreview(classInput.value);
+                
+                // Hide loading and show demo
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('demo-content').classList.remove('hidden');
+                
+                console.log('✅ Demo application started');
+                
+            } catch (error) {
+                console.error('❌ Failed to load demo:', error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+            }
+        }
+        
+        run();
+    </script>
+</body>
+</html>

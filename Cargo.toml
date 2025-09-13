@@ -1,0 +1,94 @@
+[workspace]
+members = [
+    "crates/tailwind-rs-core",
+    "crates/tailwind-rs-macros", 
+    "crates/tailwind-rs-testing",
+    "crates/tailwind-rs-leptos",
+    "crates/tailwind-rs-yew",
+    "crates/tailwind-rs-dioxus",
+    "crates/tailwind-rs-cli",
+    "crates/tailwind-rs-wasm",
+    "demos/leptos-demo",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["tailwind-rs contributors"]
+license = "MIT"
+repository = "https://github.com/your-org/tailwind-rs"
+homepage = "https://tailwind-rs.dev"
+documentation = "https://docs.tailwind-rs.dev"
+keywords = ["tailwind", "css", "rust", "web", "styling"]
+categories = ["web-programming", "development-tools"]
+
+[workspace.dependencies]
+# Core dependencies
+tailwind-rs-core = { path = "crates/tailwind-rs-core" }
+tailwind-rs-macros = { path = "crates/tailwind-rs-macros" }
+tailwind-rs-testing = { path = "crates/tailwind-rs-testing" }
+
+# Framework integrations
+tailwind-rs-leptos = { path = "crates/tailwind-rs-leptos" }
+tailwind-rs-yew = { path = "crates/tailwind-rs-yew" }
+tailwind-rs-dioxus = { path = "crates/tailwind-rs-dioxus" }
+
+# CLI tool
+tailwind-rs-cli = { path = "crates/tailwind-rs-cli" }
+
+# WASM-optimized crate
+tailwind-rs-wasm = { path = "crates/tailwind-rs-wasm" }
+
+# External dependencies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+anyhow = "1.0"
+thiserror = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["fs", "cors"] }
+leptos = "0.8.8"
+leptos_axum = "0.8.6"
+yew = "0.21"
+dioxus = "0.4"
+dioxus-web = "0.4"
+wasm-bindgen = "0.2"
+web-sys = "0.3"
+js-sys = "0.3"
+console_error_panic_hook = "0.1"
+console_log = "0.2"
+toml = "0.8"
+glob = "0.3"
+
+# Testing dependencies
+wasm-bindgen-test = "0.3"
+futures = "0.3"
+reqwest = { version = "0.11", features = ["json"] }
+proptest = "1.4"
+
+# Development dependencies
+cargo-watch = "8.0"
+cargo-tarpaulin = "0.27"
+cargo-nextest = "0.9"
+
+[profile.dev]
+opt-level = 0
+debug = true
+split-debuginfo = "unpacked"
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.test]
+opt-level = 0
+debug = true
+

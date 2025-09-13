@@ -1,0 +1,46 @@
+[package]
+name = "tailwind-rs-wasm"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tailwind-RS Team"]
+license = "MIT"
+repository = "https://github.com/your-org/tailwind-rs"
+homepage = "https://github.com/your-org/tailwind-rs"
+documentation = "https://docs.rs/tailwind-rs"
+keywords = ["tailwind", "css", "rust", "wasm", "web"]
+categories = ["web-programming", "wasm"]
+description = "WASM-optimized Tailwind CSS implementation for Rust web applications"
+rust-version = "1.89.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# WASM-compatible dependencies only
+wasm-bindgen = "0.2.101"
+web-sys = "0.3.77"
+js-sys = "0.3.77"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Conditional compilation for WASM vs native
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# WASM-specific dependencies
+console_error_panic_hook = "0.1.7"
+console_log = "1.0.0"
+log = "0.4.20"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# Native-specific dependencies (for testing)
+tokio = { version = "1.0", features = ["full"] }
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+[features]
+default = ["wasm-compat"]
+wasm-compat = []
+full = ["native-features"]
+native-features = []
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"

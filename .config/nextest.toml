@@ -1,0 +1,35 @@
+[profile.default]
+# Test output configuration
+test-threads = "num-cpus"
+retries = { backoff = "exponential", count = 3, delay = "1s", jitter = true }
+slow-timeout = "60s"
+leak-timeout = "5s"
+status-level = "pass"
+final-status-level = "none"
+failure-output = "immediate-final"
+success-output = "immediate-final"
+
+# Test execution
+fail-fast = false
+
+[profile.ci]
+# CI-specific configuration
+test-threads = "num-cpus"
+retries = { backoff = "exponential", count = 2, delay = "1s", jitter = true }
+slow-timeout = "120s"
+leak-timeout = "10s"
+status-level = "none"
+final-status-level = "none"
+failure-output = "immediate-final"
+success-output = "immediate-final"
+
+[profile.dev]
+# Development profile for faster iteration
+test-threads = "num-cpus"
+retries = 0
+slow-timeout = "30s"
+leak-timeout = "2s"
+status-level = "pass"
+final-status-level = "none"
+failure-output = "immediate-final"
+success-output = "immediate-final"

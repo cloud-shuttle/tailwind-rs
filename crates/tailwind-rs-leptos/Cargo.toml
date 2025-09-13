@@ -1,0 +1,51 @@
+[package]
+name = "tailwind-rs-leptos"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Tailwind CSS integration for Leptos framework"
+rust-version = "1.89.0"
+
+[dependencies]
+# Core dependencies
+tailwind-rs-core = { workspace = true }
+tailwind-rs-macros = { workspace = true }
+
+# Leptos dependencies
+leptos = { workspace = true, features = ["csr", "ssr", "hydrate"] }
+leptos_axum = { workspace = true }
+
+# Web dependencies
+wasm-bindgen = { workspace = true }
+web-sys = { workspace = true }
+js-sys = { workspace = true }
+
+# Utility dependencies
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+# Testing dependencies
+wasm-bindgen-test = { workspace = true }
+futures = { workspace = true }
+reqwest = { workspace = true }
+
+# Development tools
+cargo-watch = { workspace = true }
+cargo-tarpaulin = { workspace = true }
+
+[features]
+default = ["csr"]
+csr = []
+ssr = []
+hydrate = []

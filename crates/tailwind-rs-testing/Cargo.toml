@@ -1,0 +1,29 @@
+[package]
+name = "tailwind-rs-testing"
+version.workspace = true
+edition = "2024"
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Testing utilities for tailwind-rs"
+
+[dependencies]
+tailwind-rs-core = { workspace = true }
+wasm-bindgen = { workspace = true }
+web-sys = { workspace = true }
+js-sys = { workspace = true }
+console_error_panic_hook = { workspace = true }
+console_log = { workspace = true }
+
+[dev-dependencies]
+wasm-bindgen-test = { workspace = true }
+proptest = { workspace = true }
+
+[lib]
+name = "tailwind_rs_testing"
+path = "src/lib.rs"
+

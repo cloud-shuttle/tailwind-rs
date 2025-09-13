@@ -1,0 +1,16 @@
+[build]
+source = "src"
+output = "dist/styles.css"
+tree_shake = true
+minify = true
+source_maps = false
+
+[optimize]
+level = 3
+remove_unused = true
+minify = true
+source_maps = false
+
+[watch]
+debounce = 300
+patterns = ["**/*.rs"]

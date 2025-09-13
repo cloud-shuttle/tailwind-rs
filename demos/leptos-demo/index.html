@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind-RS Leptos Demo</title>
+    <meta name="description" content="Interactive demo showcasing Tailwind-RS capabilities with Leptos">
+    
+    <!-- Tailwind CSS CDN for demo purposes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom styles for the demo -->
+    <style>
+        /* Custom animations and styles */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .demo-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .demo-container {
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="demo-container" data-testid="app">
+        <!-- Loading indicator -->
+        <div id="loading" class="flex items-center justify-center min-h-screen">
+            <div class="text-center">
+                <div class="loading mx-auto mb-4"></div>
+                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                    Loading Tailwind-RS Demo...
+                </h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-2">
+                    Initializing WASM runtime and Leptos application
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Error handling -->
+    <div id="error" class="hidden flex items-center justify-center min-h-screen">
+        <div class="text-center max-w-md mx-auto p-6">
+            <div class="text-red-500 text-6xl mb-4">⚠️</div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                Failed to Load Demo
+            </h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                There was an error loading the Tailwind-RS demo. Please check the console for details.
+            </p>
+            <button 
+                onclick="location.reload()" 
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+                Reload Page
+            </button>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script>
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Demo error:', e.error);
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+        });
+        
+        // WASM loading indicator
+        console.log('🚀 Starting Tailwind-RS Leptos Demo...');
+        
+        // Hide loading when WASM is ready
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                if (loading && !loading.classList.contains('hidden')) {
+                    loading.classList.add('hidden');
+                }
+            }, 2000);
+        });
+    </script>
+    
+    <!-- Load the WASM module -->
+    <script type="module">
+        import init, { main } from './pkg/tailwind_rs_leptos_demo.js';
+        
+        async function run() {
+            try {
+                console.log('📦 Loading WASM module...');
+                await init();
+                console.log('✅ WASM module loaded successfully');
+                
+                console.log('🎨 Starting Leptos application...');
+                main();
+                console.log('✅ Demo application started');
+                
+                // Hide loading indicator
+                document.getElementById('loading').classList.add('hidden');
+            } catch (error) {
+                console.error('❌ Failed to load demo:', error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+            }
+        }
+        
+        run();
+    </script>
+</body>
+</html>

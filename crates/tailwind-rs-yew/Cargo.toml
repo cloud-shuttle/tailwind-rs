@@ -14,8 +14,8 @@ rust-version = "1.89.0"
 
 [dependencies]
 # Core dependencies
-tailwind-rs-core = { workspace = true }
-tailwind-rs-macros = { workspace = true }
+tailwind-rs-core = "0.1.0"
+tailwind-rs-macros = "0.1.0"
 
 # Yew dependencies
 yew = { workspace = true }

@@ -12,7 +12,7 @@ categories.workspace = true
 description = "Testing utilities for tailwind-rs"
 
 [dependencies]
-tailwind-rs-core = { workspace = true }
+tailwind-rs-core = "0.1.0"
 wasm-bindgen = { workspace = true }
 web-sys = { workspace = true }
 js-sys = { workspace = true }

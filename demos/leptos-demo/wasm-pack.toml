@@ -1,0 +1,10 @@
+[package]
+name = "tailwind-rs-leptos-demo"
+
+[build]
+target = "web"
+out-dir = "pkg"
+# Disable WASM_BIGINT to avoid linker issues
+wasm-bigint = false
+# Use system wasm-ld instead of rust-lld
+wasm-ld = true

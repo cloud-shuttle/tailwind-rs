@@ -1,21 +1,21 @@
 [package]
-name = "tailwind-rs-leptos-demo-working"
+name = "tailwind-rs-leptos-demo-wasm-fixed"
 version = "0.1.0"
 edition = "2021"
 authors = ["Tailwind-RS Team"]
 license = "MIT"
-description = "Working WASM Leptos demo using published tailwind-rs-wasm crate"
+description = "WASM-fixed Leptos demo using tailwind-rs-wasm crate"
 rust-version = "1.89.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-path = "src/lib_working.rs"
+path = "src/lib_wasm_fixed.rs"
 
 [dependencies]
 # Leptos dependencies
 leptos = { version = "0.8.8", features = ["csr"] }
 
-# Use the published tailwind-rs-wasm crate (WORKING SOLUTION)
+# Use the working tailwind-rs-wasm crate
 tailwind-rs-wasm = "0.1.0"
 
 # Web dependencies (only for WASM builds)

@@ -9,12 +9,14 @@ use clap::{Parser, Subcommand};
 mod build;
 mod config;
 mod optimize;
+mod stats;
 mod utils;
 mod watch;
 
 use build::BuildCommand;
 use config::ConfigCommand;
 use optimize::OptimizeCommand;
+use stats::StatsCommand;
 use watch::WatchCommand;
 
 /// Tailwind-rs CLI - The first-class Tailwind CSS integration for Rust web frameworks
@@ -37,6 +39,8 @@ pub enum Commands {
     Optimize(OptimizeCommand),
     /// Manage configuration
     Config(ConfigCommand),
+    /// Show build statistics and project information
+    Stats(StatsCommand),
 }
 
 #[tokio::main]
@@ -51,6 +55,7 @@ async fn main() -> Result<()> {
         Commands::Watch(cmd) => cmd.execute().await,
         Commands::Optimize(cmd) => cmd.execute().await,
         Commands::Config(cmd) => cmd.execute().await,
+        Commands::Stats(cmd) => cmd.execute().await,
     }
 }
 
@@ -112,5 +117,14 @@ mod tests {
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("Manage configuration"));
+    }
+
+    #[test]
+    fn test_stats_command_help() {
+        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
+        cmd.args(&["stats", "--help"]);
+        cmd.assert()
+            .success()
+            .stdout(predicate::str::contains("Show build statistics"));
     }
 }

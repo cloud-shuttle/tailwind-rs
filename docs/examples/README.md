@@ -1,119 +1,162 @@
-# Examples
+# Tailwind-RS Examples
 
-This section provides comprehensive examples demonstrating `tailwind-rs` usage across different scenarios and frameworks.
+This directory contains comprehensive examples demonstrating how to use Tailwind-RS with different frameworks and scenarios.
 
-## Available Examples
+## 📚 Available Examples
 
-### 🚀 Getting Started Examples
-- **[Basic Usage](./basic-usage.md)** - Simple examples to get you started
-- **[Hello World](./hello-world.md)** - Minimal setup examples for each framework
+### 🦀 Rust CLI Examples
+- **[Basic Usage](./basic-usage.md)** - Getting started with Tailwind-RS
+- **[Advanced Styling](./advanced-styling.md)** - Complex styling scenarios
+- **[Component Library](./component-library.md)** - Building reusable components
+- **[Performance Optimization](./performance-optimization.md)** - Optimizing for production
 
-### 🎨 UI Component Examples
-- **[Button Components](./button-components.md)** - Various button styles and states
-- **[Card Components](./card-components.md)** - Card layouts and variations
-- **[Form Components](./form-components.md)** - Form inputs and validation
-- **[Navigation Components](./navigation-components.md)** - Navigation bars and menus
+### 🌐 Web Framework Examples
+- **[Leptos Integration](./leptos-integration.md)** - Full-stack Rust web apps
+- **[Yew Integration](./yew-integration.md)** - Component-based web apps
+- **[Dioxus Integration](./dioxus-integration.md)** - Cross-platform UI framework
 
-### 🎯 Framework-Specific Examples
-- **[Leptos Examples](./leptos-examples.md)** - Leptos-specific implementations
-- **[Yew Examples](./yew-examples.md)** - Yew-specific implementations
-- **[Dioxus Examples](./dioxus-examples.md)** - Dioxus-specific implementations
+### 🎨 WASM Examples
+- **[WASM Demo](./wasm-demo.md)** - Browser-based Tailwind-RS
+- **[WASM Performance](./wasm-performance.md)** - Optimizing WASM bundles
+- **[WASM Integration](./wasm-integration.md)** - Integrating with existing web apps
 
 ### 🧪 Testing Examples
-- **[Unit Testing](./unit-testing.md)** - Component unit tests
-- **[Integration Testing](./integration-testing.md)** - Integration test examples
-- **[Playwright E2E Testing](./playwright-testing.md)** - End-to-end testing examples
+- **[Unit Testing](./unit-testing.md)** - Testing Tailwind-RS components
+- **[Integration Testing](./integration-testing.md)** - End-to-end testing
+- **[Property-Based Testing](./property-based-testing.md)** - Advanced testing strategies
 
-### 🎨 Advanced Examples
-- **[Dynamic Styling](./dynamic-styling.md)** - Runtime class generation
-- **[Theme System](./theme-system.md)** - Custom themes and design tokens
-- **[Responsive Design](./responsive-design.md)** - Responsive layouts and breakpoints
-- **[Animation Examples](./animations.md)** - CSS animations and transitions
+## 🚀 Quick Start
 
-### 🏗️ Real-World Examples
-- **[Todo App](./todo-app.md)** - Complete todo application
-- **[Dashboard](./dashboard.md)** - Admin dashboard example
-- **[E-commerce](./ecommerce.md)** - Product catalog and shopping cart
-- **[Blog](./blog.md)** - Blog layout and components
+### 1. Basic Usage
+```rust
+use tailwind_rs_core::classes::ClassBuilder;
 
-## Example Structure
+let classes = ClassBuilder::new()
+    .class("bg-blue-500")
+    .class("text-white")
+    .class("p-4")
+    .class("rounded-lg")
+    .build();
 
-Each example includes:
-
-- **📝 Code**: Complete, runnable code examples
-- **🧪 Tests**: Unit, integration, and E2E tests
-- **📖 Explanation**: Detailed explanations of concepts
-- **🎯 Best Practices**: Recommended patterns and approaches
-- **🔧 Setup**: Required dependencies and configuration
-
-## Running Examples
-
-### Prerequisites
-```bash
-# Install Rust toolchain
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# Install Node.js and PNPM (for Playwright tests)
-curl -fsSL https://get.pnpm.io/install.sh | sh
-pnpm install
+println!("Generated classes: {}", classes);
+// Output: "bg-blue-500 text-white p-4 rounded-lg"
 ```
 
-### Quick Start
-```bash
-# Clone the repository
-git clone https://github.com/your-org/tailwind-rs.git
-cd tailwind-rs
+### 2. Conditional Classes
+```rust
+use tailwind_rs_core::classes::ClassBuilder;
 
-# Run a specific example
-cargo run --example hello-world
-
-# Run tests for an example
-cargo test --example hello-world
-
-# Run Playwright tests
-pnpm test:e2e
+let is_active = true;
+let classes = ClassBuilder::new()
+    .class("base-class")
+    .class_if(is_active, "active-class")
+    .class_if(!is_active, "inactive-class")
+    .build();
 ```
 
-## Example Categories
+### 3. Responsive Design
+```rust
+use tailwind_rs_core::classes::ClassBuilder;
 
-### 🎯 Beginner Examples
-Perfect for newcomers to `tailwind-rs`:
-- Basic component creation
-- Simple styling patterns
-- Framework integration
+let classes = ClassBuilder::new()
+    .class("text-sm")
+    .class("sm:text-base")
+    .class("md:text-lg")
+    .class("lg:text-xl")
+    .build();
+```
 
-### 🚀 Intermediate Examples
-For developers familiar with the basics:
-- Dynamic styling
-- Component composition
-- State management integration
+## 📖 Framework-Specific Guides
 
-### 🏆 Advanced Examples
-For experienced developers:
-- Complex layouts
-- Performance optimization
-- Custom theme systems
+### Leptos (v0.8.8)
+```rust
+use leptos::prelude::*;
+use tailwind_rs_core::classes::ClassBuilder;
 
-## Contributing Examples
+#[component]
+fn MyComponent() -> impl IntoView {
+    let classes = ClassBuilder::new()
+        .class("bg-blue-500")
+        .class("text-white")
+        .class("p-4")
+        .build();
+    
+    view! {
+        <div class=classes>
+            "Hello, Tailwind-RS!"
+        </div>
+    }
+}
+```
 
-We welcome contributions! Please see our [Contributing Guidelines](../contributing.md) for details on:
+### Yew (v0.21.0)
+```rust
+use yew::prelude::*;
+use tailwind_rs_core::classes::ClassBuilder;
 
-- Example structure and format
-- Testing requirements
-- Documentation standards
-- Code review process
+#[function_component]
+fn MyComponent() -> Html {
+    let classes = ClassBuilder::new()
+        .class("bg-green-500")
+        .class("text-white")
+        .class("p-4")
+        .build();
+    
+    html! {
+        <div class={classes}>
+            {"Hello, Tailwind-RS!"}
+        </div>
+    }
+}
+```
 
-## Getting Help
+## 🎯 Best Practices
 
-- 📖 Check the [Getting Started Guide](../getting-started.md)
-- 🏗️ Review [Architecture Documentation](../architecture.md)
-- 🧪 Follow [Testing Guidelines](../testing.md)
-- 💬 Join our community discussions
+### 1. Performance
+- Use `ClassBuilder` for dynamic class generation
+- Cache frequently used class combinations
+- Minimize WASM bundle size for web applications
 
-## Next Steps
+### 2. Maintainability
+- Create reusable component functions
+- Use consistent naming conventions
+- Document complex styling logic
 
-1. 🚀 Start with [Basic Usage](./basic-usage.md)
-2. 🎨 Explore [UI Component Examples](./button-components.md)
-3. 🧪 Learn [Testing Patterns](./unit-testing.md)
-4. 🏗️ Build [Real-World Applications](./todo-app.md)
+### 3. Testing
+- Test class generation logic
+- Use property-based testing for edge cases
+- Validate responsive behavior
 
+## 🔧 Troubleshooting
+
+### Common Issues
+
+1. **WASM Build Errors**
+   - Ensure you're using compatible versions
+   - Check for conflicting dependencies
+   - Use `no_std` features when needed
+
+2. **Class Generation Issues**
+   - Verify Tailwind CSS is properly configured
+   - Check for typos in class names
+   - Ensure proper escaping of dynamic content
+
+3. **Performance Issues**
+   - Profile your application
+   - Use `wasm-opt` for optimization
+   - Consider code splitting for large applications
+
+## 📚 Additional Resources
+
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Rust WebAssembly Book](https://rustwasm.github.io/docs/book/)
+- [Leptos Documentation](https://leptos.dev/)
+- [Yew Documentation](https://yew.rs/)
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](../../CONTRIBUTING.md) for details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](../../LICENSE) file for details.

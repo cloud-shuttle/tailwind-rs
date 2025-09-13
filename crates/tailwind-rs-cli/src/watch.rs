@@ -9,6 +9,7 @@ use std::path::PathBuf;
 use std::sync::mpsc;
 use std::time::Duration;
 use tailwind_rs_core::TailwindBuilder;
+use crate::utils::{FileUtils, LogUtils, PathUtils};
 
 /// Watch for changes and rebuild automatically
 #[derive(Parser)]
@@ -45,9 +46,23 @@ pub struct WatchCommand {
 impl WatchCommand {
     /// Execute the watch command
     pub async fn execute(&self) -> Result<()> {
+        LogUtils::info("Starting Tailwind CSS watch mode...");
+        
         if self.verbose {
-            println!("Watching for changes in: {:?}", self.source);
-            println!("Output: {:?}", self.output);
+            LogUtils::info(&format!("Watching directory: {:?}", self.source));
+            LogUtils::info(&format!("Output file: {:?}", self.output));
+            LogUtils::info(&format!("Debounce delay: {}ms", self.debounce));
+        }
+
+        // Validate source directory exists
+        if !FileUtils::file_exists(&self.source) {
+            LogUtils::error(&format!("Source directory does not exist: {:?}", self.source));
+            return Err(anyhow::anyhow!("Source directory not found"));
+        }
+
+        // Ensure output directory exists
+        if let Some(output_dir) = self.output.parent() {
+            FileUtils::ensure_dir(output_dir)?;
         }
 
         // Create a channel to receive file system events
@@ -59,11 +74,13 @@ impl WatchCommand {
         // Watch the source directory
         watcher.watch(&self.source, RecursiveMode::Recursive)?;
 
+        LogUtils::success("Watcher started successfully");
         if self.verbose {
-            println!("Watcher started. Press Ctrl+C to stop.");
+            LogUtils::info("Press Ctrl+C to stop watching");
         }
 
         // Initial build
+        LogUtils::info("Performing initial build...");
         self.build().await?;
 
         // Watch for changes
@@ -73,7 +90,7 @@ impl WatchCommand {
                     if let Ok(event) = event {
                         if self.should_rebuild(&event) {
                             if self.verbose {
-                                println!("File changed: {:?}", event.paths);
+                                LogUtils::info(&format!("File changed: {:?}", event.paths));
                             }
 
                             // Debounce the rebuild
@@ -81,13 +98,13 @@ impl WatchCommand {
 
                             // Rebuild
                             if let Err(e) = self.build().await {
-                                eprintln!("Build error: {}", e);
+                                LogUtils::error(&format!("Build error: {}", e));
                             }
                         }
                     }
                 }
                 Err(e) => {
-                    eprintln!("Watch error: {}", e);
+                    LogUtils::error(&format!("Watch error: {}", e));
                     break;
                 }
             }
@@ -112,12 +129,16 @@ impl WatchCommand {
 
     /// Perform the actual build
     async fn build(&self) -> Result<()> {
+        let start_time = std::time::Instant::now();
+        
         let mut builder = TailwindBuilder::new()
             .scan_source(&self.source)
             .output_css(&self.output);
 
         if let Some(config_path) = &self.config {
-            builder = builder.config_file(config_path);
+            if FileUtils::file_exists(config_path) {
+                builder = builder.config_file(config_path);
+            }
         }
 
         if self.tree_shake {
@@ -129,9 +150,22 @@ impl WatchCommand {
         }
 
         builder.build().await?;
+        
+        let duration = start_time.elapsed();
+        
+        // Get output file size
+        let output_size = if FileUtils::file_exists(&self.output) {
+            std::fs::metadata(&self.output)?.len()
+        } else {
+            0
+        };
 
         if self.verbose {
-            println!("Build completed successfully!");
+            LogUtils::success(&format!(
+                "Rebuild completed in {:.2}s ({} bytes)",
+                duration.as_secs_f64(),
+                output_size
+            ));
         }
 
         Ok(())

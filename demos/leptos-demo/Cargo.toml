@@ -13,15 +13,18 @@ description = "Leptos WASM demo showcasing tailwind-rs capabilities"
 rust-version = "1.89.0"
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # Leptos dependencies
 leptos = { version = "0.8.8", features = ["csr"] }
 leptos_meta = "0.8.5"
+leptos-shadcn-signal-management = "0.1.0"
+leptos-use = "0.16.2"
 
-# Web dependencies
-wasm-bindgen = "0.2.101"
+# Web dependencies (only for WASM builds)
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.100"
 web-sys = "0.3.77"
 js-sys = "0.3.77"
 console_error_panic_hook = "0.1.7"

@@ -6,6 +6,7 @@ use anyhow::Result;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
+use crate::utils::{FileUtils, LogUtils, PathUtils};
 
 /// Manage configuration
 #[derive(Parser)]
@@ -100,34 +101,57 @@ impl ConfigCommand {
 
     /// Initialize a new configuration file
     async fn init_config(&self, file: &PathBuf, default: bool) -> Result<()> {
+        // Check if file already exists
+        if FileUtils::file_exists(file) {
+            LogUtils::warning(&format!("Configuration file already exists: {:?}", file));
+            return Ok(());
+        }
+
+        // Ensure directory exists
+        if let Some(parent) = file.parent() {
+            FileUtils::ensure_dir(parent)?;
+        }
+
         let config = if default {
+            LogUtils::info("Creating default configuration...");
             Self::default_config()
         } else {
+            LogUtils::info("Creating interactive configuration...");
             Self::interactive_config()?
         };
 
         let toml_content = toml::to_string_pretty(&config)?;
-        std::fs::write(file, toml_content)?;
+        FileUtils::write_file(file, &toml_content)?;
 
-        println!("Configuration file created: {:?}", file);
+        LogUtils::success(&format!("Configuration file created: {:?}", file));
         Ok(())
     }
 
     /// Validate configuration file
     async fn validate_config(&self, file: &PathBuf) -> Result<()> {
-        let content = std::fs::read_to_string(file)?;
+        if !FileUtils::file_exists(file) {
+            LogUtils::error(&format!("Configuration file does not exist: {:?}", file));
+            return Err(anyhow::anyhow!("Configuration file not found"));
+        }
+
+        let content = FileUtils::read_file(file)?;
         let _config: TailwindRsConfig = toml::from_str(&content)?;
 
-        println!("Configuration file is valid: {:?}", file);
+        LogUtils::success(&format!("Configuration file is valid: {:?}", file));
         Ok(())
     }
 
     /// Show current configuration
     async fn show_config(&self, file: &PathBuf) -> Result<()> {
-        let content = std::fs::read_to_string(file)?;
+        if !FileUtils::file_exists(file) {
+            LogUtils::error(&format!("Configuration file does not exist: {:?}", file));
+            return Err(anyhow::anyhow!("Configuration file not found"));
+        }
+
+        let content = FileUtils::read_file(file)?;
         let config: TailwindRsConfig = toml::from_str(&content)?;
 
-        println!("Current configuration:");
+        LogUtils::info("Current configuration:");
         println!("{:#?}", config);
         Ok(())
     }

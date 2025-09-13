@@ -6,6 +6,7 @@ use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
 use tailwind_rs_core::TailwindBuilder;
+use crate::utils::{FileUtils, LogUtils, PathUtils};
 
 /// Build Tailwind CSS from Rust source files
 #[derive(Parser)]
@@ -42,10 +43,28 @@ pub struct BuildCommand {
 impl BuildCommand {
     /// Execute the build command
     pub async fn execute(&self) -> Result<()> {
+        LogUtils::info("Starting Tailwind CSS build...");
+        
         if self.verbose {
-            println!("Building Tailwind CSS...");
-            println!("Source: {:?}", self.source);
-            println!("Output: {:?}", self.output);
+            LogUtils::info(&format!("Source directory: {:?}", self.source));
+            LogUtils::info(&format!("Output file: {:?}", self.output));
+        }
+
+        // Validate source directory exists
+        if !FileUtils::file_exists(&self.source) {
+            LogUtils::error(&format!("Source directory does not exist: {:?}", self.source));
+            return Err(anyhow::anyhow!("Source directory not found"));
+        }
+
+        // Ensure output directory exists
+        if let Some(output_dir) = self.output.parent() {
+            FileUtils::ensure_dir(output_dir)?;
+        }
+
+        // Find Rust files
+        let rust_files = FileUtils::find_rust_files(&self.source)?;
+        if self.verbose {
+            LogUtils::info(&format!("Found {} Rust files", rust_files.len()));
         }
 
         let mut builder = TailwindBuilder::new()
@@ -53,25 +72,57 @@ impl BuildCommand {
             .output_css(&self.output);
 
         if let Some(config_path) = &self.config {
-            builder = builder.config_file(config_path);
+            if FileUtils::file_exists(config_path) {
+                builder = builder.config_file(config_path);
+                if self.verbose {
+                    LogUtils::info(&format!("Using config file: {:?}", config_path));
+                }
+            } else {
+                LogUtils::warning(&format!("Config file not found: {:?}", config_path));
+            }
         }
 
         if self.tree_shake {
             builder = builder.enable_tree_shaking();
+            if self.verbose {
+                LogUtils::info("Tree-shaking enabled");
+            }
         }
 
         if self.minify {
             builder = builder.enable_minification();
+            if self.verbose {
+                LogUtils::info("Minification enabled");
+            }
         }
 
         if self.source_maps {
             builder = builder.enable_source_maps();
+            if self.verbose {
+                LogUtils::info("Source maps enabled");
+            }
         }
 
+        // Perform the build
+        let start_time = std::time::Instant::now();
         builder.build().await?;
+        let duration = start_time.elapsed();
+
+        // Get output file size
+        let output_size = if FileUtils::file_exists(&self.output) {
+            std::fs::metadata(&self.output)?.len()
+        } else {
+            0
+        };
+
+        LogUtils::success(&format!(
+            "Build completed successfully in {:.2}s ({} bytes)",
+            duration.as_secs_f64(),
+            output_size
+        ));
 
         if self.verbose {
-            println!("Build completed successfully!");
+            LogUtils::info(&format!("Output written to: {:?}", self.output));
         }
 
         Ok(())

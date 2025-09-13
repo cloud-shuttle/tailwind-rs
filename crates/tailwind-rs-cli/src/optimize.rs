@@ -6,6 +6,7 @@ use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
 use tailwind_rs_core::CssOptimizer;
+use crate::utils::{FileUtils, LogUtils, PathUtils};
 
 /// Optimize CSS output
 #[derive(Parser)]
@@ -42,11 +43,29 @@ pub struct OptimizeCommand {
 impl OptimizeCommand {
     /// Execute the optimize command
     pub async fn execute(&self) -> Result<()> {
+        LogUtils::info("Starting CSS optimization...");
+        
         if self.verbose {
-            println!("Optimizing CSS...");
-            println!("Input: {:?}", self.input);
-            println!("Output: {:?}", self.output);
-            println!("Level: {}", self.level);
+            LogUtils::info(&format!("Input file: {:?}", self.input));
+            LogUtils::info(&format!("Output file: {:?}", self.output));
+            LogUtils::info(&format!("Optimization level: {}", self.level));
+        }
+
+        // Validate input file exists
+        if !FileUtils::file_exists(&self.input) {
+            LogUtils::error(&format!("Input file does not exist: {:?}", self.input));
+            return Err(anyhow::anyhow!("Input file not found"));
+        }
+
+        // Ensure output directory exists
+        if let Some(output_dir) = self.output.parent() {
+            FileUtils::ensure_dir(output_dir)?;
+        }
+
+        // Get input file size
+        let input_size = std::fs::metadata(&self.input)?.len();
+        if self.verbose {
+            LogUtils::info(&format!("Input file size: {} bytes", input_size));
         }
 
         let mut optimizer = CssOptimizer::new()
@@ -56,20 +75,52 @@ impl OptimizeCommand {
 
         if self.remove_unused {
             optimizer = optimizer.remove_unused_classes();
+            if self.verbose {
+                LogUtils::info("Removing unused classes");
+            }
         }
 
         if self.minify {
             optimizer = optimizer.minify();
+            if self.verbose {
+                LogUtils::info("Minifying CSS");
+            }
         }
 
         if self.source_maps {
             optimizer = optimizer.generate_source_maps();
+            if self.verbose {
+                LogUtils::info("Generating source maps");
+            }
         }
 
+        // Perform optimization
+        let start_time = std::time::Instant::now();
         optimizer.optimize().await?;
+        let duration = start_time.elapsed();
+
+        // Get output file size
+        let output_size = if FileUtils::file_exists(&self.output) {
+            std::fs::metadata(&self.output)?.len()
+        } else {
+            0
+        };
+
+        let savings = if input_size > 0 {
+            ((input_size - output_size) as f64 / input_size as f64) * 100.0
+        } else {
+            0.0
+        };
+
+        LogUtils::success(&format!(
+            "Optimization completed in {:.2}s",
+            duration.as_secs_f64()
+        ));
 
         if self.verbose {
-            println!("Optimization completed successfully!");
+            LogUtils::info(&format!("Output file size: {} bytes", output_size));
+            LogUtils::info(&format!("Size reduction: {:.1}%", savings));
+            LogUtils::info(&format!("Output written to: {:?}", self.output));
         }
 
         Ok(())

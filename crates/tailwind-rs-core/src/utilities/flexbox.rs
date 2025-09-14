@@ -138,6 +138,19 @@ pub enum FlexBasis {
     Zero,
 }
 
+/// Flex values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum Flex {
+    /// Flex 1
+    One,
+    /// Flex auto
+    Auto,
+    /// Flex initial
+    Initial,
+    /// Flex none
+    None,
+}
+
 /// Order values
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Order {
@@ -367,6 +380,26 @@ impl FlexBasis {
     }
 }
 
+impl Flex {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            Flex::One => "1".to_string(),
+            Flex::Auto => "auto".to_string(),
+            Flex::Initial => "initial".to_string(),
+            Flex::None => "none".to_string(),
+        }
+    }
+    
+    pub fn to_css_value(&self) -> String {
+        match self {
+            Flex::One => "1 1 0%".to_string(),
+            Flex::Auto => "1 1 auto".to_string(),
+            Flex::Initial => "0 1 auto".to_string(),
+            Flex::None => "none".to_string(),
+        }
+    }
+}
+
 impl Order {
     pub fn to_class_name(&self) -> String {
         match self {
@@ -458,6 +491,12 @@ impl fmt::Display for FlexShrink {
 }
 
 impl fmt::Display for FlexBasis {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for Flex {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_class_name())
     }
@@ -565,6 +604,17 @@ pub trait FlexBasisUtilities {
 impl FlexBasisUtilities for ClassBuilder {
     fn flex_basis(self, basis: FlexBasis) -> Self {
         self.class(format!("basis-{}", basis.to_class_name()))
+    }
+}
+
+/// Trait for adding flex utilities to a class builder
+pub trait FlexUtilities {
+    fn flex(self, flex: Flex) -> Self;
+}
+
+impl FlexUtilities for ClassBuilder {
+    fn flex(self, flex: Flex) -> Self {
+        self.class(format!("flex-{}", flex.to_class_name()))
     }
 }
 
@@ -787,5 +837,77 @@ mod tests {
         assert!(css_classes.contains("flex-shrink-shrink"));
         assert!(css_classes.contains("basis-auto"));
         assert!(css_classes.contains("order-1"));
+    }
+    
+    /// Test that all Week 5 flexbox utilities are implemented
+    #[test]
+    fn test_week5_flexbox_utilities() {
+        // Test all Week 5 flexbox utilities
+        let classes = ClassBuilder::new()
+            // Flex Direction & Wrap
+            .flex_direction(FlexDirection::Row)
+            .flex_direction(FlexDirection::RowReverse)
+            .flex_direction(FlexDirection::Column)
+            .flex_direction(FlexDirection::ColumnReverse)
+            .flex_wrap(FlexWrap::Wrap)
+            .flex_wrap(FlexWrap::WrapReverse)
+            .flex_wrap(FlexWrap::NoWrap)
+            .flex(Flex::One)
+            .flex(Flex::Auto)
+            .flex(Flex::Initial)
+            .flex(Flex::None)
+            // Flex Alignment
+            .justify_content(JustifyContent::Start)
+            .justify_content(JustifyContent::End)
+            .justify_content(JustifyContent::Center)
+            .justify_content(JustifyContent::Between)
+            .justify_content(JustifyContent::Around)
+            .justify_content(JustifyContent::Evenly)
+            .align_items(AlignItems::Start)
+            .align_items(AlignItems::End)
+            .align_items(AlignItems::Center)
+            .align_items(AlignItems::Baseline)
+            .align_items(AlignItems::Stretch)
+            .align_self(AlignSelf::Auto)
+            .align_self(AlignSelf::Start)
+            .align_self(AlignSelf::End)
+            .align_self(AlignSelf::Center)
+            .align_self(AlignSelf::Stretch)
+            .align_self(AlignSelf::Baseline)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Flex Direction & Wrap
+        assert!(css_classes.contains("flex-row"));
+        assert!(css_classes.contains("flex-row-reverse"));
+        assert!(css_classes.contains("flex-col"));
+        assert!(css_classes.contains("flex-col-reverse"));
+        assert!(css_classes.contains("flex-wrap"));
+        assert!(css_classes.contains("flex-wrap-reverse"));
+        assert!(css_classes.contains("flex-nowrap"));
+        assert!(css_classes.contains("flex-1"));
+        assert!(css_classes.contains("flex-auto"));
+        assert!(css_classes.contains("flex-initial"));
+        assert!(css_classes.contains("flex-none"));
+        
+        // Flex Alignment
+        assert!(css_classes.contains("justify-start"));
+        assert!(css_classes.contains("justify-end"));
+        assert!(css_classes.contains("justify-center"));
+        assert!(css_classes.contains("justify-between"));
+        assert!(css_classes.contains("justify-around"));
+        assert!(css_classes.contains("justify-evenly"));
+        assert!(css_classes.contains("items-start"));
+        assert!(css_classes.contains("items-end"));
+        assert!(css_classes.contains("items-center"));
+        assert!(css_classes.contains("items-baseline"));
+        assert!(css_classes.contains("items-stretch"));
+        assert!(css_classes.contains("self-auto"));
+        assert!(css_classes.contains("self-start"));
+        assert!(css_classes.contains("self-end"));
+        assert!(css_classes.contains("self-center"));
+        assert!(css_classes.contains("self-stretch"));
+        assert!(css_classes.contains("self-baseline"));
     }
 }

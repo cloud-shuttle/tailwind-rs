@@ -494,10 +494,10 @@ mod tests {
     
     #[test]
     fn test_wasm_class_builder() {
-        let builder = WasmClassBuilder::new()
-            .class("bg-blue-500")
-            .class("text-white")
-            .class("p-4");
+        let mut builder = WasmClassBuilder::new();
+        builder.class("bg-blue-500");
+        builder.class("text-white");
+        builder.class("p-4");
         
         assert_eq!(builder.clone().build(), "bg-blue-500 text-white p-4");
         assert_eq!(builder.len(), 3);

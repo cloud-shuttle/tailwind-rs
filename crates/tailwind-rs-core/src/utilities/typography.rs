@@ -858,4 +858,89 @@ mod tests {
         assert!(css_classes.contains("underline"));
         assert!(css_classes.contains("uppercase"));
     }
+    
+    /// Test that all Tailwind CSS font sizes are supported
+    #[test]
+    fn test_all_tailwind_font_sizes() {
+        // Test all standard Tailwind CSS font sizes (text-xs through text-9xl)
+        let test_values = vec![
+            (FontSize::Xs, "text-xs"),
+            (FontSize::Sm, "text-sm"),
+            (FontSize::Base, "text-base"),
+            (FontSize::Lg, "text-lg"),
+            (FontSize::Xl, "text-xl"),
+            (FontSize::Xl2, "text-2xl"),
+            (FontSize::Xl3, "text-3xl"),
+            (FontSize::Xl4, "text-4xl"),
+            (FontSize::Xl5, "text-5xl"),
+            (FontSize::Xl6, "text-6xl"),
+            (FontSize::Xl7, "text-7xl"),
+            (FontSize::Xl8, "text-8xl"),
+            (FontSize::Xl9, "text-9xl"),
+        ];
+        
+        for (value, expected_class) in test_values {
+            let classes = ClassBuilder::new().font_size(value).build();
+            let css_classes = classes.to_css_classes();
+            assert!(css_classes.contains(expected_class), 
+                "Missing font size: {} (expected class: {})", 
+                format!("{:?}", value), expected_class);
+        }
+    }
+    
+    /// Test that all Week 4 typography utilities are implemented
+    #[test]
+    fn test_week4_typography_utilities() {
+        // Test all Week 4 typography utilities
+        let classes = ClassBuilder::new()
+            // Font sizes (text-xs through text-9xl) - already tested above
+            .font_size(FontSize::Xs)
+            .font_size(FontSize::Xl9)
+            // Font weights (font-thin through font-black)
+            .font_weight(FontWeight::Thin)
+            .font_weight(FontWeight::Black)
+            // Line heights (leading-3 through leading-10)
+            .line_height(LineHeight::Tight)
+            .line_height(LineHeight::Relaxed)
+            // Letter spacing (tracking-tighter through tracking-widest)
+            .letter_spacing(LetterSpacing::Tighter)
+            .letter_spacing(LetterSpacing::Widest)
+            // Text decoration (underline, no-underline, line-through)
+            .text_decoration(TextDecoration::Underline)
+            .text_decoration(TextDecoration::None)
+            .text_decoration(TextDecoration::LineThrough)
+            // Text transform (uppercase, lowercase, capitalize)
+            .text_transform(TextTransform::Uppercase)
+            .text_transform(TextTransform::Lowercase)
+            .text_transform(TextTransform::Capitalize)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Font sizes
+        assert!(css_classes.contains("text-xs"));
+        assert!(css_classes.contains("text-9xl"));
+        
+        // Font weights
+        assert!(css_classes.contains("font-thin"));
+        assert!(css_classes.contains("font-black"));
+        
+        // Line heights
+        assert!(css_classes.contains("leading-tight"));
+        assert!(css_classes.contains("leading-relaxed"));
+        
+        // Letter spacing
+        assert!(css_classes.contains("tracking-tighter"));
+        assert!(css_classes.contains("tracking-widest"));
+        
+        // Text decoration
+        assert!(css_classes.contains("underline"));
+        assert!(css_classes.contains("no-underline"));
+        assert!(css_classes.contains("line-through"));
+        
+        // Text transform
+        assert!(css_classes.contains("uppercase"));
+        assert!(css_classes.contains("lowercase"));
+        assert!(css_classes.contains("capitalize"));
+    }
 }

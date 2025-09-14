@@ -93,7 +93,6 @@ pub mod yew_classes {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use yew::prelude::*;
 
     #[test]
     fn test_yew_class_generation() {

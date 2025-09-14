@@ -552,4 +552,83 @@ mod tests {
         assert!(css_classes.contains("mix-blend-multiply"));
         assert!(css_classes.contains("bg-blend-screen"));
     }
+    
+    /// Test that all Week 9 shadow and opacity utilities are implemented
+    #[test]
+    fn test_week9_shadow_opacity_utilities() {
+        // Test all Week 9 shadow and opacity utilities
+        let classes = ClassBuilder::new()
+            // Box Shadows
+            .box_shadow(BoxShadow::Sm)
+            .box_shadow(BoxShadow::Default)
+            .box_shadow(BoxShadow::Md)
+            .box_shadow(BoxShadow::Lg)
+            .box_shadow(BoxShadow::Xl)
+            .box_shadow(BoxShadow::Xl2)
+            .box_shadow(BoxShadow::Inner)
+            .box_shadow(BoxShadow::None)
+            // Drop Shadows
+            .drop_shadow(DropShadow::Sm)
+            .drop_shadow(DropShadow::Default)
+            .drop_shadow(DropShadow::Md)
+            .drop_shadow(DropShadow::Lg)
+            .drop_shadow(DropShadow::Xl)
+            .drop_shadow(DropShadow::Xl2)
+            .drop_shadow(DropShadow::None)
+            // Opacity
+            .opacity(Opacity::Zero)
+            .opacity(Opacity::Five)
+            .opacity(Opacity::Ten)
+            .opacity(Opacity::Twenty)
+            .opacity(Opacity::TwentyFive)
+            .opacity(Opacity::Thirty)
+            .opacity(Opacity::Forty)
+            .opacity(Opacity::Fifty)
+            .opacity(Opacity::Sixty)
+            .opacity(Opacity::Seventy)
+            .opacity(Opacity::SeventyFive)
+            .opacity(Opacity::Eighty)
+            .opacity(Opacity::Ninety)
+            .opacity(Opacity::NinetyFive)
+            .opacity(Opacity::Hundred)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Box Shadows
+        assert!(css_classes.contains("shadow-sm"));
+        assert!(css_classes.contains("shadow"));
+        assert!(css_classes.contains("shadow-md"));
+        assert!(css_classes.contains("shadow-lg"));
+        assert!(css_classes.contains("shadow-xl"));
+        assert!(css_classes.contains("shadow-2xl"));
+        assert!(css_classes.contains("shadow-inner"));
+        assert!(css_classes.contains("shadow-none"));
+        
+        // Drop Shadows
+        assert!(css_classes.contains("drop-shadow-sm"));
+        assert!(css_classes.contains("drop-shadow"));
+        assert!(css_classes.contains("drop-shadow-md"));
+        assert!(css_classes.contains("drop-shadow-lg"));
+        assert!(css_classes.contains("drop-shadow-xl"));
+        assert!(css_classes.contains("drop-shadow-2xl"));
+        assert!(css_classes.contains("drop-shadow-none"));
+        
+        // Opacity
+        assert!(css_classes.contains("opacity-0"));
+        assert!(css_classes.contains("opacity-5"));
+        assert!(css_classes.contains("opacity-10"));
+        assert!(css_classes.contains("opacity-20"));
+        assert!(css_classes.contains("opacity-25"));
+        assert!(css_classes.contains("opacity-30"));
+        assert!(css_classes.contains("opacity-40"));
+        assert!(css_classes.contains("opacity-50"));
+        assert!(css_classes.contains("opacity-60"));
+        assert!(css_classes.contains("opacity-70"));
+        assert!(css_classes.contains("opacity-75"));
+        assert!(css_classes.contains("opacity-80"));
+        assert!(css_classes.contains("opacity-90"));
+        assert!(css_classes.contains("opacity-95"));
+        assert!(css_classes.contains("opacity-100"));
+    }
 }

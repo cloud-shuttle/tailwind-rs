@@ -18,6 +18,7 @@ fn main() {
     let html_dst = dist_dir.join("index.html");
     std::fs::copy(html_src, html_dst).expect("Failed to copy index.html");
     
-    println!("cargo:rustc-link-arg=-s");
-    println!("cargo:rustc-link-arg=WASM_BIGINT");
+    // Note: WASM_BIGINT is a wasm-opt flag, not a linker flag
+    // It should be handled by wasm-pack or wasm-opt during the build process
+    // Removing these incorrect linker arguments
 }

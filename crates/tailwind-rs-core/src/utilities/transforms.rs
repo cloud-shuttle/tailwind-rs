@@ -650,4 +650,73 @@ mod tests {
         assert!(css_classes.contains("skew-y-2"));
         assert!(css_classes.contains("origin-center"));
     }
+    
+    /// Test that all Week 11 transform utilities are implemented
+    #[test]
+    fn test_week11_transform_utilities() {
+        // Test all Week 11 transform utilities
+        let classes = ClassBuilder::new()
+            // Scale
+            .scale(Scale::Zero)
+            .scale(Scale::Fifty)
+            .scale(Scale::SeventyFive)
+            .scale(Scale::Ninety)
+            .scale(Scale::NinetyFive)
+            .scale(Scale::Hundred)
+            .scale(Scale::HundredFive)
+            .scale(Scale::HundredTen)
+            .scale(Scale::HundredTwentyFive)
+            .scale(Scale::HundredFifty)
+            .scale_x(Scale::Hundred)
+            .scale_y(Scale::Hundred)
+            // Rotate
+            .rotate(Rotate::Zero)
+            .rotate(Rotate::One)
+            .rotate(Rotate::Two)
+            .rotate(Rotate::Three)
+            .rotate(Rotate::Six)
+            .rotate(Rotate::Twelve)
+            .rotate(Rotate::FortyFive)
+            .rotate(Rotate::Ninety)
+            .rotate(Rotate::HundredEighty)
+            // Translate
+            .translate_x(Translate::Zero)
+            .translate_x(Translate::Four)
+            .translate_y(Translate::Two)
+            .translate_y(Translate::Eight)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Scale
+        assert!(css_classes.contains("scale-0"));
+        assert!(css_classes.contains("scale-50"));
+        assert!(css_classes.contains("scale-75"));
+        assert!(css_classes.contains("scale-90"));
+        assert!(css_classes.contains("scale-95"));
+        assert!(css_classes.contains("scale-100"));
+        assert!(css_classes.contains("scale-105"));
+        assert!(css_classes.contains("scale-110"));
+        assert!(css_classes.contains("scale-125"));
+        assert!(css_classes.contains("scale-150"));
+        assert!(css_classes.contains("scale-x-100"));
+        assert!(css_classes.contains("scale-y-100"));
+        
+        // Rotate
+        assert!(css_classes.contains("rotate-0"));
+        assert!(css_classes.contains("rotate-1"));
+        assert!(css_classes.contains("rotate-2"));
+        assert!(css_classes.contains("rotate-3"));
+        assert!(css_classes.contains("rotate-6"));
+        assert!(css_classes.contains("rotate-12"));
+        assert!(css_classes.contains("rotate-45"));
+        assert!(css_classes.contains("rotate-90"));
+        assert!(css_classes.contains("rotate-180"));
+        
+        // Translate
+        assert!(css_classes.contains("translate-x-0"));
+        assert!(css_classes.contains("translate-x-4"));
+        assert!(css_classes.contains("translate-y-2"));
+        assert!(css_classes.contains("translate-y-8"));
+    }
 }

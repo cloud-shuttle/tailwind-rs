@@ -862,4 +862,58 @@ mod tests {
         assert!(css_classes.contains("ring-default"));
         assert!(css_classes.contains("ring-offset-1"));
     }
+    
+    /// Test that all Week 7 border utilities are implemented
+    #[test]
+    fn test_week7_border_utilities() {
+        // Test all Week 7 border utilities
+        let classes = ClassBuilder::new()
+            // Border Radius
+            .border_radius(BorderRadius::None)
+            .border_radius(BorderRadius::Sm)
+            .border_radius(BorderRadius::Default)
+            .border_radius(BorderRadius::Md)
+            .border_radius(BorderRadius::Lg)
+            .border_radius(BorderRadius::Xl)
+            .border_radius(BorderRadius::Xl2)
+            .border_radius(BorderRadius::Xl3)
+            .border_radius(BorderRadius::Full)
+            // Border Width & Style
+            .border_width(BorderWidth::Zero)
+            .border_width(BorderWidth::Thin)
+            .border_width(BorderWidth::Default)
+            .border_width(BorderWidth::Medium)
+            .border_width(BorderWidth::Thick)
+            .border_style(BorderStyle::Solid)
+            .border_style(BorderStyle::Dashed)
+            .border_style(BorderStyle::Dotted)
+            .border_style(BorderStyle::Double)
+            .border_style(BorderStyle::None)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Border Radius
+        assert!(css_classes.contains("rounded-none"));
+        assert!(css_classes.contains("rounded-sm"));
+        assert!(css_classes.contains("rounded"));
+        assert!(css_classes.contains("rounded-md"));
+        assert!(css_classes.contains("rounded-lg"));
+        assert!(css_classes.contains("rounded-xl"));
+        assert!(css_classes.contains("rounded-2xl"));
+        assert!(css_classes.contains("rounded-3xl"));
+        assert!(css_classes.contains("rounded-full"));
+        
+        // Border Width & Style
+        assert!(css_classes.contains("border-0"));
+        assert!(css_classes.contains("border-thin"));
+        assert!(css_classes.contains("border-default"));
+        assert!(css_classes.contains("border-medium"));
+        assert!(css_classes.contains("border-thick"));
+        assert!(css_classes.contains("border-solid"));
+        assert!(css_classes.contains("border-dashed"));
+        assert!(css_classes.contains("border-dotted"));
+        assert!(css_classes.contains("border-double"));
+        assert!(css_classes.contains("border-none"));
+    }
 }

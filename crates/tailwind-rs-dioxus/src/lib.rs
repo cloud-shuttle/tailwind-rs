@@ -5,17 +5,16 @@
 //! # Example
 //!
 //! ```rust
-//! use tailwind_rs_dioxus::*;
-//! use dioxus::prelude::*;
+//! use tailwind_rs_dioxus::DioxusClassBuilder;
 //!
-//! fn App() -> Element {
-//!     rsx! {
-//!         div {
-//!             class: "bg-blue-500 text-white p-4 rounded-lg",
-//!             "Hello from Tailwind + Dioxus!"
-//!         }
-//!     }
-//! }
+//! let classes = DioxusClassBuilder::new()
+//!     .class("bg-blue-500")
+//!     .class("text-white")
+//!     .class("p-4")
+//!     .class("rounded-lg")
+//!     .build();
+//! 
+//! // Use the classes string in your Dioxus component
 //! ```
 
 pub mod class_builder;

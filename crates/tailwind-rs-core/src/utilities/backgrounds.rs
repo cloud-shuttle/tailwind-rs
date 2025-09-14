@@ -676,4 +676,59 @@ mod tests {
         assert!(css_classes.contains("from-blue-500"));
         assert!(css_classes.contains("to-red-500"));
     }
+    
+    /// Test that all Week 8 background utilities are implemented
+    #[test]
+    fn test_week8_background_utilities() {
+        // Test all Week 8 background utilities
+        let classes = ClassBuilder::new()
+            // Background Properties
+            .background_attachment(BackgroundAttachment::Fixed)
+            .background_attachment(BackgroundAttachment::Local)
+            .background_attachment(BackgroundAttachment::Scroll)
+            .background_clip(BackgroundClip::Border)
+            .background_clip(BackgroundClip::Padding)
+            .background_clip(BackgroundClip::Content)
+            .background_clip(BackgroundClip::Text)
+            .background_position(BackgroundPosition::Bottom)
+            .background_position(BackgroundPosition::Center)
+            .background_position(BackgroundPosition::Left)
+            .background_position(BackgroundPosition::Right)
+            .background_position(BackgroundPosition::Top)
+            .background_repeat(BackgroundRepeat::Repeat)
+            .background_repeat(BackgroundRepeat::NoRepeat)
+            .background_repeat(BackgroundRepeat::RepeatX)
+            .background_repeat(BackgroundRepeat::RepeatY)
+            .background_repeat(BackgroundRepeat::Round)
+            .background_repeat(BackgroundRepeat::Space)
+            .background_size(BackgroundSize::Auto)
+            .background_size(BackgroundSize::Cover)
+            .background_size(BackgroundSize::Contain)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Background Properties
+        assert!(css_classes.contains("bg-fixed"));
+        assert!(css_classes.contains("bg-local"));
+        assert!(css_classes.contains("bg-scroll"));
+        assert!(css_classes.contains("bg-clip-border"));
+        assert!(css_classes.contains("bg-clip-padding"));
+        assert!(css_classes.contains("bg-clip-content"));
+        assert!(css_classes.contains("bg-clip-text"));
+        assert!(css_classes.contains("bg-bottom"));
+        assert!(css_classes.contains("bg-center"));
+        assert!(css_classes.contains("bg-left"));
+        assert!(css_classes.contains("bg-right"));
+        assert!(css_classes.contains("bg-top"));
+        assert!(css_classes.contains("bg-repeat"));
+        assert!(css_classes.contains("bg-no-repeat"));
+        assert!(css_classes.contains("bg-repeat-x"));
+        assert!(css_classes.contains("bg-repeat-y"));
+        assert!(css_classes.contains("bg-round"));
+        assert!(css_classes.contains("bg-space"));
+        assert!(css_classes.contains("bg-auto"));
+        assert!(css_classes.contains("bg-cover"));
+        assert!(css_classes.contains("bg-contain"));
+    }
 }

@@ -13,7 +13,7 @@ use std::fmt;
 /// # Examples
 /// 
 /// ```rust
-/// use tailwind_rs_core::utilities::sizing::SizingValue;
+/// use tailwind_rs_core::utilities::sizing::{SizingValue, WidthUtilities, HeightUtilities};
 /// use tailwind_rs_core::classes::ClassBuilder;
 /// 
 /// let classes = ClassBuilder::new()
@@ -420,6 +420,44 @@ impl HeightUtilities for ClassBuilder {
     }
 }
 
+/// Trait for adding aspect-ratio utilities to a class builder
+pub trait AspectRatioUtilities {
+    /// Set aspect ratio
+    fn aspect_ratio(self, ratio: &str) -> Self;
+}
+
+impl AspectRatioUtilities for ClassBuilder {
+    fn aspect_ratio(self, ratio: &str) -> Self {
+        match ratio {
+            "1/1" => self.class("aspect-square"),
+            "16/9" => self.class("aspect-video"),
+            "4/3" => self.class("aspect-[4/3]"),
+            "3/2" => self.class("aspect-[3/2]"),
+            "2/3" => self.class("aspect-[2/3]"),
+            "9/16" => self.class("aspect-[9/16]"),
+            _ => self.class(format!("aspect-[{}]", ratio)),
+        }
+    }
+}
+
+/// Convenience methods for aspect-ratio utilities
+impl ClassBuilder {
+    /// Add aspect-square utility
+    pub fn aspect_square(self) -> Self {
+        self.aspect_ratio("1/1")
+    }
+    
+    /// Add aspect-video utility
+    pub fn aspect_video(self) -> Self {
+        self.aspect_ratio("16/9")
+    }
+    
+    /// Add aspect-[4/3] utility
+    pub fn aspect_4_3(self) -> Self {
+        self.aspect_ratio("4/3")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -541,5 +579,72 @@ mod tests {
         assert!(css_classes.contains("h-fit"));
         assert!(css_classes.contains("min-w-min"));
         assert!(css_classes.contains("max-w-max"));
+    }
+    
+    /// Test that all Tailwind CSS sizing values are supported
+    #[test]
+    fn test_all_tailwind_sizing_values() {
+        // Test all standard Tailwind CSS sizing values
+        let test_values = vec![
+            // Standard integer values (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 56, 64, 72, 80, 96)
+            (SizingValue::Zero, "w-0"),
+            (SizingValue::Integer(1), "w-1"),
+            (SizingValue::Integer(2), "w-2"),
+            (SizingValue::Integer(3), "w-3"),
+            (SizingValue::Integer(4), "w-4"),
+            (SizingValue::Integer(5), "w-5"),
+            (SizingValue::Integer(6), "w-6"),
+            (SizingValue::Integer(8), "w-8"),
+            (SizingValue::Integer(10), "w-10"),
+            (SizingValue::Integer(12), "w-12"),
+            (SizingValue::Integer(16), "w-16"),
+            (SizingValue::Integer(20), "w-20"),
+            (SizingValue::Integer(24), "w-24"),
+            (SizingValue::Integer(32), "w-32"),
+            (SizingValue::Integer(40), "w-40"),
+            (SizingValue::Integer(48), "w-48"),
+            (SizingValue::Integer(56), "w-56"),
+            (SizingValue::Integer(64), "w-64"),
+            (SizingValue::Integer(72), "w-72"),
+            (SizingValue::Integer(80), "w-80"),
+            (SizingValue::Integer(96), "w-96"),
+            // Fractional values (0.5, 1.5, 2.5, 3.5)
+            (SizingValue::Fractional(0.5), "w-0.5"),
+            (SizingValue::Fractional(1.5), "w-1.5"),
+            (SizingValue::Fractional(2.5), "w-2.5"),
+            (SizingValue::Fractional(3.5), "w-3.5"),
+            // Special values
+            (SizingValue::Px, "w-px"),
+            (SizingValue::Auto, "w-auto"),
+            (SizingValue::Full, "w-full"),
+            (SizingValue::Screen, "w-screen"),
+            (SizingValue::Min, "w-min"),
+            (SizingValue::Max, "w-max"),
+            (SizingValue::Fit, "w-fit"),
+        ];
+        
+        for (value, expected_class) in test_values {
+            let classes = ClassBuilder::new().width(value).build();
+            let css_classes = classes.to_css_classes();
+            assert!(css_classes.contains(expected_class), 
+                "Missing sizing value: {} (expected class: {})", 
+                format!("{:?}", value), expected_class);
+        }
+    }
+    
+    /// Test that aspect-ratio utilities are implemented
+    #[test]
+    fn test_aspect_ratio_utilities() {
+        // This test will fail until we implement aspect-ratio utilities
+        let classes = ClassBuilder::new()
+            .aspect_ratio("1/1")  // aspect-square
+            .aspect_ratio("16/9")  // aspect-video
+            .aspect_ratio("4/3")  // aspect-[4/3]
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("aspect-square"));
+        assert!(css_classes.contains("aspect-video"));
+        assert!(css_classes.contains("aspect-[4/3]"));
     }
 }

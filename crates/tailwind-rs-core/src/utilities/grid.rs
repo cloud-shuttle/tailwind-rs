@@ -792,6 +792,7 @@ impl GridAutoRowsUtilities for ClassBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utilities::spacing::GapUtilities;
     
     #[test]
     fn test_grid_template_columns_utilities() {
@@ -1029,5 +1030,57 @@ mod tests {
         assert!(css_classes.contains("grid-flow-row"));
         assert!(css_classes.contains("auto-cols-auto"));
         assert!(css_classes.contains("auto-rows-auto"));
+    }
+    
+    /// Test that all Week 6 grid utilities are implemented
+    #[test]
+    fn test_week6_grid_utilities() {
+        // Test all Week 6 grid utilities
+        let classes = ClassBuilder::new()
+            // Grid Template
+            .grid_template_columns(GridTemplateColumns::One)
+            .grid_template_columns(GridTemplateColumns::Twelve)
+            .grid_template_columns(GridTemplateColumns::None)
+            .grid_template_rows(GridTemplateRows::One)
+            .grid_template_rows(GridTemplateRows::Six)
+            .grid_template_rows(GridTemplateRows::None)
+            .grid_column_span(GridColumnSpan::Auto)
+            .grid_column_span(GridColumnSpan::One)
+            .grid_column_span(GridColumnSpan::Twelve)
+            .grid_column_span(GridColumnSpan::Full)
+            .grid_row_span(GridRowSpan::Auto)
+            .grid_row_span(GridRowSpan::One)
+            .grid_row_span(GridRowSpan::Six)
+            .grid_row_span(GridRowSpan::Full)
+            // Grid Gap & Alignment
+            .gap(crate::utilities::spacing::SpacingValue::Zero)
+            .gap(crate::utilities::spacing::SpacingValue::Integer(4))
+            .gap_x(crate::utilities::spacing::SpacingValue::Integer(2))
+            .gap_y(crate::utilities::spacing::SpacingValue::Integer(6))
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Grid Template
+        assert!(css_classes.contains("grid-cols-1"));
+        assert!(css_classes.contains("grid-cols-12"));
+        assert!(css_classes.contains("grid-cols-none"));
+        assert!(css_classes.contains("grid-rows-1"));
+        assert!(css_classes.contains("grid-rows-6"));
+        assert!(css_classes.contains("grid-rows-none"));
+        assert!(css_classes.contains("col-span-auto"));
+        assert!(css_classes.contains("col-span-1"));
+        assert!(css_classes.contains("col-span-12"));
+        assert!(css_classes.contains("col-span-full"));
+        assert!(css_classes.contains("row-span-auto"));
+        assert!(css_classes.contains("row-span-1"));
+        assert!(css_classes.contains("row-span-6"));
+        assert!(css_classes.contains("row-span-full"));
+        
+        // Grid Gap & Alignment
+        assert!(css_classes.contains("gap-0"));
+        assert!(css_classes.contains("gap-4"));
+        assert!(css_classes.contains("gap-x-2"));
+        assert!(css_classes.contains("gap-y-6"));
     }
 }

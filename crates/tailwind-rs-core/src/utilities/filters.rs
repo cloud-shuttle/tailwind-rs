@@ -628,4 +628,75 @@ mod tests {
         assert!(css_classes.contains("saturate-150"));
         assert!(css_classes.contains("sepia-0"));
     }
+    
+    /// Test that all Week 10 filter utilities are implemented
+    #[test]
+    fn test_week10_filter_utilities() {
+        // Test all Week 10 filter utilities
+        let classes = ClassBuilder::new()
+            // Blur
+            .blur(Blur::None)
+            .blur(Blur::Sm)
+            .blur(Blur::Default)
+            .blur(Blur::Md)
+            .blur(Blur::Lg)
+            .blur(Blur::Xl)
+            .blur(Blur::Xl2)
+            .blur(Blur::Xl3)
+            // Brightness
+            .brightness(Brightness::Zero)
+            .brightness(Brightness::Fifty)
+            .brightness(Brightness::SeventyFive)
+            .brightness(Brightness::Ninety)
+            .brightness(Brightness::NinetyFive)
+            .brightness(Brightness::Hundred)
+            .brightness(Brightness::HundredFive)
+            .brightness(Brightness::HundredTen)
+            .brightness(Brightness::HundredTwentyFive)
+            .brightness(Brightness::HundredFifty)
+            .brightness(Brightness::TwoHundred)
+            // Contrast
+            .contrast(Contrast::Zero)
+            .contrast(Contrast::Fifty)
+            .contrast(Contrast::SeventyFive)
+            .contrast(Contrast::Hundred)
+            .contrast(Contrast::HundredTwentyFive)
+            .contrast(Contrast::HundredFifty)
+            .contrast(Contrast::TwoHundred)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Blur
+        assert!(css_classes.contains("blur-none"));
+        assert!(css_classes.contains("blur-sm"));
+        assert!(css_classes.contains("blur"));
+        assert!(css_classes.contains("blur-md"));
+        assert!(css_classes.contains("blur-lg"));
+        assert!(css_classes.contains("blur-xl"));
+        assert!(css_classes.contains("blur-2xl"));
+        assert!(css_classes.contains("blur-3xl"));
+        
+        // Brightness
+        assert!(css_classes.contains("brightness-0"));
+        assert!(css_classes.contains("brightness-50"));
+        assert!(css_classes.contains("brightness-75"));
+        assert!(css_classes.contains("brightness-90"));
+        assert!(css_classes.contains("brightness-95"));
+        assert!(css_classes.contains("brightness-100"));
+        assert!(css_classes.contains("brightness-105"));
+        assert!(css_classes.contains("brightness-110"));
+        assert!(css_classes.contains("brightness-125"));
+        assert!(css_classes.contains("brightness-150"));
+        assert!(css_classes.contains("brightness-200"));
+        
+        // Contrast
+        assert!(css_classes.contains("contrast-0"));
+        assert!(css_classes.contains("contrast-50"));
+        assert!(css_classes.contains("contrast-75"));
+        assert!(css_classes.contains("contrast-100"));
+        assert!(css_classes.contains("contrast-125"));
+        assert!(css_classes.contains("contrast-150"));
+        assert!(css_classes.contains("contrast-200"));
+    }
 }

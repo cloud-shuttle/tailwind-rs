@@ -22,6 +22,15 @@ mod property_tests;
 #[cfg(test)]
 mod api_stability;
 
+#[cfg(test)]
+mod week18_documentation_tests;
+
+#[cfg(test)]
+mod week19_testing_qa_tests;
+
+#[cfg(test)]
+mod week20_release_prep_tests;
+
 // Re-export commonly used types
 pub use classes::{ClassBuilder, ClassSet};
 pub use color::Color;

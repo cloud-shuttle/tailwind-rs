@@ -249,7 +249,6 @@ pub fn Input(props: &InputProps) -> Html {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use yew::prelude::*;
 
     #[test]
     fn test_button_variant_enum() {

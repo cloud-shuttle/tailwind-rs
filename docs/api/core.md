@@ -1,11 +1,32 @@
-# Core API Reference
+# Core API Reference - v0.2.0
 
 This document provides comprehensive API reference for the core `tailwind-rs` functionality, following our Test-Driven Development approach and comprehensive testing strategy.
+
+> **🎉 Comprehensive Beta**: This API reference reflects the complete v0.2.0 implementation with all 20 utility categories fully implemented and tested.
 
 ## 🎯 Core Types
 
 ### ClassBuilder
-The primary type for building type-safe Tailwind classes.
+The primary type for building type-safe Tailwind classes with complete utility support.
+
+#### **Complete Utility Support**
+The `ClassBuilder` now supports all 20 major Tailwind CSS utility categories:
+
+- **Spacing**: `padding()`, `margin()`, `gap()`, `space_x()`, `space_y()`, `divide_x()`, `divide_y()`
+- **Layout**: `display()`, `position()`, `top()`, `right()`, `bottom()`, `left()`, `inset()`, `z_index()`, `overflow()`
+- **Sizing**: `width()`, `height()`, `min_width()`, `max_width()`, `min_height()`, `max_height()`, `aspect_ratio()`
+- **Typography**: `font_family()`, `font_size()`, `font_weight()`, `line_height()`, `letter_spacing()`, `text_decoration()`, `text_transform()`
+- **Colors**: `text_color()`, `background_color()`, `border_color()`, `ring_color()`
+- **Flexbox**: `flex()`, `flex_direction()`, `flex_wrap()`, `justify_content()`, `align_items()`, `align_self()`
+- **Grid**: `grid_template_columns()`, `grid_template_rows()`, `grid_column_span()`, `grid_row_span()`, `gap()`
+- **Borders**: `border_radius()`, `border_width()`, `border_style()`, `border_color()`
+- **Backgrounds**: `background_attachment()`, `background_clip()`, `background_position()`, `background_repeat()`, `background_size()`
+- **Effects**: `box_shadow()`, `drop_shadow()`, `opacity()`, `mix_blend_mode()`, `background_blend_mode()`
+- **Filters**: `blur()`, `brightness()`, `contrast()`, `grayscale()`, `hue_rotate()`, `invert()`, `saturate()`, `sepia()`
+- **Transforms**: `scale()`, `rotate()`, `translate_x()`, `translate_y()`, `skew_x()`, `skew_y()`
+- **Transitions**: `transition_property()`, `transition_duration()`, `transition_timing_function()`, `transition_delay()`
+- **Animations**: `animate()`, `animate_spin()`, `animate_ping()`, `animate_pulse()`, `animate_bounce()`
+- **Interactivity**: `cursor()`, `pointer_events()`, `resize()`, `scroll_behavior()`, `touch_action()`, `user_select()`
 
 ```rust
 pub struct ClassBuilder {
@@ -696,6 +717,235 @@ pub enum SecurityError {
 ```
 
 ## 📚 Examples
+
+### Complete Utility Examples
+
+#### **Spacing Utilities**
+```rust
+use tailwind_rs::*;
+
+// Padding and margin
+let classes = ClassBuilder::new()
+    .padding(SpacingValue::Integer(4))
+    .margin(SpacingValue::Integer(2))
+    .padding_x(SpacingValue::Integer(6))
+    .padding_y(SpacingValue::Integer(3))
+    .build();
+
+// Gap utilities
+let classes = ClassBuilder::new()
+    .gap(SpacingValue::Integer(4))
+    .gap_x(SpacingValue::Integer(2))
+    .gap_y(SpacingValue::Integer(6))
+    .build();
+
+// Space between utilities
+let classes = ClassBuilder::new()
+    .space_x(SpacingValue::Integer(4))
+    .space_y(SpacingValue::Integer(2))
+    .build();
+
+// Divide utilities
+let classes = ClassBuilder::new()
+    .divide_x(SpacingValue::Integer(2))
+    .divide_y(SpacingValue::Integer(4))
+    .build();
+```
+
+#### **Layout Utilities**
+```rust
+use tailwind_rs::*;
+
+// Display and position
+let classes = ClassBuilder::new()
+    .display(Display::Flex)
+    .position(Position::Relative)
+    .top(SpacingValue::Integer(4))
+    .right(SpacingValue::Integer(2))
+    .bottom(SpacingValue::Integer(6))
+    .left(SpacingValue::Integer(8))
+    .z_index(ZIndex::Ten)
+    .overflow(Overflow::Hidden)
+    .build();
+```
+
+#### **Sizing Utilities**
+```rust
+use tailwind_rs::*;
+
+// Width and height
+let classes = ClassBuilder::new()
+    .width(SizingValue::Integer(64))
+    .height(SizingValue::Integer(32))
+    .min_width(SizingValue::Integer(48))
+    .max_width(SizingValue::Integer(96))
+    .min_height(SizingValue::Integer(24))
+    .max_height(SizingValue::Integer(48))
+    .aspect_ratio(AspectRatio::Square)
+    .build();
+```
+
+#### **Typography Utilities**
+```rust
+use tailwind_rs::*;
+
+// Font properties
+let classes = ClassBuilder::new()
+    .font_family(FontFamily::Sans)
+    .font_size(FontSize::Lg)
+    .font_weight(FontWeight::Bold)
+    .line_height(LineHeight::Relaxed)
+    .letter_spacing(LetterSpacing::Wide)
+    .text_decoration(TextDecoration::Underline)
+    .text_transform(TextTransform::Uppercase)
+    .build();
+```
+
+#### **Flexbox Utilities**
+```rust
+use tailwind_rs::*;
+
+// Flexbox layout
+let classes = ClassBuilder::new()
+    .display(Display::Flex)
+    .flex_direction(FlexDirection::Row)
+    .flex_wrap(FlexWrap::Wrap)
+    .justify_content(JustifyContent::Center)
+    .align_items(AlignItems::Center)
+    .align_self(AlignSelf::Stretch)
+    .flex(Flex::One)
+    .build();
+```
+
+#### **Grid Utilities**
+```rust
+use tailwind_rs::*;
+
+// Grid layout
+let classes = ClassBuilder::new()
+    .display(Display::Grid)
+    .grid_template_columns(GridTemplateColumns::Three)
+    .grid_template_rows(GridTemplateRows::Two)
+    .grid_column_span(GridColumnSpan::Two)
+    .grid_row_span(GridRowSpan::One)
+    .gap(SpacingValue::Integer(4))
+    .build();
+```
+
+#### **Border Utilities**
+```rust
+use tailwind_rs::*;
+
+// Border properties
+let classes = ClassBuilder::new()
+    .border_radius(BorderRadius::Lg)
+    .border_width(BorderWidth::Two)
+    .border_style(BorderStyle::Solid)
+    .border_color(Color::new(ColorPalette::Blue, ColorShade::Shade500))
+    .build();
+```
+
+#### **Background Utilities**
+```rust
+use tailwind_rs::*;
+
+// Background properties
+let classes = ClassBuilder::new()
+    .background_color(Color::new(ColorPalette::Blue, ColorShade::Shade500))
+    .background_attachment(BackgroundAttachment::Fixed)
+    .background_clip(BackgroundClip::Padding)
+    .background_position(BackgroundPosition::Center)
+    .background_repeat(BackgroundRepeat::NoRepeat)
+    .background_size(BackgroundSize::Cover)
+    .build();
+```
+
+#### **Effects Utilities**
+```rust
+use tailwind_rs::*;
+
+// Visual effects
+let classes = ClassBuilder::new()
+    .box_shadow(BoxShadow::Lg)
+    .drop_shadow(DropShadow::Lg)
+    .opacity(Opacity::SeventyFive)
+    .mix_blend_mode(MixBlendMode::Multiply)
+    .background_blend_mode(BackgroundBlendMode::Multiply)
+    .build();
+```
+
+#### **Filter Utilities**
+```rust
+use tailwind_rs::*;
+
+// CSS filters
+let classes = ClassBuilder::new()
+    .blur(Blur::Sm)
+    .brightness(Brightness::OneHundredTwentyFive)
+    .contrast(Contrast::OneHundredTwentyFive)
+    .grayscale(Grayscale::Fifty)
+    .hue_rotate(HueRotate::Ninety)
+    .invert(Invert::Fifty)
+    .saturate(Saturate::OneHundredTwentyFive)
+    .sepia(Sepia::Fifty)
+    .build();
+```
+
+#### **Transform Utilities**
+```rust
+use tailwind_rs::*;
+
+// CSS transforms
+let classes = ClassBuilder::new()
+    .scale(Scale::OneHundredTen)
+    .rotate(Rotate::Twelve)
+    .translate_x(Translate::Four)
+    .translate_y(Translate::Two)
+    .skew_x(Skew::Twelve)
+    .skew_y(Skew::Six)
+    .build();
+```
+
+#### **Transition Utilities**
+```rust
+use tailwind_rs::*;
+
+// CSS transitions
+let classes = ClassBuilder::new()
+    .transition_property(TransitionProperty::All)
+    .transition_duration(TransitionDuration::ThreeHundred)
+    .transition_timing_function(TransitionTimingFunction::EaseInOut)
+    .transition_delay(TransitionDelay::SeventyFive)
+    .build();
+```
+
+#### **Animation Utilities**
+```rust
+use tailwind_rs::*;
+
+// CSS animations
+let classes = ClassBuilder::new()
+    .animate(Animation::Spin)
+    .animate(Animation::Ping)
+    .animate(Animation::Pulse)
+    .animate(Animation::Bounce)
+    .build();
+```
+
+#### **Interactivity Utilities**
+```rust
+use tailwind_rs::*;
+
+// Interactive properties
+let classes = ClassBuilder::new()
+    .cursor(Cursor::Pointer)
+    .pointer_events(PointerEvents::None)
+    .resize(Resize::Both)
+    .scroll_behavior(ScrollBehavior::Smooth)
+    .touch_action(TouchAction::PanX)
+    .user_select(UserSelect::None)
+    .build();
+```
 
 ### Basic Usage
 ```rust

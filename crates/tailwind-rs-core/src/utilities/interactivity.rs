@@ -803,4 +803,128 @@ mod tests {
         assert!(css_classes.contains("select-none"));
         assert!(css_classes.contains("will-change-transform"));
     }
+    
+    /// Test that all Week 13 interactivity utilities are implemented
+    #[test]
+    fn test_week13_interactivity_utilities() {
+        // Test all Week 13 interactivity utilities
+        let classes = ClassBuilder::new()
+            // Cursor utilities
+            .cursor(Cursor::Auto)
+            .cursor(Cursor::Default)
+            .cursor(Cursor::Pointer)
+            .cursor(Cursor::Wait)
+            .cursor(Cursor::Text)
+            .cursor(Cursor::Move)
+            .cursor(Cursor::Help)
+            .cursor(Cursor::NotAllowed)
+            .cursor(Cursor::None)
+            .cursor(Cursor::ContextMenu)
+            .cursor(Cursor::Progress)
+            .cursor(Cursor::Cell)
+            .cursor(Cursor::Crosshair)
+            .cursor(Cursor::VerticalText)
+            .cursor(Cursor::Alias)
+            .cursor(Cursor::Copy)
+            .cursor(Cursor::NoDrop)
+            .cursor(Cursor::Grab)
+            .cursor(Cursor::Grabbing)
+            // Pointer events utilities
+            .pointer_events(PointerEvents::Auto)
+            .pointer_events(PointerEvents::None)
+            // Resize utilities
+            .resize(Resize::None)
+            .resize(Resize::Both)
+            .resize(Resize::Horizontal)
+            .resize(Resize::Vertical)
+            // Scroll utilities
+            .scroll_behavior(ScrollBehavior::Auto)
+            .scroll_behavior(ScrollBehavior::Smooth)
+            .scroll_snap_type(ScrollSnapType::None)
+            .scroll_snap_type(ScrollSnapType::X)
+            .scroll_snap_type(ScrollSnapType::Y)
+            .scroll_snap_type(ScrollSnapType::Both)
+            .scroll_snap_align(ScrollSnapAlign::None)
+            .scroll_snap_align(ScrollSnapAlign::Start)
+            .scroll_snap_align(ScrollSnapAlign::End)
+            .scroll_snap_align(ScrollSnapAlign::Center)
+            // Touch action utilities
+            .touch_action(TouchAction::Auto)
+            .touch_action(TouchAction::None)
+            .touch_action(TouchAction::PanX)
+            .touch_action(TouchAction::PanY)
+            .touch_action(TouchAction::PanLeft)
+            .touch_action(TouchAction::PanRight)
+            .touch_action(TouchAction::PanUp)
+            .touch_action(TouchAction::PanDown)
+            .touch_action(TouchAction::Manipulation)
+            // User select utilities
+            .user_select(UserSelect::None)
+            .user_select(UserSelect::Text)
+            .user_select(UserSelect::All)
+            .user_select(UserSelect::Auto)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Cursor utilities
+        assert!(css_classes.contains("cursor-auto"));
+        assert!(css_classes.contains("cursor-default"));
+        assert!(css_classes.contains("cursor-pointer"));
+        assert!(css_classes.contains("cursor-wait"));
+        assert!(css_classes.contains("cursor-text"));
+        assert!(css_classes.contains("cursor-move"));
+        assert!(css_classes.contains("cursor-help"));
+        assert!(css_classes.contains("cursor-not-allowed"));
+        assert!(css_classes.contains("cursor-none"));
+        assert!(css_classes.contains("cursor-context-menu"));
+        assert!(css_classes.contains("cursor-progress"));
+        assert!(css_classes.contains("cursor-cell"));
+        assert!(css_classes.contains("cursor-crosshair"));
+        assert!(css_classes.contains("cursor-vertical-text"));
+        assert!(css_classes.contains("cursor-alias"));
+        assert!(css_classes.contains("cursor-copy"));
+        assert!(css_classes.contains("cursor-no-drop"));
+        assert!(css_classes.contains("cursor-grab"));
+        assert!(css_classes.contains("cursor-grabbing"));
+        
+        // Pointer events utilities
+        assert!(css_classes.contains("pointer-events-auto"));
+        assert!(css_classes.contains("pointer-events-none"));
+        
+        // Resize utilities
+        assert!(css_classes.contains("resize-none"));
+        assert!(css_classes.contains("resize-both"));
+        assert!(css_classes.contains("resize-horizontal"));
+        assert!(css_classes.contains("resize-vertical"));
+        
+        // Scroll utilities
+        assert!(css_classes.contains("scroll-auto"));
+        assert!(css_classes.contains("scroll-smooth"));
+        assert!(css_classes.contains("snap-none"));
+        assert!(css_classes.contains("snap-x"));
+        assert!(css_classes.contains("snap-y"));
+        assert!(css_classes.contains("snap-both"));
+        assert!(css_classes.contains("snap-align-none"));
+        assert!(css_classes.contains("snap-align-start"));
+        assert!(css_classes.contains("snap-align-end"));
+        assert!(css_classes.contains("snap-align-center"));
+        
+        // Touch action utilities
+        assert!(css_classes.contains("touch-auto"));
+        assert!(css_classes.contains("touch-none"));
+        assert!(css_classes.contains("touch-pan-x"));
+        assert!(css_classes.contains("touch-pan-y"));
+        assert!(css_classes.contains("touch-pan-left"));
+        assert!(css_classes.contains("touch-pan-right"));
+        assert!(css_classes.contains("touch-pan-up"));
+        assert!(css_classes.contains("touch-pan-down"));
+        assert!(css_classes.contains("touch-manipulation"));
+        
+        // User select utilities
+        assert!(css_classes.contains("select-none"));
+        assert!(css_classes.contains("select-text"));
+        assert!(css_classes.contains("select-all"));
+        assert!(css_classes.contains("select-auto"));
+    }
 }

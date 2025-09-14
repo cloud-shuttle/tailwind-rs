@@ -16,6 +16,7 @@ pub mod effects;
 pub mod filters;
 pub mod transitions;
 pub mod transforms;
+pub mod animations;
 pub mod interactivity;
 
 // Re-export all utility traits for easy access
@@ -32,4 +33,5 @@ pub use effects::*;
 pub use filters::*;
 pub use transitions::*;
 pub use transforms::*;
+pub use animations::*;
 pub use interactivity::*;

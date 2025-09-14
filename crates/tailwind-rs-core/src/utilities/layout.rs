@@ -626,6 +626,98 @@ impl VisibilityUtilities for ClassBuilder {
     }
 }
 
+/// Trait for adding positioning utilities to a class builder
+pub trait PositioningUtilities {
+    /// Add top positioning
+    fn top(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    
+    /// Add right positioning
+    fn right(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    
+    /// Add bottom positioning
+    fn bottom(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    
+    /// Add left positioning
+    fn left(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    
+    /// Add inset positioning (all sides)
+    fn inset(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    
+    /// Add horizontal inset positioning
+    fn inset_x(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    
+    /// Add vertical inset positioning
+    fn inset_y(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+}
+
+impl PositioningUtilities for ClassBuilder {
+    fn top(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("top-{}", value.to_class_name()))
+    }
+    
+    fn right(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("right-{}", value.to_class_name()))
+    }
+    
+    fn bottom(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("bottom-{}", value.to_class_name()))
+    }
+    
+    fn left(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("left-{}", value.to_class_name()))
+    }
+    
+    fn inset(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("inset-{}", value.to_class_name()))
+    }
+    
+    fn inset_x(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("inset-x-{}", value.to_class_name()))
+    }
+    
+    fn inset_y(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("inset-y-{}", value.to_class_name()))
+    }
+}
+
+/// Convenience methods for positioning utilities
+impl ClassBuilder {
+    /// Add top positioning with value 4
+    pub fn top_4(self) -> Self {
+        self.top(crate::utilities::spacing::SpacingValue::Integer(4))
+    }
+    
+    /// Add right positioning with value 2
+    pub fn right_2(self) -> Self {
+        self.right(crate::utilities::spacing::SpacingValue::Integer(2))
+    }
+    
+    /// Add bottom positioning with value 6
+    pub fn bottom_6(self) -> Self {
+        self.bottom(crate::utilities::spacing::SpacingValue::Integer(6))
+    }
+    
+    /// Add left positioning with value 8
+    pub fn left_8(self) -> Self {
+        self.left(crate::utilities::spacing::SpacingValue::Integer(8))
+    }
+    
+    /// Add inset positioning with value 0
+    pub fn inset_0(self) -> Self {
+        self.inset(crate::utilities::spacing::SpacingValue::Zero)
+    }
+    
+    /// Add horizontal inset positioning with value 4
+    pub fn inset_x_4(self) -> Self {
+        self.inset_x(crate::utilities::spacing::SpacingValue::Integer(4))
+    }
+    
+    /// Add vertical inset positioning with value 2
+    pub fn inset_y_2(self) -> Self {
+        self.inset_y(crate::utilities::spacing::SpacingValue::Integer(2))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -838,5 +930,29 @@ mod tests {
         assert!(css_classes.contains("object-center"));
         assert!(css_classes.contains("overscroll-contain"));
         assert!(css_classes.contains("visible"));
+    }
+
+    /// Test that positioning utilities (top/right/bottom/left) are implemented
+    #[test]
+    fn test_positioning_utilities() {
+        // This test will fail until we implement positioning utilities
+        let classes = ClassBuilder::new()
+            .top_4()  // top-4
+            .right_2()  // right-2
+            .bottom_6()  // bottom-6
+            .left_8()  // left-8
+            .inset_0()  // inset-0
+            .inset_x_4()  // inset-x-4
+            .inset_y_2()  // inset-y-2
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("top-4"));
+        assert!(css_classes.contains("right-2"));
+        assert!(css_classes.contains("bottom-6"));
+        assert!(css_classes.contains("left-8"));
+        assert!(css_classes.contains("inset-0"));
+        assert!(css_classes.contains("inset-x-4"));
+        assert!(css_classes.contains("inset-y-2"));
     }
 }

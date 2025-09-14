@@ -356,4 +356,80 @@ mod tests {
         assert!(css_classes.contains("delay-100"));
         assert!(css_classes.contains("transition-colors"));
     }
+    
+    /// Test that all Week 12 transition utilities are implemented
+    #[test]
+    fn test_week12_transition_utilities() {
+        // Test all Week 12 transition utilities
+        let classes = ClassBuilder::new()
+            // Transition Properties
+            .transition_property(TransitionProperty::None)
+            .transition_property(TransitionProperty::All)
+            .transition_property(TransitionProperty::Default)
+            .transition_property(TransitionProperty::Colors)
+            .transition_property(TransitionProperty::Opacity)
+            .transition_property(TransitionProperty::Shadow)
+            .transition_property(TransitionProperty::Transform)
+            // Duration
+            .transition_duration(TransitionDuration::Duration75)
+            .transition_duration(TransitionDuration::Duration100)
+            .transition_duration(TransitionDuration::Duration150)
+            .transition_duration(TransitionDuration::Duration200)
+            .transition_duration(TransitionDuration::Duration300)
+            .transition_duration(TransitionDuration::Duration500)
+            .transition_duration(TransitionDuration::Duration700)
+            .transition_duration(TransitionDuration::Duration1000)
+            // Ease
+            .transition_timing_function(TransitionTimingFunction::Linear)
+            .transition_timing_function(TransitionTimingFunction::In)
+            .transition_timing_function(TransitionTimingFunction::Out)
+            .transition_timing_function(TransitionTimingFunction::InOut)
+            // Delay
+            .transition_delay(TransitionDelay::Delay75)
+            .transition_delay(TransitionDelay::Delay100)
+            .transition_delay(TransitionDelay::Delay150)
+            .transition_delay(TransitionDelay::Delay200)
+            .transition_delay(TransitionDelay::Delay300)
+            .transition_delay(TransitionDelay::Delay500)
+            .transition_delay(TransitionDelay::Delay700)
+            .transition_delay(TransitionDelay::Delay1000)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Transition Properties
+        assert!(css_classes.contains("transition-none"));
+        assert!(css_classes.contains("transition-all"));
+        assert!(css_classes.contains("transition"));
+        assert!(css_classes.contains("transition-colors"));
+        assert!(css_classes.contains("transition-opacity"));
+        assert!(css_classes.contains("transition-shadow"));
+        assert!(css_classes.contains("transition-transform"));
+        
+        // Duration
+        assert!(css_classes.contains("duration-75"));
+        assert!(css_classes.contains("duration-100"));
+        assert!(css_classes.contains("duration-150"));
+        assert!(css_classes.contains("duration-200"));
+        assert!(css_classes.contains("duration-300"));
+        assert!(css_classes.contains("duration-500"));
+        assert!(css_classes.contains("duration-700"));
+        assert!(css_classes.contains("duration-1000"));
+        
+        // Ease
+        assert!(css_classes.contains("ease-linear"));
+        assert!(css_classes.contains("ease-in"));
+        assert!(css_classes.contains("ease-out"));
+        assert!(css_classes.contains("ease-in-out"));
+        
+        // Delay
+        assert!(css_classes.contains("delay-75"));
+        assert!(css_classes.contains("delay-100"));
+        assert!(css_classes.contains("delay-150"));
+        assert!(css_classes.contains("delay-200"));
+        assert!(css_classes.contains("delay-300"));
+        assert!(css_classes.contains("delay-500"));
+        assert!(css_classes.contains("delay-700"));
+        assert!(css_classes.contains("delay-1000"));
+    }
 }

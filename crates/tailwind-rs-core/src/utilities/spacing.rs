@@ -12,7 +12,7 @@ use std::fmt;
 /// # Examples
 /// 
 /// ```rust
-/// use tailwind_rs_core::utilities::spacing::SpacingValue;
+/// use tailwind_rs_core::utilities::spacing::{SpacingValue, PaddingUtilities};
 /// use tailwind_rs_core::classes::ClassBuilder;
 /// 
 /// let classes = ClassBuilder::new()
@@ -109,25 +109,34 @@ impl SpacingValue {
             SpacingValue::Zero,
             SpacingValue::Px,
             SpacingValue::Fractional(0.5),
-            SpacingValue::Fractional(1.5),
-            SpacingValue::Fractional(2.5),
-            SpacingValue::Fractional(3.5),
             SpacingValue::Integer(1),
+            SpacingValue::Fractional(1.5),
             SpacingValue::Integer(2),
+            SpacingValue::Fractional(2.5),
             SpacingValue::Integer(3),
+            SpacingValue::Fractional(3.5),
             SpacingValue::Integer(4),
             SpacingValue::Integer(5),
             SpacingValue::Integer(6),
+            SpacingValue::Integer(7),
             SpacingValue::Integer(8),
+            SpacingValue::Integer(9),
             SpacingValue::Integer(10),
+            SpacingValue::Integer(11),
             SpacingValue::Integer(12),
+            SpacingValue::Integer(14),
             SpacingValue::Integer(16),
             SpacingValue::Integer(20),
             SpacingValue::Integer(24),
+            SpacingValue::Integer(28),
             SpacingValue::Integer(32),
+            SpacingValue::Integer(36),
             SpacingValue::Integer(40),
+            SpacingValue::Integer(44),
             SpacingValue::Integer(48),
+            SpacingValue::Integer(52),
             SpacingValue::Integer(56),
+            SpacingValue::Integer(60),
             SpacingValue::Integer(64),
             SpacingValue::Integer(72),
             SpacingValue::Integer(80),
@@ -359,6 +368,118 @@ impl GapUtilities for ClassBuilder {
     }
 }
 
+/// Trait for adding space-between utilities to a class builder
+pub trait SpaceBetweenUtilities {
+    /// Add horizontal space between child elements
+    fn space_x(self, value: SpacingValue) -> Self;
+    
+    /// Add vertical space between child elements
+    fn space_y(self, value: SpacingValue) -> Self;
+    
+    /// Reverse horizontal space between child elements
+    fn space_x_reverse(self) -> Self;
+    
+    /// Reverse vertical space between child elements
+    fn space_y_reverse(self) -> Self;
+}
+
+impl SpaceBetweenUtilities for ClassBuilder {
+    fn space_x(self, value: SpacingValue) -> Self {
+        self.class(format!("space-x-{}", value.to_class_name()))
+    }
+    
+    fn space_y(self, value: SpacingValue) -> Self {
+        self.class(format!("space-y-{}", value.to_class_name()))
+    }
+    
+    fn space_x_reverse(self) -> Self {
+        self.class("space-x-reverse".to_string())
+    }
+    
+    fn space_y_reverse(self) -> Self {
+        self.class("space-y-reverse".to_string())
+    }
+}
+
+/// Convenience methods for space-between utilities
+impl ClassBuilder {
+    /// Add horizontal space between child elements with value 2
+    pub fn space_x_2(self) -> Self {
+        self.space_x(SpacingValue::Integer(2))
+    }
+    
+    /// Add horizontal space between child elements with value 4
+    pub fn space_x_4(self) -> Self {
+        self.space_x(SpacingValue::Integer(4))
+    }
+    
+    /// Add vertical space between child elements with value 2
+    pub fn space_y_2(self) -> Self {
+        self.space_y(SpacingValue::Integer(2))
+    }
+    
+    /// Add vertical space between child elements with value 4
+    pub fn space_y_4(self) -> Self {
+        self.space_y(SpacingValue::Integer(4))
+    }
+}
+
+/// Trait for adding divide utilities to a class builder
+pub trait SpacingDivideUtilities {
+    /// Add horizontal divider between child elements
+    fn divide_x(self, value: SpacingValue) -> Self;
+    
+    /// Add vertical divider between child elements
+    fn divide_y(self, value: SpacingValue) -> Self;
+    
+    /// Reverse horizontal divider between child elements
+    fn divide_x_reverse(self) -> Self;
+    
+    /// Reverse vertical divider between child elements
+    fn divide_y_reverse(self) -> Self;
+}
+
+impl SpacingDivideUtilities for ClassBuilder {
+    fn divide_x(self, value: SpacingValue) -> Self {
+        self.class(format!("divide-x-{}", value.to_class_name()))
+    }
+    
+    fn divide_y(self, value: SpacingValue) -> Self {
+        self.class(format!("divide-y-{}", value.to_class_name()))
+    }
+    
+    fn divide_x_reverse(self) -> Self {
+        self.class("divide-x-reverse".to_string())
+    }
+    
+    fn divide_y_reverse(self) -> Self {
+        self.class("divide-y-reverse".to_string())
+    }
+}
+
+/// Convenience methods for divide utilities
+impl ClassBuilder {
+    /// Add horizontal divider between child elements with value 2
+    pub fn divide_x_2(self) -> Self {
+        self.divide_x(SpacingValue::Integer(2))
+    }
+    
+    /// Add horizontal divider between child elements with value 4
+    pub fn divide_x_4(self) -> Self {
+        self.divide_x(SpacingValue::Integer(4))
+    }
+    
+    /// Add vertical divider between child elements with value 2
+    pub fn divide_y_2(self) -> Self {
+        self.divide_y(SpacingValue::Integer(2))
+    }
+    
+    /// Add vertical divider between child elements with value 4
+    pub fn divide_y_4(self) -> Self {
+        self.divide_y(SpacingValue::Integer(4))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -467,5 +588,63 @@ mod tests {
         assert!(css_classes.contains("p-auto"));
         assert!(css_classes.contains("m-full"));
         assert!(css_classes.contains("gap-screen"));
+    }
+
+    /// Test that all Tailwind CSS spacing values are supported
+    #[test]
+    fn test_all_tailwind_spacing_values() {
+        // Tailwind CSS spacing scale: 0, px, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 72, 80, 96
+        let expected_values = vec![
+            "0", "px", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10", 
+            "11", "12", "14", "16", "20", "24", "28", "32", "36", "40", "44", "48", "52", "56", "60", 
+            "64", "72", "80", "96"
+        ];
+        
+        let actual_values: Vec<String> = SpacingValue::all_values()
+            .iter()
+            .map(|v| v.to_class_name())
+            .collect();
+        
+        for expected in expected_values {
+            assert!(
+                actual_values.contains(&expected.to_string()),
+                "Missing spacing value: {}",
+                expected
+            );
+        }
+    }
+
+    /// Test that space-between utilities are implemented
+    #[test]
+    fn test_space_between_utilities() {
+        let classes = ClassBuilder::new()
+            .space_x_4()  // space-x-4
+            .space_y_2()  // space-y-2
+            .space_x_reverse()  // space-x-reverse
+            .space_y_reverse()  // space-y-reverse
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("space-x-4"));
+        assert!(css_classes.contains("space-y-2"));
+        assert!(css_classes.contains("space-x-reverse"));
+        assert!(css_classes.contains("space-y-reverse"));
+    }
+
+    /// Test that divide utilities are implemented
+    #[test]
+    fn test_divide_utilities() {
+        let classes = ClassBuilder::new()
+            .divide_x_2()  // divide-x-2
+            .divide_y_4()  // divide-y-4
+            .divide_x_reverse()  // divide-x-reverse
+            .divide_y_reverse()  // divide-y-reverse
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("divide-x-2"));
+        assert!(css_classes.contains("divide-y-4"));
+        assert!(css_classes.contains("divide-x-reverse"));
+        assert!(css_classes.contains("divide-y-reverse"));
     }
 }

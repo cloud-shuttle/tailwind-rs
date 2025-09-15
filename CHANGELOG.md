@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2024-12-19
+
+### 🐛 **Fixed**
+- **Flaky Property-Based Test**: Resolved flaky `test_complex_scenarios` property test in `tailwind-rs-testing`
+- **Test Logic Correction**: Fixed incorrect assumption that components with different names should always produce different HTML
+- **Stable CI/CD**: All 66 tests in `tailwind-rs-testing` now pass consistently
+- **Test Reliability**: Ensures stable test runs without random failures
+
+### 🔧 **Technical Details**
+- Updated test logic to only assert difference when classes are actually different
+- Added comprehensive assertions for class and content integrity
+- Improved property-based test robustness and realism
+
+## [0.4.1] - 2024-12-19
+
+### 🔧 **Fixed**
+- **Version Inconsistencies**: Resolved version inconsistencies across workspace crates
+- **Workspace Dependencies**: All crates now use workspace versions instead of hardcoded version numbers
+- **Consistent Version Management**: Ensures all crates reference the same version of dependencies
+
+### 📦 **Dependencies Updated**
+- `tailwind-rs-macros` now uses `{ workspace = true }` for `tailwind-rs-core`
+- All framework crates (`tailwind-rs-cli`, `tailwind-rs-yew`, `tailwind-rs-dioxus`, `tailwind-rs-leptos`) now use workspace versions
+- `tailwind-rs-testing` now uses workspace version of `tailwind-rs-core`
+
+### 🎯 **Benefits**
+- **Easier Maintenance**: Only need to update version in one place
+- **Prevents Version Mismatches**: Eliminates potential build issues from version conflicts
+- **Consistent Builds**: All crates use the same dependency versions
+
 ## [0.4.0] - 2024-12-XX
 
 ### 🌐 **WASM Compatibility Release**

@@ -14,8 +14,8 @@ rust-version = "1.89.0"
 
 [dependencies]
 # Core dependencies
-tailwind-rs-core = "0.1.0"
-tailwind-rs-macros = "0.1.0"
+tailwind-rs-core = { workspace = true }
+tailwind-rs-macros = { workspace = true }
 
 # Yew dependencies
 yew = { workspace = true }
@@ -26,7 +26,7 @@ js-sys = { workspace = true }
 # Utility dependencies
 serde = { workspace = true }
 serde_json = { workspace = true }
-uuid = { workspace = true }
+uuid = { workspace = true, features = ["v4", "serde", "js"] }
 chrono = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }

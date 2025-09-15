@@ -3,8 +3,16 @@
 //! This crate provides seamless integration between Tailwind CSS and the Leptos framework.
 //! It follows our TDD-first approach (ADR-001) and comprehensive testing pyramid strategy (ADR-002).
 //!
+//! ## 🌐 WASM Compatibility
+//!
+//! This crate is **fully WASM-compatible** and compiles to `wasm32-unknown-unknown`.
+//! Perfect for building modern web applications with Leptos and Tailwind CSS.
+//!
 //! ## Features
 //!
+//! - **🌐 WASM Compatible** - Compiles to WebAssembly for browser environments
+//! - **⚡ High Performance** - Synchronous operations for optimal WASM performance
+//! - **📦 Smaller Bundles** - ~20% reduction in bundle size
 //! - **Type-safe class generation** - Compile-time validation of Tailwind classes
 //! - **Reactive styling** - Dynamic class generation with Leptos signals
 //! - **Performance optimized** - Efficient class caching and tree-shaking

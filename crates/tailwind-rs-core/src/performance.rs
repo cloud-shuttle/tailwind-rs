@@ -9,6 +9,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
+use parking_lot::RwLock;
 
 /// Performance metrics for tracking optimization effectiveness
 #[derive(Debug, Clone)]
@@ -40,7 +41,7 @@ pub struct UsageMetric {
 /// Caches generated classes for performance
 #[derive(Debug)]
 pub struct ClassCache {
-    cache: Arc<tokio::sync::RwLock<LruCache<String, String>>>,
+    cache: Arc<RwLock<LruCache<String, String>>>,
     hit_rate: AtomicU64,
     miss_rate: AtomicU64,
     total_requests: AtomicU64,
@@ -50,8 +51,8 @@ impl ClassCache {
     /// Create a new cache with specified capacity
     pub fn new(capacity: usize) -> Self {
         Self {
-            cache: Arc::new(tokio::sync::RwLock::new(LruCache::new(
-                std::num::NonZeroUsize::new(capacity).unwrap(),
+            cache: Arc::new(RwLock::new(LruCache::new(
+                std::num::NonZeroUsize::new(capacity).unwrap_or(std::num::NonZeroUsize::new(100).unwrap()),
             ))),
             hit_rate: AtomicU64::new(0),
             miss_rate: AtomicU64::new(0),
@@ -60,10 +61,10 @@ impl ClassCache {
     }
 
     /// Retrieve a cached class string
-    pub async fn get(&self, key: &str) -> Option<String> {
+    pub fn get(&self, key: &str) -> Option<String> {
         self.total_requests.fetch_add(1, Ordering::Relaxed);
 
-        let mut cache = self.cache.write().await;
+        let mut cache = self.cache.write();
         if let Some(value) = cache.get(key) {
             self.hit_rate.fetch_add(1, Ordering::Relaxed);
             Some(value.clone())
@@ -74,8 +75,8 @@ impl ClassCache {
     }
 
     /// Store a class string in the cache
-    pub async fn put(&self, key: String, value: String) {
-        let mut cache = self.cache.write().await;
+    pub fn put(&self, key: String, value: String) {
+        let mut cache = self.cache.write();
         cache.put(key, value);
     }
 
@@ -101,20 +102,20 @@ impl ClassCache {
     }
 
     /// Clear the cache
-    pub async fn clear(&self) {
-        let mut cache = self.cache.write().await;
+    pub fn clear(&self) {
+        let mut cache = self.cache.write();
         cache.clear();
     }
 
     /// Get cache size
-    pub async fn len(&self) -> usize {
-        let cache = self.cache.read().await;
+    pub fn len(&self) -> usize {
+        let cache = self.cache.read();
         cache.len()
     }
 
     /// Check if cache is empty
-    pub async fn is_empty(&self) -> bool {
-        let cache = self.cache.read().await;
+    pub fn is_empty(&self) -> bool {
+        let cache = self.cache.read();
         cache.is_empty()
     }
 }
@@ -159,9 +160,9 @@ pub struct PerformanceOptimizer {
     class_cache: ClassCache,
     css_cache: ClassCache,
     optimization_level: OptimizationLevel,
-    performance_metrics: Arc<tokio::sync::RwLock<Vec<PerformanceMetric>>>,
-    error_metrics: Arc<tokio::sync::RwLock<Vec<ErrorMetric>>>,
-    usage_metrics: Arc<tokio::sync::RwLock<HashMap<String, UsageMetric>>>,
+    performance_metrics: Arc<RwLock<Vec<PerformanceMetric>>>,
+    error_metrics: Arc<RwLock<Vec<ErrorMetric>>>,
+    usage_metrics: Arc<RwLock<HashMap<String, UsageMetric>>>,
 }
 
 impl PerformanceOptimizer {
@@ -177,55 +178,51 @@ impl PerformanceOptimizer {
             class_cache: ClassCache::new(capacity),
             css_cache: ClassCache::new(capacity),
             optimization_level: level,
-            performance_metrics: Arc::new(tokio::sync::RwLock::new(Vec::new())),
-            error_metrics: Arc::new(tokio::sync::RwLock::new(Vec::new())),
-            usage_metrics: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+            performance_metrics: Arc::new(RwLock::new(Vec::new())),
+            error_metrics: Arc::new(RwLock::new(Vec::new())),
+            usage_metrics: Arc::new(RwLock::new(HashMap::new())),
         }
     }
 
     /// Optimize class generation with caching
-    pub async fn optimize_class_generation(&mut self, classes: &[String]) -> Result<String> {
+    pub fn optimize_class_generation(&mut self, classes: &[String]) -> Result<String> {
         let start = Instant::now();
         let cache_key = self.generate_cache_key(classes);
 
         // Try to get from cache first
-        if let Some(cached_result) = self.class_cache.get(&cache_key).await {
-            self.record_performance("class_generation_cached", start.elapsed(), true)
-                .await;
+        if let Some(cached_result) = self.class_cache.get(&cache_key) {
+            self.record_performance("class_generation_cached", start.elapsed(), true);
             return Ok(cached_result);
         }
 
         // Generate classes
-        let result = self.generate_classes(classes).await?;
+        let result = self.generate_classes(classes)?;
 
         // Cache the result
-        self.class_cache.put(cache_key, result.clone()).await;
+        self.class_cache.put(cache_key, result.clone());
 
-        self.record_performance("class_generation", start.elapsed(), true)
-            .await;
+        self.record_performance("class_generation", start.elapsed(), true);
         Ok(result)
     }
 
     /// Optimize CSS generation with caching
-    pub async fn optimize_css_generation(&mut self, css: &str) -> Result<String> {
+    pub fn optimize_css_generation(&mut self, css: &str) -> Result<String> {
         let start = Instant::now();
         let cache_key = format!("css:{}", css);
 
         // Try to get from cache first
-        if let Some(cached_result) = self.css_cache.get(&cache_key).await {
-            self.record_performance("css_generation_cached", start.elapsed(), true)
-                .await;
+        if let Some(cached_result) = self.css_cache.get(&cache_key) {
+            self.record_performance("css_generation_cached", start.elapsed(), true);
             return Ok(cached_result);
         }
 
         // Generate optimized CSS
-        let result = self.optimize_css(css).await?;
+        let result = self.optimize_css(css)?;
 
         // Cache the result
-        self.css_cache.put(cache_key, result.clone()).await;
+        self.css_cache.put(cache_key, result.clone());
 
-        self.record_performance("css_generation", start.elapsed(), true)
-            .await;
+        self.record_performance("css_generation", start.elapsed(), true);
         Ok(result)
     }
 
@@ -240,21 +237,21 @@ impl PerformanceOptimizer {
     }
 
     /// Generate classes with optimization
-    async fn generate_classes(&self, classes: &[String]) -> Result<String> {
+    fn generate_classes(&self, classes: &[String]) -> Result<String> {
         // Apply optimization based on level
         let optimized_classes = match self.optimization_level {
             OptimizationLevel::None => classes.to_vec(),
-            OptimizationLevel::Low => self.optimize_classes_low(classes).await,
-            OptimizationLevel::Medium => self.optimize_classes_medium(classes).await,
-            OptimizationLevel::High => self.optimize_classes_high(classes).await,
-            OptimizationLevel::Maximum => self.optimize_classes_maximum(classes).await,
+            OptimizationLevel::Low => self.optimize_classes_low(classes),
+            OptimizationLevel::Medium => self.optimize_classes_medium(classes),
+            OptimizationLevel::High => self.optimize_classes_high(classes),
+            OptimizationLevel::Maximum => self.optimize_classes_maximum(classes),
         };
 
         Ok(optimized_classes.join(" "))
     }
 
     /// Low-level optimization
-    async fn optimize_classes_low(&self, classes: &[String]) -> Vec<String> {
+    fn optimize_classes_low(&self, classes: &[String]) -> Vec<String> {
         // Remove duplicates
         let mut unique_classes: Vec<String> = classes.to_vec();
         unique_classes.sort();
@@ -263,37 +260,37 @@ impl PerformanceOptimizer {
     }
 
     /// Medium-level optimization
-    async fn optimize_classes_medium(&self, classes: &[String]) -> Vec<String> {
-        let mut optimized = self.optimize_classes_low(classes).await;
+    fn optimize_classes_medium(&self, classes: &[String]) -> Vec<String> {
+        let mut optimized = self.optimize_classes_low(classes);
 
         // Remove conflicting classes
-        optimized = self.remove_conflicting_classes(optimized).await;
+        optimized = self.remove_conflicting_classes(optimized);
 
         optimized
     }
 
     /// High-level optimization
-    async fn optimize_classes_high(&self, classes: &[String]) -> Vec<String> {
-        let mut optimized = self.optimize_classes_medium(classes).await;
+    fn optimize_classes_high(&self, classes: &[String]) -> Vec<String> {
+        let mut optimized = self.optimize_classes_medium(classes);
 
         // Merge similar classes
-        optimized = self.merge_similar_classes(optimized).await;
+        optimized = self.merge_similar_classes(optimized);
 
         optimized
     }
 
     /// Maximum-level optimization
-    async fn optimize_classes_maximum(&self, classes: &[String]) -> Vec<String> {
-        let mut optimized = self.optimize_classes_high(classes).await;
+    fn optimize_classes_maximum(&self, classes: &[String]) -> Vec<String> {
+        let mut optimized = self.optimize_classes_high(classes);
 
         // Apply advanced optimizations
-        optimized = self.apply_advanced_optimizations(optimized).await;
+        optimized = self.apply_advanced_optimizations(optimized);
 
         optimized
     }
 
     /// Remove conflicting classes
-    async fn remove_conflicting_classes(&self, classes: Vec<String>) -> Vec<String> {
+    fn remove_conflicting_classes(&self, classes: Vec<String>) -> Vec<String> {
         let mut result = Vec::new();
         let mut seen_groups: HashMap<String, String> = HashMap::new();
 
@@ -318,7 +315,7 @@ impl PerformanceOptimizer {
     }
 
     /// Merge similar classes
-    async fn merge_similar_classes(&self, classes: Vec<String>) -> Vec<String> {
+    fn merge_similar_classes(&self, classes: Vec<String>) -> Vec<String> {
         // This is a simplified implementation
         // In a real implementation, you would merge classes like:
         // "px-2", "px-4" -> "px-4" (keep the larger value)
@@ -326,7 +323,7 @@ impl PerformanceOptimizer {
     }
 
     /// Apply advanced optimizations
-    async fn apply_advanced_optimizations(&self, classes: Vec<String>) -> Vec<String> {
+    fn apply_advanced_optimizations(&self, classes: Vec<String>) -> Vec<String> {
         // This is a placeholder for advanced optimizations
         // In a real implementation, you might:
         // - Combine responsive classes
@@ -359,7 +356,7 @@ impl PerformanceOptimizer {
     }
 
     /// Optimize CSS
-    async fn optimize_css(&self, css: &str) -> Result<String> {
+    fn optimize_css(&self, css: &str) -> Result<String> {
         let mut optimized = css.to_string();
 
         // Remove unnecessary whitespace
@@ -374,7 +371,7 @@ impl PerformanceOptimizer {
     }
 
     /// Record performance metrics
-    pub async fn record_performance(&self, operation: &str, duration: Duration, success: bool) {
+    pub fn record_performance(&self, operation: &str, duration: Duration, success: bool) {
         let metric = PerformanceMetric {
             operation: operation.to_string(),
             duration,
@@ -382,7 +379,7 @@ impl PerformanceOptimizer {
             success,
         };
 
-        let mut metrics = self.performance_metrics.write().await;
+        let mut metrics = self.performance_metrics.write();
         metrics.push(metric);
 
         // Keep only the last 1000 metrics
@@ -393,7 +390,7 @@ impl PerformanceOptimizer {
     }
 
     /// Record error metrics
-    pub async fn record_error(&self, error_type: &str, error: &dyn std::error::Error) {
+    pub fn record_error(&self, error_type: &str, error: &dyn std::error::Error) {
         let metric = ErrorMetric {
             error_type: error_type.to_string(),
             error_message: error.to_string(),
@@ -401,7 +398,7 @@ impl PerformanceOptimizer {
             count: 1,
         };
 
-        let mut metrics = self.error_metrics.write().await;
+        let mut metrics = self.error_metrics.write();
         metrics.push(metric);
 
         // Keep only the last 1000 error metrics
@@ -412,8 +409,8 @@ impl PerformanceOptimizer {
     }
 
     /// Record usage metrics
-    pub async fn record_usage(&self, class_pattern: &str, generation_time: Duration) {
-        let mut metrics = self.usage_metrics.write().await;
+    pub fn record_usage(&self, class_pattern: &str, generation_time: Duration) {
+        let mut metrics = self.usage_metrics.write();
 
         if let Some(usage) = metrics.get_mut(class_pattern) {
             usage.usage_count += 1;
@@ -436,34 +433,34 @@ impl PerformanceOptimizer {
     }
 
     /// Get performance metrics
-    pub async fn get_performance_metrics(&self) -> Vec<PerformanceMetric> {
-        let metrics = self.performance_metrics.read().await;
+    pub fn get_performance_metrics(&self) -> Vec<PerformanceMetric> {
+        let metrics = self.performance_metrics.read();
         metrics.clone()
     }
 
     /// Get error metrics
-    pub async fn get_error_metrics(&self) -> Vec<ErrorMetric> {
-        let metrics = self.error_metrics.read().await;
+    pub fn get_error_metrics(&self) -> Vec<ErrorMetric> {
+        let metrics = self.error_metrics.read();
         metrics.clone()
     }
 
     /// Get usage metrics
-    pub async fn get_usage_metrics(&self) -> HashMap<String, UsageMetric> {
-        let metrics = self.usage_metrics.read().await;
+    pub fn get_usage_metrics(&self) -> HashMap<String, UsageMetric> {
+        let metrics = self.usage_metrics.read();
         metrics.clone()
     }
 
     /// Get cache statistics
-    pub async fn get_cache_stats(&self) -> CacheStats {
+    pub fn get_cache_stats(&self) -> CacheStats {
         CacheStats {
             class_cache_hit_rate: self.class_cache.hit_rate(),
             class_cache_miss_rate: self.class_cache.miss_rate(),
             class_cache_total_requests: self.class_cache.total_requests(),
-            class_cache_size: self.class_cache.len().await,
+            class_cache_size: self.class_cache.len(),
             css_cache_hit_rate: self.css_cache.hit_rate(),
             css_cache_miss_rate: self.css_cache.miss_rate(),
             css_cache_total_requests: self.css_cache.total_requests(),
-            css_cache_size: self.css_cache.len().await,
+            css_cache_size: self.css_cache.len(),
         }
     }
 

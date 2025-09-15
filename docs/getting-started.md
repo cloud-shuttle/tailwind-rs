@@ -2,6 +2,10 @@
 
 Get up and running with `tailwind-rs` in under 5 minutes. This guide will walk you through setting up a new project and creating your first styled components.
 
+## 🌐 **v0.4.0 WASM Compatibility Release**
+
+> **🚀 Major Update**: All Tailwind-RS crates are now **fully WASM-compatible**! Perfect for modern web applications with improved performance and smaller bundles.
+
 ## 🚀 Quick Setup
 
 ### Prerequisites
@@ -9,6 +13,7 @@ Get up and running with `tailwind-rs` in under 5 minutes. This guide will walk y
 - Rust 1.70+ (latest stable recommended)
 - Cargo
 - Your preferred Rust web framework (Leptos, Yew, or Dioxus)
+- **WASM support** (for web applications)
 
 ### 1. Create a New Project
 
@@ -19,8 +24,11 @@ cd my-tailwind-app
 
 # Add your web framework (example with Leptos)
 cargo add leptos
-cargo add tailwind-rs
-cargo add tailwind-rs-leptos
+cargo add tailwind-rs-core@0.4.0
+cargo add tailwind-rs-leptos@0.4.0
+
+# For WASM applications
+cargo add tailwind-rs-wasm@0.4.0
 ```
 
 ### 2. Configure Cargo.toml

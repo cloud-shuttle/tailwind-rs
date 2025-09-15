@@ -7,3 +7,4 @@
 cc c60a3b1880b4d865ac26401a96e0edabaf4343143f81188c56cf87b0617bbdc8 # shrinks to classes = ["block"], html_content = "<div>Test content</div>"
 cc c0e80da6bafa3f029a64904c2e06cc359e8fe29a6d90ed95f8ce3d52220389e4 # shrinks to classes = ["px-2", "p-7"], html_content = "<div>Test content</div>"
 cc 94204b50ad2596dedd08eaba1282bfc596005381feb98e260ef169a0420865e2 # shrinks to classes = ["block"], html_content = "<div>Test content</div>", css_properties = [("r", "A"), ("r", " ")]
+cc 21fafc60f83046f4549648c6127a990ab465b0b0bcc4895733f76cb0183200e6 # shrinks to classes1 = ["my-7"], classes2 = ["my-7"], html_content = "<div>Test content</div>"

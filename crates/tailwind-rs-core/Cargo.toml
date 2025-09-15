@@ -14,7 +14,7 @@ description = "Core types and utilities for tailwind-rs"
 [dependencies]
 serde = { workspace = true }
 serde_json = { workspace = true }
-uuid = { workspace = true }
+uuid = { workspace = true, features = ["v4", "serde", "js"] }
 chrono = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
@@ -22,7 +22,7 @@ toml = { workspace = true }
 glob = { workspace = true }
 regex = "1.10"
 lru = "0.12"
-tokio = { version = "1.0", features = ["sync", "rt", "rt-multi-thread", "test-util"] }
+parking_lot = "0.12"
 
 [dev-dependencies]
 tailwind-rs-testing = { workspace = true }

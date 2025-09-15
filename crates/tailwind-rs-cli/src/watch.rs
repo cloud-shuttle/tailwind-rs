@@ -81,7 +81,7 @@ impl WatchCommand {
 
         // Initial build
         LogUtils::info("Performing initial build...");
-        self.build().await?;
+        self.build()?;
 
         // Watch for changes
         loop {
@@ -97,7 +97,7 @@ impl WatchCommand {
                             tokio::time::sleep(Duration::from_millis(self.debounce)).await;
 
                             // Rebuild
-                            if let Err(e) = self.build().await {
+                            if let Err(e) = self.build() {
                                 LogUtils::error(&format!("Build error: {}", e));
                             }
                         }
@@ -128,7 +128,7 @@ impl WatchCommand {
     }
 
     /// Perform the actual build
-    async fn build(&self) -> Result<()> {
+    fn build(&self) -> Result<()> {
         let start_time = std::time::Instant::now();
         
         let mut builder = TailwindBuilder::new()
@@ -149,7 +149,7 @@ impl WatchCommand {
             builder = builder.enable_minification();
         }
 
-        builder.build().await?;
+        builder.build()?;
         
         let duration = start_time.elapsed();
         

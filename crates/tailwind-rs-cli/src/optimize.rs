@@ -96,7 +96,7 @@ impl OptimizeCommand {
 
         // Perform optimization
         let start_time = std::time::Instant::now();
-        optimizer.optimize().await?;
+        optimizer.optimize()?;
         let duration = start_time.elapsed();
 
         // Get output file size

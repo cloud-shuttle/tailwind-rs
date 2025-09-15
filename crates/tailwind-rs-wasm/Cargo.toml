@@ -32,7 +32,6 @@ log = "0.4.20"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 # Native-specific dependencies (for testing)
-tokio = { version = "1.0", features = ["full"] }
 chrono = { version = "0.4", features = ["serde"] }
 uuid = { version = "1.0", features = ["v4", "serde"] }
 

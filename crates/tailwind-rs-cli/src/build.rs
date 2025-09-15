@@ -105,7 +105,7 @@ impl BuildCommand {
 
         // Perform the build
         let start_time = std::time::Instant::now();
-        builder.build().await?;
+        builder.build()?;
         let duration = start_time.elapsed();
 
         // Get output file size

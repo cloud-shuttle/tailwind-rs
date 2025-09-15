@@ -389,8 +389,23 @@ mod integration_property_tests {
             assert!(!html1.is_empty(), "Complex scenario should produce HTML");
             assert!(!html2.is_empty(), "Complex scenario should produce HTML");
             
-            // Property: Complex scenarios should maintain separation
-            assert_ne!(html1, html2, "Complex scenarios should maintain separation");
+            // Property: Components with different classes should produce different HTML
+            // (unless they happen to have the same classes, which is valid)
+            if classes1 != classes2 {
+                assert_ne!(html1, html2, "Components with different classes should produce different HTML");
+            }
+            
+            // Property: Both components should contain their respective classes
+            for class in &classes1 {
+                assert!(html1.contains(class), "Component 1 should contain class: {}", class);
+            }
+            for class in &classes2 {
+                assert!(html2.contains(class), "Component 2 should contain class: {}", class);
+            }
+            
+            // Property: Both components should contain the HTML content
+            assert!(html1.contains(&html_content), "Component 1 should contain HTML content");
+            assert!(html2.contains(&html_content), "Component 2 should contain HTML content");
         }
     }
 }

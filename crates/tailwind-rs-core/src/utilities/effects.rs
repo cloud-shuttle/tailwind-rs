@@ -158,6 +158,167 @@ pub enum BackgroundBlendMode {
     Luminosity,
 }
 
+/// Backdrop filter blur values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropBlur {
+    /// No backdrop blur
+    None,
+    /// backdrop-blur-sm (4px)
+    Sm,
+    /// backdrop-blur (8px)
+    Default,
+    /// backdrop-blur-md (12px)
+    Md,
+    /// backdrop-blur-lg (16px)
+    Lg,
+    /// backdrop-blur-xl (24px)
+    Xl,
+    /// backdrop-blur-2xl (40px)
+    Xl2,
+    /// backdrop-blur-3xl (64px)
+    Xl3,
+}
+
+/// Backdrop filter brightness values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropBrightness {
+    /// backdrop-brightness-0 (0)
+    Zero,
+    /// backdrop-brightness-50 (0.5)
+    Fifty,
+    /// backdrop-brightness-75 (0.75)
+    SeventyFive,
+    /// backdrop-brightness-90 (0.9)
+    Ninety,
+    /// backdrop-brightness-95 (0.95)
+    NinetyFive,
+    /// backdrop-brightness-100 (1)
+    OneHundred,
+    /// backdrop-brightness-105 (1.05)
+    OneOhFive,
+    /// backdrop-brightness-110 (1.1)
+    OneOneZero,
+    /// backdrop-brightness-125 (1.25)
+    OneTwoFive,
+    /// backdrop-brightness-150 (1.5)
+    OneFifty,
+    /// backdrop-brightness-200 (2)
+    TwoHundred,
+}
+
+/// Backdrop filter contrast values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropContrast {
+    /// backdrop-contrast-0 (0)
+    Zero,
+    /// backdrop-contrast-50 (0.5)
+    Fifty,
+    /// backdrop-contrast-75 (0.75)
+    SeventyFive,
+    /// backdrop-contrast-100 (1)
+    OneHundred,
+    /// backdrop-contrast-125 (1.25)
+    OneTwoFive,
+    /// backdrop-contrast-150 (1.5)
+    OneFifty,
+    /// backdrop-contrast-200 (2)
+    TwoHundred,
+}
+
+/// Backdrop filter grayscale values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropGrayscale {
+    /// backdrop-grayscale-0 (0)
+    Zero,
+    /// backdrop-grayscale (1)
+    Default,
+}
+
+/// Backdrop filter hue rotate values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropHueRotate {
+    /// backdrop-hue-rotate-0 (0deg)
+    Zero,
+    /// backdrop-hue-rotate-15 (15deg)
+    Fifteen,
+    /// backdrop-hue-rotate-30 (30deg)
+    Thirty,
+    /// backdrop-hue-rotate-60 (60deg)
+    Sixty,
+    /// backdrop-hue-rotate-90 (90deg)
+    Ninety,
+    /// backdrop-hue-rotate-180 (180deg)
+    OneEighty,
+}
+
+/// Backdrop filter invert values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropInvert {
+    /// backdrop-invert-0 (0)
+    Zero,
+    /// backdrop-invert (1)
+    Default,
+}
+
+/// Backdrop filter opacity values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropOpacity {
+    /// backdrop-opacity-0 (0)
+    Zero,
+    /// backdrop-opacity-5 (0.05)
+    Five,
+    /// backdrop-opacity-10 (0.1)
+    Ten,
+    /// backdrop-opacity-20 (0.2)
+    Twenty,
+    /// backdrop-opacity-25 (0.25)
+    TwentyFive,
+    /// backdrop-opacity-30 (0.3)
+    Thirty,
+    /// backdrop-opacity-40 (0.4)
+    Forty,
+    /// backdrop-opacity-50 (0.5)
+    Fifty,
+    /// backdrop-opacity-60 (0.6)
+    Sixty,
+    /// backdrop-opacity-70 (0.7)
+    Seventy,
+    /// backdrop-opacity-75 (0.75)
+    SeventyFive,
+    /// backdrop-opacity-80 (0.8)
+    Eighty,
+    /// backdrop-opacity-90 (0.9)
+    Ninety,
+    /// backdrop-opacity-95 (0.95)
+    NinetyFive,
+    /// backdrop-opacity-100 (1)
+    OneHundred,
+}
+
+/// Backdrop filter saturate values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropSaturate {
+    /// backdrop-saturate-0 (0)
+    Zero,
+    /// backdrop-saturate-50 (0.5)
+    Fifty,
+    /// backdrop-saturate-100 (1)
+    OneHundred,
+    /// backdrop-saturate-150 (1.5)
+    OneFifty,
+    /// backdrop-saturate-200 (2)
+    TwoHundred,
+}
+
+/// Backdrop filter sepia values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BackdropSepia {
+    /// backdrop-sepia-0 (0)
+    Zero,
+    /// backdrop-sepia (1)
+    Default,
+}
+
 impl BoxShadow {
     pub fn to_class_name(&self) -> String {
         match self {
@@ -344,6 +505,230 @@ impl BackgroundBlendMode {
     }
 }
 
+impl BackdropBlur {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropBlur::None => "backdrop-blur-none".to_string(),
+            BackdropBlur::Sm => "backdrop-blur-sm".to_string(),
+            BackdropBlur::Default => "backdrop-blur".to_string(),
+            BackdropBlur::Md => "backdrop-blur-md".to_string(),
+            BackdropBlur::Lg => "backdrop-blur-lg".to_string(),
+            BackdropBlur::Xl => "backdrop-blur-xl".to_string(),
+            BackdropBlur::Xl2 => "backdrop-blur-2xl".to_string(),
+            BackdropBlur::Xl3 => "backdrop-blur-3xl".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropBlur::None => "blur(0px)".to_string(),
+            BackdropBlur::Sm => "blur(4px)".to_string(),
+            BackdropBlur::Default => "blur(8px)".to_string(),
+            BackdropBlur::Md => "blur(12px)".to_string(),
+            BackdropBlur::Lg => "blur(16px)".to_string(),
+            BackdropBlur::Xl => "blur(24px)".to_string(),
+            BackdropBlur::Xl2 => "blur(40px)".to_string(),
+            BackdropBlur::Xl3 => "blur(64px)".to_string(),
+        }
+    }
+}
+
+impl BackdropBrightness {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropBrightness::Zero => "backdrop-brightness-0".to_string(),
+            BackdropBrightness::Fifty => "backdrop-brightness-50".to_string(),
+            BackdropBrightness::SeventyFive => "backdrop-brightness-75".to_string(),
+            BackdropBrightness::Ninety => "backdrop-brightness-90".to_string(),
+            BackdropBrightness::NinetyFive => "backdrop-brightness-95".to_string(),
+            BackdropBrightness::OneHundred => "backdrop-brightness-100".to_string(),
+            BackdropBrightness::OneOhFive => "backdrop-brightness-105".to_string(),
+            BackdropBrightness::OneOneZero => "backdrop-brightness-110".to_string(),
+            BackdropBrightness::OneTwoFive => "backdrop-brightness-125".to_string(),
+            BackdropBrightness::OneFifty => "backdrop-brightness-150".to_string(),
+            BackdropBrightness::TwoHundred => "backdrop-brightness-200".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropBrightness::Zero => "brightness(0)".to_string(),
+            BackdropBrightness::Fifty => "brightness(0.5)".to_string(),
+            BackdropBrightness::SeventyFive => "brightness(0.75)".to_string(),
+            BackdropBrightness::Ninety => "brightness(0.9)".to_string(),
+            BackdropBrightness::NinetyFive => "brightness(0.95)".to_string(),
+            BackdropBrightness::OneHundred => "brightness(1)".to_string(),
+            BackdropBrightness::OneOhFive => "brightness(1.05)".to_string(),
+            BackdropBrightness::OneOneZero => "brightness(1.1)".to_string(),
+            BackdropBrightness::OneTwoFive => "brightness(1.25)".to_string(),
+            BackdropBrightness::OneFifty => "brightness(1.5)".to_string(),
+            BackdropBrightness::TwoHundred => "brightness(2)".to_string(),
+        }
+    }
+}
+
+impl BackdropContrast {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropContrast::Zero => "backdrop-contrast-0".to_string(),
+            BackdropContrast::Fifty => "backdrop-contrast-50".to_string(),
+            BackdropContrast::SeventyFive => "backdrop-contrast-75".to_string(),
+            BackdropContrast::OneHundred => "backdrop-contrast-100".to_string(),
+            BackdropContrast::OneTwoFive => "backdrop-contrast-125".to_string(),
+            BackdropContrast::OneFifty => "backdrop-contrast-150".to_string(),
+            BackdropContrast::TwoHundred => "backdrop-contrast-200".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropContrast::Zero => "contrast(0)".to_string(),
+            BackdropContrast::Fifty => "contrast(0.5)".to_string(),
+            BackdropContrast::SeventyFive => "contrast(0.75)".to_string(),
+            BackdropContrast::OneHundred => "contrast(1)".to_string(),
+            BackdropContrast::OneTwoFive => "contrast(1.25)".to_string(),
+            BackdropContrast::OneFifty => "contrast(1.5)".to_string(),
+            BackdropContrast::TwoHundred => "contrast(2)".to_string(),
+        }
+    }
+}
+
+impl BackdropGrayscale {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropGrayscale::Zero => "backdrop-grayscale-0".to_string(),
+            BackdropGrayscale::Default => "backdrop-grayscale".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropGrayscale::Zero => "grayscale(0)".to_string(),
+            BackdropGrayscale::Default => "grayscale(1)".to_string(),
+        }
+    }
+}
+
+impl BackdropHueRotate {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropHueRotate::Zero => "backdrop-hue-rotate-0".to_string(),
+            BackdropHueRotate::Fifteen => "backdrop-hue-rotate-15".to_string(),
+            BackdropHueRotate::Thirty => "backdrop-hue-rotate-30".to_string(),
+            BackdropHueRotate::Sixty => "backdrop-hue-rotate-60".to_string(),
+            BackdropHueRotate::Ninety => "backdrop-hue-rotate-90".to_string(),
+            BackdropHueRotate::OneEighty => "backdrop-hue-rotate-180".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropHueRotate::Zero => "hue-rotate(0deg)".to_string(),
+            BackdropHueRotate::Fifteen => "hue-rotate(15deg)".to_string(),
+            BackdropHueRotate::Thirty => "hue-rotate(30deg)".to_string(),
+            BackdropHueRotate::Sixty => "hue-rotate(60deg)".to_string(),
+            BackdropHueRotate::Ninety => "hue-rotate(90deg)".to_string(),
+            BackdropHueRotate::OneEighty => "hue-rotate(180deg)".to_string(),
+        }
+    }
+}
+
+impl BackdropInvert {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropInvert::Zero => "backdrop-invert-0".to_string(),
+            BackdropInvert::Default => "backdrop-invert".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropInvert::Zero => "invert(0)".to_string(),
+            BackdropInvert::Default => "invert(1)".to_string(),
+        }
+    }
+}
+
+impl BackdropOpacity {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropOpacity::Zero => "backdrop-opacity-0".to_string(),
+            BackdropOpacity::Five => "backdrop-opacity-5".to_string(),
+            BackdropOpacity::Ten => "backdrop-opacity-10".to_string(),
+            BackdropOpacity::Twenty => "backdrop-opacity-20".to_string(),
+            BackdropOpacity::TwentyFive => "backdrop-opacity-25".to_string(),
+            BackdropOpacity::Thirty => "backdrop-opacity-30".to_string(),
+            BackdropOpacity::Forty => "backdrop-opacity-40".to_string(),
+            BackdropOpacity::Fifty => "backdrop-opacity-50".to_string(),
+            BackdropOpacity::Sixty => "backdrop-opacity-60".to_string(),
+            BackdropOpacity::Seventy => "backdrop-opacity-70".to_string(),
+            BackdropOpacity::SeventyFive => "backdrop-opacity-75".to_string(),
+            BackdropOpacity::Eighty => "backdrop-opacity-80".to_string(),
+            BackdropOpacity::Ninety => "backdrop-opacity-90".to_string(),
+            BackdropOpacity::NinetyFive => "backdrop-opacity-95".to_string(),
+            BackdropOpacity::OneHundred => "backdrop-opacity-100".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropOpacity::Zero => "opacity(0)".to_string(),
+            BackdropOpacity::Five => "opacity(0.05)".to_string(),
+            BackdropOpacity::Ten => "opacity(0.1)".to_string(),
+            BackdropOpacity::Twenty => "opacity(0.2)".to_string(),
+            BackdropOpacity::TwentyFive => "opacity(0.25)".to_string(),
+            BackdropOpacity::Thirty => "opacity(0.3)".to_string(),
+            BackdropOpacity::Forty => "opacity(0.4)".to_string(),
+            BackdropOpacity::Fifty => "opacity(0.5)".to_string(),
+            BackdropOpacity::Sixty => "opacity(0.6)".to_string(),
+            BackdropOpacity::Seventy => "opacity(0.7)".to_string(),
+            BackdropOpacity::SeventyFive => "opacity(0.75)".to_string(),
+            BackdropOpacity::Eighty => "opacity(0.8)".to_string(),
+            BackdropOpacity::Ninety => "opacity(0.9)".to_string(),
+            BackdropOpacity::NinetyFive => "opacity(0.95)".to_string(),
+            BackdropOpacity::OneHundred => "opacity(1)".to_string(),
+        }
+    }
+}
+
+impl BackdropSaturate {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropSaturate::Zero => "backdrop-saturate-0".to_string(),
+            BackdropSaturate::Fifty => "backdrop-saturate-50".to_string(),
+            BackdropSaturate::OneHundred => "backdrop-saturate-100".to_string(),
+            BackdropSaturate::OneFifty => "backdrop-saturate-150".to_string(),
+            BackdropSaturate::TwoHundred => "backdrop-saturate-200".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropSaturate::Zero => "saturate(0)".to_string(),
+            BackdropSaturate::Fifty => "saturate(0.5)".to_string(),
+            BackdropSaturate::OneHundred => "saturate(1)".to_string(),
+            BackdropSaturate::OneFifty => "saturate(1.5)".to_string(),
+            BackdropSaturate::TwoHundred => "saturate(2)".to_string(),
+        }
+    }
+}
+
+impl BackdropSepia {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            BackdropSepia::Zero => "backdrop-sepia-0".to_string(),
+            BackdropSepia::Default => "backdrop-sepia".to_string(),
+        }
+    }
+
+    pub fn to_css_value(&self) -> String {
+        match self {
+            BackdropSepia::Zero => "sepia(0)".to_string(),
+            BackdropSepia::Default => "sepia(1)".to_string(),
+        }
+    }
+}
+
 impl fmt::Display for BoxShadow {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_class_name())
@@ -369,6 +754,60 @@ impl fmt::Display for MixBlendMode {
 }
 
 impl fmt::Display for BackgroundBlendMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropBlur {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropBrightness {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropContrast {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropGrayscale {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropHueRotate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropInvert {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropOpacity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropSaturate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for BackdropSepia {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_class_name())
     }
@@ -630,5 +1069,321 @@ mod tests {
         assert!(css_classes.contains("opacity-90"));
         assert!(css_classes.contains("opacity-95"));
         assert!(css_classes.contains("opacity-100"));
+    }
+
+    #[test]
+    fn test_box_shadow_display() {
+        // Test that BoxShadow displays correctly
+        assert_eq!(format!("{}", BoxShadow::None), "none");
+        assert_eq!(format!("{}", BoxShadow::Sm), "sm");
+        assert_eq!(format!("{}", BoxShadow::Default), "default");
+        assert_eq!(format!("{}", BoxShadow::Md), "md");
+        assert_eq!(format!("{}", BoxShadow::Lg), "lg");
+        assert_eq!(format!("{}", BoxShadow::Xl), "xl");
+        assert_eq!(format!("{}", BoxShadow::Xl2), "2xl");
+        assert_eq!(format!("{}", BoxShadow::Inner), "inner");
+    }
+
+    #[test]
+    fn test_drop_shadow_display() {
+        // Test that DropShadow displays correctly
+        assert_eq!(format!("{}", DropShadow::None), "none");
+        assert_eq!(format!("{}", DropShadow::Sm), "sm");
+        assert_eq!(format!("{}", DropShadow::Default), "default");
+        assert_eq!(format!("{}", DropShadow::Md), "md");
+        assert_eq!(format!("{}", DropShadow::Lg), "lg");
+        assert_eq!(format!("{}", DropShadow::Xl), "xl");
+        assert_eq!(format!("{}", DropShadow::Xl2), "2xl");
+        assert_eq!(format!("{}", DropShadow::Xl3), "3xl");
+    }
+
+    #[test]
+    fn test_opacity_display() {
+        // Test that Opacity displays correctly
+        assert_eq!(format!("{}", Opacity::Zero), "0");
+        assert_eq!(format!("{}", Opacity::Five), "5");
+        assert_eq!(format!("{}", Opacity::Ten), "10");
+        assert_eq!(format!("{}", Opacity::Twenty), "20");
+        assert_eq!(format!("{}", Opacity::TwentyFive), "25");
+        assert_eq!(format!("{}", Opacity::Thirty), "30");
+        assert_eq!(format!("{}", Opacity::Forty), "40");
+        assert_eq!(format!("{}", Opacity::Fifty), "50");
+        assert_eq!(format!("{}", Opacity::Sixty), "60");
+        assert_eq!(format!("{}", Opacity::Seventy), "70");
+        assert_eq!(format!("{}", Opacity::SeventyFive), "75");
+        assert_eq!(format!("{}", Opacity::Eighty), "80");
+        assert_eq!(format!("{}", Opacity::Ninety), "90");
+        assert_eq!(format!("{}", Opacity::NinetyFive), "95");
+        assert_eq!(format!("{}", Opacity::Hundred), "100");
+    }
+
+    #[test]
+    fn test_mix_blend_mode_display() {
+        // Test that MixBlendMode displays correctly
+        assert_eq!(format!("{}", MixBlendMode::Normal), "normal");
+        assert_eq!(format!("{}", MixBlendMode::Multiply), "multiply");
+        assert_eq!(format!("{}", MixBlendMode::Screen), "screen");
+        assert_eq!(format!("{}", MixBlendMode::Overlay), "overlay");
+        assert_eq!(format!("{}", MixBlendMode::Darken), "darken");
+        assert_eq!(format!("{}", MixBlendMode::Lighten), "lighten");
+        assert_eq!(format!("{}", MixBlendMode::ColorDodge), "color-dodge");
+        assert_eq!(format!("{}", MixBlendMode::ColorBurn), "color-burn");
+        assert_eq!(format!("{}", MixBlendMode::HardLight), "hard-light");
+        assert_eq!(format!("{}", MixBlendMode::SoftLight), "soft-light");
+        assert_eq!(format!("{}", MixBlendMode::Difference), "difference");
+        assert_eq!(format!("{}", MixBlendMode::Exclusion), "exclusion");
+        assert_eq!(format!("{}", MixBlendMode::Hue), "hue");
+        assert_eq!(format!("{}", MixBlendMode::Saturation), "saturation");
+        assert_eq!(format!("{}", MixBlendMode::Color), "color");
+        assert_eq!(format!("{}", MixBlendMode::Luminosity), "luminosity");
+    }
+
+    #[test]
+    fn test_background_blend_mode_display() {
+        // Test that BackgroundBlendMode displays correctly
+        assert_eq!(format!("{}", BackgroundBlendMode::Normal), "normal");
+        assert_eq!(format!("{}", BackgroundBlendMode::Multiply), "multiply");
+        assert_eq!(format!("{}", BackgroundBlendMode::Screen), "screen");
+        assert_eq!(format!("{}", BackgroundBlendMode::Overlay), "overlay");
+        assert_eq!(format!("{}", BackgroundBlendMode::Darken), "darken");
+        assert_eq!(format!("{}", BackgroundBlendMode::Lighten), "lighten");
+        assert_eq!(format!("{}", BackgroundBlendMode::ColorDodge), "color-dodge");
+        assert_eq!(format!("{}", BackgroundBlendMode::ColorBurn), "color-burn");
+        assert_eq!(format!("{}", BackgroundBlendMode::HardLight), "hard-light");
+        assert_eq!(format!("{}", BackgroundBlendMode::SoftLight), "soft-light");
+        assert_eq!(format!("{}", BackgroundBlendMode::Difference), "difference");
+        assert_eq!(format!("{}", BackgroundBlendMode::Exclusion), "exclusion");
+        assert_eq!(format!("{}", BackgroundBlendMode::Hue), "hue");
+        assert_eq!(format!("{}", BackgroundBlendMode::Saturation), "saturation");
+        assert_eq!(format!("{}", BackgroundBlendMode::Color), "color");
+        assert_eq!(format!("{}", BackgroundBlendMode::Luminosity), "luminosity");
+    }
+
+    #[test]
+    fn test_box_shadow_css_values() {
+        // Test that BoxShadow generates correct CSS values
+        assert_eq!(BoxShadow::None.to_css_value(), "none");
+        assert_eq!(BoxShadow::Sm.to_css_value(), "0 1px 2px 0 rgb(0 0 0 / 0.05)");
+        assert_eq!(BoxShadow::Default.to_css_value(), "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)");
+        assert_eq!(BoxShadow::Md.to_css_value(), "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)");
+        assert_eq!(BoxShadow::Lg.to_css_value(), "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
+        assert_eq!(BoxShadow::Xl.to_css_value(), "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
+        assert_eq!(BoxShadow::Xl2.to_css_value(), "0 25px 50px -12px rgb(0 0 0 / 0.25)");
+        assert_eq!(BoxShadow::Inner.to_css_value(), "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)");
+    }
+
+    #[test]
+    fn test_drop_shadow_css_values() {
+        // Test that DropShadow generates correct CSS values
+        assert_eq!(DropShadow::None.to_css_value(), "none");
+        assert_eq!(DropShadow::Sm.to_css_value(), "0 1px 2px rgb(0 0 0 / 0.05)");
+        assert_eq!(DropShadow::Default.to_css_value(), "0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px rgb(0 0 0 / 0.06)");
+        assert_eq!(DropShadow::Md.to_css_value(), "0 4px 6px rgb(0 0 0 / 0.07), 0 2px 4px rgb(0 0 0 / 0.06)");
+        assert_eq!(DropShadow::Lg.to_css_value(), "0 10px 15px rgb(0 0 0 / 0.1), 0 4px 6px rgb(0 0 0 / 0.05)");
+        assert_eq!(DropShadow::Xl.to_css_value(), "0 20px 25px rgb(0 0 0 / 0.1), 0 8px 10px rgb(0 0 0 / 0.04)");
+        assert_eq!(DropShadow::Xl2.to_css_value(), "0 25px 50px rgb(0 0 0 / 0.25)");
+        assert_eq!(DropShadow::Xl3.to_css_value(), "0 35px 60px rgb(0 0 0 / 0.3)");
+    }
+
+    #[test]
+    fn test_opacity_css_values() {
+        // Test that Opacity generates correct CSS values
+        assert_eq!(Opacity::Zero.to_css_value(), "0");
+        assert_eq!(Opacity::Five.to_css_value(), "0.05");
+        assert_eq!(Opacity::Ten.to_css_value(), "0.1");
+        assert_eq!(Opacity::Twenty.to_css_value(), "0.2");
+        assert_eq!(Opacity::TwentyFive.to_css_value(), "0.25");
+        assert_eq!(Opacity::Thirty.to_css_value(), "0.3");
+        assert_eq!(Opacity::Forty.to_css_value(), "0.4");
+        assert_eq!(Opacity::Fifty.to_css_value(), "0.5");
+        assert_eq!(Opacity::Sixty.to_css_value(), "0.6");
+        assert_eq!(Opacity::Seventy.to_css_value(), "0.7");
+        assert_eq!(Opacity::SeventyFive.to_css_value(), "0.75");
+        assert_eq!(Opacity::Eighty.to_css_value(), "0.8");
+        assert_eq!(Opacity::Ninety.to_css_value(), "0.9");
+        assert_eq!(Opacity::NinetyFive.to_css_value(), "0.95");
+        assert_eq!(Opacity::Hundred.to_css_value(), "1");
+    }
+
+    #[test]
+    fn test_mix_blend_mode_css_values() {
+        // Test that MixBlendMode generates correct CSS values
+        assert_eq!(MixBlendMode::Normal.to_css_value(), "normal");
+        assert_eq!(MixBlendMode::Multiply.to_css_value(), "multiply");
+        assert_eq!(MixBlendMode::Screen.to_css_value(), "screen");
+        assert_eq!(MixBlendMode::Overlay.to_css_value(), "overlay");
+        assert_eq!(MixBlendMode::Darken.to_css_value(), "darken");
+        assert_eq!(MixBlendMode::Lighten.to_css_value(), "lighten");
+        assert_eq!(MixBlendMode::ColorDodge.to_css_value(), "color-dodge");
+        assert_eq!(MixBlendMode::ColorBurn.to_css_value(), "color-burn");
+        assert_eq!(MixBlendMode::HardLight.to_css_value(), "hard-light");
+        assert_eq!(MixBlendMode::SoftLight.to_css_value(), "soft-light");
+        assert_eq!(MixBlendMode::Difference.to_css_value(), "difference");
+        assert_eq!(MixBlendMode::Exclusion.to_css_value(), "exclusion");
+        assert_eq!(MixBlendMode::Hue.to_css_value(), "hue");
+        assert_eq!(MixBlendMode::Saturation.to_css_value(), "saturation");
+        assert_eq!(MixBlendMode::Color.to_css_value(), "color");
+        assert_eq!(MixBlendMode::Luminosity.to_css_value(), "luminosity");
+    }
+
+    #[test]
+    fn test_background_blend_mode_css_values() {
+        // Test that BackgroundBlendMode generates correct CSS values
+        assert_eq!(BackgroundBlendMode::Normal.to_css_value(), "normal");
+        assert_eq!(BackgroundBlendMode::Multiply.to_css_value(), "multiply");
+        assert_eq!(BackgroundBlendMode::Screen.to_css_value(), "screen");
+        assert_eq!(BackgroundBlendMode::Overlay.to_css_value(), "overlay");
+        assert_eq!(BackgroundBlendMode::Darken.to_css_value(), "darken");
+        assert_eq!(BackgroundBlendMode::Lighten.to_css_value(), "lighten");
+        assert_eq!(BackgroundBlendMode::ColorDodge.to_css_value(), "color-dodge");
+        assert_eq!(BackgroundBlendMode::ColorBurn.to_css_value(), "color-burn");
+        assert_eq!(BackgroundBlendMode::HardLight.to_css_value(), "hard-light");
+        assert_eq!(BackgroundBlendMode::SoftLight.to_css_value(), "soft-light");
+        assert_eq!(BackgroundBlendMode::Difference.to_css_value(), "difference");
+        assert_eq!(BackgroundBlendMode::Exclusion.to_css_value(), "exclusion");
+        assert_eq!(BackgroundBlendMode::Hue.to_css_value(), "hue");
+        assert_eq!(BackgroundBlendMode::Saturation.to_css_value(), "saturation");
+        assert_eq!(BackgroundBlendMode::Color.to_css_value(), "color");
+        assert_eq!(BackgroundBlendMode::Luminosity.to_css_value(), "luminosity");
+    }
+
+    #[test]
+    fn test_effects_serialization() {
+        // Test that effects can be serialized and deserialized
+        let box_shadow = BoxShadow::Lg;
+        let serialized = serde_json::to_string(&box_shadow).unwrap();
+        let deserialized: BoxShadow = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(box_shadow, deserialized);
+
+        let drop_shadow = DropShadow::Md;
+        let serialized = serde_json::to_string(&drop_shadow).unwrap();
+        let deserialized: DropShadow = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(drop_shadow, deserialized);
+
+        let opacity = Opacity::Fifty;
+        let serialized = serde_json::to_string(&opacity).unwrap();
+        let deserialized: Opacity = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(opacity, deserialized);
+
+        let mix_blend_mode = MixBlendMode::Multiply;
+        let serialized = serde_json::to_string(&mix_blend_mode).unwrap();
+        let deserialized: MixBlendMode = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(mix_blend_mode, deserialized);
+
+        let background_blend_mode = BackgroundBlendMode::Screen;
+        let serialized = serde_json::to_string(&background_blend_mode).unwrap();
+        let deserialized: BackgroundBlendMode = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(background_blend_mode, deserialized);
+    }
+
+    #[test]
+    fn test_effects_equality_and_hash() {
+        // Test that effects can be compared for equality and hashed
+        let box_shadow1 = BoxShadow::Lg;
+        let box_shadow2 = BoxShadow::Lg;
+        let box_shadow3 = BoxShadow::Md;
+        
+        assert_eq!(box_shadow1, box_shadow2);
+        assert_ne!(box_shadow1, box_shadow3);
+        
+        // Test that equal effects have the same hash
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        
+        let mut hasher1 = DefaultHasher::new();
+        let mut hasher2 = DefaultHasher::new();
+        box_shadow1.hash(&mut hasher1);
+        box_shadow2.hash(&mut hasher2);
+        assert_eq!(hasher1.finish(), hasher2.finish());
+    }
+
+    #[test]
+    fn test_comprehensive_effects_utilities() {
+        // Test comprehensive usage of all effects utility methods
+        let classes = ClassBuilder::new()
+            // Box shadows
+            .box_shadow(BoxShadow::None)
+            .box_shadow(BoxShadow::Sm)
+            .box_shadow(BoxShadow::Default)
+            .box_shadow(BoxShadow::Md)
+            .box_shadow(BoxShadow::Lg)
+            .box_shadow(BoxShadow::Xl)
+            .box_shadow(BoxShadow::Xl2)
+            .box_shadow(BoxShadow::Inner)
+            
+            // Drop shadows
+            .drop_shadow(DropShadow::None)
+            .drop_shadow(DropShadow::Sm)
+            .drop_shadow(DropShadow::Default)
+            .drop_shadow(DropShadow::Md)
+            .drop_shadow(DropShadow::Lg)
+            .drop_shadow(DropShadow::Xl)
+            .drop_shadow(DropShadow::Xl2)
+            .drop_shadow(DropShadow::Xl3)
+            
+            // Opacity
+            .opacity(Opacity::Zero)
+            .opacity(Opacity::TwentyFive)
+            .opacity(Opacity::Fifty)
+            .opacity(Opacity::SeventyFive)
+            .opacity(Opacity::Hundred)
+            
+            // Mix blend modes
+            .mix_blend_mode(MixBlendMode::Normal)
+            .mix_blend_mode(MixBlendMode::Multiply)
+            .mix_blend_mode(MixBlendMode::Screen)
+            .mix_blend_mode(MixBlendMode::Overlay)
+            .mix_blend_mode(MixBlendMode::Difference)
+            
+            // Background blend modes
+            .background_blend_mode(BackgroundBlendMode::Normal)
+            .background_blend_mode(BackgroundBlendMode::Multiply)
+            .background_blend_mode(BackgroundBlendMode::Screen)
+            .background_blend_mode(BackgroundBlendMode::Overlay)
+            .background_blend_mode(BackgroundBlendMode::Difference)
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Verify box shadows
+        assert!(css_classes.contains("shadow-none"));
+        assert!(css_classes.contains("shadow-sm"));
+        assert!(css_classes.contains("shadow-default"));
+        assert!(css_classes.contains("shadow-md"));
+        assert!(css_classes.contains("shadow-lg"));
+        assert!(css_classes.contains("shadow-xl"));
+        assert!(css_classes.contains("shadow-2xl"));
+        assert!(css_classes.contains("shadow-inner"));
+        
+        // Verify drop shadows
+        assert!(css_classes.contains("drop-shadow-none"));
+        assert!(css_classes.contains("drop-shadow-sm"));
+        assert!(css_classes.contains("drop-shadow-default"));
+        assert!(css_classes.contains("drop-shadow-md"));
+        assert!(css_classes.contains("drop-shadow-lg"));
+        assert!(css_classes.contains("drop-shadow-xl"));
+        assert!(css_classes.contains("drop-shadow-2xl"));
+        assert!(css_classes.contains("drop-shadow-3xl"));
+        
+        // Verify opacity
+        assert!(css_classes.contains("opacity-0"));
+        assert!(css_classes.contains("opacity-25"));
+        assert!(css_classes.contains("opacity-50"));
+        assert!(css_classes.contains("opacity-75"));
+        assert!(css_classes.contains("opacity-100"));
+        
+        // Verify mix blend modes
+        assert!(css_classes.contains("mix-blend-normal"));
+        assert!(css_classes.contains("mix-blend-multiply"));
+        assert!(css_classes.contains("mix-blend-screen"));
+        assert!(css_classes.contains("mix-blend-overlay"));
+        assert!(css_classes.contains("mix-blend-difference"));
+        
+        // Verify background blend modes
+        assert!(css_classes.contains("bg-blend-normal"));
+        assert!(css_classes.contains("bg-blend-multiply"));
+        assert!(css_classes.contains("bg-blend-screen"));
+        assert!(css_classes.contains("bg-blend-overlay"));
+        assert!(css_classes.contains("bg-blend-difference"));
     }
 }

@@ -647,4 +647,315 @@ mod tests {
         assert!(css_classes.contains("aspect-video"));
         assert!(css_classes.contains("aspect-[4/3]"));
     }
+
+    #[test]
+    fn test_sizing_value_display() {
+        // Test that SizingValue displays correctly
+        assert_eq!(format!("{}", SizingValue::Zero), "0");
+        assert_eq!(format!("{}", SizingValue::Px), "px");
+        assert_eq!(format!("{}", SizingValue::Fractional(0.5)), "0.5");
+        assert_eq!(format!("{}", SizingValue::Integer(4)), "4");
+        assert_eq!(format!("{}", SizingValue::Auto), "auto");
+        assert_eq!(format!("{}", SizingValue::Full), "full");
+        assert_eq!(format!("{}", SizingValue::Screen), "screen");
+        assert_eq!(format!("{}", SizingValue::Min), "min");
+        assert_eq!(format!("{}", SizingValue::Max), "max");
+        assert_eq!(format!("{}", SizingValue::Fit), "fit");
+        assert_eq!(format!("{}", SizingValue::Fraction(Fraction::Half)), "1/2");
+        assert_eq!(format!("{}", SizingValue::GridFraction(GridFraction::SixTwelfths)), "6/12");
+    }
+
+    #[test]
+    fn test_fraction_display() {
+        // Test that Fraction displays correctly
+        assert_eq!(Fraction::Half.to_class_name(), "1/2");
+        assert_eq!(Fraction::Third.to_class_name(), "1/3");
+        assert_eq!(Fraction::TwoThirds.to_class_name(), "2/3");
+        assert_eq!(Fraction::Quarter.to_class_name(), "1/4");
+        assert_eq!(Fraction::TwoQuarters.to_class_name(), "2/4");
+        assert_eq!(Fraction::ThreeQuarters.to_class_name(), "3/4");
+        assert_eq!(Fraction::Fifth.to_class_name(), "1/5");
+        assert_eq!(Fraction::TwoFifths.to_class_name(), "2/5");
+        assert_eq!(Fraction::ThreeFifths.to_class_name(), "3/5");
+        assert_eq!(Fraction::FourFifths.to_class_name(), "4/5");
+        assert_eq!(Fraction::Sixth.to_class_name(), "1/6");
+        assert_eq!(Fraction::TwoSixths.to_class_name(), "2/6");
+        assert_eq!(Fraction::ThreeSixths.to_class_name(), "3/6");
+        assert_eq!(Fraction::FourSixths.to_class_name(), "4/6");
+        assert_eq!(Fraction::FiveSixths.to_class_name(), "5/6");
+    }
+
+    #[test]
+    fn test_grid_fraction_display() {
+        // Test that GridFraction displays correctly
+        assert_eq!(GridFraction::OneTwelfth.to_class_name(), "1/12");
+        assert_eq!(GridFraction::TwoTwelfths.to_class_name(), "2/12");
+        assert_eq!(GridFraction::ThreeTwelfths.to_class_name(), "3/12");
+        assert_eq!(GridFraction::FourTwelfths.to_class_name(), "4/12");
+        assert_eq!(GridFraction::FiveTwelfths.to_class_name(), "5/12");
+        assert_eq!(GridFraction::SixTwelfths.to_class_name(), "6/12");
+        assert_eq!(GridFraction::SevenTwelfths.to_class_name(), "7/12");
+        assert_eq!(GridFraction::EightTwelfths.to_class_name(), "8/12");
+        assert_eq!(GridFraction::NineTwelfths.to_class_name(), "9/12");
+        assert_eq!(GridFraction::TenTwelfths.to_class_name(), "10/12");
+        assert_eq!(GridFraction::ElevenTwelfths.to_class_name(), "11/12");
+    }
+
+    #[test]
+    fn test_sizing_value_class_names() {
+        // Test that SizingValue generates correct class names
+        assert_eq!(SizingValue::Zero.to_class_name(), "0");
+        assert_eq!(SizingValue::Px.to_class_name(), "px");
+        assert_eq!(SizingValue::Fractional(0.5).to_class_name(), "0.5");
+        assert_eq!(SizingValue::Integer(4).to_class_name(), "4");
+        assert_eq!(SizingValue::Auto.to_class_name(), "auto");
+        assert_eq!(SizingValue::Full.to_class_name(), "full");
+        assert_eq!(SizingValue::Screen.to_class_name(), "screen");
+        assert_eq!(SizingValue::Min.to_class_name(), "min");
+        assert_eq!(SizingValue::Max.to_class_name(), "max");
+        assert_eq!(SizingValue::Fit.to_class_name(), "fit");
+        assert_eq!(SizingValue::Fraction(Fraction::Half).to_class_name(), "1/2");
+        assert_eq!(SizingValue::GridFraction(GridFraction::SixTwelfths).to_class_name(), "6/12");
+    }
+
+    #[test]
+    fn test_all_fraction_css_values() {
+        // Test that all Fraction variants generate correct CSS values
+        assert_eq!(Fraction::Half.to_css_value(), "50%");
+        assert_eq!(Fraction::Third.to_css_value(), "33.333333%");
+        assert_eq!(Fraction::TwoThirds.to_css_value(), "66.666667%");
+        assert_eq!(Fraction::Quarter.to_css_value(), "25%");
+        assert_eq!(Fraction::TwoQuarters.to_css_value(), "50%");
+        assert_eq!(Fraction::ThreeQuarters.to_css_value(), "75%");
+        assert_eq!(Fraction::Fifth.to_css_value(), "20%");
+        assert_eq!(Fraction::TwoFifths.to_css_value(), "40%");
+        assert_eq!(Fraction::ThreeFifths.to_css_value(), "60%");
+        assert_eq!(Fraction::FourFifths.to_css_value(), "80%");
+        assert_eq!(Fraction::Sixth.to_css_value(), "16.666667%");
+        assert_eq!(Fraction::TwoSixths.to_css_value(), "33.333333%");
+        assert_eq!(Fraction::ThreeSixths.to_css_value(), "50%");
+        assert_eq!(Fraction::FourSixths.to_css_value(), "66.666667%");
+        assert_eq!(Fraction::FiveSixths.to_css_value(), "83.333333%");
+    }
+
+    #[test]
+    fn test_all_fraction_class_names() {
+        // Test that all Fraction variants generate correct class names
+        assert_eq!(Fraction::Half.to_class_name(), "1/2");
+        assert_eq!(Fraction::Third.to_class_name(), "1/3");
+        assert_eq!(Fraction::TwoThirds.to_class_name(), "2/3");
+        assert_eq!(Fraction::Quarter.to_class_name(), "1/4");
+        assert_eq!(Fraction::TwoQuarters.to_class_name(), "2/4");
+        assert_eq!(Fraction::ThreeQuarters.to_class_name(), "3/4");
+        assert_eq!(Fraction::Fifth.to_class_name(), "1/5");
+        assert_eq!(Fraction::TwoFifths.to_class_name(), "2/5");
+        assert_eq!(Fraction::ThreeFifths.to_class_name(), "3/5");
+        assert_eq!(Fraction::FourFifths.to_class_name(), "4/5");
+        assert_eq!(Fraction::Sixth.to_class_name(), "1/6");
+        assert_eq!(Fraction::TwoSixths.to_class_name(), "2/6");
+        assert_eq!(Fraction::ThreeSixths.to_class_name(), "3/6");
+        assert_eq!(Fraction::FourSixths.to_class_name(), "4/6");
+        assert_eq!(Fraction::FiveSixths.to_class_name(), "5/6");
+    }
+
+    #[test]
+    fn test_all_grid_fraction_css_values() {
+        // Test that all GridFraction variants generate correct CSS values
+        assert_eq!(GridFraction::OneTwelfth.to_css_value(), "8.333333%");
+        assert_eq!(GridFraction::TwoTwelfths.to_css_value(), "16.666667%");
+        assert_eq!(GridFraction::ThreeTwelfths.to_css_value(), "25%");
+        assert_eq!(GridFraction::FourTwelfths.to_css_value(), "33.333333%");
+        assert_eq!(GridFraction::FiveTwelfths.to_css_value(), "41.666667%");
+        assert_eq!(GridFraction::SixTwelfths.to_css_value(), "50%");
+        assert_eq!(GridFraction::SevenTwelfths.to_css_value(), "58.333333%");
+        assert_eq!(GridFraction::EightTwelfths.to_css_value(), "66.666667%");
+        assert_eq!(GridFraction::NineTwelfths.to_css_value(), "75%");
+        assert_eq!(GridFraction::TenTwelfths.to_css_value(), "83.333333%");
+        assert_eq!(GridFraction::ElevenTwelfths.to_css_value(), "91.666667%");
+    }
+
+    #[test]
+    fn test_all_grid_fraction_class_names() {
+        // Test that all GridFraction variants generate correct class names
+        assert_eq!(GridFraction::OneTwelfth.to_class_name(), "1/12");
+        assert_eq!(GridFraction::TwoTwelfths.to_class_name(), "2/12");
+        assert_eq!(GridFraction::ThreeTwelfths.to_class_name(), "3/12");
+        assert_eq!(GridFraction::FourTwelfths.to_class_name(), "4/12");
+        assert_eq!(GridFraction::FiveTwelfths.to_class_name(), "5/12");
+        assert_eq!(GridFraction::SixTwelfths.to_class_name(), "6/12");
+        assert_eq!(GridFraction::SevenTwelfths.to_class_name(), "7/12");
+        assert_eq!(GridFraction::EightTwelfths.to_class_name(), "8/12");
+        assert_eq!(GridFraction::NineTwelfths.to_class_name(), "9/12");
+        assert_eq!(GridFraction::TenTwelfths.to_class_name(), "10/12");
+        assert_eq!(GridFraction::ElevenTwelfths.to_class_name(), "11/12");
+    }
+
+    #[test]
+    fn test_sizing_serialization() {
+        // Test that sizing enums can be serialized and deserialized
+        let sizing_value = SizingValue::Full;
+        let serialized = serde_json::to_string(&sizing_value).unwrap();
+        let deserialized: SizingValue = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(sizing_value, deserialized);
+
+        let fraction = Fraction::Half;
+        let serialized = serde_json::to_string(&fraction).unwrap();
+        let deserialized: Fraction = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(fraction, deserialized);
+
+        let grid_fraction = GridFraction::SixTwelfths;
+        let serialized = serde_json::to_string(&grid_fraction).unwrap();
+        let deserialized: GridFraction = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(grid_fraction, deserialized);
+    }
+
+    #[test]
+    fn test_sizing_equality_and_hash() {
+        // Test that sizing enums can be compared for equality and hashed
+        let sizing_value1 = SizingValue::Full;
+        let sizing_value2 = SizingValue::Full;
+        let sizing_value3 = SizingValue::Auto;
+        
+        assert_eq!(sizing_value1, sizing_value2);
+        assert_ne!(sizing_value1, sizing_value3);
+        
+        // Test that equal enums have the same hash
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        
+        let mut hasher1 = DefaultHasher::new();
+        let mut hasher2 = DefaultHasher::new();
+        sizing_value1.hash(&mut hasher1);
+        sizing_value2.hash(&mut hasher2);
+        assert_eq!(hasher1.finish(), hasher2.finish());
+    }
+
+    #[test]
+    fn test_aspect_ratio_convenience_methods() {
+        // Test that aspect ratio convenience methods work
+        let classes = ClassBuilder::new()
+            .aspect_square()
+            .aspect_video()
+            .aspect_4_3()
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("aspect-square"));
+        assert!(css_classes.contains("aspect-video"));
+        assert!(css_classes.contains("aspect-[4/3]"));
+    }
+
+    #[test]
+    fn test_comprehensive_sizing_utilities() {
+        // Test comprehensive usage of all sizing utility methods
+        let classes = ClassBuilder::new()
+            // Width utilities
+            .width(SizingValue::Zero)
+            .width(SizingValue::Px)
+            .width(SizingValue::Fractional(0.5))
+            .width(SizingValue::Integer(4))
+            .width(SizingValue::Auto)
+            .width(SizingValue::Full)
+            .width(SizingValue::Screen)
+            .width(SizingValue::Min)
+            .width(SizingValue::Max)
+            .width(SizingValue::Fit)
+            .width(SizingValue::Fraction(Fraction::Half))
+            .width(SizingValue::GridFraction(GridFraction::SixTwelfths))
+            
+            // Min width utilities
+            .min_width(SizingValue::Integer(2))
+            .min_width(SizingValue::Fraction(Fraction::Third))
+            
+            // Max width utilities
+            .max_width(SizingValue::Integer(8))
+            .max_width(SizingValue::Fraction(Fraction::TwoThirds))
+            
+            // Height utilities
+            .height(SizingValue::Zero)
+            .height(SizingValue::Px)
+            .height(SizingValue::Fractional(1.5))
+            .height(SizingValue::Integer(6))
+            .height(SizingValue::Auto)
+            .height(SizingValue::Full)
+            .height(SizingValue::Screen)
+            .height(SizingValue::Min)
+            .height(SizingValue::Max)
+            .height(SizingValue::Fit)
+            .height(SizingValue::Fraction(Fraction::Quarter))
+            .height(SizingValue::GridFraction(GridFraction::FourTwelfths))
+            
+            // Min height utilities
+            .min_height(SizingValue::Integer(3))
+            .min_height(SizingValue::Fraction(Fraction::Fifth))
+            
+            // Max height utilities
+            .max_height(SizingValue::Integer(10))
+            .max_height(SizingValue::Fraction(Fraction::ThreeQuarters))
+            
+            // Aspect ratio utilities
+            .aspect_ratio("1/1")
+            .aspect_ratio("16/9")
+            .aspect_ratio("4/3")
+            .aspect_ratio("3/2")
+            .aspect_ratio("2/3")
+            .aspect_ratio("9/16")
+            .aspect_ratio("21/9")
+            .build();
+        
+        let css_classes = classes.to_css_classes();
+        
+        // Verify width utilities
+        assert!(css_classes.contains("w-0"));
+        assert!(css_classes.contains("w-px"));
+        assert!(css_classes.contains("w-0.5"));
+        assert!(css_classes.contains("w-4"));
+        assert!(css_classes.contains("w-auto"));
+        assert!(css_classes.contains("w-full"));
+        assert!(css_classes.contains("w-screen"));
+        assert!(css_classes.contains("w-min"));
+        assert!(css_classes.contains("w-max"));
+        assert!(css_classes.contains("w-fit"));
+        assert!(css_classes.contains("w-1/2"));
+        assert!(css_classes.contains("w-6/12"));
+        
+        // Verify min width utilities
+        assert!(css_classes.contains("min-w-2"));
+        assert!(css_classes.contains("min-w-1/3"));
+        
+        // Verify max width utilities
+        assert!(css_classes.contains("max-w-8"));
+        assert!(css_classes.contains("max-w-2/3"));
+        
+        // Verify height utilities
+        assert!(css_classes.contains("h-0"));
+        assert!(css_classes.contains("h-px"));
+        assert!(css_classes.contains("h-1.5"));
+        assert!(css_classes.contains("h-6"));
+        assert!(css_classes.contains("h-auto"));
+        assert!(css_classes.contains("h-full"));
+        assert!(css_classes.contains("h-screen"));
+        assert!(css_classes.contains("h-min"));
+        assert!(css_classes.contains("h-max"));
+        assert!(css_classes.contains("h-fit"));
+        assert!(css_classes.contains("h-1/4"));
+        assert!(css_classes.contains("h-4/12"));
+        
+        // Verify min height utilities
+        assert!(css_classes.contains("min-h-3"));
+        assert!(css_classes.contains("min-h-1/5"));
+        
+        // Verify max height utilities
+        assert!(css_classes.contains("max-h-10"));
+        assert!(css_classes.contains("max-h-3/4"));
+        
+        // Verify aspect ratio utilities
+        assert!(css_classes.contains("aspect-square"));
+        assert!(css_classes.contains("aspect-video"));
+        assert!(css_classes.contains("aspect-[4/3]"));
+        assert!(css_classes.contains("aspect-[3/2]"));
+        assert!(css_classes.contains("aspect-[2/3]"));
+        assert!(css_classes.contains("aspect-[9/16]"));
+        assert!(css_classes.contains("aspect-[21/9]"));
+    }
 }

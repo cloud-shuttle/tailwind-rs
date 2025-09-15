@@ -910,4 +910,290 @@ mod tests {
         assert!(css_classes.contains("self-stretch"));
         assert!(css_classes.contains("self-baseline"));
     }
+
+    #[test]
+    fn test_flex_direction_class_names() {
+        assert_eq!(FlexDirection::Row.to_class_name(), "row");
+        assert_eq!(FlexDirection::RowReverse.to_class_name(), "row-reverse");
+        assert_eq!(FlexDirection::Column.to_class_name(), "col");
+        assert_eq!(FlexDirection::ColumnReverse.to_class_name(), "col-reverse");
+    }
+
+    #[test]
+    fn test_flex_direction_css_values() {
+        assert_eq!(FlexDirection::Row.to_css_value(), "row");
+        assert_eq!(FlexDirection::RowReverse.to_css_value(), "row-reverse");
+        assert_eq!(FlexDirection::Column.to_css_value(), "column");
+        assert_eq!(FlexDirection::ColumnReverse.to_css_value(), "column-reverse");
+    }
+
+    #[test]
+    fn test_flex_wrap_class_names() {
+        assert_eq!(FlexWrap::NoWrap.to_class_name(), "nowrap");
+        assert_eq!(FlexWrap::Wrap.to_class_name(), "wrap");
+        assert_eq!(FlexWrap::WrapReverse.to_class_name(), "wrap-reverse");
+    }
+
+    #[test]
+    fn test_flex_wrap_css_values() {
+        assert_eq!(FlexWrap::NoWrap.to_css_value(), "nowrap");
+        assert_eq!(FlexWrap::Wrap.to_css_value(), "wrap");
+        assert_eq!(FlexWrap::WrapReverse.to_css_value(), "wrap-reverse");
+    }
+
+    #[test]
+    fn test_justify_content_class_names() {
+        assert_eq!(JustifyContent::Start.to_class_name(), "start");
+        assert_eq!(JustifyContent::End.to_class_name(), "end");
+        assert_eq!(JustifyContent::Center.to_class_name(), "center");
+        assert_eq!(JustifyContent::Between.to_class_name(), "between");
+        assert_eq!(JustifyContent::Around.to_class_name(), "around");
+        assert_eq!(JustifyContent::Evenly.to_class_name(), "evenly");
+    }
+
+    #[test]
+    fn test_justify_content_css_values() {
+        assert_eq!(JustifyContent::Start.to_css_value(), "flex-start");
+        assert_eq!(JustifyContent::End.to_css_value(), "flex-end");
+        assert_eq!(JustifyContent::Center.to_css_value(), "center");
+        assert_eq!(JustifyContent::Between.to_css_value(), "space-between");
+        assert_eq!(JustifyContent::Around.to_css_value(), "space-around");
+        assert_eq!(JustifyContent::Evenly.to_css_value(), "space-evenly");
+    }
+
+    #[test]
+    fn test_align_items_class_names() {
+        assert_eq!(AlignItems::Start.to_class_name(), "start");
+        assert_eq!(AlignItems::End.to_class_name(), "end");
+        assert_eq!(AlignItems::Center.to_class_name(), "center");
+        assert_eq!(AlignItems::Baseline.to_class_name(), "baseline");
+        assert_eq!(AlignItems::Stretch.to_class_name(), "stretch");
+    }
+
+    #[test]
+    fn test_align_items_css_values() {
+        assert_eq!(AlignItems::Start.to_css_value(), "flex-start");
+        assert_eq!(AlignItems::End.to_css_value(), "flex-end");
+        assert_eq!(AlignItems::Center.to_css_value(), "center");
+        assert_eq!(AlignItems::Baseline.to_css_value(), "baseline");
+        assert_eq!(AlignItems::Stretch.to_css_value(), "stretch");
+    }
+
+    #[test]
+    fn test_align_content_class_names() {
+        assert_eq!(AlignContent::Start.to_class_name(), "start");
+        assert_eq!(AlignContent::End.to_class_name(), "end");
+        assert_eq!(AlignContent::Center.to_class_name(), "center");
+        assert_eq!(AlignContent::Between.to_class_name(), "between");
+        assert_eq!(AlignContent::Around.to_class_name(), "around");
+        assert_eq!(AlignContent::Evenly.to_class_name(), "evenly");
+        assert_eq!(AlignContent::Baseline.to_class_name(), "baseline");
+        assert_eq!(AlignContent::Stretch.to_class_name(), "stretch");
+    }
+
+    #[test]
+    fn test_align_content_css_values() {
+        assert_eq!(AlignContent::Start.to_css_value(), "flex-start");
+        assert_eq!(AlignContent::End.to_css_value(), "flex-end");
+        assert_eq!(AlignContent::Center.to_css_value(), "center");
+        assert_eq!(AlignContent::Between.to_css_value(), "space-between");
+        assert_eq!(AlignContent::Around.to_css_value(), "space-around");
+        assert_eq!(AlignContent::Evenly.to_css_value(), "space-evenly");
+        assert_eq!(AlignContent::Baseline.to_css_value(), "baseline");
+        assert_eq!(AlignContent::Stretch.to_css_value(), "stretch");
+    }
+
+    #[test]
+    fn test_align_self_class_names() {
+        assert_eq!(AlignSelf::Auto.to_class_name(), "auto");
+        assert_eq!(AlignSelf::Start.to_class_name(), "start");
+        assert_eq!(AlignSelf::End.to_class_name(), "end");
+        assert_eq!(AlignSelf::Center.to_class_name(), "center");
+        assert_eq!(AlignSelf::Stretch.to_class_name(), "stretch");
+        assert_eq!(AlignSelf::Baseline.to_class_name(), "baseline");
+    }
+
+    #[test]
+    fn test_align_self_css_values() {
+        assert_eq!(AlignSelf::Auto.to_css_value(), "auto");
+        assert_eq!(AlignSelf::Start.to_css_value(), "flex-start");
+        assert_eq!(AlignSelf::End.to_css_value(), "flex-end");
+        assert_eq!(AlignSelf::Center.to_css_value(), "center");
+        assert_eq!(AlignSelf::Stretch.to_css_value(), "stretch");
+        assert_eq!(AlignSelf::Baseline.to_css_value(), "baseline");
+    }
+
+    #[test]
+    fn test_flex_grow_class_names() {
+        assert_eq!(FlexGrow::Zero.to_class_name(), "0");
+        assert_eq!(FlexGrow::Grow.to_class_name(), "grow");
+    }
+
+    #[test]
+    fn test_flex_grow_css_values() {
+        assert_eq!(FlexGrow::Zero.to_css_value(), "0");
+        assert_eq!(FlexGrow::Grow.to_css_value(), "1");
+    }
+
+    #[test]
+    fn test_flex_shrink_class_names() {
+        assert_eq!(FlexShrink::Zero.to_class_name(), "0");
+        assert_eq!(FlexShrink::Shrink.to_class_name(), "shrink");
+    }
+
+    #[test]
+    fn test_flex_shrink_css_values() {
+        assert_eq!(FlexShrink::Zero.to_css_value(), "0");
+        assert_eq!(FlexShrink::Shrink.to_css_value(), "1");
+    }
+
+    #[test]
+    fn test_flex_basis_class_names() {
+        assert_eq!(FlexBasis::Auto.to_class_name(), "auto");
+        assert_eq!(FlexBasis::Full.to_class_name(), "full");
+        assert_eq!(FlexBasis::Fit.to_class_name(), "fit");
+        assert_eq!(FlexBasis::Max.to_class_name(), "max");
+        assert_eq!(FlexBasis::Min.to_class_name(), "min");
+        assert_eq!(FlexBasis::None.to_class_name(), "none");
+        assert_eq!(FlexBasis::Zero.to_class_name(), "0");
+    }
+
+    #[test]
+    fn test_flex_basis_css_values() {
+        assert_eq!(FlexBasis::Auto.to_css_value(), "auto");
+        assert_eq!(FlexBasis::Full.to_css_value(), "100%");
+        assert_eq!(FlexBasis::Fit.to_css_value(), "fit-content");
+        assert_eq!(FlexBasis::Max.to_css_value(), "max-content");
+        assert_eq!(FlexBasis::Min.to_css_value(), "min-content");
+        assert_eq!(FlexBasis::None.to_css_value(), "none");
+        assert_eq!(FlexBasis::Zero.to_css_value(), "0%");
+    }
+
+    #[test]
+    fn test_flex_class_names() {
+        assert_eq!(Flex::One.to_class_name(), "1");
+        assert_eq!(Flex::Auto.to_class_name(), "auto");
+        assert_eq!(Flex::Initial.to_class_name(), "initial");
+        assert_eq!(Flex::None.to_class_name(), "none");
+    }
+
+    #[test]
+    fn test_flex_css_values() {
+        assert_eq!(Flex::One.to_css_value(), "1 1 0%");
+        assert_eq!(Flex::Auto.to_css_value(), "1 1 auto");
+        assert_eq!(Flex::Initial.to_css_value(), "0 1 auto");
+        assert_eq!(Flex::None.to_css_value(), "none");
+    }
+
+    #[test]
+    fn test_order_class_names() {
+        assert_eq!(Order::First.to_class_name(), "first");
+        assert_eq!(Order::Last.to_class_name(), "last");
+        assert_eq!(Order::None.to_class_name(), "none");
+        assert_eq!(Order::One.to_class_name(), "1");
+        assert_eq!(Order::Two.to_class_name(), "2");
+        assert_eq!(Order::Three.to_class_name(), "3");
+        assert_eq!(Order::Four.to_class_name(), "4");
+        assert_eq!(Order::Five.to_class_name(), "5");
+        assert_eq!(Order::Six.to_class_name(), "6");
+        assert_eq!(Order::Seven.to_class_name(), "7");
+        assert_eq!(Order::Eight.to_class_name(), "8");
+        assert_eq!(Order::Nine.to_class_name(), "9");
+        assert_eq!(Order::Ten.to_class_name(), "10");
+        assert_eq!(Order::Eleven.to_class_name(), "11");
+        assert_eq!(Order::Twelve.to_class_name(), "12");
+    }
+
+    #[test]
+    fn test_order_css_values() {
+        assert_eq!(Order::First.to_css_value(), "-9999");
+        assert_eq!(Order::Last.to_css_value(), "9999");
+        assert_eq!(Order::None.to_css_value(), "0");
+        assert_eq!(Order::One.to_css_value(), "1");
+        assert_eq!(Order::Two.to_css_value(), "2");
+        assert_eq!(Order::Three.to_css_value(), "3");
+        assert_eq!(Order::Four.to_css_value(), "4");
+        assert_eq!(Order::Five.to_css_value(), "5");
+        assert_eq!(Order::Six.to_css_value(), "6");
+        assert_eq!(Order::Seven.to_css_value(), "7");
+        assert_eq!(Order::Eight.to_css_value(), "8");
+        assert_eq!(Order::Nine.to_css_value(), "9");
+        assert_eq!(Order::Ten.to_css_value(), "10");
+        assert_eq!(Order::Eleven.to_css_value(), "11");
+        assert_eq!(Order::Twelve.to_css_value(), "12");
+    }
+
+    #[test]
+    fn test_flexbox_serialization() {
+        // Test FlexDirection serialization
+        let direction = FlexDirection::Row;
+        let serialized = serde_json::to_string(&direction).unwrap();
+        let deserialized: FlexDirection = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(direction, deserialized);
+
+        // Test JustifyContent serialization
+        let justify = JustifyContent::Center;
+        let serialized = serde_json::to_string(&justify).unwrap();
+        let deserialized: JustifyContent = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(justify, deserialized);
+
+        // Test Order serialization
+        let order = Order::First;
+        let serialized = serde_json::to_string(&order).unwrap();
+        let deserialized: Order = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(order, deserialized);
+    }
+
+    #[test]
+    fn test_flexbox_equality_and_hash() {
+        // Test FlexDirection equality
+        assert_eq!(FlexDirection::Row, FlexDirection::Row);
+        assert_ne!(FlexDirection::Row, FlexDirection::Column);
+
+        // Test JustifyContent equality
+        assert_eq!(JustifyContent::Center, JustifyContent::Center);
+        assert_ne!(JustifyContent::Center, JustifyContent::Start);
+
+        // Test Order equality
+        assert_eq!(Order::First, Order::First);
+        assert_ne!(Order::First, Order::Last);
+
+        // Test hash consistency
+        use std::collections::HashMap;
+        let mut map = HashMap::new();
+        map.insert(FlexDirection::Row, "row");
+        map.insert(FlexDirection::Column, "column");
+        assert_eq!(map.get(&FlexDirection::Row), Some(&"row"));
+        assert_eq!(map.get(&FlexDirection::Column), Some(&"column"));
+    }
+
+    #[test]
+    fn test_comprehensive_flexbox_utilities() {
+        let classes = ClassBuilder::new()
+            .flex_direction(FlexDirection::Row)
+            .flex_wrap(FlexWrap::Wrap)
+            .justify_content(JustifyContent::Between)
+            .align_items(AlignItems::Center)
+            .align_content(AlignContent::Stretch)
+            .align_self(AlignSelf::Start)
+            .flex_grow(FlexGrow::Grow)
+            .flex_shrink(FlexShrink::Shrink)
+            .flex_basis(FlexBasis::Auto)
+            .flex(Flex::One)
+            .order(Order::First)
+            .build();
+
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("flex-row"));
+        assert!(css_classes.contains("flex-wrap"));
+        assert!(css_classes.contains("justify-between"));
+        assert!(css_classes.contains("items-center"));
+        assert!(css_classes.contains("content-stretch"));
+        assert!(css_classes.contains("self-start"));
+        assert!(css_classes.contains("flex-grow-grow"));
+        assert!(css_classes.contains("flex-shrink-shrink"));
+        assert!(css_classes.contains("basis-auto"));
+        assert!(css_classes.contains("flex-1"));
+        assert!(css_classes.contains("order-first"));
+    }
 }

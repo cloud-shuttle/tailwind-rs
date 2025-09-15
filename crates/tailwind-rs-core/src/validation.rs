@@ -78,12 +78,12 @@ impl ValidationRules {
             r"^(flex-row|flex-row-reverse|flex-col|flex-col-reverse|flex-wrap|flex-wrap-reverse|flex-nowrap|items-start|items-end|items-center|items-baseline|items-stretch|justify-start|justify-end|justify-center|justify-between|justify-around|justify-evenly|justify-stretch|content-start|content-end|content-center|content-between|content-around|content-evenly|content-stretch|self-auto|self-start|self-end|self-center|self-stretch|self-baseline)$",
             // Grid
             r"^(grid-cols-\d+|grid-cols-none|grid-cols-subgrid|col-auto|col-span-\d+|col-start-\d+|col-end-\d+|col-start-auto|col-end-auto|grid-rows-\d+|grid-rows-none|grid-rows-subgrid|row-auto|row-span-\d+|row-start-\d+|row-end-\d+|row-start-auto|row-end-auto|auto-cols-auto|auto-cols-min|auto-cols-max|auto-cols-fr|auto-rows-auto|auto-rows-min|auto-rows-max|auto-rows-fr|gap-\d+|gap-x-\d+|gap-y-\d+|justify-items-start|justify-items-end|justify-items-center|justify-items-stretch|justify-self-auto|justify-self-start|justify-self-end|justify-self-center|justify-self-stretch|place-content-start|place-content-end|place-content-center|place-content-between|place-content-around|place-content-evenly|place-content-stretch|place-items-start|place-items-end|place-items-center|place-items-stretch|place-self-auto|place-self-start|place-self-end|place-self-center|place-self-stretch)$",
-            // Spacing
-            r"^(p-\d+|pt-\d+|pr-\d+|pb-\d+|pl-\d+|px-\d+|py-\d+|m-\d+|mt-\d+|mr-\d+|mb-\d+|ml-\d+|mx-\d+|my-\d+|space-x-\d+|space-y-\d+|space-x-reverse|space-y-reverse)$",
+            // Spacing (Enhanced with fractional values and space/divide utilities)
+            r"^(p-\d+(\.\d+)?|pt-\d+(\.\d+)?|pr-\d+(\.\d+)?|pb-\d+(\.\d+)?|pl-\d+(\.\d+)?|px-\d+(\.\d+)?|py-\d+(\.\d+)?|ps-\d+(\.\d+)?|pe-\d+(\.\d+)?|m-\d+(\.\d+)?|mt-\d+(\.\d+)?|mr-\d+(\.\d+)?|mb-\d+(\.\d+)?|ml-\d+(\.\d+)?|mx-\d+(\.\d+)?|my-\d+(\.\d+)?|ms-\d+(\.\d+)?|me-\d+(\.\d+)?|-m-\d+(\.\d+)?|-mt-\d+(\.\d+)?|-mr-\d+(\.\d+)?|-mb-\d+(\.\d+)?|-ml-\d+(\.\d+)?|-mx-\d+(\.\d+)?|-my-\d+(\.\d+)?|space-x-\d+(\.\d+)?|space-y-\d+(\.\d+)?|space-x-reverse|space-y-reverse|divide-x-\d+(\.\d+)?|divide-y-\d+(\.\d+)?|divide-x-reverse|divide-y-reverse)$",
             // Sizing
             r"^(w-\d+|w-auto|w-px|w-0\.5|w-1\.5|w-2\.5|w-3\.5|w-1\/2|w-1\/3|w-2\/3|w-1\/4|w-2\/4|w-3\/4|w-1\/5|w-2\/5|w-3\/5|w-4\/5|w-1\/6|w-2\/6|w-3\/6|w-4\/6|w-5\/6|w-1\/12|w-2\/12|w-3\/12|w-4\/12|w-5\/12|w-6\/12|w-7\/12|w-8\/12|w-9\/12|w-10\/12|w-11\/12|w-full|w-screen|w-min|w-max|w-fit|h-\d+|h-auto|h-px|h-0\.5|h-1\.5|h-2\.5|h-3\.5|h-1\/2|h-1\/3|h-2\/3|h-1\/4|h-2\/4|h-3\/4|h-1\/5|h-2\/5|h-3\/5|h-4\/5|h-1\/6|h-2\/6|h-3\/6|h-4\/6|h-5\/6|h-1\/12|h-2\/12|h-3\/12|h-4\/12|h-5\/12|h-6\/12|h-7\/12|h-8\/12|h-9\/12|h-10\/12|h-11\/12|h-full|h-screen|h-min|h-max|h-fit|min-w-0|min-w-full|min-w-min|min-w-max|min-w-fit|max-w-0|max-w-none|max-w-xs|max-w-sm|max-w-md|max-w-lg|max-w-xl|max-w-2xl|max-w-3xl|max-w-4xl|max-w-5xl|max-w-6xl|max-w-7xl|max-w-full|max-w-min|max-w-max|max-w-fit|max-w-prose|max-w-screen-sm|max-w-screen-md|max-w-screen-lg|max-w-screen-xl|max-w-screen-2xl|min-h-0|min-h-full|min-h-screen|min-h-min|min-h-max|min-h-fit|max-h-0|max-h-px|max-h-0\.5|max-h-1|max-h-1\.5|max-h-2|max-h-2\.5|max-h-3|max-h-3\.5|max-h-4|max-h-5|max-h-6|max-h-7|max-h-8|max-h-9|max-h-10|max-h-11|max-h-12|max-h-14|max-h-16|max-h-20|max-h-24|max-h-28|max-h-32|max-h-36|max-h-40|max-h-44|max-h-48|max-h-52|max-h-56|max-h-60|max-h-64|max-h-72|max-h-80|max-h-96|max-h-px|max-h-0\.5|max-h-1|max-h-1\.5|max-h-2|max-h-2\.5|max-h-3|max-h-3\.5|max-h-4|max-h-5|max-h-6|max-h-7|max-h-8|max-h-9|max-h-10|max-h-11|max-h-12|max-h-14|max-h-16|max-h-20|max-h-24|max-h-28|max-h-32|max-h-36|max-h-40|max-h-44|max-h-48|max-h-52|max-h-56|max-h-60|max-h-64|max-h-72|max-h-80|max-h-96|max-h-full|max-h-screen)$",
             // Typography
-            r"^(text-xs|text-sm|text-base|text-lg|text-xl|text-2xl|text-3xl|text-4xl|text-5xl|text-6xl|text-7xl|text-8xl|text-9xl|font-thin|font-extralight|font-light|font-normal|font-medium|font-semibold|font-bold|font-extrabold|font-black|italic|not-italic|leading-3|leading-4|leading-5|leading-6|leading-7|leading-8|leading-9|leading-10|leading-none|leading-tight|leading-snug|leading-normal|leading-relaxed|leading-loose|tracking-tighter|tracking-tight|tracking-normal|tracking-wide|tracking-wider|tracking-widest|text-left|text-center|text-right|text-justify|text-start|text-end|text-inherit|text-current|text-transparent|text-black|text-white|text-slate-\d+|text-gray-\d+|text-zinc-\d+|text-neutral-\d+|text-stone-\d+|text-red-\d+|text-orange-\d+|text-amber-\d+|text-yellow-\d+|text-lime-\d+|text-green-\d+|text-emerald-\d+|text-teal-\d+|text-cyan-\d+|text-sky-\d+|text-blue-\d+|text-indigo-\d+|text-violet-\d+|text-purple-\d+|text-fuchsia-\d+|text-pink-\d+|text-rose-\d+)$",
+            r"^(text-xs|text-sm|text-base|text-lg|text-xl|text-2xl|text-3xl|text-4xl|text-5xl|text-6xl|text-7xl|text-8xl|text-9xl|font-thin|font-extralight|font-light|font-normal|font-medium|font-semibold|font-bold|font-extrabold|font-black|italic|not-italic|leading-3|leading-4|leading-5|leading-6|leading-7|leading-8|leading-9|leading-10|leading-none|leading-tight|leading-snug|leading-normal|leading-relaxed|leading-loose|tracking-tighter|tracking-tight|tracking-normal|tracking-wide|tracking-wider|tracking-widest|text-left|text-center|text-right|text-justify|text-start|text-end|text-inherit|text-current|text-transparent|text-black|text-white|text-slate-\d+|text-gray-\d+|text-zinc-\d+|text-neutral-\d+|text-stone-\d+|text-red-\d+|text-orange-\d+|text-amber-\d+|text-yellow-\d+|text-lime-\d+|text-green-\d+|text-emerald-\d+|text-teal-\d+|text-cyan-\d+|text-sky-\d+|text-blue-\d+|text-indigo-\d+|text-violet-\d+|text-purple-\d+|text-fuchsia-\d+|text-pink-\d+|text-rose-\d+|underline|overline|line-through|no-underline|decoration-solid|decoration-double|decoration-dotted|decoration-dashed|decoration-wavy|decoration-auto|decoration-from-font|decoration-0|decoration-1|decoration-2|decoration-4|decoration-8|underline-offset-auto|underline-offset-0|underline-offset-1|underline-offset-2|underline-offset-4|underline-offset-8|uppercase|lowercase|capitalize|normal-case)$",
             // Backgrounds
             r"^(bg-inherit|bg-current|bg-transparent|bg-black|bg-white|bg-slate-\d+|bg-gray-\d+|bg-zinc-\d+|bg-neutral-\d+|bg-stone-\d+|bg-red-\d+|bg-orange-\d+|bg-amber-\d+|bg-yellow-\d+|bg-lime-\d+|bg-green-\d+|bg-emerald-\d+|bg-teal-\d+|bg-cyan-\d+|bg-sky-\d+|bg-blue-\d+|bg-indigo-\d+|bg-violet-\d+|bg-purple-\d+|bg-fuchsia-\d+|bg-pink-\d+|bg-rose-\d+)$",
             // Borders
@@ -100,8 +100,37 @@ impl ValidationRules {
             r"^(sr-only|not-sr-only|focus-within|focus-visible|focus|focus:outline-none|focus:outline|focus:outline-2|focus:outline-4|focus:outline-8|focus:outline-offset-0|focus:outline-offset-1|focus:outline-offset-2|focus:outline-offset-4|focus:outline-offset-8)$",
             // Responsive prefixes
             r"^(sm:|md:|lg:|xl:|2xl:).*$",
-            // State prefixes
-            r"^(hover:|focus:|active:|visited:|disabled:|checked:|indeterminate:|required:|valid:|invalid:|in-range:|out-of-range:|read-only:|read-write:|optional:|placeholder-shown:|autofill:|default:|first-child:|last-child:|only-child:|first-of-type:|last-of-type:|only-of-type:|empty:|target:|root:|not:|where:|is:|has:|before:|after:|first-letter:|first-line:|selection:|marker:|placeholder:|file:|backdrop:|any-link:|link:|local-link:|scope:|current:|past:|future:|playing:|paused:|seeking:|buffering:|stalled:|muted:|volume-locked:|user-invalid:|user-valid:|modal:|picture-in-picture:|fullscreen:|resize:|scroll:|snap:|touch:|user-select:|will-change:|accent-color:|appearance:|cursor:|outline:).*$",
+            // State prefixes (removed catch-all to allow more specific patterns)
+            r"^(hover:|focus:|active:|visited:|disabled:|checked:|indeterminate:|required:|valid:|invalid:|in-range:|out-of-range:|read-only:|read-write:|optional:|placeholder-shown:|autofill:|default:|first-child:|last-child:|only-child:|first-of-type:|last-of-type:|only-of-type:|empty:|target:|root:|not:|where:|is:|has:|before:|after:|first-letter:|first-line:|selection:|marker:|placeholder:|file:|backdrop:|any-link:|link:|local-link:|scope:|current:|past:|future:|playing:|paused:|seeking:|buffering:|stalled:|muted:|volume-locked:|user-invalid:|user-valid:|modal:|picture-in-picture:|fullscreen:|resize:|scroll:|snap:|touch:|user-select:|will-change:|accent-color:|appearance:|cursor:|outline:)(bg-|text-|border-|p-|m-|w-|h-|flex|grid|block|hidden).*$",
+            // Dark mode variants
+            r"^dark:.*$",
+            r"^dark:hover:.*$",
+            r"^dark:focus:.*$",
+            r"^dark:active:.*$",
+            r"^dark:disabled:.*$",
+            r"^dark:checked:.*$",
+            r"^dark:group-hover:.*$",
+            r"^dark:group-focus:.*$",
+            // Gradient utilities
+            r"^bg-gradient-to-(r|l|t|b|tr|tl|br|bl)$",
+            r"^from-[a-zA-Z-]+-\d+$",
+            r"^via-[a-zA-Z-]+-\d+$",
+            r"^to-[a-zA-Z-]+-\d+$",
+            // Animation utilities (Enhanced with new animation types)
+            r"^animate-(none|spin|ping|pulse|bounce|fade-in|fade-out|slide-in-left|slide-in-right|slide-in-top|slide-in-bottom|zoom-in|zoom-out|wobble|shake|flip|heartbeat)$",
+            // Enhanced animation controls
+            r"^animation-iteration-count-\d+$",
+            r"^animation-play-state-(paused|running)$",
+            // State-based animations
+            r"^hover:animate-(none|spin|ping|pulse|bounce|fade-in|fade-out|slide-in-left|slide-in-right|slide-in-top|slide-in-bottom|zoom-in|zoom-out|wobble|shake|flip|heartbeat)$",
+            r"^focus:animate-(none|spin|ping|pulse|bounce|fade-in|fade-out|slide-in-left|slide-in-right|slide-in-top|slide-in-bottom|zoom-in|zoom-out|wobble|shake|flip|heartbeat)$",
+            // Transition utilities
+            r"^transition-(none|all|colors|opacity|shadow|transform)$",
+            r"^duration-(75|100|150|200|300|500|700|1000)$",
+            r"^delay-(75|100|150|200|300|500|700|1000)$",
+            r"^ease-(linear|in|out|in-out)$",
+            // Arbitrary values
+            r"^[a-zA-Z-]+-\[[^\]]+\]$",
         ];
 
         for pattern in patterns {
@@ -477,6 +506,129 @@ mod tests {
         assert!(validator.validate_class("px-4").is_ok());
         assert!(validator.validate_class("py-2").is_ok());
     }
+    
+    #[test]
+    fn test_validate_arbitrary_values() {
+        let validator = ClassValidator::new();
+        // Test arbitrary values
+        assert!(validator.validate_class("w-[123px]").is_ok());
+        assert!(validator.validate_class("bg-[#ff0000]").is_ok());
+        assert!(validator.validate_class("text-[14px]").is_ok());
+        assert!(validator.validate_class("p-[1.5rem]").is_ok());
+        assert!(validator.validate_class("m-[2rem]").is_ok());
+        assert!(validator.validate_class("rounded-[8px]").is_ok());
+        assert!(validator.validate_class("shadow-[0_4px_6px_rgba(0,0,0,0.1)]").is_ok());
+        assert!(validator.validate_class("opacity-[0.5]").is_ok());
+        assert!(validator.validate_class("z-[999]").is_ok());
+        assert!(validator.validate_class("top-[10px]").is_ok());
+        assert!(validator.validate_class("right-[20px]").is_ok());
+        assert!(validator.validate_class("bottom-[30px]").is_ok());
+        assert!(validator.validate_class("left-[40px]").is_ok());
+    }
+    
+    #[test]
+    fn test_validate_dark_mode_variants() {
+        let validator = ClassValidator::new();
+        // Test dark mode variants
+        assert!(validator.validate_class("dark:bg-gray-800").is_ok());
+        assert!(validator.validate_class("dark:text-white").is_ok());
+        assert!(validator.validate_class("dark:border-gray-700").is_ok());
+        assert!(validator.validate_class("dark:hover:bg-gray-700").is_ok());
+        assert!(validator.validate_class("dark:focus:bg-gray-600").is_ok());
+        assert!(validator.validate_class("dark:active:bg-gray-500").is_ok());
+        assert!(validator.validate_class("dark:disabled:bg-gray-400").is_ok());
+        assert!(validator.validate_class("dark:checked:bg-gray-300").is_ok());
+        assert!(validator.validate_class("dark:group-hover:bg-gray-200").is_ok());
+        assert!(validator.validate_class("dark:group-focus:bg-gray-100").is_ok());
+    }
+    
+    #[test]
+    fn test_validate_gradient_variants() {
+        let validator = ClassValidator::new();
+        // Test gradient variants
+        assert!(validator.validate_class("bg-gradient-to-r").is_ok());
+        assert!(validator.validate_class("bg-gradient-to-l").is_ok());
+        assert!(validator.validate_class("bg-gradient-to-t").is_ok());
+        assert!(validator.validate_class("bg-gradient-to-b").is_ok());
+        assert!(validator.validate_class("bg-gradient-to-tr").is_ok());
+        assert!(validator.validate_class("bg-gradient-to-tl").is_ok());
+        assert!(validator.validate_class("bg-gradient-to-br").is_ok());
+        assert!(validator.validate_class("bg-gradient-to-bl").is_ok());
+        assert!(validator.validate_class("from-blue-500").is_ok());
+        assert!(validator.validate_class("via-purple-500").is_ok());
+        assert!(validator.validate_class("to-pink-500").is_ok());
+    }
+    
+    #[test]
+    fn test_validate_fractional_spacing() {
+        let validator = ClassValidator::new();
+        // Test fractional spacing values
+        assert!(validator.validate_class("p-0.5").is_ok());
+        assert!(validator.validate_class("p-1.5").is_ok());
+        assert!(validator.validate_class("p-2.5").is_ok());
+        assert!(validator.validate_class("p-3.5").is_ok());
+        assert!(validator.validate_class("m-0.5").is_ok());
+        assert!(validator.validate_class("m-1.5").is_ok());
+        assert!(validator.validate_class("m-2.5").is_ok());
+        assert!(validator.validate_class("m-3.5").is_ok());
+        assert!(validator.validate_class("px-0.5").is_ok());
+        assert!(validator.validate_class("py-1.5").is_ok());
+        assert!(validator.validate_class("pt-2.5").is_ok());
+        assert!(validator.validate_class("pr-3.5").is_ok());
+        assert!(validator.validate_class("pb-0.5").is_ok());
+        assert!(validator.validate_class("pl-1.5").is_ok());
+        assert!(validator.validate_class("mx-2.5").is_ok());
+        assert!(validator.validate_class("my-3.5").is_ok());
+        assert!(validator.validate_class("mt-0.5").is_ok());
+        assert!(validator.validate_class("mr-1.5").is_ok());
+        assert!(validator.validate_class("mb-2.5").is_ok());
+        assert!(validator.validate_class("ml-3.5").is_ok());
+    }
+    
+    #[test]
+    fn test_validate_animation_system() {
+        let validator = ClassValidator::new();
+        // Test animation classes
+        assert!(validator.validate_class("animate-none").is_ok());
+        assert!(validator.validate_class("animate-spin").is_ok());
+        assert!(validator.validate_class("animate-ping").is_ok());
+        assert!(validator.validate_class("animate-pulse").is_ok());
+        assert!(validator.validate_class("animate-bounce").is_ok());
+        
+        // Test transition classes
+        assert!(validator.validate_class("transition-none").is_ok());
+        assert!(validator.validate_class("transition-all").is_ok());
+        assert!(validator.validate_class("transition-colors").is_ok());
+        assert!(validator.validate_class("transition-opacity").is_ok());
+        assert!(validator.validate_class("transition-shadow").is_ok());
+        assert!(validator.validate_class("transition-transform").is_ok());
+        
+        // Test transition duration classes
+        assert!(validator.validate_class("duration-75").is_ok());
+        assert!(validator.validate_class("duration-100").is_ok());
+        assert!(validator.validate_class("duration-150").is_ok());
+        assert!(validator.validate_class("duration-200").is_ok());
+        assert!(validator.validate_class("duration-300").is_ok());
+        assert!(validator.validate_class("duration-500").is_ok());
+        assert!(validator.validate_class("duration-700").is_ok());
+        assert!(validator.validate_class("duration-1000").is_ok());
+        
+        // Test transition delay classes
+        assert!(validator.validate_class("delay-75").is_ok());
+        assert!(validator.validate_class("delay-100").is_ok());
+        assert!(validator.validate_class("delay-150").is_ok());
+        assert!(validator.validate_class("delay-200").is_ok());
+        assert!(validator.validate_class("delay-300").is_ok());
+        assert!(validator.validate_class("delay-500").is_ok());
+        assert!(validator.validate_class("delay-700").is_ok());
+        assert!(validator.validate_class("delay-1000").is_ok());
+        
+        // Test transition timing function classes
+        assert!(validator.validate_class("ease-linear").is_ok());
+        assert!(validator.validate_class("ease-in").is_ok());
+        assert!(validator.validate_class("ease-out").is_ok());
+        assert!(validator.validate_class("ease-in-out").is_ok());
+    }
 
     #[test]
     fn test_validate_invalid_class() {
@@ -557,5 +709,141 @@ mod tests {
 
         let error = ValidationError::UnsupportedClass("unsupported".to_string());
         assert_eq!(format!("{}", error), "Unsupported class: unsupported");
+    }
+
+    #[test]
+    fn test_validate_enhanced_animations() {
+        let validator = ClassValidator::new();
+
+        // Valid basic animations
+        assert!(validator.validate_class("animate-spin").is_ok());
+        assert!(validator.validate_class("animate-bounce").is_ok());
+        assert!(validator.validate_class("animate-pulse").is_ok());
+
+        // Valid extended animations
+        assert!(validator.validate_class("animate-fade-in").is_ok());
+        assert!(validator.validate_class("animate-fade-out").is_ok());
+        assert!(validator.validate_class("animate-slide-in-left").is_ok());
+        assert!(validator.validate_class("animate-slide-in-right").is_ok());
+        assert!(validator.validate_class("animate-slide-in-top").is_ok());
+        assert!(validator.validate_class("animate-slide-in-bottom").is_ok());
+        assert!(validator.validate_class("animate-zoom-in").is_ok());
+        assert!(validator.validate_class("animate-zoom-out").is_ok());
+        assert!(validator.validate_class("animate-wobble").is_ok());
+        assert!(validator.validate_class("animate-shake").is_ok());
+        assert!(validator.validate_class("animate-flip").is_ok());
+        assert!(validator.validate_class("animate-heartbeat").is_ok());
+
+        // Valid animation controls
+        assert!(validator.validate_class("animation-iteration-count-1").is_ok());
+        assert!(validator.validate_class("animation-iteration-count-3").is_ok());
+        assert!(validator.validate_class("animation-play-state-paused").is_ok());
+        assert!(validator.validate_class("animation-play-state-running").is_ok());
+
+        // Valid state-based animations
+        assert!(validator.validate_class("hover:animate-bounce").is_ok());
+        assert!(validator.validate_class("focus:animate-pulse").is_ok());
+        assert!(validator.validate_class("hover:animate-fade-in").is_ok());
+        assert!(validator.validate_class("focus:animate-slide-in-left").is_ok());
+
+        // Invalid animation classes
+        assert!(validator.validate_class("animate-invalid").is_err());
+        assert!(validator.validate_class("animate-unknown-animation").is_err());
+        assert!(validator.validate_class("hover:animate-invalid").is_err());
+    }
+
+    #[test]
+    fn test_validate_enhanced_spacing() {
+        let validator = ClassValidator::new();
+
+        // Valid enhanced spacing with fractional values
+        assert!(validator.validate_class("p-0.5").is_ok());
+        assert!(validator.validate_class("p-1.5").is_ok());
+        assert!(validator.validate_class("p-2.5").is_ok());
+        assert!(validator.validate_class("p-3.5").is_ok());
+        assert!(validator.validate_class("m-0.5").is_ok());
+        assert!(validator.validate_class("m-1.5").is_ok());
+
+        // Valid enhanced spacing with new directions
+        assert!(validator.validate_class("ps-4").is_ok());
+        assert!(validator.validate_class("pe-4").is_ok());
+        assert!(validator.validate_class("ms-4").is_ok());
+        assert!(validator.validate_class("me-4").is_ok());
+
+        // Valid negative margins
+        assert!(validator.validate_class("-m-4").is_ok());
+        assert!(validator.validate_class("-mt-2").is_ok());
+        assert!(validator.validate_class("-mx-3").is_ok());
+
+        // Valid space and divide utilities
+        assert!(validator.validate_class("space-x-4").is_ok());
+        assert!(validator.validate_class("space-y-2").is_ok());
+        assert!(validator.validate_class("space-x-reverse").is_ok());
+        assert!(validator.validate_class("space-y-reverse").is_ok());
+        assert!(validator.validate_class("divide-x-2").is_ok());
+        assert!(validator.validate_class("divide-y-4").is_ok());
+        assert!(validator.validate_class("divide-x-reverse").is_ok());
+        assert!(validator.validate_class("divide-y-reverse").is_ok());
+
+        // Valid fractional space utilities
+        assert!(validator.validate_class("space-x-0.5").is_ok());
+        assert!(validator.validate_class("space-y-1.5").is_ok());
+        assert!(validator.validate_class("divide-x-0.5").is_ok());
+        assert!(validator.validate_class("divide-y-2.5").is_ok());
+    }
+
+    #[test]
+    fn test_validate_comprehensive_modern_features() {
+        let validator = ClassValidator::new();
+
+        // Test comprehensive validation of all new features
+        let modern_classes = vec![
+            // Enhanced animations
+            "animate-fade-in",
+            "animate-slide-in-right",
+            "animate-zoom-out",
+            "animate-heartbeat",
+            "hover:animate-wobble",
+            "focus:animate-shake",
+            "animation-iteration-count-2",
+            "animation-play-state-paused",
+
+            // Enhanced spacing
+            "p-1.5",
+            "m-2.5",
+            "ps-4",
+            "me-6",
+            "-mx-8",
+            "space-x-0.5",
+            "divide-y-3.5",
+            "space-x-reverse",
+            "divide-y-reverse",
+
+            // Dark mode variants
+            "dark:bg-gray-800",
+            "dark:text-white",
+            "dark:hover:bg-gray-700",
+            "dark:focus:text-gray-100",
+
+            // Gradients
+            "bg-gradient-to-r",
+            "from-blue-500",
+            "via-purple-500",
+            "to-pink-500",
+
+            // Arbitrary values
+            "w-[123px]",
+            "bg-[#ff0000]",
+            "text-[14px]",
+            "p-[1.5rem]",
+        ];
+
+        for class in modern_classes {
+            assert!(
+                validator.validate_class(class).is_ok(),
+                "Failed to validate modern class: {}",
+                class
+            );
+        }
     }
 }

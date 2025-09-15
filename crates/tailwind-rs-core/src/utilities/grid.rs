@@ -1083,4 +1083,370 @@ mod tests {
         assert!(css_classes.contains("gap-x-2"));
         assert!(css_classes.contains("gap-y-6"));
     }
+
+    #[test]
+    fn test_grid_template_columns_class_names() {
+        assert_eq!(GridTemplateColumns::None.to_class_name(), "none");
+        assert_eq!(GridTemplateColumns::Subgrid.to_class_name(), "subgrid");
+        assert_eq!(GridTemplateColumns::Auto.to_class_name(), "auto");
+        assert_eq!(GridTemplateColumns::One.to_class_name(), "1");
+        assert_eq!(GridTemplateColumns::Two.to_class_name(), "2");
+        assert_eq!(GridTemplateColumns::Three.to_class_name(), "3");
+        assert_eq!(GridTemplateColumns::Four.to_class_name(), "4");
+        assert_eq!(GridTemplateColumns::Five.to_class_name(), "5");
+        assert_eq!(GridTemplateColumns::Six.to_class_name(), "6");
+        assert_eq!(GridTemplateColumns::Seven.to_class_name(), "7");
+        assert_eq!(GridTemplateColumns::Eight.to_class_name(), "8");
+        assert_eq!(GridTemplateColumns::Nine.to_class_name(), "9");
+        assert_eq!(GridTemplateColumns::Ten.to_class_name(), "10");
+        assert_eq!(GridTemplateColumns::Eleven.to_class_name(), "11");
+        assert_eq!(GridTemplateColumns::Twelve.to_class_name(), "12");
+    }
+
+    #[test]
+    fn test_grid_template_columns_css_values() {
+        assert_eq!(GridTemplateColumns::None.to_css_value(), "none");
+        assert_eq!(GridTemplateColumns::Subgrid.to_css_value(), "subgrid");
+        assert_eq!(GridTemplateColumns::Auto.to_css_value(), "repeat(auto-fit, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::One.to_css_value(), "repeat(1, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Two.to_css_value(), "repeat(2, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Three.to_css_value(), "repeat(3, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Four.to_css_value(), "repeat(4, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Five.to_css_value(), "repeat(5, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Six.to_css_value(), "repeat(6, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Seven.to_css_value(), "repeat(7, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Eight.to_css_value(), "repeat(8, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Nine.to_css_value(), "repeat(9, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Ten.to_css_value(), "repeat(10, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Eleven.to_css_value(), "repeat(11, minmax(0, 1fr))");
+        assert_eq!(GridTemplateColumns::Twelve.to_css_value(), "repeat(12, minmax(0, 1fr))");
+    }
+
+    #[test]
+    fn test_grid_template_rows_class_names() {
+        assert_eq!(GridTemplateRows::None.to_class_name(), "none");
+        assert_eq!(GridTemplateRows::Subgrid.to_class_name(), "subgrid");
+        assert_eq!(GridTemplateRows::Auto.to_class_name(), "auto");
+        assert_eq!(GridTemplateRows::One.to_class_name(), "1");
+        assert_eq!(GridTemplateRows::Two.to_class_name(), "2");
+        assert_eq!(GridTemplateRows::Three.to_class_name(), "3");
+        assert_eq!(GridTemplateRows::Four.to_class_name(), "4");
+        assert_eq!(GridTemplateRows::Five.to_class_name(), "5");
+        assert_eq!(GridTemplateRows::Six.to_class_name(), "6");
+    }
+
+    #[test]
+    fn test_grid_template_rows_css_values() {
+        assert_eq!(GridTemplateRows::None.to_css_value(), "none");
+        assert_eq!(GridTemplateRows::Subgrid.to_css_value(), "subgrid");
+        assert_eq!(GridTemplateRows::Auto.to_css_value(), "repeat(auto-fit, minmax(0, 1fr))");
+        assert_eq!(GridTemplateRows::One.to_css_value(), "repeat(1, minmax(0, 1fr))");
+        assert_eq!(GridTemplateRows::Two.to_css_value(), "repeat(2, minmax(0, 1fr))");
+        assert_eq!(GridTemplateRows::Three.to_css_value(), "repeat(3, minmax(0, 1fr))");
+        assert_eq!(GridTemplateRows::Four.to_css_value(), "repeat(4, minmax(0, 1fr))");
+        assert_eq!(GridTemplateRows::Five.to_css_value(), "repeat(5, minmax(0, 1fr))");
+        assert_eq!(GridTemplateRows::Six.to_css_value(), "repeat(6, minmax(0, 1fr))");
+    }
+
+    #[test]
+    fn test_grid_column_span_class_names() {
+        assert_eq!(GridColumnSpan::Auto.to_class_name(), "auto");
+        assert_eq!(GridColumnSpan::One.to_class_name(), "1");
+        assert_eq!(GridColumnSpan::Two.to_class_name(), "2");
+        assert_eq!(GridColumnSpan::Three.to_class_name(), "3");
+        assert_eq!(GridColumnSpan::Four.to_class_name(), "4");
+        assert_eq!(GridColumnSpan::Five.to_class_name(), "5");
+        assert_eq!(GridColumnSpan::Six.to_class_name(), "6");
+        assert_eq!(GridColumnSpan::Seven.to_class_name(), "7");
+        assert_eq!(GridColumnSpan::Eight.to_class_name(), "8");
+        assert_eq!(GridColumnSpan::Nine.to_class_name(), "9");
+        assert_eq!(GridColumnSpan::Ten.to_class_name(), "10");
+        assert_eq!(GridColumnSpan::Eleven.to_class_name(), "11");
+        assert_eq!(GridColumnSpan::Twelve.to_class_name(), "12");
+        assert_eq!(GridColumnSpan::Full.to_class_name(), "full");
+    }
+
+    #[test]
+    fn test_grid_column_span_css_values() {
+        assert_eq!(GridColumnSpan::Auto.to_css_value(), "auto");
+        assert_eq!(GridColumnSpan::One.to_css_value(), "span 1 / span 1");
+        assert_eq!(GridColumnSpan::Two.to_css_value(), "span 2 / span 2");
+        assert_eq!(GridColumnSpan::Three.to_css_value(), "span 3 / span 3");
+        assert_eq!(GridColumnSpan::Four.to_css_value(), "span 4 / span 4");
+        assert_eq!(GridColumnSpan::Five.to_css_value(), "span 5 / span 5");
+        assert_eq!(GridColumnSpan::Six.to_css_value(), "span 6 / span 6");
+        assert_eq!(GridColumnSpan::Seven.to_css_value(), "span 7 / span 7");
+        assert_eq!(GridColumnSpan::Eight.to_css_value(), "span 8 / span 8");
+        assert_eq!(GridColumnSpan::Nine.to_css_value(), "span 9 / span 9");
+        assert_eq!(GridColumnSpan::Ten.to_css_value(), "span 10 / span 10");
+        assert_eq!(GridColumnSpan::Eleven.to_css_value(), "span 11 / span 11");
+        assert_eq!(GridColumnSpan::Twelve.to_css_value(), "span 12 / span 12");
+        assert_eq!(GridColumnSpan::Full.to_css_value(), "1 / -1");
+    }
+
+    #[test]
+    fn test_grid_row_span_class_names() {
+        assert_eq!(GridRowSpan::Auto.to_class_name(), "auto");
+        assert_eq!(GridRowSpan::One.to_class_name(), "1");
+        assert_eq!(GridRowSpan::Two.to_class_name(), "2");
+        assert_eq!(GridRowSpan::Three.to_class_name(), "3");
+        assert_eq!(GridRowSpan::Four.to_class_name(), "4");
+        assert_eq!(GridRowSpan::Five.to_class_name(), "5");
+        assert_eq!(GridRowSpan::Six.to_class_name(), "6");
+        assert_eq!(GridRowSpan::Full.to_class_name(), "full");
+    }
+
+    #[test]
+    fn test_grid_row_span_css_values() {
+        assert_eq!(GridRowSpan::Auto.to_css_value(), "auto");
+        assert_eq!(GridRowSpan::One.to_css_value(), "span 1 / span 1");
+        assert_eq!(GridRowSpan::Two.to_css_value(), "span 2 / span 2");
+        assert_eq!(GridRowSpan::Three.to_css_value(), "span 3 / span 3");
+        assert_eq!(GridRowSpan::Four.to_css_value(), "span 4 / span 4");
+        assert_eq!(GridRowSpan::Five.to_css_value(), "span 5 / span 5");
+        assert_eq!(GridRowSpan::Six.to_css_value(), "span 6 / span 6");
+        assert_eq!(GridRowSpan::Full.to_css_value(), "1 / -1");
+    }
+
+    #[test]
+    fn test_grid_column_start_class_names() {
+        assert_eq!(GridColumnStart::Auto.to_class_name(), "auto");
+        assert_eq!(GridColumnStart::One.to_class_name(), "1");
+        assert_eq!(GridColumnStart::Two.to_class_name(), "2");
+        assert_eq!(GridColumnStart::Three.to_class_name(), "3");
+        assert_eq!(GridColumnStart::Four.to_class_name(), "4");
+        assert_eq!(GridColumnStart::Five.to_class_name(), "5");
+        assert_eq!(GridColumnStart::Six.to_class_name(), "6");
+        assert_eq!(GridColumnStart::Seven.to_class_name(), "7");
+        assert_eq!(GridColumnStart::Eight.to_class_name(), "8");
+        assert_eq!(GridColumnStart::Nine.to_class_name(), "9");
+        assert_eq!(GridColumnStart::Ten.to_class_name(), "10");
+        assert_eq!(GridColumnStart::Eleven.to_class_name(), "11");
+        assert_eq!(GridColumnStart::Twelve.to_class_name(), "12");
+        assert_eq!(GridColumnStart::Thirteen.to_class_name(), "13");
+    }
+
+    #[test]
+    fn test_grid_column_start_css_values() {
+        assert_eq!(GridColumnStart::Auto.to_css_value(), "auto");
+        assert_eq!(GridColumnStart::One.to_css_value(), "1");
+        assert_eq!(GridColumnStart::Two.to_css_value(), "2");
+        assert_eq!(GridColumnStart::Three.to_css_value(), "3");
+        assert_eq!(GridColumnStart::Four.to_css_value(), "4");
+        assert_eq!(GridColumnStart::Five.to_css_value(), "5");
+        assert_eq!(GridColumnStart::Six.to_css_value(), "6");
+        assert_eq!(GridColumnStart::Seven.to_css_value(), "7");
+        assert_eq!(GridColumnStart::Eight.to_css_value(), "8");
+        assert_eq!(GridColumnStart::Nine.to_css_value(), "9");
+        assert_eq!(GridColumnStart::Ten.to_css_value(), "10");
+        assert_eq!(GridColumnStart::Eleven.to_css_value(), "11");
+        assert_eq!(GridColumnStart::Twelve.to_css_value(), "12");
+        assert_eq!(GridColumnStart::Thirteen.to_css_value(), "13");
+    }
+
+    #[test]
+    fn test_grid_row_start_class_names() {
+        assert_eq!(GridRowStart::Auto.to_class_name(), "auto");
+        assert_eq!(GridRowStart::One.to_class_name(), "1");
+        assert_eq!(GridRowStart::Two.to_class_name(), "2");
+        assert_eq!(GridRowStart::Three.to_class_name(), "3");
+        assert_eq!(GridRowStart::Four.to_class_name(), "4");
+        assert_eq!(GridRowStart::Five.to_class_name(), "5");
+        assert_eq!(GridRowStart::Six.to_class_name(), "6");
+        assert_eq!(GridRowStart::Seven.to_class_name(), "7");
+    }
+
+    #[test]
+    fn test_grid_row_start_css_values() {
+        assert_eq!(GridRowStart::Auto.to_css_value(), "auto");
+        assert_eq!(GridRowStart::One.to_css_value(), "1");
+        assert_eq!(GridRowStart::Two.to_css_value(), "2");
+        assert_eq!(GridRowStart::Three.to_css_value(), "3");
+        assert_eq!(GridRowStart::Four.to_css_value(), "4");
+        assert_eq!(GridRowStart::Five.to_css_value(), "5");
+        assert_eq!(GridRowStart::Six.to_css_value(), "6");
+        assert_eq!(GridRowStart::Seven.to_css_value(), "7");
+    }
+
+    #[test]
+    fn test_grid_column_end_class_names() {
+        assert_eq!(GridColumnEnd::Auto.to_class_name(), "auto");
+        assert_eq!(GridColumnEnd::One.to_class_name(), "1");
+        assert_eq!(GridColumnEnd::Two.to_class_name(), "2");
+        assert_eq!(GridColumnEnd::Three.to_class_name(), "3");
+        assert_eq!(GridColumnEnd::Four.to_class_name(), "4");
+        assert_eq!(GridColumnEnd::Five.to_class_name(), "5");
+        assert_eq!(GridColumnEnd::Six.to_class_name(), "6");
+        assert_eq!(GridColumnEnd::Seven.to_class_name(), "7");
+        assert_eq!(GridColumnEnd::Eight.to_class_name(), "8");
+        assert_eq!(GridColumnEnd::Nine.to_class_name(), "9");
+        assert_eq!(GridColumnEnd::Ten.to_class_name(), "10");
+        assert_eq!(GridColumnEnd::Eleven.to_class_name(), "11");
+        assert_eq!(GridColumnEnd::Twelve.to_class_name(), "12");
+        assert_eq!(GridColumnEnd::Thirteen.to_class_name(), "13");
+    }
+
+    #[test]
+    fn test_grid_column_end_css_values() {
+        assert_eq!(GridColumnEnd::Auto.to_css_value(), "auto");
+        assert_eq!(GridColumnEnd::One.to_css_value(), "1");
+        assert_eq!(GridColumnEnd::Two.to_css_value(), "2");
+        assert_eq!(GridColumnEnd::Three.to_css_value(), "3");
+        assert_eq!(GridColumnEnd::Four.to_css_value(), "4");
+        assert_eq!(GridColumnEnd::Five.to_css_value(), "5");
+        assert_eq!(GridColumnEnd::Six.to_css_value(), "6");
+        assert_eq!(GridColumnEnd::Seven.to_css_value(), "7");
+        assert_eq!(GridColumnEnd::Eight.to_css_value(), "8");
+        assert_eq!(GridColumnEnd::Nine.to_css_value(), "9");
+        assert_eq!(GridColumnEnd::Ten.to_css_value(), "10");
+        assert_eq!(GridColumnEnd::Eleven.to_css_value(), "11");
+        assert_eq!(GridColumnEnd::Twelve.to_css_value(), "12");
+        assert_eq!(GridColumnEnd::Thirteen.to_css_value(), "13");
+    }
+
+    #[test]
+    fn test_grid_row_end_class_names() {
+        assert_eq!(GridRowEnd::Auto.to_class_name(), "auto");
+        assert_eq!(GridRowEnd::One.to_class_name(), "1");
+        assert_eq!(GridRowEnd::Two.to_class_name(), "2");
+        assert_eq!(GridRowEnd::Three.to_class_name(), "3");
+        assert_eq!(GridRowEnd::Four.to_class_name(), "4");
+        assert_eq!(GridRowEnd::Five.to_class_name(), "5");
+        assert_eq!(GridRowEnd::Six.to_class_name(), "6");
+        assert_eq!(GridRowEnd::Seven.to_class_name(), "7");
+    }
+
+    #[test]
+    fn test_grid_row_end_css_values() {
+        assert_eq!(GridRowEnd::Auto.to_css_value(), "auto");
+        assert_eq!(GridRowEnd::One.to_css_value(), "1");
+        assert_eq!(GridRowEnd::Two.to_css_value(), "2");
+        assert_eq!(GridRowEnd::Three.to_css_value(), "3");
+        assert_eq!(GridRowEnd::Four.to_css_value(), "4");
+        assert_eq!(GridRowEnd::Five.to_css_value(), "5");
+        assert_eq!(GridRowEnd::Six.to_css_value(), "6");
+        assert_eq!(GridRowEnd::Seven.to_css_value(), "7");
+    }
+
+    #[test]
+    fn test_grid_auto_flow_class_names() {
+        assert_eq!(GridAutoFlow::Row.to_class_name(), "row");
+        assert_eq!(GridAutoFlow::Column.to_class_name(), "col");
+        assert_eq!(GridAutoFlow::Dense.to_class_name(), "dense");
+        assert_eq!(GridAutoFlow::DenseColumn.to_class_name(), "col-dense");
+    }
+
+    #[test]
+    fn test_grid_auto_flow_css_values() {
+        assert_eq!(GridAutoFlow::Row.to_css_value(), "row");
+        assert_eq!(GridAutoFlow::Column.to_css_value(), "column");
+        assert_eq!(GridAutoFlow::Dense.to_css_value(), "row dense");
+        assert_eq!(GridAutoFlow::DenseColumn.to_css_value(), "column dense");
+    }
+
+    #[test]
+    fn test_grid_auto_columns_class_names() {
+        assert_eq!(GridAutoColumns::Auto.to_class_name(), "auto");
+        assert_eq!(GridAutoColumns::Min.to_class_name(), "min");
+        assert_eq!(GridAutoColumns::Max.to_class_name(), "max");
+        assert_eq!(GridAutoColumns::Fr.to_class_name(), "fr");
+    }
+
+    #[test]
+    fn test_grid_auto_columns_css_values() {
+        assert_eq!(GridAutoColumns::Auto.to_css_value(), "auto");
+        assert_eq!(GridAutoColumns::Min.to_css_value(), "min-content");
+        assert_eq!(GridAutoColumns::Max.to_css_value(), "max-content");
+        assert_eq!(GridAutoColumns::Fr.to_css_value(), "minmax(0, 1fr)");
+    }
+
+    #[test]
+    fn test_grid_auto_rows_class_names() {
+        assert_eq!(GridAutoRows::Auto.to_class_name(), "auto");
+        assert_eq!(GridAutoRows::Min.to_class_name(), "min");
+        assert_eq!(GridAutoRows::Max.to_class_name(), "max");
+        assert_eq!(GridAutoRows::Fr.to_class_name(), "fr");
+    }
+
+    #[test]
+    fn test_grid_auto_rows_css_values() {
+        assert_eq!(GridAutoRows::Auto.to_css_value(), "auto");
+        assert_eq!(GridAutoRows::Min.to_css_value(), "min-content");
+        assert_eq!(GridAutoRows::Max.to_css_value(), "max-content");
+        assert_eq!(GridAutoRows::Fr.to_css_value(), "minmax(0, 1fr)");
+    }
+
+    #[test]
+    fn test_grid_serialization() {
+        // Test GridTemplateColumns serialization
+        let columns = GridTemplateColumns::Three;
+        let serialized = serde_json::to_string(&columns).unwrap();
+        let deserialized: GridTemplateColumns = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(columns, deserialized);
+
+        // Test GridColumnSpan serialization
+        let span = GridColumnSpan::Full;
+        let serialized = serde_json::to_string(&span).unwrap();
+        let deserialized: GridColumnSpan = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(span, deserialized);
+
+        // Test GridAutoFlow serialization
+        let flow = GridAutoFlow::Dense;
+        let serialized = serde_json::to_string(&flow).unwrap();
+        let deserialized: GridAutoFlow = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(flow, deserialized);
+    }
+
+    #[test]
+    fn test_grid_equality_and_hash() {
+        // Test GridTemplateColumns equality
+        assert_eq!(GridTemplateColumns::Three, GridTemplateColumns::Three);
+        assert_ne!(GridTemplateColumns::Three, GridTemplateColumns::Four);
+
+        // Test GridColumnSpan equality
+        assert_eq!(GridColumnSpan::Full, GridColumnSpan::Full);
+        assert_ne!(GridColumnSpan::Full, GridColumnSpan::Auto);
+
+        // Test GridAutoFlow equality
+        assert_eq!(GridAutoFlow::Row, GridAutoFlow::Row);
+        assert_ne!(GridAutoFlow::Row, GridAutoFlow::Column);
+
+        // Test hash consistency
+        use std::collections::HashMap;
+        let mut map = HashMap::new();
+        map.insert(GridTemplateColumns::Three, "three");
+        map.insert(GridTemplateColumns::Four, "four");
+        assert_eq!(map.get(&GridTemplateColumns::Three), Some(&"three"));
+        assert_eq!(map.get(&GridTemplateColumns::Four), Some(&"four"));
+    }
+
+    #[test]
+    fn test_comprehensive_grid_utilities() {
+        let classes = ClassBuilder::new()
+            .grid_template_columns(GridTemplateColumns::Three)
+            .grid_template_rows(GridTemplateRows::Two)
+            .grid_column_span(GridColumnSpan::Two)
+            .grid_row_span(GridRowSpan::One)
+            .grid_column_start(GridColumnStart::One)
+            .grid_row_start(GridRowStart::One)
+            .grid_column_end(GridColumnEnd::Three)
+            .grid_row_end(GridRowEnd::Two)
+            .grid_auto_flow(GridAutoFlow::Row)
+            .grid_auto_columns(GridAutoColumns::Auto)
+            .grid_auto_rows(GridAutoRows::Auto)
+            .build();
+
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("grid-cols-3"));
+        assert!(css_classes.contains("grid-rows-2"));
+        assert!(css_classes.contains("col-span-2"));
+        assert!(css_classes.contains("row-span-1"));
+        assert!(css_classes.contains("col-start-1"));
+        assert!(css_classes.contains("row-start-1"));
+        assert!(css_classes.contains("col-end-3"));
+        assert!(css_classes.contains("row-end-2"));
+        assert!(css_classes.contains("grid-flow-row"));
+        assert!(css_classes.contains("auto-cols-auto"));
+        assert!(css_classes.contains("auto-rows-auto"));
+    }
 }

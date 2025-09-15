@@ -3,11 +3,14 @@
 //! Core types and utilities for the tailwind-rs library.
 //! This crate provides the fundamental building blocks for Tailwind CSS integration in Rust.
 
+pub mod arbitrary;
 pub mod classes;
 pub mod color;
 pub mod config;
 pub mod custom_variant;
+pub mod dark_mode;
 pub mod error;
+pub mod gradients;
 pub mod performance;
 pub mod responsive;
 pub mod theme;
@@ -32,11 +35,14 @@ mod week19_testing_qa_tests;
 mod week20_release_prep_tests;
 
 // Re-export commonly used types
+pub use arbitrary::{ArbitraryValue, ArbitraryValueError, ArbitraryValueUtilities};
 pub use classes::{ClassBuilder, ClassSet};
 pub use color::Color;
 pub use config::{BuildConfig, TailwindConfig};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};
+pub use dark_mode::{DarkModeVariant, DarkModeVariantError, DarkModeVariantUtilities};
 pub use error::{Result, TailwindError};
+pub use gradients::{Gradient, GradientDirection, GradientError, GradientStop, GradientUtilities};
 pub use performance::{CacheStats, ClassCache, OptimizationLevel, PerformanceOptimizer};
 pub use responsive::{
     AlignItems, Breakpoint, FlexDirection, FlexWrap, JustifyContent, Responsive, ResponsiveBuilder,

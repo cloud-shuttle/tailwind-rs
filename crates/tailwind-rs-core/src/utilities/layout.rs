@@ -100,6 +100,20 @@ pub enum ZIndex {
     Forty,
     /// Z-index 50
     Fifty,
+    /// Z-index 100
+    OneHundred,
+    /// Z-index 200
+    TwoHundred,
+    /// Z-index 300
+    ThreeHundred,
+    /// Z-index 400
+    FourHundred,
+    /// Z-index 500
+    FiveHundred,
+    /// Z-index 1000
+    OneThousand,
+    /// Z-index 9999
+    Max,
 }
 
 /// Float values
@@ -303,9 +317,16 @@ impl ZIndex {
             ZIndex::Thirty => "30".to_string(),
             ZIndex::Forty => "40".to_string(),
             ZIndex::Fifty => "50".to_string(),
+            ZIndex::OneHundred => "100".to_string(),
+            ZIndex::TwoHundred => "200".to_string(),
+            ZIndex::ThreeHundred => "300".to_string(),
+            ZIndex::FourHundred => "400".to_string(),
+            ZIndex::FiveHundred => "500".to_string(),
+            ZIndex::OneThousand => "1000".to_string(),
+            ZIndex::Max => "9999".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             ZIndex::Auto => "auto".to_string(),
@@ -315,6 +336,53 @@ impl ZIndex {
             ZIndex::Thirty => "30".to_string(),
             ZIndex::Forty => "40".to_string(),
             ZIndex::Fifty => "50".to_string(),
+            ZIndex::OneHundred => "100".to_string(),
+            ZIndex::TwoHundred => "200".to_string(),
+            ZIndex::ThreeHundred => "300".to_string(),
+            ZIndex::FourHundred => "400".to_string(),
+            ZIndex::FiveHundred => "500".to_string(),
+            ZIndex::OneThousand => "1000".to_string(),
+            ZIndex::Max => "9999".to_string(),
+        }
+    }
+
+    /// Get all available z-index values
+    pub fn all_values() -> Vec<ZIndex> {
+        vec![
+            ZIndex::Auto,
+            ZIndex::Zero,
+            ZIndex::Ten,
+            ZIndex::Twenty,
+            ZIndex::Thirty,
+            ZIndex::Forty,
+            ZIndex::Fifty,
+            ZIndex::OneHundred,
+            ZIndex::TwoHundred,
+            ZIndex::ThreeHundred,
+            ZIndex::FourHundred,
+            ZIndex::FiveHundred,
+            ZIndex::OneThousand,
+            ZIndex::Max,
+        ]
+    }
+
+    /// Get the numeric value of the z-index
+    pub fn to_numeric_value(&self) -> Option<i32> {
+        match self {
+            ZIndex::Auto => None,
+            ZIndex::Zero => Some(0),
+            ZIndex::Ten => Some(10),
+            ZIndex::Twenty => Some(20),
+            ZIndex::Thirty => Some(30),
+            ZIndex::Forty => Some(40),
+            ZIndex::Fifty => Some(50),
+            ZIndex::OneHundred => Some(100),
+            ZIndex::TwoHundred => Some(200),
+            ZIndex::ThreeHundred => Some(300),
+            ZIndex::FourHundred => Some(400),
+            ZIndex::FiveHundred => Some(500),
+            ZIndex::OneThousand => Some(1000),
+            ZIndex::Max => Some(9999),
         }
     }
 }
@@ -783,13 +851,44 @@ mod tests {
             .z_index(ZIndex::Zero)
             .z_index(ZIndex::Ten)
             .z_index(ZIndex::Fifty)
+            .z_index(ZIndex::OneHundred)
+            .z_index(ZIndex::FiveHundred)
+            .z_index(ZIndex::OneThousand)
+            .z_index(ZIndex::Max)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("z-auto"));
         assert!(css_classes.contains("z-0"));
         assert!(css_classes.contains("z-10"));
         assert!(css_classes.contains("z-50"));
+        assert!(css_classes.contains("z-100"));
+        assert!(css_classes.contains("z-500"));
+        assert!(css_classes.contains("z-1000"));
+        assert!(css_classes.contains("z-9999"));
+    }
+
+    #[test]
+    fn test_extended_z_index_values() {
+        // Test all z-index values are available
+        let all_z_values = ZIndex::all_values();
+        assert_eq!(all_z_values.len(), 14);
+        assert!(all_z_values.contains(&ZIndex::Auto));
+        assert!(all_z_values.contains(&ZIndex::OneHundred));
+        assert!(all_z_values.contains(&ZIndex::Max));
+
+        // Test numeric values
+        assert_eq!(ZIndex::Auto.to_numeric_value(), None);
+        assert_eq!(ZIndex::Zero.to_numeric_value(), Some(0));
+        assert_eq!(ZIndex::OneHundred.to_numeric_value(), Some(100));
+        assert_eq!(ZIndex::FiveHundred.to_numeric_value(), Some(500));
+        assert_eq!(ZIndex::OneThousand.to_numeric_value(), Some(1000));
+        assert_eq!(ZIndex::Max.to_numeric_value(), Some(9999));
+
+        // Test CSS values
+        assert_eq!(ZIndex::OneHundred.to_css_value(), "100");
+        assert_eq!(ZIndex::TwoHundred.to_css_value(), "200");
+        assert_eq!(ZIndex::Max.to_css_value(), "9999");
     }
     
     #[test]
@@ -954,5 +1053,323 @@ mod tests {
         assert!(css_classes.contains("inset-0"));
         assert!(css_classes.contains("inset-x-4"));
         assert!(css_classes.contains("inset-y-2"));
+    }
+
+    #[test]
+    fn test_display_class_names() {
+        assert_eq!(Display::Block.to_class_name(), "block");
+        assert_eq!(Display::Inline.to_class_name(), "inline");
+        assert_eq!(Display::InlineBlock.to_class_name(), "inline-block");
+        assert_eq!(Display::Flex.to_class_name(), "flex");
+        assert_eq!(Display::InlineFlex.to_class_name(), "inline-flex");
+        assert_eq!(Display::Grid.to_class_name(), "grid");
+        assert_eq!(Display::InlineGrid.to_class_name(), "inline-grid");
+        assert_eq!(Display::Table.to_class_name(), "table");
+        assert_eq!(Display::InlineTable.to_class_name(), "inline-table");
+        assert_eq!(Display::TableCaption.to_class_name(), "table-caption");
+        assert_eq!(Display::TableCell.to_class_name(), "table-cell");
+        assert_eq!(Display::TableColumn.to_class_name(), "table-column");
+        assert_eq!(Display::TableColumnGroup.to_class_name(), "table-column-group");
+        assert_eq!(Display::TableFooterGroup.to_class_name(), "table-footer-group");
+        assert_eq!(Display::TableHeaderGroup.to_class_name(), "table-header-group");
+        assert_eq!(Display::TableRow.to_class_name(), "table-row");
+        assert_eq!(Display::TableRowGroup.to_class_name(), "table-row-group");
+        assert_eq!(Display::FlowRoot.to_class_name(), "flow-root");
+        assert_eq!(Display::Contents.to_class_name(), "contents");
+        assert_eq!(Display::ListItem.to_class_name(), "list-item");
+        assert_eq!(Display::Hidden.to_class_name(), "hidden");
+    }
+
+    #[test]
+    fn test_display_css_values() {
+        assert_eq!(Display::Block.to_css_value(), "block");
+        assert_eq!(Display::Inline.to_css_value(), "inline");
+        assert_eq!(Display::InlineBlock.to_css_value(), "inline-block");
+        assert_eq!(Display::Flex.to_css_value(), "flex");
+        assert_eq!(Display::InlineFlex.to_css_value(), "inline-flex");
+        assert_eq!(Display::Grid.to_css_value(), "grid");
+        assert_eq!(Display::InlineGrid.to_css_value(), "inline-grid");
+        assert_eq!(Display::Table.to_css_value(), "table");
+        assert_eq!(Display::InlineTable.to_css_value(), "inline-table");
+        assert_eq!(Display::TableCaption.to_css_value(), "table-caption");
+        assert_eq!(Display::TableCell.to_css_value(), "table-cell");
+        assert_eq!(Display::TableColumn.to_css_value(), "table-column");
+        assert_eq!(Display::TableColumnGroup.to_css_value(), "table-column-group");
+        assert_eq!(Display::TableFooterGroup.to_css_value(), "table-footer-group");
+        assert_eq!(Display::TableHeaderGroup.to_css_value(), "table-header-group");
+        assert_eq!(Display::TableRow.to_css_value(), "table-row");
+        assert_eq!(Display::TableRowGroup.to_css_value(), "table-row-group");
+        assert_eq!(Display::FlowRoot.to_css_value(), "flow-root");
+        assert_eq!(Display::Contents.to_css_value(), "contents");
+        assert_eq!(Display::ListItem.to_css_value(), "list-item");
+        assert_eq!(Display::Hidden.to_css_value(), "none");
+    }
+
+    #[test]
+    fn test_position_class_names() {
+        assert_eq!(Position::Static.to_class_name(), "static");
+        assert_eq!(Position::Fixed.to_class_name(), "fixed");
+        assert_eq!(Position::Absolute.to_class_name(), "absolute");
+        assert_eq!(Position::Relative.to_class_name(), "relative");
+        assert_eq!(Position::Sticky.to_class_name(), "sticky");
+    }
+
+    #[test]
+    fn test_position_css_values() {
+        assert_eq!(Position::Static.to_css_value(), "static");
+        assert_eq!(Position::Fixed.to_css_value(), "fixed");
+        assert_eq!(Position::Absolute.to_css_value(), "absolute");
+        assert_eq!(Position::Relative.to_css_value(), "relative");
+        assert_eq!(Position::Sticky.to_css_value(), "sticky");
+    }
+
+    #[test]
+    fn test_overflow_class_names() {
+        assert_eq!(Overflow::Auto.to_class_name(), "auto");
+        assert_eq!(Overflow::Hidden.to_class_name(), "hidden");
+        assert_eq!(Overflow::Clip.to_class_name(), "clip");
+        assert_eq!(Overflow::Visible.to_class_name(), "visible");
+        assert_eq!(Overflow::Scroll.to_class_name(), "scroll");
+    }
+
+    #[test]
+    fn test_overflow_css_values() {
+        assert_eq!(Overflow::Auto.to_css_value(), "auto");
+        assert_eq!(Overflow::Hidden.to_css_value(), "hidden");
+        assert_eq!(Overflow::Clip.to_css_value(), "clip");
+        assert_eq!(Overflow::Visible.to_css_value(), "visible");
+        assert_eq!(Overflow::Scroll.to_css_value(), "scroll");
+    }
+
+    #[test]
+    fn test_z_index_class_names() {
+        assert_eq!(ZIndex::Auto.to_class_name(), "auto");
+        assert_eq!(ZIndex::Zero.to_class_name(), "0");
+        assert_eq!(ZIndex::Ten.to_class_name(), "10");
+        assert_eq!(ZIndex::Twenty.to_class_name(), "20");
+        assert_eq!(ZIndex::Thirty.to_class_name(), "30");
+        assert_eq!(ZIndex::Forty.to_class_name(), "40");
+        assert_eq!(ZIndex::Fifty.to_class_name(), "50");
+        assert_eq!(ZIndex::OneHundred.to_class_name(), "100");
+        assert_eq!(ZIndex::TwoHundred.to_class_name(), "200");
+        assert_eq!(ZIndex::ThreeHundred.to_class_name(), "300");
+        assert_eq!(ZIndex::FourHundred.to_class_name(), "400");
+        assert_eq!(ZIndex::FiveHundred.to_class_name(), "500");
+        assert_eq!(ZIndex::OneThousand.to_class_name(), "1000");
+        assert_eq!(ZIndex::Max.to_class_name(), "9999");
+    }
+
+    #[test]
+    fn test_z_index_css_values() {
+        assert_eq!(ZIndex::Auto.to_css_value(), "auto");
+        assert_eq!(ZIndex::Zero.to_css_value(), "0");
+        assert_eq!(ZIndex::Ten.to_css_value(), "10");
+        assert_eq!(ZIndex::Twenty.to_css_value(), "20");
+        assert_eq!(ZIndex::Thirty.to_css_value(), "30");
+        assert_eq!(ZIndex::Forty.to_css_value(), "40");
+        assert_eq!(ZIndex::Fifty.to_css_value(), "50");
+        assert_eq!(ZIndex::OneHundred.to_css_value(), "100");
+        assert_eq!(ZIndex::TwoHundred.to_css_value(), "200");
+        assert_eq!(ZIndex::ThreeHundred.to_css_value(), "300");
+        assert_eq!(ZIndex::FourHundred.to_css_value(), "400");
+        assert_eq!(ZIndex::FiveHundred.to_css_value(), "500");
+        assert_eq!(ZIndex::OneThousand.to_css_value(), "1000");
+        assert_eq!(ZIndex::Max.to_css_value(), "9999");
+    }
+
+    #[test]
+    fn test_float_class_names() {
+        assert_eq!(Float::Right.to_class_name(), "right");
+        assert_eq!(Float::Left.to_class_name(), "left");
+        assert_eq!(Float::None.to_class_name(), "none");
+    }
+
+    #[test]
+    fn test_float_css_values() {
+        assert_eq!(Float::Right.to_css_value(), "right");
+        assert_eq!(Float::Left.to_css_value(), "left");
+        assert_eq!(Float::None.to_css_value(), "none");
+    }
+
+    #[test]
+    fn test_clear_class_names() {
+        assert_eq!(Clear::Left.to_class_name(), "left");
+        assert_eq!(Clear::Right.to_class_name(), "right");
+        assert_eq!(Clear::Both.to_class_name(), "both");
+        assert_eq!(Clear::None.to_class_name(), "none");
+    }
+
+    #[test]
+    fn test_clear_css_values() {
+        assert_eq!(Clear::Left.to_css_value(), "left");
+        assert_eq!(Clear::Right.to_css_value(), "right");
+        assert_eq!(Clear::Both.to_css_value(), "both");
+        assert_eq!(Clear::None.to_css_value(), "none");
+    }
+
+    #[test]
+    fn test_isolation_class_names() {
+        assert_eq!(Isolation::Isolate.to_class_name(), "isolate");
+        assert_eq!(Isolation::Auto.to_class_name(), "auto");
+    }
+
+    #[test]
+    fn test_isolation_css_values() {
+        assert_eq!(Isolation::Isolate.to_css_value(), "isolate");
+        assert_eq!(Isolation::Auto.to_css_value(), "auto");
+    }
+
+    #[test]
+    fn test_object_fit_class_names() {
+        assert_eq!(ObjectFit::Contain.to_class_name(), "contain");
+        assert_eq!(ObjectFit::Cover.to_class_name(), "cover");
+        assert_eq!(ObjectFit::Fill.to_class_name(), "fill");
+        assert_eq!(ObjectFit::None.to_class_name(), "none");
+        assert_eq!(ObjectFit::ScaleDown.to_class_name(), "scale-down");
+    }
+
+    #[test]
+    fn test_object_fit_css_values() {
+        assert_eq!(ObjectFit::Contain.to_css_value(), "contain");
+        assert_eq!(ObjectFit::Cover.to_css_value(), "cover");
+        assert_eq!(ObjectFit::Fill.to_css_value(), "fill");
+        assert_eq!(ObjectFit::None.to_css_value(), "none");
+        assert_eq!(ObjectFit::ScaleDown.to_css_value(), "scale-down");
+    }
+
+    #[test]
+    fn test_object_position_class_names() {
+        assert_eq!(ObjectPosition::Bottom.to_class_name(), "bottom");
+        assert_eq!(ObjectPosition::Center.to_class_name(), "center");
+        assert_eq!(ObjectPosition::Left.to_class_name(), "left");
+        assert_eq!(ObjectPosition::LeftBottom.to_class_name(), "left-bottom");
+        assert_eq!(ObjectPosition::LeftTop.to_class_name(), "left-top");
+        assert_eq!(ObjectPosition::Right.to_class_name(), "right");
+        assert_eq!(ObjectPosition::RightBottom.to_class_name(), "right-bottom");
+        assert_eq!(ObjectPosition::RightTop.to_class_name(), "right-top");
+        assert_eq!(ObjectPosition::Top.to_class_name(), "top");
+    }
+
+    #[test]
+    fn test_object_position_css_values() {
+        assert_eq!(ObjectPosition::Bottom.to_css_value(), "bottom");
+        assert_eq!(ObjectPosition::Center.to_css_value(), "center");
+        assert_eq!(ObjectPosition::Left.to_css_value(), "left");
+        assert_eq!(ObjectPosition::LeftBottom.to_css_value(), "left bottom");
+        assert_eq!(ObjectPosition::LeftTop.to_css_value(), "left top");
+        assert_eq!(ObjectPosition::Right.to_css_value(), "right");
+        assert_eq!(ObjectPosition::RightBottom.to_css_value(), "right bottom");
+        assert_eq!(ObjectPosition::RightTop.to_css_value(), "right top");
+        assert_eq!(ObjectPosition::Top.to_css_value(), "top");
+    }
+
+    #[test]
+    fn test_overscroll_behavior_class_names() {
+        assert_eq!(OverscrollBehavior::Auto.to_class_name(), "auto");
+        assert_eq!(OverscrollBehavior::Contain.to_class_name(), "contain");
+        assert_eq!(OverscrollBehavior::None.to_class_name(), "none");
+    }
+
+    #[test]
+    fn test_overscroll_behavior_css_values() {
+        assert_eq!(OverscrollBehavior::Auto.to_css_value(), "auto");
+        assert_eq!(OverscrollBehavior::Contain.to_css_value(), "contain");
+        assert_eq!(OverscrollBehavior::None.to_css_value(), "none");
+    }
+
+    #[test]
+    fn test_visibility_class_names() {
+        assert_eq!(Visibility::Visible.to_class_name(), "visible");
+        assert_eq!(Visibility::Hidden.to_class_name(), "invisible");
+        assert_eq!(Visibility::Collapse.to_class_name(), "collapse");
+    }
+
+    #[test]
+    fn test_visibility_css_values() {
+        assert_eq!(Visibility::Visible.to_css_value(), "visible");
+        assert_eq!(Visibility::Hidden.to_css_value(), "hidden");
+        assert_eq!(Visibility::Collapse.to_css_value(), "collapse");
+    }
+
+    #[test]
+    fn test_layout_serialization() {
+        // Test Display serialization
+        let display = Display::Flex;
+        let serialized = serde_json::to_string(&display).unwrap();
+        let deserialized: Display = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(display, deserialized);
+
+        // Test Position serialization
+        let position = Position::Relative;
+        let serialized = serde_json::to_string(&position).unwrap();
+        let deserialized: Position = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(position, deserialized);
+
+        // Test ZIndex serialization
+        let z_index = ZIndex::Fifty;
+        let serialized = serde_json::to_string(&z_index).unwrap();
+        let deserialized: ZIndex = serde_json::from_str(&serialized).unwrap();
+        assert_eq!(z_index, deserialized);
+    }
+
+    #[test]
+    fn test_layout_equality_and_hash() {
+        // Test Display equality
+        assert_eq!(Display::Block, Display::Block);
+        assert_ne!(Display::Block, Display::Flex);
+
+        // Test Position equality
+        assert_eq!(Position::Relative, Position::Relative);
+        assert_ne!(Position::Relative, Position::Absolute);
+
+        // Test ZIndex equality
+        assert_eq!(ZIndex::Ten, ZIndex::Ten);
+        assert_ne!(ZIndex::Ten, ZIndex::Twenty);
+
+        // Test hash consistency
+        use std::collections::HashMap;
+        let mut map = HashMap::new();
+        map.insert(Display::Flex, "flex");
+        map.insert(Display::Grid, "grid");
+        assert_eq!(map.get(&Display::Flex), Some(&"flex"));
+        assert_eq!(map.get(&Display::Grid), Some(&"grid"));
+    }
+
+    #[test]
+    fn test_comprehensive_layout_utilities() {
+        let classes = ClassBuilder::new()
+            .display(Display::Flex)
+            .position(Position::Relative)
+            .overflow(Overflow::Hidden)
+            .overflow_x(Overflow::Auto)
+            .overflow_y(Overflow::Scroll)
+            .z_index(ZIndex::Fifty)
+            .float(Float::None)
+            .clear(Clear::Both)
+            .isolation(Isolation::Isolate)
+            .object_fit(ObjectFit::Cover)
+            .object_position(ObjectPosition::Center)
+            .overscroll_behavior(OverscrollBehavior::Contain)
+            .overscroll_behavior_x(OverscrollBehavior::Auto)
+            .overscroll_behavior_y(OverscrollBehavior::None)
+            .visibility(Visibility::Visible)
+            .build();
+
+        let css_classes = classes.to_css_classes();
+        assert!(css_classes.contains("flex"));
+        assert!(css_classes.contains("relative"));
+        assert!(css_classes.contains("overflow-hidden"));
+        assert!(css_classes.contains("overflow-x-auto"));
+        assert!(css_classes.contains("overflow-y-scroll"));
+        assert!(css_classes.contains("z-50"));
+        assert!(css_classes.contains("float-none"));
+        assert!(css_classes.contains("clear-both"));
+        assert!(css_classes.contains("isolation-isolate"));
+        assert!(css_classes.contains("object-cover"));
+        assert!(css_classes.contains("object-center"));
+        assert!(css_classes.contains("overscroll-contain"));
+        assert!(css_classes.contains("overscroll-x-auto"));
+        assert!(css_classes.contains("overscroll-y-none"));
+        assert!(css_classes.contains("visible"));
     }
 }

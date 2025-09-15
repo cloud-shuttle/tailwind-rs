@@ -5,8 +5,8 @@ Welcome to the comprehensive documentation for Tailwind-RS v0.4.0! This document
 ## 🚀 **Quick Start**
 
 - **[Quick Start Guide](getting-started/quick-start.md)** - Get up and running in 5 minutes
-- **[Installation Guide](installation.md)** - Detailed installation instructions
-- **[Basic Usage](basic-usage.md)** - Learn the fundamentals
+- **[Installation Guide](getting-started/installation.md)** - Detailed installation instructions
+- **[Basic Usage](getting-started/basic-usage.md)** - Learn the fundamentals
 
 ## 🎨 **Features & Benefits**
 
@@ -50,7 +50,7 @@ Welcome to the comprehensive documentation for Tailwind-RS v0.4.0! This document
 
 ## 🏗️ **Technical Implementation**
 
-- **[Architecture Overview](architecture.md)** - System architecture and design
+- **[Architecture Overview](technical-implementation/architecture.md)** - System architecture and design
 - **[Technical Implementation](technical-implementation/README.md)** - Deep technical details
 - **[Design Patterns](technical-implementation/03-design-patterns.md)** - Design patterns used
 - **[Spacing System](technical-implementation/05-spacing-system.md)** - Spacing implementation
@@ -59,12 +59,14 @@ Welcome to the comprehensive documentation for Tailwind-RS v0.4.0! This document
 
 ## 🧪 **Testing**
 
-- **[Testing Guide](testing.md)** - Comprehensive testing documentation
-- **[Property-Based Testing](property-based-testing.md)** - Advanced testing techniques
+- **[Testing Overview](testing/README.md)** - Testing documentation index
+- **[Testing Guide](testing/testing.md)** - Comprehensive testing documentation
+- **[Property-Based Testing](testing/property-based-testing.md)** - Advanced testing techniques
 
 ## 🤝 **Community & Contributing**
 
-- **[Contributing Guide](contributing.md)** - How to contribute to the project
+- **[Community Overview](community/README.md)** - Community resources and guidelines
+- **[Contributing Guide](community/contributing.md)** - How to contribute to the project
 - **[ADR (Architecture Decision Records)](adr/README.md)** - Design decisions and rationale
 
 ## 📊 **Project Statistics**

@@ -59,6 +59,8 @@ pub enum AlignItems {
     Center,
     /// Baseline align
     Baseline,
+    /// Baseline last align
+    BaselineLast,
     /// Stretch align
     Stretch,
 }
@@ -99,6 +101,8 @@ pub enum AlignSelf {
     Stretch,
     /// Baseline align self
     Baseline,
+    /// Baseline last align self
+    BaselineLast,
 }
 
 /// Flex grow values
@@ -255,6 +259,7 @@ impl AlignItems {
             AlignItems::End => "end".to_string(),
             AlignItems::Center => "center".to_string(),
             AlignItems::Baseline => "baseline".to_string(),
+            AlignItems::BaselineLast => "baseline-last".to_string(),
             AlignItems::Stretch => "stretch".to_string(),
         }
     }
@@ -265,6 +270,7 @@ impl AlignItems {
             AlignItems::End => "flex-end".to_string(),
             AlignItems::Center => "center".to_string(),
             AlignItems::Baseline => "baseline".to_string(),
+            AlignItems::BaselineLast => "last baseline".to_string(),
             AlignItems::Stretch => "stretch".to_string(),
         }
     }
@@ -307,6 +313,7 @@ impl AlignSelf {
             AlignSelf::Center => "center".to_string(),
             AlignSelf::Stretch => "stretch".to_string(),
             AlignSelf::Baseline => "baseline".to_string(),
+            AlignSelf::BaselineLast => "baseline-last".to_string(),
         }
     }
     
@@ -318,6 +325,7 @@ impl AlignSelf {
             AlignSelf::Center => "center".to_string(),
             AlignSelf::Stretch => "stretch".to_string(),
             AlignSelf::Baseline => "baseline".to_string(),
+            AlignSelf::BaselineLast => "last baseline".to_string(),
         }
     }
 }

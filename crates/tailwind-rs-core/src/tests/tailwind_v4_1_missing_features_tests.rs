@@ -711,6 +711,158 @@ mod tests {
     }
 
     // ============================================================================
+    // OVERFLOW WRAP TESTS
+    // ============================================================================
+    
+    /// Test overflow wrap utilities - these tests will FAIL until implementation
+    mod overflow_wrap_tests {
+        use super::*;
+
+        #[test]
+        fn test_overflow_wrap_normal() {
+            let classes = ClassBuilder::new()
+                .overflow_wrap(OverflowWrap::Normal);
+            
+            let result = classes.build();
+            assert!(result.classes.contains("overflow-wrap-normal"));
+        }
+
+        #[test]
+        fn test_overflow_wrap_break() {
+            let classes = ClassBuilder::new()
+                .overflow_wrap(OverflowWrap::BreakWord);
+            
+            let result = classes.build();
+            assert!(result.classes.contains("overflow-wrap-break"));
+        }
+
+        #[test]
+        fn test_overflow_wrap_anywhere() {
+            let classes = ClassBuilder::new()
+                .overflow_wrap(OverflowWrap::Anywhere);
+            
+            let result = classes.build();
+            assert!(result.classes.contains("overflow-wrap-anywhere"));
+        }
+
+        #[test]
+        fn test_overflow_wrap_comprehensive() {
+            let classes = ClassBuilder::new()
+                .overflow_wrap(OverflowWrap::Normal)
+                .overflow_wrap(OverflowWrap::BreakWord)
+                .overflow_wrap(OverflowWrap::Anywhere);
+            
+            let result = classes.build();
+            assert!(result.classes.contains("overflow-wrap-normal"));
+            assert!(result.classes.contains("overflow-wrap-break"));
+            assert!(result.classes.contains("overflow-wrap-anywhere"));
+        }
+    }
+
+    // ============================================================================
+    // BASELINE ALIGNMENT TESTS
+    // ============================================================================
+    
+    /// Test baseline alignment utilities - these tests will FAIL until implementation
+    mod baseline_alignment_tests {
+        use super::*;
+
+        #[test]
+        fn test_items_baseline_last() {
+            let classes = ClassBuilder::new()
+                .align_items(AlignItems::BaselineLast);
+            
+            let result = classes.build();
+            assert!(result.classes.contains("items-baseline-last"));
+        }
+
+        #[test]
+        fn test_self_baseline_last() {
+            let classes = ClassBuilder::new()
+                .align_self(AlignSelf::BaselineLast);
+            
+            let result = classes.build();
+            assert!(result.classes.contains("self-baseline-last"));
+        }
+
+        #[test]
+        fn test_baseline_alignment_comprehensive() {
+            let classes = ClassBuilder::new()
+                .align_items(AlignItems::Baseline)
+                .align_items(AlignItems::BaselineLast)
+                .align_self(AlignSelf::Baseline)
+                .align_self(AlignSelf::BaselineLast);
+            
+            let result = classes.build();
+            assert!(result.classes.contains("items-baseline"));
+            assert!(result.classes.contains("items-baseline-last"));
+            assert!(result.classes.contains("self-baseline"));
+            assert!(result.classes.contains("self-baseline-last"));
+        }
+    }
+
+    // ============================================================================
+    // SAFE ALIGNMENT TESTS
+    // ============================================================================
+    
+    /// Test safe alignment utilities - these tests will FAIL until implementation
+    mod safe_alignment_tests {
+        use super::*;
+        use crate::utilities::spacing::SpacingValue;
+
+        #[test]
+        fn test_safe_top_4() {
+            let classes = ClassBuilder::new()
+                .safe_top(SpacingValue::Integer(4));
+            
+            let result = classes.build();
+            assert!(result.classes.contains("safe-top-4"));
+        }
+
+        #[test]
+        fn test_safe_bottom_4() {
+            let classes = ClassBuilder::new()
+                .safe_bottom(SpacingValue::Integer(4));
+            
+            let result = classes.build();
+            assert!(result.classes.contains("safe-bottom-4"));
+        }
+
+        #[test]
+        fn test_safe_left_4() {
+            let classes = ClassBuilder::new()
+                .safe_left(SpacingValue::Integer(4));
+            
+            let result = classes.build();
+            assert!(result.classes.contains("safe-left-4"));
+        }
+
+        #[test]
+        fn test_safe_right_4() {
+            let classes = ClassBuilder::new()
+                .safe_right(SpacingValue::Integer(4));
+            
+            let result = classes.build();
+            assert!(result.classes.contains("safe-right-4"));
+        }
+
+        #[test]
+        fn test_safe_alignment_comprehensive() {
+            let classes = ClassBuilder::new()
+                .safe_top(SpacingValue::Integer(4))
+                .safe_bottom(SpacingValue::Integer(4))
+                .safe_left(SpacingValue::Integer(4))
+                .safe_right(SpacingValue::Integer(4));
+            
+            let result = classes.build();
+            assert!(result.classes.contains("safe-top-4"));
+            assert!(result.classes.contains("safe-bottom-4"));
+            assert!(result.classes.contains("safe-left-4"));
+            assert!(result.classes.contains("safe-right-4"));
+        }
+    }
+
+    // ============================================================================
     // INTEGRATION TESTS
     // ============================================================================
     

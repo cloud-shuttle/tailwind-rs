@@ -261,6 +261,17 @@ pub enum WordBreak {
     KeepAll,
 }
 
+/// Overflow wrap values
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum OverflowWrap {
+    /// Normal overflow wrap
+    Normal,
+    /// Break-word overflow wrap
+    BreakWord,
+    /// Anywhere overflow wrap
+    Anywhere,
+}
+
 impl std::hash::Hash for LineHeight {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         match self {
@@ -678,6 +689,24 @@ impl WordBreak {
     }
 }
 
+impl OverflowWrap {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            OverflowWrap::Normal => "overflow-wrap-normal".to_string(),
+            OverflowWrap::BreakWord => "overflow-wrap-break".to_string(),
+            OverflowWrap::Anywhere => "overflow-wrap-anywhere".to_string(),
+        }
+    }
+    
+    pub fn to_css_value(&self) -> String {
+        match self {
+            OverflowWrap::Normal => "normal".to_string(),
+            OverflowWrap::BreakWord => "break-word".to_string(),
+            OverflowWrap::Anywhere => "anywhere".to_string(),
+        }
+    }
+}
+
 impl fmt::Display for FontFamily {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_class_name())
@@ -739,6 +768,12 @@ impl fmt::Display for TextUnderlineOffset {
 }
 
 impl fmt::Display for TextTransform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for OverflowWrap {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_class_name())
     }
@@ -873,6 +908,18 @@ pub trait WordBreakUtilities {
 impl WordBreakUtilities for ClassBuilder {
     fn word_break(self, break_type: WordBreak) -> Self {
         self.class(break_type.to_class_name())
+    }
+}
+
+/// Trait for adding overflow wrap utilities to a class builder
+pub trait OverflowWrapUtilities {
+    /// Set overflow wrap
+    fn overflow_wrap(self, wrap_type: OverflowWrap) -> Self;
+}
+
+impl OverflowWrapUtilities for ClassBuilder {
+    fn overflow_wrap(self, wrap_type: OverflowWrap) -> Self {
+        self.class(wrap_type.to_class_name())
     }
 }
 

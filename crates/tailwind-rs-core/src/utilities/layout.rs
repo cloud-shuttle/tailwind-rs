@@ -209,6 +209,19 @@ pub enum Visibility {
     Collapse,
 }
 
+/// Safe alignment values for mobile device compatibility
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SafeAlignment {
+    /// Safe top alignment
+    Top,
+    /// Safe bottom alignment
+    Bottom,
+    /// Safe left alignment
+    Left,
+    /// Safe right alignment
+    Right,
+}
+
 impl Display {
     pub fn to_class_name(&self) -> String {
         match self {
@@ -529,6 +542,26 @@ impl Visibility {
     }
 }
 
+impl SafeAlignment {
+    pub fn to_class_name(&self) -> String {
+        match self {
+            SafeAlignment::Top => "safe-top".to_string(),
+            SafeAlignment::Bottom => "safe-bottom".to_string(),
+            SafeAlignment::Left => "safe-left".to_string(),
+            SafeAlignment::Right => "safe-right".to_string(),
+        }
+    }
+    
+    pub fn to_css_value(&self) -> String {
+        match self {
+            SafeAlignment::Top => "max(1rem, env(safe-area-inset-top))".to_string(),
+            SafeAlignment::Bottom => "max(1rem, env(safe-area-inset-bottom))".to_string(),
+            SafeAlignment::Left => "max(1rem, env(safe-area-inset-left))".to_string(),
+            SafeAlignment::Right => "max(1rem, env(safe-area-inset-right))".to_string(),
+        }
+    }
+}
+
 impl fmt::Display for Display {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_class_name())
@@ -548,6 +581,12 @@ impl fmt::Display for Overflow {
 }
 
 impl fmt::Display for ZIndex {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.to_class_name())
+    }
+}
+
+impl fmt::Display for SafeAlignment {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_class_name())
     }
@@ -691,6 +730,36 @@ pub trait VisibilityUtilities {
 impl VisibilityUtilities for ClassBuilder {
     fn visibility(self, visibility: Visibility) -> Self {
         self.class(visibility.to_class_name())
+    }
+}
+
+/// Trait for adding safe alignment utilities to a class builder
+pub trait SafeAlignmentUtilities {
+    /// Add safe top alignment with spacing value
+    fn safe_top(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    /// Add safe bottom alignment with spacing value
+    fn safe_bottom(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    /// Add safe left alignment with spacing value
+    fn safe_left(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+    /// Add safe right alignment with spacing value
+    fn safe_right(self, value: crate::utilities::spacing::SpacingValue) -> Self;
+}
+
+impl SafeAlignmentUtilities for ClassBuilder {
+    fn safe_top(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("safe-top-{}", value.to_class_name()))
+    }
+    
+    fn safe_bottom(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("safe-bottom-{}", value.to_class_name()))
+    }
+    
+    fn safe_left(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("safe-left-{}", value.to_class_name()))
+    }
+    
+    fn safe_right(self, value: crate::utilities::spacing::SpacingValue) -> Self {
+        self.class(format!("safe-right-{}", value.to_class_name()))
     }
 }
 

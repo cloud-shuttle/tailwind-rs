@@ -30,7 +30,7 @@ mod tests {
                 .text_shadow_none(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("text-shadow-none"));
+            assert!(result.classes.contains("text-shadow-none"));
         }
 
         #[test]
@@ -40,7 +40,7 @@ mod tests {
                 .text_shadow_sm(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("text-shadow-sm"));
+            assert!(result.classes.contains("text-shadow-sm"));
         }
 
         #[test]
@@ -50,7 +50,7 @@ mod tests {
                 .text_shadow(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("text-shadow"));
+            assert!(result.classes.contains("text-shadow"));
         }
 
         #[test]
@@ -60,7 +60,7 @@ mod tests {
                 .text_shadow_lg(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("text-shadow-lg"));
+            assert!(result.classes.contains("text-shadow-lg"));
         }
 
         #[test]
@@ -70,7 +70,7 @@ mod tests {
                 .text_shadow_xl(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("text-shadow-xl"));
+            assert!(result.classes.contains("text-shadow-xl"));
         }
 
         #[test]
@@ -80,7 +80,7 @@ mod tests {
                 .text_shadow_2xl(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("text-shadow-2xl"));
+            assert!(result.classes.contains("text-shadow-2xl"));
         }
 
         #[test]
@@ -90,7 +90,7 @@ mod tests {
                 .text_shadow_inner(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("text-shadow-inner"));
+            assert!(result.classes.contains("text-shadow-inner"));
         }
 
         #[test]
@@ -102,9 +102,9 @@ mod tests {
                 .text_shadow_inner();
             
             let result = classes.build();
-            assert!(result.contains("text-shadow-sm"));
-            assert!(result.contains("text-shadow-lg"));
-            assert!(result.contains("text-shadow-inner"));
+            assert!(result.classes.contains("text-shadow-sm"));
+            assert!(result.classes.contains("text-shadow-lg"));
+            assert!(result.classes.contains("text-shadow-inner"));
         }
     }
 
@@ -123,7 +123,7 @@ mod tests {
                 .mask_none(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-none"));
+            assert!(result.classes.contains("mask-none"));
         }
 
         #[test]
@@ -133,7 +133,7 @@ mod tests {
                 .mask_alpha(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-alpha"));
+            assert!(result.classes.contains("mask-alpha"));
         }
 
         #[test]
@@ -143,7 +143,7 @@ mod tests {
                 .mask_luminance(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-luminance"));
+            assert!(result.classes.contains("mask-luminance"));
         }
 
         #[test]
@@ -153,7 +153,7 @@ mod tests {
                 .mask_repeat_none(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-repeat-none"));
+            assert!(result.classes.contains("mask-repeat-none"));
         }
 
         #[test]
@@ -163,7 +163,7 @@ mod tests {
                 .mask_repeat(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-repeat"));
+            assert!(result.classes.contains("mask-repeat"));
         }
 
         #[test]
@@ -173,7 +173,7 @@ mod tests {
                 .mask_repeat_x(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-repeat-x"));
+            assert!(result.classes.contains("mask-repeat-x"));
         }
 
         #[test]
@@ -183,7 +183,7 @@ mod tests {
                 .mask_repeat_y(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-repeat-y"));
+            assert!(result.classes.contains("mask-repeat-y"));
         }
 
         #[test]
@@ -193,7 +193,7 @@ mod tests {
                 .mask_repeat_round(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-repeat-round"));
+            assert!(result.classes.contains("mask-repeat-round"));
         }
 
         #[test]
@@ -203,7 +203,7 @@ mod tests {
                 .mask_repeat_space(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-repeat-space"));
+            assert!(result.classes.contains("mask-repeat-space"));
         }
 
         #[test]
@@ -213,7 +213,7 @@ mod tests {
                 .mask_size_auto(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-size-auto"));
+            assert!(result.classes.contains("mask-size-auto"));
         }
 
         #[test]
@@ -223,7 +223,7 @@ mod tests {
                 .mask_size_cover(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-size-cover"));
+            assert!(result.classes.contains("mask-size-cover"));
         }
 
         #[test]
@@ -233,7 +233,7 @@ mod tests {
                 .mask_size_contain(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-size-contain"));
+            assert!(result.classes.contains("mask-size-contain"));
         }
 
         #[test]
@@ -243,7 +243,7 @@ mod tests {
                 .mask_center(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-center"));
+            assert!(result.classes.contains("mask-center"));
         }
 
         #[test]
@@ -253,7 +253,7 @@ mod tests {
                 .mask_top(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-top"));
+            assert!(result.classes.contains("mask-top"));
         }
 
         #[test]
@@ -263,7 +263,7 @@ mod tests {
                 .mask_bottom(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-bottom"));
+            assert!(result.classes.contains("mask-bottom"));
         }
 
         #[test]
@@ -273,7 +273,7 @@ mod tests {
                 .mask_left(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-left"));
+            assert!(result.classes.contains("mask-left"));
         }
 
         #[test]
@@ -283,7 +283,7 @@ mod tests {
                 .mask_right(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-right"));
+            assert!(result.classes.contains("mask-right"));
         }
 
         #[test]
@@ -293,7 +293,7 @@ mod tests {
                 .mask_top_left(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-top-left"));
+            assert!(result.classes.contains("mask-top-left"));
         }
 
         #[test]
@@ -303,7 +303,7 @@ mod tests {
                 .mask_top_right(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-top-right"));
+            assert!(result.classes.contains("mask-top-right"));
         }
 
         #[test]
@@ -313,7 +313,7 @@ mod tests {
                 .mask_bottom_left(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-bottom-left"));
+            assert!(result.classes.contains("mask-bottom-left"));
         }
 
         #[test]
@@ -323,7 +323,7 @@ mod tests {
                 .mask_bottom_right(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-bottom-right"));
+            assert!(result.classes.contains("mask-bottom-right"));
         }
 
         #[test]
@@ -333,7 +333,7 @@ mod tests {
                 .mask_clip_border(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-clip-border"));
+            assert!(result.classes.contains("mask-clip-border"));
         }
 
         #[test]
@@ -343,7 +343,7 @@ mod tests {
                 .mask_clip_padding(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-clip-padding"));
+            assert!(result.classes.contains("mask-clip-padding"));
         }
 
         #[test]
@@ -353,7 +353,7 @@ mod tests {
                 .mask_clip_content(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-clip-content"));
+            assert!(result.classes.contains("mask-clip-content"));
         }
 
         #[test]
@@ -363,7 +363,7 @@ mod tests {
                 .mask_clip_text(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-clip-text"));
+            assert!(result.classes.contains("mask-clip-text"));
         }
 
         #[test]
@@ -373,7 +373,7 @@ mod tests {
                 .mask_origin_border(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-origin-border"));
+            assert!(result.classes.contains("mask-origin-border"));
         }
 
         #[test]
@@ -383,7 +383,7 @@ mod tests {
                 .mask_origin_padding(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-origin-padding"));
+            assert!(result.classes.contains("mask-origin-padding"));
         }
 
         #[test]
@@ -393,7 +393,7 @@ mod tests {
                 .mask_origin_content(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("mask-origin-content"));
+            assert!(result.classes.contains("mask-origin-content"));
         }
 
         #[test]
@@ -408,12 +408,12 @@ mod tests {
                 .mask_origin_padding();
             
             let result = classes.build();
-            assert!(result.contains("mask-alpha"));
-            assert!(result.contains("mask-repeat-round"));
-            assert!(result.contains("mask-size-cover"));
-            assert!(result.contains("mask-center"));
-            assert!(result.contains("mask-clip-border"));
-            assert!(result.contains("mask-origin-padding"));
+            assert!(result.classes.contains("mask-alpha"));
+            assert!(result.classes.contains("mask-repeat-round"));
+            assert!(result.classes.contains("mask-size-cover"));
+            assert!(result.classes.contains("mask-center"));
+            assert!(result.classes.contains("mask-clip-border"));
+            assert!(result.classes.contains("mask-origin-padding"));
         }
     }
 
@@ -432,7 +432,7 @@ mod tests {
                 .margin_inline_start_4(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("ms-4"));
+            assert!(result.classes.contains("ms-4"));
         }
 
         #[test]
@@ -442,7 +442,7 @@ mod tests {
                 .margin_inline_end_4(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("me-4"));
+            assert!(result.classes.contains("me-4"));
         }
 
         #[test]
@@ -452,7 +452,7 @@ mod tests {
                 .padding_inline_start_4(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("ps-4"));
+            assert!(result.classes.contains("ps-4"));
         }
 
         #[test]
@@ -462,7 +462,7 @@ mod tests {
                 .padding_inline_end_4(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("pe-4"));
+            assert!(result.classes.contains("pe-4"));
         }
 
         #[test]
@@ -472,7 +472,7 @@ mod tests {
                 .border_inline_start_2(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("border-s-2"));
+            assert!(result.classes.contains("border-s-2"));
         }
 
         #[test]
@@ -482,7 +482,7 @@ mod tests {
                 .border_inline_end_2(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("border-e-2"));
+            assert!(result.classes.contains("border-e-2"));
         }
 
         #[test]
@@ -497,12 +497,12 @@ mod tests {
                 .border_inline_end_1();
             
             let result = classes.build();
-            assert!(result.contains("ms-4"));
-            assert!(result.contains("me-4"));
-            assert!(result.contains("ps-2"));
-            assert!(result.contains("pe-2"));
-            assert!(result.contains("border-s-1"));
-            assert!(result.contains("border-e-1"));
+            assert!(result.classes.contains("ms-4"));
+            assert!(result.classes.contains("me-4"));
+            assert!(result.classes.contains("ps-2"));
+            assert!(result.classes.contains("pe-2"));
+            assert!(result.classes.contains("border-s-1"));
+            assert!(result.classes.contains("border-e-1"));
         }
     }
 
@@ -521,7 +521,7 @@ mod tests {
                 .backdrop_blur_none(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur-none"));
+            assert!(result.classes.contains("backdrop-blur-none"));
         }
 
         #[test]
@@ -531,7 +531,7 @@ mod tests {
                 .backdrop_blur_sm(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur-sm"));
+            assert!(result.classes.contains("backdrop-blur-sm"));
         }
 
         #[test]
@@ -541,7 +541,7 @@ mod tests {
                 .backdrop_blur(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur"));
+            assert!(result.classes.contains("backdrop-blur"));
         }
 
         #[test]
@@ -551,7 +551,7 @@ mod tests {
                 .backdrop_blur_lg(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur-lg"));
+            assert!(result.classes.contains("backdrop-blur-lg"));
         }
 
         #[test]
@@ -561,7 +561,7 @@ mod tests {
                 .backdrop_blur_xl(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur-xl"));
+            assert!(result.classes.contains("backdrop-blur-xl"));
         }
 
         #[test]
@@ -571,7 +571,7 @@ mod tests {
                 .backdrop_blur_2xl(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur-2xl"));
+            assert!(result.classes.contains("backdrop-blur-2xl"));
         }
 
         #[test]
@@ -581,7 +581,7 @@ mod tests {
                 .backdrop_blur_3xl(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur-3xl"));
+            assert!(result.classes.contains("backdrop-blur-3xl"));
         }
 
         #[test]
@@ -593,9 +593,9 @@ mod tests {
                 .backdrop_blur_3xl();
             
             let result = classes.build();
-            assert!(result.contains("backdrop-blur-sm"));
-            assert!(result.contains("backdrop-blur-lg"));
-            assert!(result.contains("backdrop-blur-3xl"));
+            assert!(result.classes.contains("backdrop-blur-sm"));
+            assert!(result.classes.contains("backdrop-blur-lg"));
+            assert!(result.classes.contains("backdrop-blur-3xl"));
         }
     }
 
@@ -614,7 +614,7 @@ mod tests {
                 .layer_utilities(); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("layer-utilities"));
+            assert!(result.classes.contains("layer-utilities"));
         }
 
         #[test]
@@ -624,7 +624,8 @@ mod tests {
                 .custom_property("--primary-color", "blue"); // This method doesn't exist yet
             
             let result = classes.build();
-            assert!(result.contains("--primary-color: blue"));
+            assert!(result.custom.contains_key("--primary-color"));
+        assert_eq!(result.custom.get("--primary-color"), Some(&"blue".to_string()));
         }
 
         #[test]
@@ -636,9 +637,11 @@ mod tests {
                 .custom_property("--secondary-color", "red");
             
             let result = classes.build();
-            assert!(result.contains("layer-utilities"));
-            assert!(result.contains("--primary-color: blue"));
-            assert!(result.contains("--secondary-color: red"));
+            assert!(result.classes.contains("layer-utilities"));
+            assert!(result.custom.contains_key("--primary-color"));
+        assert_eq!(result.custom.get("--primary-color"), Some(&"blue".to_string()));
+            assert!(result.custom.contains_key("--secondary-color"));
+        assert_eq!(result.custom.get("--secondary-color"), Some(&"red".to_string()));
         }
     }
 
@@ -672,23 +675,24 @@ mod tests {
             let result = classes.build();
             
             // Text shadow assertions
-            assert!(result.contains("text-shadow-lg"));
+            assert!(result.classes.contains("text-shadow-lg"));
             
             // Mask utilities assertions
-            assert!(result.contains("mask-alpha"));
-            assert!(result.contains("mask-repeat-round"));
-            assert!(result.contains("mask-size-cover"));
+            assert!(result.classes.contains("mask-alpha"));
+            assert!(result.classes.contains("mask-repeat-round"));
+            assert!(result.classes.contains("mask-size-cover"));
             
             // Logical properties assertions
-            assert!(result.contains("ms-4"));
-            assert!(result.contains("pe-2"));
+            assert!(result.classes.contains("ms-4"));
+            assert!(result.classes.contains("pe-2"));
             
             // Enhanced backdrop filters assertions
-            assert!(result.contains("backdrop-blur-lg"));
+            assert!(result.classes.contains("backdrop-blur-lg"));
             
             // Modern CSS features assertions
-            assert!(result.contains("layer-utilities"));
-            assert!(result.contains("--primary-color: blue"));
+            assert!(result.classes.contains("layer-utilities"));
+            assert!(result.custom.contains_key("--primary-color"));
+        assert_eq!(result.custom.get("--primary-color"), Some(&"blue".to_string()));
         }
     }
 }

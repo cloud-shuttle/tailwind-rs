@@ -95,6 +95,7 @@ pub use validation::{ClassValidator, ErrorReporter, ValidationError, ValidationR
 #[cfg(test)]
 mod tests {
     mod sync_api_tests;
+    mod tailwind_v4_1_missing_features_tests;
     
     use super::*;
 

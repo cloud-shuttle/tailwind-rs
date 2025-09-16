@@ -1,35 +1,42 @@
+# Cargo nextest configuration for tailwind-rs
+# Optimized for TDD workflow and comprehensive testing
+
 [profile.default]
-# Test output configuration
-test-threads = "num-cpus"
-retries = { backoff = "exponential", count = 3, delay = "1s", jitter = true }
-slow-timeout = "60s"
+# Test execution settings
+retries = 2
+slow-timeout = { period = "60s", terminate-after = 2 }
 leak-timeout = "5s"
-status-level = "pass"
-final-status-level = "none"
-failure-output = "immediate-final"
-success-output = "immediate-final"
-
-# Test execution
-fail-fast = false
-
-[profile.ci]
-# CI-specific configuration
 test-threads = "num-cpus"
-retries = { backoff = "exponential", count = 2, delay = "1s", jitter = true }
-slow-timeout = "120s"
-leak-timeout = "10s"
-status-level = "none"
-final-status-level = "none"
-failure-output = "immediate-final"
-success-output = "immediate-final"
 
-[profile.dev]
-# Development profile for faster iteration
-test-threads = "num-cpus"
+# Output settings
+failure-output = "immediate-final"
+success-output = "never"
+status-level = "fail"
+
+# Performance settings
+partition-strategy = "count"
+partition-size = 1
+
+[profile.tdd]
+# TDD-specific settings for rapid development
 retries = 0
-slow-timeout = "30s"
-leak-timeout = "2s"
-status-level = "pass"
-final-status-level = "none"
+slow-timeout = { period = "30s", terminate-after = 1 }
+test-threads = "num-cpus"
 failure-output = "immediate-final"
-success-output = "immediate-final"
+success-output = "never"
+status-level = "fail"
+partition-strategy = "count"
+partition-size = 1
+
+# Test organization
+[[profile.default.overrides]]
+filter = "test(test_|integration_)"
+slow-timeout = { period = "30s", terminate-after = 1 }
+
+[[profile.default.overrides]]
+filter = "test(property_)"
+slow-timeout = { period = "60s", terminate-after = 2 }
+
+[[profile.default.overrides]]
+filter = "test(comprehensive_)"
+slow-timeout = { period = "120s", terminate-after = 3 }

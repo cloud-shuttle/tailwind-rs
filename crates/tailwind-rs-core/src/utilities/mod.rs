@@ -22,6 +22,11 @@ pub mod animations;
 pub mod advanced_animations;
 pub mod performance_optimization;
 pub mod interactivity;
+pub mod text_shadow;
+pub mod mask;
+pub mod logical_properties;
+pub mod enhanced_backdrop_filters;
+pub mod modern_css_features;
 
 // Re-export all utility traits for easy access
 pub use spacing::*;
@@ -43,3 +48,8 @@ pub use animations::*;
 pub use advanced_animations::*;
 pub use performance_optimization::*;
 pub use interactivity::*;
+pub use text_shadow::*;
+pub use mask::*;
+pub use logical_properties::*;
+pub use enhanced_backdrop_filters::*;
+pub use modern_css_features::*;

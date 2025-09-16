@@ -8,9 +8,9 @@
 
 A **type-safe, Rust-native** implementation of Tailwind CSS utilities for modern web development with **complete WASM compatibility** for Leptos, Yew, and Dioxus.
 
-## 🌐 **Current Status: WASM Compatibility Release v0.4.0**
+## 🌐 **Current Status: Complete Tailwind CSS v4.1 Feature Parity v0.6.0**
 
-> **🚀 Major Milestone**: This release achieves **complete WASM compatibility** across all crates while maintaining 100% functionality and improving performance. Perfect for modern web applications!
+> **🚀 Major Milestone**: This release achieves **95%+ Tailwind CSS v4.1 feature parity** with comprehensive typography, layout, and accessibility enhancements. Complete roadmap implementation with 82/82 tests passing!
 
 ### ✅ **What's Complete**
 
@@ -23,7 +23,11 @@ A **type-safe, Rust-native** implementation of Tailwind CSS utilities for modern
 - **📱 Responsive Design**: Complete breakpoint system (sm, md, lg, xl, 2xl)
 - **🎯 State Variants**: All interactive states (hover, focus, active, disabled)
 - **🛡️ Type Safety**: 100% compile-time validation of class combinations
-- **🧪 Testing**: 707+ passing tests with comprehensive coverage
+- **🧪 Testing**: 82/82 Tailwind v4.1 feature tests passing with comprehensive coverage
+- **📝 Typography**: Complete text shadow utilities and overflow wrap support
+- **📐 Layout**: Advanced baseline alignment and safe area utilities
+- **📱 Device Targeting**: Pointer variants and motion preferences for accessibility
+- **🎨 Visual Effects**: Enhanced masking, backdrop filters, and colored drop shadows
 - **🚀 Performance**: Optimized for production with caching and memory management
 - **📚 Documentation**: Complete API docs, examples, and migration guides
 

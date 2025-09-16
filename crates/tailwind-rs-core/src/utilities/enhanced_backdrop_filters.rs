@@ -472,14 +472,14 @@ mod tests {
             .backdrop_blur_3xl();
 
         let result = classes.build();
-        assert!(result.contains("backdrop-blur-none"));
-        assert!(result.contains("backdrop-blur-sm"));
-        assert!(result.contains("backdrop-blur"));
-        assert!(result.contains("backdrop-blur-md"));
-        assert!(result.contains("backdrop-blur-lg"));
-        assert!(result.contains("backdrop-blur-xl"));
-        assert!(result.contains("backdrop-blur-2xl"));
-        assert!(result.contains("backdrop-blur-3xl"));
+        assert!(result.classes.contains("backdrop-blur-none"));
+        assert!(result.classes.contains("backdrop-blur-sm"));
+        assert!(result.classes.contains("backdrop-blur"));
+        assert!(result.classes.contains("backdrop-blur-md"));
+        assert!(result.classes.contains("backdrop-blur-lg"));
+        assert!(result.classes.contains("backdrop-blur-xl"));
+        assert!(result.classes.contains("backdrop-blur-2xl"));
+        assert!(result.classes.contains("backdrop-blur-3xl"));
     }
 
     #[test]
@@ -510,9 +510,9 @@ mod tests {
             .backdrop_blur_3xl();
 
         let result = classes.build();
-        assert!(result.contains("backdrop-blur-sm"));
-        assert!(result.contains("backdrop-blur-lg"));
-        assert!(result.contains("backdrop-blur-3xl"));
+        assert!(result.classes.contains("backdrop-blur-sm"));
+        assert!(result.classes.contains("backdrop-blur-lg"));
+        assert!(result.classes.contains("backdrop-blur-3xl"));
     }
 
     #[test]
@@ -522,8 +522,8 @@ mod tests {
             .backdrop_blur_custom(EnhancedBackdropBlur::Xl3);
 
         let result = classes.build();
-        assert!(result.contains("backdrop-blur-xl"));
-        assert!(result.contains("backdrop-blur-3xl"));
+        assert!(result.classes.contains("backdrop-blur-xl"));
+        assert!(result.classes.contains("backdrop-blur-3xl"));
     }
 
     #[test]

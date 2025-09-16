@@ -44,6 +44,16 @@ mod tests {
         }
 
         #[test]
+        fn test_text_shadow_md() {
+            // This test will FAIL until we implement text shadow utilities
+            let classes = ClassBuilder::new()
+                .text_shadow_md(); // This method doesn't exist yet
+            
+            let result = classes.build();
+            assert!(result.classes.contains("text-shadow-md"));
+        }
+
+        #[test]
         fn test_text_shadow_default() {
             // This test will FAIL until we implement text shadow utilities
             let classes = ClassBuilder::new()
@@ -105,6 +115,61 @@ mod tests {
             assert!(result.classes.contains("text-shadow-sm"));
             assert!(result.classes.contains("text-shadow-lg"));
             assert!(result.classes.contains("text-shadow-inner"));
+        }
+    }
+
+    // ============================================================================
+    // COLORED DROP SHADOW TESTS
+    // ============================================================================
+    
+    /// Test colored drop shadow utilities - these tests will FAIL until implementation
+    mod colored_drop_shadow_tests {
+        use super::*;
+
+        #[test]
+        fn test_drop_shadow_red() {
+            let classes = ClassBuilder::new()
+                .drop_shadow_red();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("drop-shadow-red-500"));
+        }
+
+        #[test]
+        fn test_drop_shadow_blue() {
+            let classes = ClassBuilder::new()
+                .drop_shadow_blue();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("drop-shadow-blue-500"));
+        }
+
+        #[test]
+        fn test_drop_shadow_green() {
+            let classes = ClassBuilder::new()
+                .drop_shadow_green();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("drop-shadow-green-500"));
+        }
+
+        #[test]
+        fn test_colored_drop_shadows_comprehensive() {
+            let classes = ClassBuilder::new()
+                .drop_shadow_red()
+                .drop_shadow_blue()
+                .drop_shadow_green()
+                .drop_shadow_yellow()
+                .drop_shadow_purple()
+                .drop_shadow_pink();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("drop-shadow-red-500"));
+            assert!(result.classes.contains("drop-shadow-blue-500"));
+            assert!(result.classes.contains("drop-shadow-green-500"));
+            assert!(result.classes.contains("drop-shadow-yellow-500"));
+            assert!(result.classes.contains("drop-shadow-purple-500"));
+            assert!(result.classes.contains("drop-shadow-pink-500"));
         }
     }
 

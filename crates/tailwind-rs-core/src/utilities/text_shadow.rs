@@ -14,6 +14,8 @@ pub enum TextShadow {
     None,
     /// Small text shadow (0 1px 2px 0 rgb(0 0 0 / 0.05))
     Sm,
+    /// Medium text shadow (0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1))
+    Md,
     /// Default text shadow (0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1))
     Default,
     /// Large text shadow (0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1))
@@ -31,10 +33,11 @@ impl fmt::Display for TextShadow {
         match self {
             TextShadow::None => write!(f, "none"),
             TextShadow::Sm => write!(f, "0 1px 2px 0 rgb(0 0 0 / 0.05)"),
+            TextShadow::Md => write!(f, "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)"),
             TextShadow::Default => write!(f, "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)"),
-            TextShadow::Lg => write!(f, "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)"),
-            TextShadow::Xl => write!(f, "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"),
-            TextShadow::Xl2 => write!(f, "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"),
+            TextShadow::Lg => write!(f, "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"),
+            TextShadow::Xl => write!(f, "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"),
+            TextShadow::Xl2 => write!(f, "0 25px 50px -12px rgb(0 0 0 / 0.25)"),
             TextShadow::Inner => write!(f, "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)"),
         }
     }
@@ -46,6 +49,7 @@ impl TextShadow {
         match self {
             TextShadow::None => "text-shadow-none".to_string(),
             TextShadow::Sm => "text-shadow-sm".to_string(),
+            TextShadow::Md => "text-shadow-md".to_string(),
             TextShadow::Default => "text-shadow".to_string(),
             TextShadow::Lg => "text-shadow-lg".to_string(),
             TextShadow::Xl => "text-shadow-xl".to_string(),
@@ -66,6 +70,8 @@ pub trait TextShadowUtilities {
     fn text_shadow_none(self) -> Self;
     /// Set text shadow to small
     fn text_shadow_sm(self) -> Self;
+    /// Set text shadow to medium
+    fn text_shadow_md(self) -> Self;
     /// Set text shadow to default
     fn text_shadow(self) -> Self;
     /// Set text shadow to large
@@ -87,6 +93,10 @@ impl TextShadowUtilities for ClassBuilder {
 
     fn text_shadow_sm(self) -> Self {
         self.class("text-shadow-sm")
+    }
+
+    fn text_shadow_md(self) -> Self {
+        self.class("text-shadow-md")
     }
 
     fn text_shadow(self) -> Self {
@@ -153,13 +163,13 @@ mod tests {
             .text_shadow_inner();
 
         let result = classes.build();
-        assert!(result.contains("text-shadow-none"));
-        assert!(result.contains("text-shadow-sm"));
-        assert!(result.contains("text-shadow"));
-        assert!(result.contains("text-shadow-lg"));
-        assert!(result.contains("text-shadow-xl"));
-        assert!(result.contains("text-shadow-2xl"));
-        assert!(result.contains("text-shadow-inner"));
+        assert!(result.classes.contains("text-shadow-none"));
+        assert!(result.classes.contains("text-shadow-sm"));
+        assert!(result.classes.contains("text-shadow"));
+        assert!(result.classes.contains("text-shadow-lg"));
+        assert!(result.classes.contains("text-shadow-xl"));
+        assert!(result.classes.contains("text-shadow-2xl"));
+        assert!(result.classes.contains("text-shadow-inner"));
     }
 
     #[test]
@@ -188,8 +198,8 @@ mod tests {
             .text_shadow_lg();
 
         let result = classes.build();
-        assert!(result.contains("text-shadow-sm"));
-        assert!(result.contains("text-shadow-lg"));
+        assert!(result.classes.contains("text-shadow-sm"));
+        assert!(result.classes.contains("text-shadow-lg"));
     }
 
     #[test]
@@ -199,7 +209,7 @@ mod tests {
             .text_shadow_custom(TextShadow::Inner);
 
         let result = classes.build();
-        assert!(result.contains("text-shadow-xl"));
-        assert!(result.contains("text-shadow-inner"));
+        assert!(result.classes.contains("text-shadow-xl"));
+        assert!(result.classes.contains("text-shadow-inner"));
     }
 }

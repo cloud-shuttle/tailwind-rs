@@ -465,12 +465,12 @@ mod tests {
             .mask_origin_padding();
 
         let result = classes.build();
-        assert!(result.contains("mask-alpha"));
-        assert!(result.contains("mask-repeat-round"));
-        assert!(result.contains("mask-size-cover"));
-        assert!(result.contains("mask-center"));
-        assert!(result.contains("mask-clip-border"));
-        assert!(result.contains("mask-origin-padding"));
+        assert!(result.classes.contains("mask-alpha"));
+        assert!(result.classes.contains("mask-repeat-round"));
+        assert!(result.classes.contains("mask-size-cover"));
+        assert!(result.classes.contains("mask-center"));
+        assert!(result.classes.contains("mask-clip-border"));
+        assert!(result.classes.contains("mask-origin-padding"));
     }
 
     #[test]
@@ -490,9 +490,9 @@ mod tests {
             .mask_top_left();
 
         let result = classes.build();
-        assert!(result.contains("mask-luminance"));
-        assert!(result.contains("mask-repeat-round"));
-        assert!(result.contains("mask-size-contain"));
-        assert!(result.contains("mask-top-left"));
+        assert!(result.classes.contains("mask-luminance"));
+        assert!(result.classes.contains("mask-repeat-round"));
+        assert!(result.classes.contains("mask-size-contain"));
+        assert!(result.classes.contains("mask-top-left"));
     }
 }

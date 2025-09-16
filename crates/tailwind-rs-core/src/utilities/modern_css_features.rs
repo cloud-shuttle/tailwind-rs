@@ -222,9 +222,8 @@ impl ModernCssFeaturesUtilities for ClassBuilder {
         self.class(&layer.to_class_name())
     }
 
-    fn custom_property(self, name: &str, _value: &str) -> Self {
-        let class_name = format!("custom-{}", name);
-        self.class(class_name)
+    fn custom_property(self, name: &str, value: &str) -> Self {
+        self.custom(name, value)
     }
 
     fn custom_property_value(self, property: CustomProperty) -> Self {
@@ -325,14 +324,15 @@ mod tests {
             .container_large();
 
         let result = classes.build();
-        assert!(result.contains("layer-base"));
-        assert!(result.contains("layer-components"));
-        assert!(result.contains("layer-utilities"));
-        assert!(result.contains("custom-color"));
-        assert!(result.contains("custom-spacing"));
-        assert!(result.contains("container-small"));
-        assert!(result.contains("container-medium"));
-        assert!(result.contains("container-large"));
+        assert!(result.classes.contains("layer-base"));
+        assert!(result.classes.contains("layer-components"));
+        assert!(result.classes.contains("layer-utilities"));
+        assert!(result.custom.contains_key("--color"));
+        assert_eq!(result.custom.get("--color"), Some(&"red".to_string()));
+        assert!(result.classes.contains("custom-spacing"));
+        assert!(result.classes.contains("container-small"));
+        assert!(result.classes.contains("container-medium"));
+        assert!(result.classes.contains("container-large"));
     }
 
     #[test]
@@ -375,11 +375,12 @@ mod tests {
             .container_custom("main");
 
         let result = classes.build();
-        assert!(result.contains("layer-theme"));
-        assert!(result.contains("custom-primary-color"));
-        assert!(result.contains("custom-secondary-color"));
-        assert!(result.contains("container-sidebar"));
-        assert!(result.contains("container-main"));
+        assert!(result.classes.contains("layer-theme"));
+        assert!(result.custom.contains_key("--primary-color"));
+        assert_eq!(result.custom.get("--primary-color"), Some(&"blue".to_string()));
+        assert!(result.classes.contains("custom-secondary-color"));
+        assert!(result.classes.contains("container-sidebar"));
+        assert!(result.classes.contains("container-main"));
     }
 
     #[test]
@@ -391,10 +392,11 @@ mod tests {
             .container_custom_value(ModernContainerQuery::Custom("sidebar".to_string()));
 
         let result = classes.build();
-        assert!(result.contains("layer-theme"));
-        assert!(result.contains("custom-color"));
-        assert!(result.contains("custom-spacing"));
-        assert!(result.contains("container-sidebar"));
+        assert!(result.classes.contains("layer-theme"));
+        assert!(result.custom.contains_key("--color"));
+        assert_eq!(result.custom.get("--color"), Some(&"red".to_string()));
+        assert!(result.classes.contains("custom-spacing"));
+        assert!(result.classes.contains("container-sidebar"));
     }
 
     #[test]
@@ -423,26 +425,39 @@ mod tests {
             .container_custom("sidebar");
 
         let result = classes.build();
-        assert!(result.contains("layer-base"));
-        assert!(result.contains("layer-components"));
-        assert!(result.contains("layer-utilities"));
-        assert!(result.contains("layer-theme"));
-        assert!(result.contains("custom-color"));
-        assert!(result.contains("custom-spacing"));
-        assert!(result.contains("custom-font-size"));
-        assert!(result.contains("custom-font-weight"));
-        assert!(result.contains("custom-line-height"));
-        assert!(result.contains("custom-border-radius"));
-        assert!(result.contains("custom-box-shadow"));
-        assert!(result.contains("custom-z-index"));
-        assert!(result.contains("custom-opacity"));
-        assert!(result.contains("custom-transform"));
-        assert!(result.contains("custom-animation"));
-        assert!(result.contains("custom-transition"));
-        assert!(result.contains("container-small"));
-        assert!(result.contains("container-medium"));
-        assert!(result.contains("container-large"));
-        assert!(result.contains("container-extra-large"));
-        assert!(result.contains("container-sidebar"));
+        assert!(result.classes.contains("layer-base"));
+        assert!(result.classes.contains("layer-components"));
+        assert!(result.classes.contains("layer-utilities"));
+        assert!(result.classes.contains("layer-theme"));
+        // Check custom properties
+        assert!(result.custom.contains_key("--color"));
+        assert_eq!(result.custom.get("--color"), Some(&"red".to_string()));
+        assert!(result.custom.contains_key("--spacing"));
+        assert_eq!(result.custom.get("--spacing"), Some(&"1rem".to_string()));
+        assert!(result.custom.contains_key("--font-size"));
+        assert_eq!(result.custom.get("--font-size"), Some(&"16px".to_string()));
+        assert!(result.custom.contains_key("--font-weight"));
+        assert_eq!(result.custom.get("--font-weight"), Some(&"bold".to_string()));
+        assert!(result.custom.contains_key("--line-height"));
+        assert_eq!(result.custom.get("--line-height"), Some(&"1.5".to_string()));
+        assert!(result.custom.contains_key("--border-radius"));
+        assert_eq!(result.custom.get("--border-radius"), Some(&"8px".to_string()));
+        assert!(result.custom.contains_key("--box-shadow"));
+        assert_eq!(result.custom.get("--box-shadow"), Some(&"0 4px 6px -1px rgb(0 0 0 / 0.1)".to_string()));
+        assert!(result.custom.contains_key("--z-index"));
+        assert_eq!(result.custom.get("--z-index"), Some(&"10".to_string()));
+        assert!(result.custom.contains_key("--opacity"));
+        assert_eq!(result.custom.get("--opacity"), Some(&"0.8".to_string()));
+        assert!(result.custom.contains_key("--transform"));
+        assert_eq!(result.custom.get("--transform"), Some(&"rotate(45deg)".to_string()));
+        assert!(result.custom.contains_key("--animation"));
+        assert_eq!(result.custom.get("--animation"), Some(&"fadeIn 0.5s ease-in-out".to_string()));
+        assert!(result.custom.contains_key("--transition"));
+        assert_eq!(result.custom.get("--transition"), Some(&"all 0.3s ease".to_string()));
+        assert!(result.classes.contains("container-small"));
+        assert!(result.classes.contains("container-medium"));
+        assert!(result.classes.contains("container-large"));
+        assert!(result.classes.contains("container-extra-large"));
+        assert!(result.classes.contains("container-sidebar"));
     }
 }

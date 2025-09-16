@@ -66,6 +66,7 @@ pub trait LogicalPropertiesUtilities {
     fn inset_block_start(self, value: SpacingValue) -> Self;
     /// Set inset block end
     fn inset_block_end(self, value: SpacingValue) -> Self;
+
 }
 
 impl LogicalPropertiesUtilities for ClassBuilder {
@@ -148,6 +149,7 @@ impl LogicalPropertiesUtilities for ClassBuilder {
         let class_name = format!("bottom-{}", value.to_string());
         self.class(class_name)
     }
+
 }
 
 /// Convenience methods for common spacing values
@@ -156,18 +158,22 @@ pub trait LogicalPropertiesConvenience {
     fn margin_inline_start_4(self) -> Self;
     /// Set margin inline end to 4
     fn margin_inline_end_4(self) -> Self;
+    /// Set padding inline start to 2
+    fn padding_inline_start_2(self) -> Self;
+    /// Set padding inline end to 2
+    fn padding_inline_end_2(self) -> Self;
     /// Set padding inline start to 4
     fn padding_inline_start_4(self) -> Self;
     /// Set padding inline end to 4
     fn padding_inline_end_4(self) -> Self;
-    /// Set border inline start to 2
-    fn border_inline_start_2(self) -> Self;
-    /// Set border inline end to 2
-    fn border_inline_end_2(self) -> Self;
     /// Set border inline start to 1
     fn border_inline_start_1(self) -> Self;
     /// Set border inline end to 1
     fn border_inline_end_1(self) -> Self;
+    /// Set border inline start to 2
+    fn border_inline_start_2(self) -> Self;
+    /// Set border inline end to 2
+    fn border_inline_end_2(self) -> Self;
 }
 
 impl LogicalPropertiesConvenience for ClassBuilder {
@@ -177,6 +183,22 @@ impl LogicalPropertiesConvenience for ClassBuilder {
 
     fn margin_inline_end_4(self) -> Self {
         self.margin_inline_end(SpacingValue::Integer(4))
+    }
+
+    fn padding_inline_start_2(self) -> Self {
+        self.padding_inline_start(SpacingValue::Integer(2))
+    }
+
+    fn padding_inline_end_2(self) -> Self {
+        self.padding_inline_end(SpacingValue::Integer(2))
+    }
+
+    fn border_inline_start_1(self) -> Self {
+        self.border_inline_start(SpacingValue::Integer(1))
+    }
+
+    fn border_inline_end_1(self) -> Self {
+        self.border_inline_end(SpacingValue::Integer(1))
     }
 
     fn padding_inline_start_4(self) -> Self {
@@ -193,14 +215,6 @@ impl LogicalPropertiesConvenience for ClassBuilder {
 
     fn border_inline_end_2(self) -> Self {
         self.border_inline_end(SpacingValue::Integer(2))
-    }
-
-    fn border_inline_start_1(self) -> Self {
-        self.border_inline_start(SpacingValue::Integer(1))
-    }
-
-    fn border_inline_end_1(self) -> Self {
-        self.border_inline_end(SpacingValue::Integer(1))
     }
 }
 
@@ -229,12 +243,12 @@ mod tests {
             .border_inline_end(SpacingValue::Integer(1));
 
         let result = classes.build();
-        assert!(result.contains("ms-4"));
-        assert!(result.contains("me-4"));
-        assert!(result.contains("ps-2"));
-        assert!(result.contains("pe-2"));
-        assert!(result.contains("border-s-1"));
-        assert!(result.contains("border-e-1"));
+        assert!(result.classes.contains("ms-4"));
+        assert!(result.classes.contains("me-4"));
+        assert!(result.classes.contains("ps-2"));
+        assert!(result.classes.contains("pe-2"));
+        assert!(result.classes.contains("border-s-1"));
+        assert!(result.classes.contains("border-e-1"));
     }
 
     #[test]
@@ -248,12 +262,12 @@ mod tests {
             .border_inline_end_2();
 
         let result = classes.build();
-        assert!(result.contains("ms-4"));
-        assert!(result.contains("me-4"));
-        assert!(result.contains("ps-4"));
-        assert!(result.contains("pe-4"));
-        assert!(result.contains("border-s-2"));
-        assert!(result.contains("border-e-2"));
+        assert!(result.classes.contains("ms-4"));
+        assert!(result.classes.contains("me-4"));
+        assert!(result.classes.contains("ps-4"));
+        assert!(result.classes.contains("pe-4"));
+        assert!(result.classes.contains("border-s-2"));
+        assert!(result.classes.contains("border-e-2"));
     }
 
     #[test]
@@ -275,12 +289,12 @@ mod tests {
             .border_inline_end_1();
 
         let result = classes.build();
-        assert!(result.contains("ms-4"));
-        assert!(result.contains("me-4"));
-        assert!(result.contains("ps-2"));
-        assert!(result.contains("pe-2"));
-        assert!(result.contains("border-s-1"));
-        assert!(result.contains("border-e-1"));
+        assert!(result.classes.contains("ms-4"));
+        assert!(result.classes.contains("me-4"));
+        assert!(result.classes.contains("ps-2"));
+        assert!(result.classes.contains("pe-2"));
+        assert!(result.classes.contains("border-s-1"));
+        assert!(result.classes.contains("border-e-1"));
     }
 
     #[test]
@@ -292,10 +306,10 @@ mod tests {
             .padding_inline_end(SpacingValue::Integer(10));
 
         let result = classes.build();
-        assert!(result.contains("ms-8"));
-        assert!(result.contains("me-12"));
-        assert!(result.contains("ps-6"));
-        assert!(result.contains("pe-10"));
+        assert!(result.classes.contains("ms-8"));
+        assert!(result.classes.contains("me-12"));
+        assert!(result.classes.contains("ps-6"));
+        assert!(result.classes.contains("pe-10"));
     }
 
     #[test]
@@ -307,10 +321,10 @@ mod tests {
             .padding_block_end(SpacingValue::Integer(2));
 
         let result = classes.build();
-        assert!(result.contains("mt-4"));
-        assert!(result.contains("mb-4"));
-        assert!(result.contains("pt-2"));
-        assert!(result.contains("pb-2"));
+        assert!(result.classes.contains("mt-4"));
+        assert!(result.classes.contains("mb-4"));
+        assert!(result.classes.contains("pt-2"));
+        assert!(result.classes.contains("pb-2"));
     }
 
     #[test]
@@ -322,9 +336,9 @@ mod tests {
             .inset_block_end(SpacingValue::Integer(2));
 
         let result = classes.build();
-        assert!(result.contains("start-4"));
-        assert!(result.contains("end-4"));
-        assert!(result.contains("top-2"));
-        assert!(result.contains("bottom-2"));
+        assert!(result.classes.contains("start-4"));
+        assert!(result.classes.contains("end-4"));
+        assert!(result.classes.contains("top-2"));
+        assert!(result.classes.contains("bottom-2"));
     }
 }

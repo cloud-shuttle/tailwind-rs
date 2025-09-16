@@ -47,6 +47,51 @@ pub enum DropShadow {
     Xl2,
     /// 3x large shadow
     Xl3,
+    // Colored drop shadows
+    /// Red drop shadow
+    Red,
+    /// Blue drop shadow
+    Blue,
+    /// Green drop shadow
+    Green,
+    /// Yellow drop shadow
+    Yellow,
+    /// Purple drop shadow
+    Purple,
+    /// Pink drop shadow
+    Pink,
+    /// Orange drop shadow
+    Orange,
+    /// Indigo drop shadow
+    Indigo,
+    /// Cyan drop shadow
+    Cyan,
+    /// Teal drop shadow
+    Teal,
+    /// Lime drop shadow
+    Lime,
+    /// Emerald drop shadow
+    Emerald,
+    /// Rose drop shadow
+    Rose,
+    /// Violet drop shadow
+    Violet,
+    /// Fuchsia drop shadow
+    Fuchsia,
+    /// Sky drop shadow
+    Sky,
+    /// Amber drop shadow
+    Amber,
+    /// Stone drop shadow
+    Stone,
+    /// Neutral drop shadow
+    Neutral,
+    /// Zinc drop shadow
+    Zinc,
+    /// Gray drop shadow
+    Gray,
+    /// Slate drop shadow
+    Slate,
 }
 
 /// Opacity values
@@ -358,6 +403,29 @@ impl DropShadow {
             DropShadow::Xl => "xl".to_string(),
             DropShadow::Xl2 => "2xl".to_string(),
             DropShadow::Xl3 => "3xl".to_string(),
+            // Colored drop shadows
+            DropShadow::Red => "red-500".to_string(),
+            DropShadow::Blue => "blue-500".to_string(),
+            DropShadow::Green => "green-500".to_string(),
+            DropShadow::Yellow => "yellow-500".to_string(),
+            DropShadow::Purple => "purple-500".to_string(),
+            DropShadow::Pink => "pink-500".to_string(),
+            DropShadow::Orange => "orange-500".to_string(),
+            DropShadow::Indigo => "indigo-500".to_string(),
+            DropShadow::Cyan => "cyan-500".to_string(),
+            DropShadow::Teal => "teal-500".to_string(),
+            DropShadow::Lime => "lime-500".to_string(),
+            DropShadow::Emerald => "emerald-500".to_string(),
+            DropShadow::Rose => "rose-500".to_string(),
+            DropShadow::Violet => "violet-500".to_string(),
+            DropShadow::Fuchsia => "fuchsia-500".to_string(),
+            DropShadow::Sky => "sky-500".to_string(),
+            DropShadow::Amber => "amber-500".to_string(),
+            DropShadow::Stone => "stone-500".to_string(),
+            DropShadow::Neutral => "neutral-500".to_string(),
+            DropShadow::Zinc => "zinc-500".to_string(),
+            DropShadow::Gray => "gray-500".to_string(),
+            DropShadow::Slate => "slate-500".to_string(),
         }
     }
     
@@ -371,6 +439,29 @@ impl DropShadow {
             DropShadow::Xl => "0 20px 25px rgb(0 0 0 / 0.1), 0 8px 10px rgb(0 0 0 / 0.04)".to_string(),
             DropShadow::Xl2 => "0 25px 50px rgb(0 0 0 / 0.25)".to_string(),
             DropShadow::Xl3 => "0 35px 60px rgb(0 0 0 / 0.3)".to_string(),
+            // Colored drop shadows
+            DropShadow::Red => "0 1px 2px rgb(239 68 68)".to_string(),
+            DropShadow::Blue => "0 1px 2px rgb(59 130 246)".to_string(),
+            DropShadow::Green => "0 1px 2px rgb(34 197 94)".to_string(),
+            DropShadow::Yellow => "0 1px 2px rgb(234 179 8)".to_string(),
+            DropShadow::Purple => "0 1px 2px rgb(168 85 247)".to_string(),
+            DropShadow::Pink => "0 1px 2px rgb(236 72 153)".to_string(),
+            DropShadow::Orange => "0 1px 2px rgb(249 115 22)".to_string(),
+            DropShadow::Indigo => "0 1px 2px rgb(99 102 241)".to_string(),
+            DropShadow::Cyan => "0 1px 2px rgb(6 182 212)".to_string(),
+            DropShadow::Teal => "0 1px 2px rgb(20 184 166)".to_string(),
+            DropShadow::Lime => "0 1px 2px rgb(132 204 22)".to_string(),
+            DropShadow::Emerald => "0 1px 2px rgb(16 185 129)".to_string(),
+            DropShadow::Rose => "0 1px 2px rgb(244 63 94)".to_string(),
+            DropShadow::Violet => "0 1px 2px rgb(139 92 246)".to_string(),
+            DropShadow::Fuchsia => "0 1px 2px rgb(217 70 239)".to_string(),
+            DropShadow::Sky => "0 1px 2px rgb(14 165 233)".to_string(),
+            DropShadow::Amber => "0 1px 2px rgb(245 158 11)".to_string(),
+            DropShadow::Stone => "0 1px 2px rgb(120 113 108)".to_string(),
+            DropShadow::Neutral => "0 1px 2px rgb(115 115 115)".to_string(),
+            DropShadow::Zinc => "0 1px 2px rgb(113 113 122)".to_string(),
+            DropShadow::Gray => "0 1px 2px rgb(107 114 128)".to_string(),
+            DropShadow::Slate => "0 1px 2px rgb(100 116 139)".to_string(),
         }
     }
 }
@@ -827,11 +918,124 @@ impl BoxShadowUtilities for ClassBuilder {
 /// Trait for adding drop shadow utilities to a class builder
 pub trait DropShadowUtilities {
     fn drop_shadow(self, shadow: DropShadow) -> Self;
+    
+    // Convenience methods for colored drop shadows
+    fn drop_shadow_red(self) -> Self;
+    fn drop_shadow_blue(self) -> Self;
+    fn drop_shadow_green(self) -> Self;
+    fn drop_shadow_yellow(self) -> Self;
+    fn drop_shadow_purple(self) -> Self;
+    fn drop_shadow_pink(self) -> Self;
+    fn drop_shadow_orange(self) -> Self;
+    fn drop_shadow_indigo(self) -> Self;
+    fn drop_shadow_cyan(self) -> Self;
+    fn drop_shadow_teal(self) -> Self;
+    fn drop_shadow_lime(self) -> Self;
+    fn drop_shadow_emerald(self) -> Self;
+    fn drop_shadow_rose(self) -> Self;
+    fn drop_shadow_violet(self) -> Self;
+    fn drop_shadow_fuchsia(self) -> Self;
+    fn drop_shadow_sky(self) -> Self;
+    fn drop_shadow_amber(self) -> Self;
+    fn drop_shadow_stone(self) -> Self;
+    fn drop_shadow_neutral(self) -> Self;
+    fn drop_shadow_zinc(self) -> Self;
+    fn drop_shadow_gray(self) -> Self;
+    fn drop_shadow_slate(self) -> Self;
 }
 
 impl DropShadowUtilities for ClassBuilder {
     fn drop_shadow(self, shadow: DropShadow) -> Self {
         self.class(format!("drop-shadow-{}", shadow.to_class_name()))
+    }
+    
+    // Convenience methods for colored drop shadows
+    fn drop_shadow_red(self) -> Self {
+        self.drop_shadow(DropShadow::Red)
+    }
+    
+    fn drop_shadow_blue(self) -> Self {
+        self.drop_shadow(DropShadow::Blue)
+    }
+    
+    fn drop_shadow_green(self) -> Self {
+        self.drop_shadow(DropShadow::Green)
+    }
+    
+    fn drop_shadow_yellow(self) -> Self {
+        self.drop_shadow(DropShadow::Yellow)
+    }
+    
+    fn drop_shadow_purple(self) -> Self {
+        self.drop_shadow(DropShadow::Purple)
+    }
+    
+    fn drop_shadow_pink(self) -> Self {
+        self.drop_shadow(DropShadow::Pink)
+    }
+    
+    fn drop_shadow_orange(self) -> Self {
+        self.drop_shadow(DropShadow::Orange)
+    }
+    
+    fn drop_shadow_indigo(self) -> Self {
+        self.drop_shadow(DropShadow::Indigo)
+    }
+    
+    fn drop_shadow_cyan(self) -> Self {
+        self.drop_shadow(DropShadow::Cyan)
+    }
+    
+    fn drop_shadow_teal(self) -> Self {
+        self.drop_shadow(DropShadow::Teal)
+    }
+    
+    fn drop_shadow_lime(self) -> Self {
+        self.drop_shadow(DropShadow::Lime)
+    }
+    
+    fn drop_shadow_emerald(self) -> Self {
+        self.drop_shadow(DropShadow::Emerald)
+    }
+    
+    fn drop_shadow_rose(self) -> Self {
+        self.drop_shadow(DropShadow::Rose)
+    }
+    
+    fn drop_shadow_violet(self) -> Self {
+        self.drop_shadow(DropShadow::Violet)
+    }
+    
+    fn drop_shadow_fuchsia(self) -> Self {
+        self.drop_shadow(DropShadow::Fuchsia)
+    }
+    
+    fn drop_shadow_sky(self) -> Self {
+        self.drop_shadow(DropShadow::Sky)
+    }
+    
+    fn drop_shadow_amber(self) -> Self {
+        self.drop_shadow(DropShadow::Amber)
+    }
+    
+    fn drop_shadow_stone(self) -> Self {
+        self.drop_shadow(DropShadow::Stone)
+    }
+    
+    fn drop_shadow_neutral(self) -> Self {
+        self.drop_shadow(DropShadow::Neutral)
+    }
+    
+    fn drop_shadow_zinc(self) -> Self {
+        self.drop_shadow(DropShadow::Zinc)
+    }
+    
+    fn drop_shadow_gray(self) -> Self {
+        self.drop_shadow(DropShadow::Gray)
+    }
+    
+    fn drop_shadow_slate(self) -> Self {
+        self.drop_shadow(DropShadow::Slate)
     }
 }
 

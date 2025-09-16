@@ -27,6 +27,7 @@ pub mod mask;
 pub mod logical_properties;
 pub mod enhanced_backdrop_filters;
 pub mod modern_css_features;
+pub mod device_variants;
 
 // Re-export all utility traits for easy access
 pub use spacing::*;
@@ -53,3 +54,4 @@ pub use mask::*;
 pub use logical_properties::*;
 pub use enhanced_backdrop_filters::*;
 pub use modern_css_features::*;
+pub use device_variants::*;

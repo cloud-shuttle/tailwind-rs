@@ -863,6 +863,110 @@ mod tests {
     }
 
     // ============================================================================
+    // DEVICE VARIANT TESTS
+    // ============================================================================
+    
+    /// Test device variant utilities - these tests will FAIL until implementation
+    mod device_variant_tests {
+        use super::*;
+
+        #[test]
+        fn test_pointer_coarse() {
+            let classes = ClassBuilder::new()
+                .pointer_coarse();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("pointer-coarse"));
+        }
+
+        #[test]
+        fn test_pointer_fine() {
+            let classes = ClassBuilder::new()
+                .pointer_fine();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("pointer-fine"));
+        }
+
+        #[test]
+        fn test_any_pointer_coarse() {
+            let classes = ClassBuilder::new()
+                .any_pointer_coarse();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("any-pointer-coarse"));
+        }
+
+        #[test]
+        fn test_any_pointer_fine() {
+            let classes = ClassBuilder::new()
+                .any_pointer_fine();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("any-pointer-fine"));
+        }
+
+        #[test]
+        fn test_motion_reduce() {
+            let classes = ClassBuilder::new()
+                .motion_reduce();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("motion-reduce"));
+        }
+
+        #[test]
+        fn test_motion_safe() {
+            let classes = ClassBuilder::new()
+                .motion_safe();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("motion-safe"));
+        }
+
+        #[test]
+        fn test_light_color_scheme() {
+            let classes = ClassBuilder::new()
+                .light();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("light"));
+        }
+
+        #[test]
+        fn test_dark_color_scheme() {
+            let classes = ClassBuilder::new()
+                .dark();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("dark"));
+        }
+
+        #[test]
+        fn test_device_variants_comprehensive() {
+            let classes = ClassBuilder::new()
+                .pointer_coarse()
+                .pointer_fine()
+                .any_pointer_coarse()
+                .any_pointer_fine()
+                .motion_reduce()
+                .motion_safe()
+                .light()
+                .dark();
+            
+            let result = classes.build();
+            assert!(result.classes.contains("pointer-coarse"));
+            assert!(result.classes.contains("pointer-fine"));
+            assert!(result.classes.contains("any-pointer-coarse"));
+            assert!(result.classes.contains("any-pointer-fine"));
+            assert!(result.classes.contains("motion-reduce"));
+            assert!(result.classes.contains("motion-safe"));
+            assert!(result.classes.contains("light"));
+            assert!(result.classes.contains("dark"));
+        }
+    }
+
+    // ============================================================================
     // INTEGRATION TESTS
     // ============================================================================
     

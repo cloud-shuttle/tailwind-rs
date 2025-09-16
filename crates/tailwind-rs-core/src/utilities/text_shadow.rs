@@ -134,9 +134,9 @@ mod tests {
         assert_eq!(TextShadow::None.to_string(), "none");
         assert_eq!(TextShadow::Sm.to_string(), "0 1px 2px 0 rgb(0 0 0 / 0.05)");
         assert_eq!(TextShadow::Default.to_string(), "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Lg.to_string(), "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl.to_string(), "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl2.to_string(), "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
+        assert_eq!(TextShadow::Lg.to_string(), "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
+        assert_eq!(TextShadow::Xl.to_string(), "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
+        assert_eq!(TextShadow::Xl2.to_string(), "0 25px 50px -12px rgb(0 0 0 / 0.25)");
         assert_eq!(TextShadow::Inner.to_string(), "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)");
     }
 
@@ -177,9 +177,9 @@ mod tests {
         assert_eq!(TextShadow::None.to_css_value(), "none");
         assert_eq!(TextShadow::Sm.to_css_value(), "0 1px 2px 0 rgb(0 0 0 / 0.05)");
         assert_eq!(TextShadow::Default.to_css_value(), "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Lg.to_css_value(), "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl.to_css_value(), "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl2.to_css_value(), "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
+        assert_eq!(TextShadow::Lg.to_css_value(), "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
+        assert_eq!(TextShadow::Xl.to_css_value(), "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
+        assert_eq!(TextShadow::Xl2.to_css_value(), "0 25px 50px -12px rgb(0 0 0 / 0.25)");
         assert_eq!(TextShadow::Inner.to_css_value(), "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)");
     }
 

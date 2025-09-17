@@ -1,7 +1,5 @@
 # 🚀 Critical Performance Fixes Completed
 
-> **🤖 AI-Generated Code**: This entire codebase has been completely generated using advanced AI systems. All implementations, tests, documentation, and examples were created through automated code generation processes.
-
 ## 📊 Executive Summary
 
 We have successfully completed the **two most critical performance improvements** identified in our comprehensive remediation analysis. These fixes will provide the biggest performance impact for the tailwind-rs codebase.

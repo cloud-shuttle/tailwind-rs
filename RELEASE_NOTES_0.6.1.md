@@ -1,7 +1,5 @@
 # 🚀 Release Notes: tailwind-rs v0.6.1
 
-> **🤖 AI-Generated Code**: This entire codebase has been completely generated using advanced AI systems. All implementations, tests, documentation, and examples were created through automated code generation processes.
-
 ## 📊 Executive Summary
 
 **Release Date**: September 16, 2025  

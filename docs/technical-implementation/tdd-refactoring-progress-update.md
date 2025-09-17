@@ -1,7 +1,5 @@
 # 🧪 TDD Refactoring Progress Update - E2E Tests Complete!
 
-> **🤖 AI-Generated Code**: This entire codebase has been completely generated using advanced AI systems. All implementations, tests, documentation, and examples were created through automated code generation processes.
-
 ## 📊 Executive Summary
 
 We have successfully completed the second major refactoring using our Test-Driven Development (TDD) approach with cargo nextest. The `e2e_tests.rs` file (591 lines) has been successfully broken down into focused, maintainable modules.

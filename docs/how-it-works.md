@@ -1,6 +1,6 @@
 # How Tailwind-RS Works
 
-> **🤖 AI-Generated Code**: This entire codebase has been completely generated using advanced AI systems. All implementations, tests, documentation, and examples were created through automated code generation processes.
+> **🤖 **: This entire codebase has been completely generated using advanced AI systems. All implementations, tests, documentation, and examples were created through automated code generation processes.
 
 **Last Updated**: September 16, 2025
 

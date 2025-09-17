@@ -1,7 +1,5 @@
 # 📋 Signal Management Analysis Summary
 
-> **🤖 AI-Generated Code**: This entire codebase has been completely generated using advanced AI systems. All implementations, tests, documentation, and examples were created through automated code generation processes.
-
 ## 🎯 Executive Summary
 
 After conducting a comprehensive analysis of the signal management approach in the tailwind-rs-leptos integration, I've identified significant issues with the current `SignalCleanup` implementation and provided detailed recommendations for improvement.

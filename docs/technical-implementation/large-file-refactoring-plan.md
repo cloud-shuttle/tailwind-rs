@@ -1,7 +1,5 @@
 # 🔧 Large File Refactoring Plan - TDD Approach
 
-> **🤖 AI-Generated Code**: This entire codebase has been completely generated using advanced AI systems. All implementations, tests, documentation, and examples were created through automated code generation processes.
-
 ## 📊 Executive Summary
 
 This document outlines a Test-Driven Development (TDD) approach using cargo nextest to refactor large files (>300 lines) into smaller, more testable modules. The goal is to improve maintainability, testability, and code organization.

@@ -21,21 +21,15 @@
 //! ## Quick Start
 //!
 //! ```rust
-//! use leptos::prelude::*;
-//! use tailwind_rs_leptos::*;
+//! use tailwind_rs_leptos::DynamicClassBuilder;
 //!
-//! #[component]
-//! pub fn Button(variant: ButtonVariant) -> impl IntoView {
-//!     let classes = classes! {
-//!         base: "px-4 py-2 rounded-md font-medium transition-colors",
-//!         variant: match variant {
-//!             ButtonVariant::Primary => "bg-blue-600 text-white hover:bg-blue-700",
-//!             ButtonVariant::Secondary => "bg-gray-200 text-gray-900 hover:bg-gray-300",
-//!         },
-//!     };
+//! // Create dynamic classes with reactive updates
+//! let builder = DynamicClassBuilder::new()
+//!     .base("px-4 py-2 rounded-md font-medium")
+//!     .variant("bg-blue-600 text-white");
 //!     
-//!     view! { <button class=classes>"Click me"</button> }
-//! }
+//! let classes = builder.classes();
+//! assert!(classes.contains("px-4"));
 //! ```
 
 // Core working modules with Leptos 0.8.8 support

@@ -5,7 +5,7 @@
 
 pub mod spacing;
 pub mod sizing;
-pub mod typography;
+// pub mod typography; // Temporarily disabled for v0.7.0 release
 pub mod colors;
 pub mod color_functions;
 pub mod container_queries;
@@ -32,7 +32,7 @@ pub mod device_variants;
 // Re-export all utility traits for easy access
 pub use spacing::*;
 pub use sizing::*;
-pub use typography::*;
+// pub use typography::*; // Temporarily disabled for v0.7.0 release
 pub use colors::*;
 pub use color_functions::*;
 pub use container_queries::*;

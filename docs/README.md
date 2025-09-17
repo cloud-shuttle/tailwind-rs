@@ -58,6 +58,11 @@ Welcome to the comprehensive documentation for Tailwind-RS, a type-safe, Rust-na
 - **[Remediation Implementation Plan](implementation/REMEDIATION_IMPLEMENTATION_PLAN.md)** - Issue resolution strategy
 - **[Tokio Removal Plan](implementation/TOKIO_REMOVAL_REMEDIATION_PLAN.md)** - WASM compatibility improvements
 
+### Technical Analysis
+- **[Signal Management Analysis](technical-implementation/signal-management-analysis.md)** - Comprehensive analysis of Leptos signal management patterns and recommendations
+- **[Signal Cleanup Removal Guide](technical-implementation/signal-cleanup-removal-guide.md)** - Step-by-step implementation guide for removing problematic signal cleanup code
+- **[Signal Management Summary](technical-implementation/signal-management-summary.md)** - Executive summary of findings and recommendations
+
 ### Project Management
 - **[Development Roadmap](project/ROADMAP.md)** - Complete development timeline and milestones
 - **[Documentation Update Summary](project/DOCUMENTATION_UPDATE_SUMMARY.md)** - Documentation changes and updates

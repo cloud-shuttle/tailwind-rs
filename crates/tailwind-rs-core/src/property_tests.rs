@@ -263,22 +263,23 @@ proptest! {
         md_value in 0i32..=100,
         lg_value in 0i32..=100,
     ) {
-        let mut responsive = ResponsiveValue::new(base_value);
+        let mut responsive = ResponsiveValue::new();
+        responsive.set_breakpoint(Breakpoint::Base, base_value);
         responsive.set_breakpoint(Breakpoint::Sm, sm_value);
         responsive.set_breakpoint(Breakpoint::Md, md_value);
         responsive.set_breakpoint(Breakpoint::Lg, lg_value);
         
         // Property: Base value should be retrievable
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Base), base_value);
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Base), Some(&base_value));
         
         // Property: Set values should be retrievable
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Sm), sm_value);
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Md), md_value);
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Lg), lg_value);
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Sm), Some(&sm_value));
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Md), Some(&md_value));
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Lg), Some(&lg_value));
         
-        // Property: Unset breakpoints should return base value
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Xl), base_value);
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Xl2), base_value);
+        // Property: Unset breakpoints should return None
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Xl), None);
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Xl2), None);
     }
 
     /// Test that Theme operations maintain invariants
@@ -341,7 +342,8 @@ proptest! {
     fn test_responsive_ordering_properties(
         values in prop::collection::vec(0i32..=100, 2..=6)
     ) {
-        let mut responsive = ResponsiveValue::new(values[0]);
+        let mut responsive = ResponsiveValue::new();
+        responsive.set_breakpoint(Breakpoint::Base, values[0]);
         
         // Add values in order
         for (i, &value) in values.iter().enumerate().skip(1) {
@@ -357,12 +359,12 @@ proptest! {
         }
         
         // Property: Values should be retrievable in correct order
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Base), values[0]);
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Base), Some(&values[0]));
         if values.len() > 1 {
-            assert_eq!(*responsive.get_breakpoint(Breakpoint::Sm), values[1]);
+            assert_eq!(responsive.get_breakpoint(Breakpoint::Sm), Some(&values[1]));
         }
         if values.len() > 2 {
-            assert_eq!(*responsive.get_breakpoint(Breakpoint::Md), values[2]);
+            assert_eq!(responsive.get_breakpoint(Breakpoint::Md), Some(&values[2]));
         }
     }
 

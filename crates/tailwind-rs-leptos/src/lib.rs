@@ -138,11 +138,11 @@ mod tests {
         
         // Initially should be empty
         assert!(builder.is_empty());
-        assert_eq!(builder.classes_string(), "");
+        assert_eq!(builder.classes(), "");
         
         // Add base classes
-        builder.base("px-4 py-2");
-        let classes = builder.classes_string();
+        let builder = builder.base("px-4 py-2");
+        let classes = builder.classes();
         assert!(classes.contains("px-4"));
         assert!(classes.contains("py-2"));
     }

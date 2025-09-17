@@ -63,7 +63,7 @@ pub fn test_responsive_value<T: PartialEq + std::fmt::Debug>(
 ) -> ResponsiveTestResult {
     let actual_value = responsive_value.get_breakpoint(breakpoint);
 
-    if actual_value == expected_value {
+    if actual_value == Some(expected_value) {
         ResponsiveTestResult::success(format!(
             "Responsive value at {:?} matches expected",
             breakpoint
@@ -89,16 +89,16 @@ pub fn test_responsive_config(
     let mut incorrect_breakpoints = Vec::new();
 
     for (name, expected_value) in expected_breakpoints {
-        match config.get_breakpoint(name) {
-            Ok(actual_value) => {
-                if actual_value != *expected_value {
+        match config.get_breakpoint_config(name.parse().unwrap_or(Breakpoint::Base)) {
+            Some(actual_config) => {
+                if actual_config.min_width != *expected_value {
                     incorrect_breakpoints.push(format!(
                         "{}: expected {}, got {}",
-                        name, expected_value, actual_value
+                        name, expected_value, actual_config.min_width
                     ));
                 }
             }
-            Err(_) => {
+            None => {
                 missing_breakpoints.push(name.to_string());
             }
         }
@@ -202,7 +202,8 @@ mod tests {
 
     #[test]
     fn test_responsive_value_testing() {
-        let responsive_value = ResponsiveValue::new(10);
+        let mut responsive_value = ResponsiveValue::new();
+        responsive_value.set_breakpoint(Breakpoint::Base, 10);
         let result = test_responsive_value(&responsive_value, Breakpoint::Base, &10);
         assert!(result.success);
 

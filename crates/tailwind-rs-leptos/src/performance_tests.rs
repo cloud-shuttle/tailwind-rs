@@ -72,15 +72,14 @@ impl PerformanceTestUtils {
     /// Benchmark dynamic class builder performance
     pub fn benchmark_dynamic_class_builder(iterations: usize) -> (Duration, Duration) {
         let (_, total_duration, average_duration) = Self::measure_average_time(|| {
-            let builder = DynamicClassBuilder::new();
-            builder
+            let builder = DynamicClassBuilder::new()
                 .base("px-4 py-2")
                 .variant("bg-blue-600 text-white")
                 .responsive("sm:text-sm md:text-base")
                 .state("hover:bg-blue-700 focus:ring-2")
                 .custom("transition-colors duration-200");
             
-            builder.classes_string()
+            builder.classes()
         }, iterations);
         
         (total_duration, average_duration)

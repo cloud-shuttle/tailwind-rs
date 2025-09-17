@@ -59,7 +59,8 @@ mod api_signature_tests {
     /// Test that ResponsiveValue API is stable
     #[test]
     fn test_responsive_value_api_stability() {
-        let mut responsive = ResponsiveValue::new(10);
+        let mut responsive = ResponsiveValue::new();
+        responsive.set_breakpoint(Breakpoint::Base, 10);
         
         // Test that all public methods exist
         responsive.set_breakpoint(Breakpoint::Sm, 20);
@@ -144,15 +145,16 @@ mod serialization_stability_tests {
     /// Test that ResponsiveValue serialization is stable
     #[test]
     fn test_responsive_value_serialization_stability() {
-        let mut responsive = ResponsiveValue::new(10);
+        let mut responsive = ResponsiveValue::new();
+        responsive.set_breakpoint(Breakpoint::Base, 10);
         responsive.set_breakpoint(Breakpoint::Sm, 20);
         
         // Test JSON serialization
         let json = serde_json::to_string(&responsive).expect("Should serialize to JSON");
         let deserialized: ResponsiveValue<i32> = serde_json::from_str(&json).expect("Should deserialize from JSON");
         
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Base), *deserialized.get_breakpoint(Breakpoint::Base));
-        assert_eq!(*responsive.get_breakpoint(Breakpoint::Sm), *deserialized.get_breakpoint(Breakpoint::Sm));
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Base), deserialized.get_breakpoint(Breakpoint::Base));
+        assert_eq!(responsive.get_breakpoint(Breakpoint::Sm), deserialized.get_breakpoint(Breakpoint::Sm));
     }
 }
 

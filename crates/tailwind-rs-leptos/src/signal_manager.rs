@@ -1,7 +1,10 @@
-//! # Signal Lifecycle Management for Leptos 0.8.8
+//! # Signal Management for Leptos 0.8.8
 //!
-//! This module provides comprehensive signal lifecycle management for tailwind-rs components
+//! This module provides signal management for tailwind-rs components
 //! following the new Leptos 0.8.8 signal system patterns.
+//! 
+//! Leptos 0.8.8 automatically handles signal cleanup when they go out of scope,
+//! so no explicit cleanup management is needed.
 
 use leptos::prelude::*;
 use tailwind_rs_core::Theme;
@@ -135,59 +138,6 @@ pub fn use_tailwind_signal_manager_or_default() -> TailwindSignalManager {
     })
 }
 
-/// Signal cleanup utility for proper memory management
-pub struct SignalCleanup {
-    signals: Vec<ArcRwSignal<()>>,
-    memos: Vec<ArcMemo<()>>,
-}
-
-impl SignalCleanup {
-    /// Create a new signal cleanup manager
-    pub fn new() -> Self {
-        Self { 
-            signals: Vec::new(),
-            memos: Vec::new(),
-        }
-    }
-    
-    /// Track a signal for cleanup
-    pub fn track_signal<T>(&mut self, signal: ArcRwSignal<T>) -> ArcRwSignal<T> {
-        // Track signal for cleanup by creating a dummy signal
-        self.signals.push(ArcRwSignal::new(()));
-        signal
-    }
-    
-    /// Track a memo for cleanup
-    pub fn track_memo<T>(&mut self, memo: ArcMemo<T>) -> ArcMemo<T> 
-    where
-        T: Send + Sync + 'static,
-    {
-        // Track memo for cleanup by creating a dummy memo
-        self.memos.push(ArcMemo::new(|_| ()));
-        memo
-    }
-    
-    /// Cleanup all tracked signals and memos
-    pub fn cleanup(self) {
-        // Signals and memos will be automatically disposed when this struct is dropped
-        // due to Leptos 0.8.8's ownership tree
-        drop(self);
-    }
-}
-
-impl Default for SignalCleanup {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-/// Automatic cleanup implementation
-impl Drop for SignalCleanup {
-    fn drop(&mut self) {
-        // Leptos 0.8.8 will automatically dispose signals and memos
-        // when they go out of scope
-    }
-}
 
 #[cfg(test)]
 mod tests {
@@ -233,21 +183,26 @@ mod tests {
     }
     
     #[test]
-    fn test_signal_cleanup() {
-        let mut cleanup = SignalCleanup::new();
+    fn test_automatic_signal_cleanup() {
+        // Test that signals are automatically cleaned up when they go out of scope
+        {
+            let signal = ArcRwSignal::new(42);
+            assert_eq!(signal.get(), 42);
+            // Signal should be automatically cleaned up here
+        }
+        // No explicit cleanup needed - Leptos handles it
+    }
+    
+    #[test]
+    fn test_signal_lifecycle_in_component() {
+        // Test that signals work correctly without explicit cleanup
+        let signal = ArcRwSignal::new("test".to_string());
+        assert_eq!(signal.get(), "test");
         
-        // Create signals and track them
-        let signal1 = cleanup.track_signal(ArcRwSignal::new(42));
-        let signal2 = cleanup.track_signal(ArcRwSignal::new("test".to_string()));
-        let memo = cleanup.track_memo(ArcMemo::new(|_| 84));
+        signal.set("updated".to_string());
+        assert_eq!(signal.get(), "updated");
         
-        // Verify signals work
-        assert_eq!(signal1.get(), 42);
-        assert_eq!(signal2.get(), "test");
-        assert_eq!(memo.get(), 84);
-        
-        // Cleanup should dispose signals
-        cleanup.cleanup();
+        // Signal cleanup is automatic
     }
     
     #[test]

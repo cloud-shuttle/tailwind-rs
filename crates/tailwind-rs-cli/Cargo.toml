@@ -18,7 +18,7 @@ path = "src/main.rs"
 
 [dependencies]
 # Core dependencies
-tailwind-rs-core = { workspace = true }
+tailwind-rs-core = "0.8.0"
 tailwind-rs-macros = { workspace = true }
 
 # CLI dependencies

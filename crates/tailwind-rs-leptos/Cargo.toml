@@ -14,8 +14,8 @@ rust-version = "1.89.0"
 
 [dependencies]
 # Core dependencies
-tailwind-rs-core = { workspace = true }
-tailwind-rs-macros = { workspace = true }
+tailwind-rs-core = "0.8.0"
+tailwind-rs-macros = "0.8.0"
 
 # Leptos dependencies
 leptos = { workspace = true, features = ["csr", "ssr", "hydrate"] }

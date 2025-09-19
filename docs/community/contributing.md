@@ -25,8 +25,7 @@ We follow a strict **Test-Driven Development** approach:
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Rust 1.89.0+ (latest stable)
-- Node.js 18+ and PNPM (for Playwright tests)
+- Rust 1.70+ (latest stable)
 - Git
 - VS Code with rust-analyzer (recommended)
 
@@ -39,15 +38,8 @@ cd tailwind-rs
 # Install Rust dependencies
 cargo build
 
-# Install Node.js dependencies for testing
-pnpm install
-
-# Install Playwright browsers
-pnpm run playwright:install
-
 # Run the test suite
-cargo test
-pnpm run test:e2e
+cargo test --workspace
 ```
 
 ## 🧪 Development Workflow
@@ -182,14 +174,15 @@ test.describe('Feature E2E Testing', () => {
 ```toml
 [package]
 name = "tailwind-rs"
-version = "0.1.0"
+version = "0.8.1"
 edition = "2021"
-rust-version = "1.89.0"
+rust-version = "1.70"
 
 [dependencies]
 # Latest stable versions
-leptos = { version = "0.8.8", features = ["csr"] }
+leptos = { version = "0.6", features = ["csr"] }
 serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
@@ -427,11 +420,7 @@ git checkout -b feature/new-feature
 ### 4. Run Full Test Suite
 ```bash
 # Rust tests
-cargo test
-cargo test --test integration
-
-# Playwright tests
-pnpm run test:e2e
+cargo test --workspace
 
 # Performance tests
 cargo bench
@@ -503,7 +492,6 @@ test.describe('New Feature Demo', () => {
 ### Coverage Requirements
 - **Unit Tests**: 100% coverage for new code
 - **Integration Tests**: 100% coverage for new APIs
-- **E2E Tests**: 100% coverage for new user workflows
 - **Documentation**: 100% coverage for public APIs
 
 ### Performance Requirements

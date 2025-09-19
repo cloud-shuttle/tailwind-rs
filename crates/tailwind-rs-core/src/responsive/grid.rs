@@ -369,7 +369,7 @@ mod tests {
         let grid = ResponsiveGrid::new();
         assert!(!grid.is_empty()); // Has default values
         
-        let mut empty_grid = ResponsiveGrid {
+        let empty_grid = ResponsiveGrid {
             columns: HashMap::new(),
             gap: HashMap::new(),
             row_gap: HashMap::new(),

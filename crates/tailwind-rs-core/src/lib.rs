@@ -82,6 +82,7 @@ pub use classes::{ClassBuilder, ClassSet};
 pub use class_scanner::{ClassScanner, ScanConfig, ScanResults, ScanStats};
 pub use color::Color;
 pub use config::{BuildConfig, TailwindConfig};
+pub use config::parser::ConfigParser;
 pub use css_generator::{CssGenerator, CssProperty, CssRule};
 pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};

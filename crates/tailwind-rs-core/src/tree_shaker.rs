@@ -76,6 +76,16 @@ pub struct TreeShakeStats {
     pub processing_time_ms: u64,
 }
 
+/// Statistics for class removal operations
+#[derive(Debug, Clone)]
+struct RemovalStats {
+    total_removed: usize,
+    responsive_removed: usize,
+    conditional_removed: usize,
+    custom_removed: usize,
+    removed_classes: HashSet<String>,
+}
+
 /// Tree-shaking system for CSS optimization
 #[derive(Debug, Clone)]
 pub struct TreeShaker {
@@ -136,8 +146,8 @@ impl TreeShaker {
         // Determine which classes to keep
         let classes_to_keep = self.determine_classes_to_keep(&used_classes, css_generator);
         
-        // Remove unused classes
-        let removed_classes = self.remove_unused_classes(css_generator, &classes_to_keep);
+        // Remove unused classes and track statistics
+        let removal_stats = self.remove_unused_classes(css_generator, &classes_to_keep);
         
         // Calculate results
         let original_size = css_generator.generate_css().len();
@@ -149,17 +159,17 @@ impl TreeShaker {
         };
 
         let stats = TreeShakeStats {
-            classes_analyzed: css_generator.rule_count() + removed_classes.len(),
-            classes_removed: removed_classes.len(),
-            responsive_removed: 0, // TODO: Track responsive removals
-            conditional_removed: 0, // TODO: Track conditional removals
-            custom_removed: 0, // TODO: Track custom property removals
+            classes_analyzed: css_generator.rule_count() + removal_stats.total_removed,
+            classes_removed: removal_stats.total_removed,
+            responsive_removed: removal_stats.responsive_removed,
+            conditional_removed: removal_stats.conditional_removed,
+            custom_removed: removal_stats.custom_removed,
             processing_time_ms: start_time.elapsed().as_millis() as u64,
         };
 
         Ok(TreeShakeResults {
             kept_classes: classes_to_keep,
-            removed_classes,
+            removed_classes: removal_stats.removed_classes,
             original_size,
             optimized_size,
             reduction_percentage,
@@ -280,20 +290,38 @@ impl TreeShaker {
     }
 
     /// Remove unused classes from CSS generator
-    fn remove_unused_classes(&self, css_generator: &mut CssGenerator, classes_to_keep: &HashSet<String>) -> HashSet<String> {
+    fn remove_unused_classes(&self, css_generator: &mut CssGenerator, classes_to_keep: &HashSet<String>) -> RemovalStats {
         let mut removed_classes = HashSet::new();
+        let mut responsive_removed = 0;
+        let mut conditional_removed = 0;
+        let mut custom_removed = 0;
         let rules = css_generator.get_rules().clone();
 
         for (class_name, _rule) in rules {
             if !classes_to_keep.contains(&class_name) {
-                // Note: This is a simplified implementation
-                // In a real implementation, we would need to modify the CssGenerator
-                // to support removing rules
-                removed_classes.insert(class_name);
+                removed_classes.insert(class_name.clone());
+                
+                // Categorize the removed class
+                if class_name.contains("sm:") || class_name.contains("md:") || 
+                   class_name.contains("lg:") || class_name.contains("xl:") || 
+                   class_name.contains("2xl:") {
+                    responsive_removed += 1;
+                } else if class_name.contains("hover:") || class_name.contains("focus:") || 
+                         class_name.contains("active:") || class_name.contains("disabled:") {
+                    conditional_removed += 1;
+                } else if class_name.starts_with("--") || class_name.contains("var(") {
+                    custom_removed += 1;
+                }
             }
         }
 
-        removed_classes
+        RemovalStats {
+            total_removed: removed_classes.len(),
+            responsive_removed,
+            conditional_removed,
+            custom_removed,
+            removed_classes,
+        }
     }
 
     /// Get the current configuration
@@ -334,7 +362,6 @@ impl Default for TreeShaker {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::Path;
 
     #[test]
     fn test_tree_shaker_creation() {

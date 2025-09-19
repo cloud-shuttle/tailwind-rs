@@ -3,6 +3,7 @@
 use crate::error::{Result, TailwindError};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::str::FromStr;
 
 /// Represents a color value in the theme system
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -63,6 +64,61 @@ impl Color {
                 format!("hsla({}, {}%, {}%, {})", h, s * 100.0, l * 100.0, a)
             }
             Color::Named(name) => format!("var(--color-{})", name),
+        }
+    }
+}
+
+impl FromStr for Color {
+    type Err = TailwindError;
+
+    fn from_str(s: &str) -> Result<Self> {
+        let s = s.trim();
+        
+        if s.starts_with('#') {
+            Ok(Color::hex(s))
+        } else if s.starts_with("rgb(") {
+            // Parse rgb(r, g, b) format
+            let content = s.strip_prefix("rgb(")
+                .and_then(|s| s.strip_suffix(')'))
+                .ok_or_else(|| TailwindError::theme("Invalid RGB format"))?;
+            
+            let values: Vec<&str> = content.split(',').map(|s| s.trim()).collect();
+            if values.len() != 3 {
+                return Err(TailwindError::theme("RGB must have 3 values"));
+            }
+            
+            let r = values[0].parse::<u8>()
+                .map_err(|_| TailwindError::theme("Invalid RGB red value"))?;
+            let g = values[1].parse::<u8>()
+                .map_err(|_| TailwindError::theme("Invalid RGB green value"))?;
+            let b = values[2].parse::<u8>()
+                .map_err(|_| TailwindError::theme("Invalid RGB blue value"))?;
+            
+            Ok(Color::rgb(r, g, b))
+        } else if s.starts_with("rgba(") {
+            // Parse rgba(r, g, b, a) format
+            let content = s.strip_prefix("rgba(")
+                .and_then(|s| s.strip_suffix(')'))
+                .ok_or_else(|| TailwindError::theme("Invalid RGBA format"))?;
+            
+            let values: Vec<&str> = content.split(',').map(|s| s.trim()).collect();
+            if values.len() != 4 {
+                return Err(TailwindError::theme("RGBA must have 4 values"));
+            }
+            
+            let r = values[0].parse::<u8>()
+                .map_err(|_| TailwindError::theme("Invalid RGBA red value"))?;
+            let g = values[1].parse::<u8>()
+                .map_err(|_| TailwindError::theme("Invalid RGBA green value"))?;
+            let b = values[2].parse::<u8>()
+                .map_err(|_| TailwindError::theme("Invalid RGBA blue value"))?;
+            let a = values[3].parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid RGBA alpha value"))?;
+            
+            Ok(Color::rgba(r, g, b, a))
+        } else {
+            // Named color
+            Ok(Color::named(s))
         }
     }
 }
@@ -136,6 +192,57 @@ impl Spacing {
     }
 }
 
+impl FromStr for Spacing {
+    type Err = TailwindError;
+
+    fn from_str(s: &str) -> Result<Self> {
+        let s = s.trim();
+        
+        if s.ends_with("px") {
+            let value = s.strip_suffix("px")
+                .ok_or_else(|| TailwindError::theme("Invalid pixel value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid pixel value"))?;
+            Ok(Spacing::px(value))
+        } else if s.ends_with("rem") {
+            let value = s.strip_suffix("rem")
+                .ok_or_else(|| TailwindError::theme("Invalid rem value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid rem value"))?;
+            Ok(Spacing::rem(value))
+        } else if s.ends_with("em") {
+            let value = s.strip_suffix("em")
+                .ok_or_else(|| TailwindError::theme("Invalid em value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid em value"))?;
+            Ok(Spacing::em(value))
+        } else if s.ends_with('%') {
+            let value = s.strip_suffix('%')
+                .ok_or_else(|| TailwindError::theme("Invalid percentage value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid percentage value"))?;
+            Ok(Spacing::percent(value))
+        } else if s.ends_with("vw") {
+            let value = s.strip_suffix("vw")
+                .ok_or_else(|| TailwindError::theme("Invalid vw value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid vw value"))?;
+            Ok(Spacing::vw(value))
+        } else if s.ends_with("vh") {
+            let value = s.strip_suffix("vh")
+                .ok_or_else(|| TailwindError::theme("Invalid vh value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid vh value"))?;
+            Ok(Spacing::vh(value))
+        } else {
+            // Try parsing as number (defaults to rem)
+            let value = s.parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid spacing value"))?;
+            Ok(Spacing::rem(value))
+        }
+    }
+}
+
 /// Represents a border radius value in the theme system
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum BorderRadius {
@@ -177,6 +284,39 @@ impl BorderRadius {
             BorderRadius::Rem(value) => format!("{}rem", value),
             BorderRadius::Percent(value) => format!("{}%", value),
             BorderRadius::Named(name) => format!("var(--border-radius-{})", name),
+        }
+    }
+}
+
+impl FromStr for BorderRadius {
+    type Err = TailwindError;
+
+    fn from_str(s: &str) -> Result<Self> {
+        let s = s.trim();
+        
+        if s.ends_with("px") {
+            let value = s.strip_suffix("px")
+                .ok_or_else(|| TailwindError::theme("Invalid pixel value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid pixel value"))?;
+            Ok(BorderRadius::px(value))
+        } else if s.ends_with("rem") {
+            let value = s.strip_suffix("rem")
+                .ok_or_else(|| TailwindError::theme("Invalid rem value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid rem value"))?;
+            Ok(BorderRadius::rem(value))
+        } else if s.ends_with('%') {
+            let value = s.strip_suffix('%')
+                .ok_or_else(|| TailwindError::theme("Invalid percentage value"))?
+                .parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid percentage value"))?;
+            Ok(BorderRadius::percent(value))
+        } else {
+            // Try parsing as number (defaults to rem)
+            let value = s.parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid border radius value"))?;
+            Ok(BorderRadius::rem(value))
         }
     }
 }
@@ -224,6 +364,45 @@ impl BoxShadow {
             self.spread_radius,
             self.color.to_css()
         )
+    }
+}
+
+impl FromStr for BoxShadow {
+    type Err = TailwindError;
+
+    fn from_str(s: &str) -> Result<Self> {
+        // Parse box shadow string like "0 1px 3px rgba(0, 0, 0, 0.1)"
+        let parts: Vec<&str> = s.split_whitespace().collect();
+        
+        if parts.len() < 3 {
+            return Err(TailwindError::theme("Invalid box shadow format"));
+        }
+        
+        let offset_x = parts[0].parse::<f32>()
+            .map_err(|_| TailwindError::theme("Invalid box shadow offset x"))?;
+        let offset_y = parts[1].parse::<f32>()
+            .map_err(|_| TailwindError::theme("Invalid box shadow offset y"))?;
+        let blur_radius = parts[2].parse::<f32>()
+            .map_err(|_| TailwindError::theme("Invalid box shadow blur radius"))?;
+        
+        let spread_radius = if parts.len() > 3 && !parts[3].starts_with("rgba") && !parts[3].starts_with("rgb") {
+            parts[3].parse::<f32>()
+                .map_err(|_| TailwindError::theme("Invalid box shadow spread radius"))?
+        } else {
+            0.0
+        };
+        
+        let color_part = if parts.len() > 3 && (parts[3].starts_with("rgba") || parts[3].starts_with("rgb")) {
+            parts[3..].join(" ")
+        } else if parts.len() > 4 {
+            parts[4..].join(" ")
+        } else {
+            "rgba(0, 0, 0, 0.1)".to_string()
+        };
+        
+        let color = Color::from_str(&color_part)?;
+        
+        Ok(BoxShadow::new(offset_x, offset_y, blur_radius, spread_radius, color, false))
     }
 }
 
@@ -336,6 +515,120 @@ impl Theme {
                 name, self.name
             ))
         })
+    }
+
+    /// Validate the theme
+    pub fn validate(&self) -> Result<()> {
+        if self.name.is_empty() {
+            return Err(TailwindError::theme("Theme name cannot be empty".to_string()));
+        }
+
+        // Validate colors
+        for (name, color) in &self.colors {
+            match color {
+                Color::Hex(hex) => {
+                    if !hex.starts_with('#') || hex.len() != 7 {
+                        return Err(TailwindError::theme(format!("Invalid hex color '{}' for '{}'", hex, name)));
+                    }
+                }
+                    Color::Rgb { r: _, g: _, b: _ } => {
+                        // RGB values are already validated as u8, so they're always valid
+                    }
+                    Color::Rgba { r: _, g: _, b: _, a } => {
+                        if *a < 0.0 || *a > 1.0 {
+                            return Err(TailwindError::theme(format!("Invalid RGBA alpha value for '{}'", name)));
+                        }
+                    }
+                Color::Hsl { h, s, l } => {
+                    if *h < 0.0 || *h > 360.0 || *s < 0.0 || *s > 100.0 || *l < 0.0 || *l > 100.0 {
+                        return Err(TailwindError::theme(format!("Invalid HSL values for '{}'", name)));
+                    }
+                }
+                Color::Hsla { h, s, l, a } => {
+                    if *h < 0.0 || *h > 360.0 || *s < 0.0 || *s > 100.0 || *l < 0.0 || *l > 100.0 || *a < 0.0 || *a > 1.0 {
+                        return Err(TailwindError::theme(format!("Invalid HSLA values for '{}'", name)));
+                    }
+                }
+                Color::Named(_) => {} // Named colors are always valid
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// TOML representation of theme configuration
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ThemeToml {
+    pub name: String,
+    pub colors: Option<HashMap<String, String>>,
+    pub spacing: Option<HashMap<String, String>>,
+    pub border_radius: Option<HashMap<String, String>>,
+    pub box_shadows: Option<HashMap<String, String>>,
+    pub custom: Option<HashMap<String, toml::Value>>,
+}
+
+impl From<Theme> for ThemeToml {
+    fn from(theme: Theme) -> Self {
+        Self {
+            name: theme.name,
+            colors: Some(theme.colors.into_iter().map(|(k, v)| (k, v.to_css())).collect()),
+            spacing: Some(theme.spacing.into_iter().map(|(k, v)| (k, v.to_css())).collect()),
+            border_radius: Some(theme.border_radius.into_iter().map(|(k, v)| (k, v.to_css())).collect()),
+            box_shadows: Some(theme.box_shadows.into_iter().map(|(k, v)| (k, v.to_css())).collect()),
+            custom: Some(theme.custom.into_iter().map(|(k, v)| {
+                let toml_value = match v {
+                    ThemeValue::String(s) => toml::Value::String(s),
+                    ThemeValue::Number(n) => toml::Value::Float(n as f64),
+                    ThemeValue::Boolean(b) => toml::Value::Boolean(b),
+                    ThemeValue::Color(c) => toml::Value::String(c.to_css()),
+                    ThemeValue::Spacing(s) => toml::Value::String(s.to_css()),
+                    ThemeValue::BorderRadius(br) => toml::Value::String(br.to_css()),
+                    ThemeValue::BoxShadow(bs) => toml::Value::String(bs.to_css()),
+                };
+                (k, toml_value)
+            }).collect()),
+        }
+    }
+}
+
+impl From<ThemeToml> for Theme {
+    fn from(toml_theme: ThemeToml) -> Self {
+        let mut theme = Theme::new(toml_theme.name);
+        
+        if let Some(colors) = toml_theme.colors {
+            for (name, color_str) in colors {
+                if let Ok(color) = Color::from_str(&color_str) {
+                    theme.add_color(name, color);
+                }
+            }
+        }
+        
+        if let Some(spacing) = toml_theme.spacing {
+            for (name, spacing_str) in spacing {
+                if let Ok(spacing_value) = Spacing::from_str(&spacing_str) {
+                    theme.add_spacing(name, spacing_value);
+                }
+            }
+        }
+        
+        if let Some(border_radius) = toml_theme.border_radius {
+            for (name, radius_str) in border_radius {
+                if let Ok(radius_value) = BorderRadius::from_str(&radius_str) {
+                    theme.add_border_radius(name, radius_value);
+                }
+            }
+        }
+        
+        if let Some(box_shadows) = toml_theme.box_shadows {
+            for (name, shadow_str) in box_shadows {
+                if let Ok(shadow_value) = BoxShadow::from_str(&shadow_str) {
+                    theme.add_box_shadow(name, shadow_value);
+                }
+            }
+        }
+        
+        theme
     }
 }
 

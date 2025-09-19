@@ -359,7 +359,6 @@ impl Default for ClassScanner {
 mod tests {
     use super::*;
     use std::fs;
-    use std::path::PathBuf;
 
     #[test]
     fn test_scanner_creation() {

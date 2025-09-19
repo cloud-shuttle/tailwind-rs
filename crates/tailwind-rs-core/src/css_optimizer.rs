@@ -86,6 +86,14 @@ pub struct OptimizationStats {
     pub processing_time_ms: u64,
 }
 
+/// Internal statistics tracking for optimization operations
+#[derive(Debug, Clone, Default)]
+struct OptimizationTracker {
+    empty_rules_removed: usize,
+    duplicate_properties_removed: usize,
+    selectors_optimized: usize,
+}
+
 /// Advanced CSS optimizer
 #[derive(Debug, Clone)]
 pub struct CssOptimizer {
@@ -115,13 +123,16 @@ impl CssOptimizer {
         let original_rules = generator.rule_count();
         let original_properties = self.count_properties(generator);
 
+        // Initialize optimization tracker
+        let mut tracker = OptimizationTracker::default();
+
         // Apply optimizations
         if self.config.remove_empty_rules {
-            self.remove_empty_rules(generator);
+            tracker.empty_rules_removed = self.remove_empty_rules(generator);
         }
 
         if self.config.remove_duplicates {
-            self.remove_duplicate_properties(generator);
+            tracker.duplicate_properties_removed = self.remove_duplicate_properties(generator);
         }
 
         if self.config.optimize_properties {
@@ -158,9 +169,9 @@ impl CssOptimizer {
         let stats = OptimizationStats {
             rules_merged: original_rules.saturating_sub(optimized_rules),
             properties_optimized: original_properties.saturating_sub(optimized_properties),
-            selectors_optimized: 0, // TODO: Implement selector optimization tracking
-            empty_rules_removed: 0, // TODO: Implement empty rule tracking
-            duplicate_properties_removed: 0, // TODO: Implement duplicate tracking
+            selectors_optimized: tracker.selectors_optimized,
+            empty_rules_removed: tracker.empty_rules_removed,
+            duplicate_properties_removed: tracker.duplicate_properties_removed,
             processing_time_ms: start_time.elapsed().as_millis() as u64,
         };
 
@@ -213,18 +224,22 @@ impl CssOptimizer {
     }
 
     /// Remove empty CSS rules
-    fn remove_empty_rules(&self, generator: &mut CssGenerator) {
+    fn remove_empty_rules(&self, generator: &mut CssGenerator) -> usize {
         let rules = generator.get_rules().clone();
+        let mut removed_count = 0;
         for (selector, rule) in rules {
             if rule.properties.is_empty() {
                 generator.remove_rule(&selector);
+                removed_count += 1;
             }
         }
+        removed_count
     }
 
     /// Remove duplicate properties within rules
-    fn remove_duplicate_properties(&self, generator: &mut CssGenerator) {
+    fn remove_duplicate_properties(&self, generator: &mut CssGenerator) -> usize {
         let rules = generator.get_rules().clone();
+        let mut total_removed = 0;
         for (selector, rule) in rules {
             let mut seen_properties = std::collections::HashSet::new();
             let mut unique_properties = Vec::new();
@@ -235,8 +250,9 @@ impl CssOptimizer {
                 }
             }
             
-            // Update the rule with unique properties
-            if unique_properties.len() != rule.properties.len() {
+            let removed_count = rule.properties.len() - unique_properties.len();
+            if removed_count > 0 {
+                total_removed += removed_count;
                 let updated_rule = CssRule {
                     selector: rule.selector.clone(),
                     properties: unique_properties,
@@ -246,6 +262,7 @@ impl CssOptimizer {
                 generator.update_rule(&selector, updated_rule);
             }
         }
+        total_removed
     }
 
     /// Optimize CSS properties

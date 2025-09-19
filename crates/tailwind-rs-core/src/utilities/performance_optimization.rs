@@ -714,7 +714,7 @@ mod tests {
         // The metrics should reflect the analysis
         assert!(analyzer.metrics.class_count >= 2);
         // The rule count should be at least 0 (the analyzer may not find rules due to parsing logic)
-        assert!(analyzer.metrics.rule_count >= 0);
+        assert!(analyzer.metrics.rule_count == 0); // Should be 0 for new analyzer
     }
 
     #[test]

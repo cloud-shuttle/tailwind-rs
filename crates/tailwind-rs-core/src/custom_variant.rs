@@ -431,7 +431,7 @@ mod tests {
 
     #[test]
     fn test_custom_variant_suggestions() {
-        let mut manager = CustomVariantManager::with_defaults();
+        let manager = CustomVariantManager::with_defaults();
         
         let suggestions = manager.get_suggestions("aria-");
         assert!(!suggestions.is_empty());

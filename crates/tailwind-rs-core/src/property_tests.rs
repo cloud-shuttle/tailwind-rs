@@ -10,7 +10,7 @@ use std::collections::HashSet;
 use crate::{
     classes::ClassBuilder,
     color::Color as TailwindColor,
-    responsive::{Breakpoint, ResponsiveValue, State},
+    responsive::{Breakpoint, ResponsiveValue},
     theme::{Theme, Spacing, Color as ThemeColor},
     validation::{ClassValidator, ValidationError},
 };
@@ -132,29 +132,6 @@ fn valid_spacing() -> impl Strategy<Value = Spacing> {
             Just(Spacing::named("full")),
             Just(Spacing::named("screen")),
         ],
-    ]
-}
-
-/// Generate valid breakpoints
-fn valid_breakpoint() -> impl Strategy<Value = Breakpoint> {
-    prop_oneof![
-        Just(Breakpoint::Base),
-        Just(Breakpoint::Sm),
-        Just(Breakpoint::Md),
-        Just(Breakpoint::Lg),
-        Just(Breakpoint::Xl),
-        Just(Breakpoint::Xl2),
-    ]
-}
-
-/// Generate valid states
-fn valid_state() -> impl Strategy<Value = State> {
-    prop_oneof![
-        Just(State::Hover),
-        Just(State::Focus),
-        Just(State::Active),
-        Just(State::Disabled),
-        Just(State::Visited),
     ]
 }
 
@@ -402,9 +379,7 @@ proptest! {
 #[cfg(test)]
 mod api_stability_tests {
     use super::*;
-    use proptest::prelude::*;
 
-    /// Test that public API functions don't panic on valid inputs
     proptest! {
         #[test]
         fn test_api_stability_no_panics(classes in valid_tailwind_classes()) {
@@ -427,7 +402,6 @@ mod api_stability_tests {
         }
     }
 
-    /// Test that serialization is stable
     proptest! {
         #[test]
         fn test_serialization_stability(
@@ -445,7 +419,6 @@ mod api_stability_tests {
         }
     }
 
-    /// Test that equality is stable
     proptest! {
         #[test]
         fn test_equality_stability(

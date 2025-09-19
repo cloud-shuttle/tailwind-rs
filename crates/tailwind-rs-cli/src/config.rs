@@ -6,7 +6,7 @@ use anyhow::Result;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
-use crate::utils::{FileUtils, LogUtils, PathUtils};
+use crate::utils::{FileUtils, LogUtils};
 
 /// Manage configuration
 #[derive(Parser)]

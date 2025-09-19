@@ -9,7 +9,7 @@ use std::path::PathBuf;
 use std::sync::mpsc;
 use std::time::Duration;
 use tailwind_rs_core::TailwindBuilder;
-use crate::utils::{FileUtils, LogUtils, PathUtils};
+use crate::utils::{FileUtils, LogUtils};
 
 /// Watch for changes and rebuild automatically
 #[derive(Parser)]

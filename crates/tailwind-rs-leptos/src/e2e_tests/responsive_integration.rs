@@ -4,7 +4,7 @@
 
 use leptos::prelude::*;
 use tailwind_rs_core::ClassBuilder;
-use super::{E2ETestSuite, E2ETestDetail};
+use super::E2ETestSuite;
 
 /// Test component that demonstrates responsive styling
 #[component]
@@ -121,7 +121,7 @@ pub fn run_responsive_tests() -> E2ETestSuite {
 
 /// Test the responsive component logic
 fn test_responsive_component_logic() -> bool {
-    let (screen_size, set_screen_size) = signal("md".to_string());
+    let (screen_size, _set_screen_size) = signal("md".to_string());
     
     let responsive_classes = move || {
         let mut builder = ClassBuilder::new();

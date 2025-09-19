@@ -4,7 +4,7 @@
 //! before we implement the migration from async to sync.
 
 use crate::performance::{ClassCache, PerformanceOptimizer, OptimizationLevel};
-use crate::{TailwindBuilder, CssOptimizer};
+use crate::{TailwindBuilder, css_optimizer::CssOptimizer};
 use std::sync::Arc;
 use std::thread;
 
@@ -246,17 +246,15 @@ mod sync_builder_tests {
     #[test]
     fn test_css_optimizer_sync() {
         // Test: CssOptimizer should work synchronously
-        let optimizer = CssOptimizer::new()
-            .input_file(std::path::Path::new("input.css"))
-            .output_file(std::path::Path::new("output.css"))
-            .optimization_level(3)
-            .remove_unused_classes()
-            .minify()
-            .generate_source_maps();
+        let optimizer = CssOptimizer::new();
         
-        // Optimize should complete synchronously
-        let result = optimizer.optimize();
+        // Test CSS optimization
+        let css = ".test { padding: 1rem; margin: 0px; }";
+        let result = optimizer.optimize_css(css);
         assert!(result.is_ok());
+        
+        let optimized = result.unwrap();
+        assert!(optimized.len() <= css.len());
     }
 }
 

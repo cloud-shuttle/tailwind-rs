@@ -42,7 +42,7 @@ impl VisualTestUtils {
     }
     
     /// Validate that a component's classes are consistent
-    pub fn validate_component_consistency(component_name: &str, expected_classes: &str, actual_classes: &str) -> bool {
+    pub fn validate_component_consistency(_component_name: &str, expected_classes: &str, actual_classes: &str) -> bool {
         expected_classes == actual_classes
     }
     

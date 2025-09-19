@@ -255,8 +255,10 @@ impl ErrorReporter {
 
     /// Report an error
     pub fn report(&self, error: &ValidationError) {
-        if self.enabled && let Some(ref callback) = self.callback {
-            callback(error);
+        if self.enabled {
+            if let Some(ref callback) = self.callback {
+                callback(error);
+            }
         }
     }
 }

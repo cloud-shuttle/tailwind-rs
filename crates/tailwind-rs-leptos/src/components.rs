@@ -3,7 +3,6 @@
 //! This module provides pre-built Leptos components that use Tailwind-RS for styling.
 
 use leptos::prelude::*;
-use tailwind_rs_core::*;
 use crate::dynamic_class_builder::DynamicClassBuilder;
 
 /// Button variant options
@@ -195,7 +194,6 @@ pub fn Input(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use leptos::prelude::*;
 
     #[test]
     fn test_button_variant_enum() {

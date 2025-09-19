@@ -99,7 +99,7 @@ mod tests {
             Some(LetterSpacing::Wide),
         );
 
-        let classes = builder.to_string();
+        let classes = builder.build_string();
         assert!(classes.contains("font-sans"));
         assert!(classes.contains("text-lg"));
         assert!(classes.contains("font-bold"));
@@ -113,7 +113,7 @@ mod tests {
         let mut builder = ClassBuilder::new();
         builder.font_sans().text_xl().font_bold();
 
-        let classes = builder.to_string();
+        let classes = builder.build_string();
         assert!(classes.contains("font-sans"));
         assert!(classes.contains("text-xl"));
         assert!(classes.contains("font-bold"));
@@ -124,7 +124,7 @@ mod tests {
         let mut builder = ClassBuilder::new();
         builder.text_center();
 
-        let classes = builder.to_string();
+        let classes = builder.build_string();
         assert!(classes.contains("text-center"));
     }
 
@@ -133,7 +133,7 @@ mod tests {
         let mut builder = ClassBuilder::new();
         builder.leading_relaxed().tracking_wide();
 
-        let classes = builder.to_string();
+        let classes = builder.build_string();
         assert!(classes.contains("leading-relaxed"));
         assert!(classes.contains("tracking-wide"));
     }

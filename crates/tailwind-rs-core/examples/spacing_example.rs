@@ -57,7 +57,7 @@ fn main() {
     // Gap examples
     println!("🔲 Gap Examples:");
     let gap_classes = ClassBuilder::new()
-        .gap(SpacingValue::Integer(4))            // gap-4
+        .gap_x(SpacingValue::Integer(4))          // gap-x-4
         .gap_x(SpacingValue::Integer(6))          // gap-x-6
         .gap_y(SpacingValue::Integer(2))          // gap-y-2
         .build();
@@ -70,7 +70,7 @@ fn main() {
     let complex_classes = ClassBuilder::new()
         .padding(SpacingValue::Integer(4))        // p-4
         .margin(SpacingValue::Integer(2))         // m-2
-        .gap(SpacingValue::Integer(3))            // gap-3
+        .gap_x(SpacingValue::Integer(3))         // gap-x-3
         .padding_x(SpacingValue::Integer(6))      // px-6
         .margin_y(SpacingValue::Integer(1))       // my-1
         .gap_x(SpacingValue::Integer(2))          // gap-x-2

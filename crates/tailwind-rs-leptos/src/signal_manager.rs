@@ -142,7 +142,6 @@ pub fn use_tailwind_signal_manager_or_default() -> TailwindSignalManager {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use leptos::prelude::*;
 
     #[test]
     fn test_signal_manager_creation() {

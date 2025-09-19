@@ -5,7 +5,7 @@
 use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
-use crate::utils::{FileUtils, LogUtils, PathUtils, StringUtils};
+use crate::utils::{FileUtils, LogUtils, StringUtils};
 
 /// Show build statistics and project information
 #[derive(Parser)]

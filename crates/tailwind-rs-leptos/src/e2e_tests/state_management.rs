@@ -4,7 +4,7 @@
 
 use leptos::prelude::*;
 use tailwind_rs_core::ClassBuilder;
-use super::{E2ETestSuite, E2ETestDetail};
+use super::E2ETestSuite;
 
 /// Test component that demonstrates complex state management
 #[component]
@@ -251,7 +251,7 @@ fn test_derived_state() -> bool {
 
 /// Test state interactions
 fn test_state_interactions() -> bool {
-    let (count, set_count) = signal(0);
+    let (_count, _set_count) = signal(0);
     let (is_loading, set_loading) = signal(false);
     let (error, set_error) = signal(None::<String>);
     

@@ -6,7 +6,7 @@
 use leptos::prelude::*;
 use tailwind_rs_core::ClassBuilder;
 use crate::{DynamicClassBuilder, TailwindSignalManager};
-use super::{E2ETestSuite, E2ETestDetail};
+use super::E2ETestSuite;
 
 /// Test component that demonstrates complete workflow
 #[component]

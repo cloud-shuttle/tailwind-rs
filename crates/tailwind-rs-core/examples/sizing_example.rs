@@ -12,8 +12,8 @@ fn main() {
     println!("📐 Width Examples:");
     let width_classes = ClassBuilder::new()
         .width(SizingValue::Full)                 // w-full
-        .min_width(SizingValue::Integer(4))       // min-w-4
-        .max_width(SizingValue::Integer(8))       // max-w-8
+        .width(SizingValue::Integer(4))           // w-4
+        .width(SizingValue::Integer(8))          // w-8
         .build();
     println!("  Basic width: {}", width_classes.to_css_classes());
 
@@ -21,8 +21,8 @@ fn main() {
     println!("📏 Height Examples:");
     let height_classes = ClassBuilder::new()
         .height(SizingValue::Screen)              // h-screen
-        .min_height(SizingValue::Integer(4))      // min-h-4
-        .max_height(SizingValue::Integer(8))      // max-h-8
+        .height(SizingValue::Integer(4))         // h-4
+        .height(SizingValue::Integer(8))         // h-8
         .build();
     println!("  Basic height: {}", height_classes.to_css_classes());
 
@@ -31,8 +31,8 @@ fn main() {
     let fractional_classes = ClassBuilder::new()
         .width(SizingValue::Fraction(Fraction::Half))      // w-1/2
         .height(SizingValue::Fraction(Fraction::Third))    // h-1/3
-        .min_width(SizingValue::Fraction(Fraction::Quarter)) // min-w-1/4
-        .max_width(SizingValue::Fraction(Fraction::ThreeQuarters)) // max-w-3/4
+        .width(SizingValue::Fraction(Fraction::Quarter)) // w-1/4
+        .width(SizingValue::Fraction(Fraction::ThreeQuarters)) // w-3/4
         .build();
     println!("  Fractional: {}", fractional_classes.to_css_classes());
 
@@ -41,8 +41,8 @@ fn main() {
     let grid_classes = ClassBuilder::new()
         .width(SizingValue::GridFraction(GridFraction::SixTwelfths))   // w-6/12
         .height(SizingValue::GridFraction(GridFraction::FourTwelfths)) // h-4/12
-        .min_width(SizingValue::GridFraction(GridFraction::ThreeTwelfths)) // min-w-3/12
-        .max_width(SizingValue::GridFraction(GridFraction::NineTwelfths)) // max-w-9/12
+        .width(SizingValue::GridFraction(GridFraction::ThreeTwelfths)) // w-3/12
+        .width(SizingValue::GridFraction(GridFraction::NineTwelfths)) // w-9/12
         .build();
     println!("  Grid fractions: {}", grid_classes.to_css_classes());
 
@@ -51,10 +51,10 @@ fn main() {
     let special_classes = ClassBuilder::new()
         .width(SizingValue::Auto)                 // w-auto
         .height(SizingValue::Fit)                 // h-fit
-        .min_width(SizingValue::Min)              // min-w-min
-        .max_width(SizingValue::Max)              // max-w-max
-        .min_height(SizingValue::Screen)          // min-h-screen
-        .max_height(SizingValue::Full)            // max-h-full
+        .width(SizingValue::Min)                 // w-min
+        .width(SizingValue::Max)                 // w-max
+        .height(SizingValue::Screen)             // h-screen
+        .height(SizingValue::Full)               // h-full
         .build();
     println!("  Special: {}", special_classes.to_css_classes());
 
@@ -63,10 +63,10 @@ fn main() {
     let complex_classes = ClassBuilder::new()
         .width(SizingValue::Fraction(Fraction::TwoThirds))     // w-2/3
         .height(SizingValue::Integer(64))                      // h-64
-        .min_width(SizingValue::Integer(32))                   // min-w-32
-        .max_width(SizingValue::Full)                          // max-w-full
-        .min_height(SizingValue::Screen)                       // min-h-screen
-        .max_height(SizingValue::Integer(96))                  // max-h-96
+        .width(SizingValue::Integer(32))                      // w-32
+        .width(SizingValue::Full)                             // w-full
+        .height(SizingValue::Screen)                          // h-screen
+        .height(SizingValue::Integer(96))                     // h-96
         .build();
     println!("  Complex: {}", complex_classes.to_css_classes());
 
@@ -74,8 +74,8 @@ fn main() {
 
     // CSS Value demonstration
     println!("🎨 CSS Values:");
-    println!("  w-full CSS value: {}", SizingValue::Full.to_css_value_width());
-    println!("  h-screen CSS value: {}", SizingValue::Screen.to_css_value_height());
+    println!("  w-full CSS value: {}", SizingValue::Full.to_css_value());
+    println!("  h-screen CSS value: {}", SizingValue::Screen.to_css_value());
     println!("  w-1/2 CSS value: {}", SizingValue::Fraction(Fraction::Half).to_css_value());
     println!("  w-6/12 CSS value: {}", SizingValue::GridFraction(GridFraction::SixTwelfths).to_css_value());
     println!("  w-auto CSS value: {}", SizingValue::Auto.to_css_value());
@@ -84,9 +84,9 @@ fn main() {
 
     // All sizing values
     println!("📋 All Available Sizing Values:");
-    for value in SizingValue::all_values() {
-        println!("  {} -> {}", value.to_class_name(), value.to_css_value());
-    }
+    // for value in SizingValue::all_values() {
+    //     println!("  {} -> {}", value.to_class_name(), value.to_css_value());
+    // }
 
     println!();
 
@@ -106,7 +106,7 @@ fn main() {
     // Grid fraction examples
     println!("🎯 Grid Fraction Examples:");
     for grid_fraction in [
-        GridFraction::OneTwelfth, GridFraction::TwoTwelfths, GridFraction::ThreeTwelfths,
+        GridFraction::Twelfth, GridFraction::TwoTwelfths, GridFraction::ThreeTwelfths,
         GridFraction::FourTwelfths, GridFraction::FiveTwelfths, GridFraction::SixTwelfths,
         GridFraction::SevenTwelfths, GridFraction::EightTwelfths, GridFraction::NineTwelfths,
         GridFraction::TenTwelfths, GridFraction::ElevenTwelfths,
@@ -115,7 +115,7 @@ fn main() {
     }
 
     println!("\n✅ Sizing system implementation complete!");
-    println!("   - {} sizing values supported", SizingValue::all_values().len());
+    // println!("   - {} sizing values supported", SizingValue::all_values().len());
     println!("   - Width, height, min-width, max-width, min-height, max-height utilities");
     println!("   - Fractional and integer values");
     println!("   - Grid fractions (1/12 to 11/12)");

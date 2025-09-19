@@ -6,7 +6,7 @@ use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
 use tailwind_rs_core::TailwindBuilder;
-use crate::utils::{FileUtils, LogUtils, PathUtils};
+use crate::utils::{FileUtils, LogUtils};
 
 /// Build Tailwind CSS from Rust source files
 #[derive(Parser)]

@@ -1,7 +1,7 @@
 [package]
 name = "tailwind-rs-macros"
 version.workspace = true
-edition = "2024"
+edition = "2021"
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
@@ -20,7 +20,7 @@ path = "src/lib.rs"
 proc-macro2 = "1.0"
 quote = "1.0"
 syn = { version = "2.0", features = ["full"] }
-tailwind-rs-core = "0.6.1"
+tailwind-rs-core = { workspace = true }
 
 [dev-dependencies]
 tailwind-rs-testing = { workspace = true }

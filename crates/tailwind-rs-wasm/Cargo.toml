@@ -1,6 +1,6 @@
 [package]
 name = "tailwind-rs-wasm"
-version = "0.7.0"
+version = "0.7.1"
 edition = "2021"
 authors = ["Tailwind-RS Team"]
 license = "MIT"

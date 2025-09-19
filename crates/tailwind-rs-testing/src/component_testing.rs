@@ -176,13 +176,14 @@ pub fn extract_classes_from_html(html: &str) -> HashSet<String> {
     let mut classes = HashSet::new();
 
     // Simple parsing for class attributes
-    if let Some(class_start) = html.find("class=\"")
-        && let Some(class_end) = html[class_start + 7..].find("\"") {
-        let class_content = &html[class_start + 7..class_start + 7 + class_end];
+    if let Some(class_start) = html.find("class=\"") {
+        if let Some(class_end) = html[class_start + 7..].find("\"") {
+            let class_content = &html[class_start + 7..class_start + 7 + class_end];
 
-        for class in class_content.split_whitespace() {
-            if !class.is_empty() {
-                classes.insert(class.to_string());
+            for class in class_content.split_whitespace() {
+                if !class.is_empty() {
+                    classes.insert(class.to_string());
+                }
             }
         }
     }
@@ -247,15 +248,16 @@ where
     let mut found_properties = std::collections::HashMap::new();
 
     // Simple parsing for style attributes
-    if let Some(style_start) = html.find("style=\"")
-        && let Some(style_end) = html[style_start + 7..].find("\"") {
-        let style_content = &html[style_start + 7..style_start + 7 + style_end];
+    if let Some(style_start) = html.find("style=\"") {
+        if let Some(style_end) = html[style_start + 7..].find("\"") {
+            let style_content = &html[style_start + 7..style_start + 7 + style_end];
 
-        for property in style_content.split(';') {
-            if let Some(colon_pos) = property.find(':') {
-                let prop = property[..colon_pos].trim();
-                let value = property[colon_pos + 1..].trim();
-                found_properties.insert(prop.to_string(), value.to_string());
+            for property in style_content.split(';') {
+                if let Some(colon_pos) = property.find(':') {
+                    let prop = property[..colon_pos].trim();
+                    let value = property[colon_pos + 1..].trim();
+                    found_properties.insert(prop.to_string(), value.to_string());
+                }
             }
         }
     }

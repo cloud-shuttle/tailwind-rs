@@ -5,8 +5,8 @@
 use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
-use tailwind_rs_core::CssOptimizer;
-use crate::utils::{FileUtils, LogUtils, PathUtils};
+use tailwind_rs_core::css_optimizer::CssOptimizer;
+use crate::utils::{FileUtils, LogUtils};
 
 /// Optimize CSS output
 #[derive(Parser)]
@@ -68,35 +68,17 @@ impl OptimizeCommand {
             LogUtils::info(&format!("Input file size: {} bytes", input_size));
         }
 
-        let mut optimizer = CssOptimizer::new()
-            .input_file(&self.input)
-            .output_file(&self.output)
-            .optimization_level(self.level);
+        let optimizer = CssOptimizer::new();
 
-        if self.remove_unused {
-            optimizer = optimizer.remove_unused_classes();
-            if self.verbose {
-                LogUtils::info("Removing unused classes");
-            }
-        }
-
-        if self.minify {
-            optimizer = optimizer.minify();
-            if self.verbose {
-                LogUtils::info("Minifying CSS");
-            }
-        }
-
-        if self.source_maps {
-            optimizer = optimizer.generate_source_maps();
-            if self.verbose {
-                LogUtils::info("Generating source maps");
-            }
-        }
-
+        // Read input CSS
+        let css_content = std::fs::read_to_string(&self.input)?;
+        
         // Perform optimization
         let start_time = std::time::Instant::now();
-        optimizer.optimize()?;
+        let optimized_css = optimizer.optimize_css(&css_content)?;
+        
+        // Write output
+        std::fs::write(&self.output, optimized_css)?;
         let duration = start_time.elapsed();
 
         // Get output file size

@@ -221,6 +221,14 @@ impl ClassVisitor {
                     self.visit_expr(&arm.body);
                 }
             }
+            syn::Expr::Return(return_expr) => {
+                if let Some(expr) = &return_expr.expr {
+                    self.visit_expr(expr);
+                }
+            }
+            syn::Expr::Assign(assign_expr) => {
+                self.visit_expr(&assign_expr.right);
+            }
             _ => {}
         }
     }
@@ -238,6 +246,10 @@ impl ClassVisitor {
         if self.is_class_builder_method(&method_name) {
             self.extract_class_from_method_call(method_call, &method_name);
         }
+        
+        // Also check for chained method calls (e.g., ClassBuilder::new().class("px-4").class("py-2"))
+        // Visit the receiver to handle chained calls
+        self.visit_expr(&method_call.receiver);
         
         // Visit arguments
         for arg in &method_call.args {
@@ -409,10 +421,10 @@ mod tests {
         // Debug output
         println!("Extracted classes: {:?}", parser.get_classes());
         
-        // The AST parser is not extracting classes correctly, so we'll skip these assertions for now
-        // This is a known issue that needs to be fixed in the AST parsing logic
-        // assert!(parser.get_classes().contains("px-4"));
-        // assert!(parser.get_classes().contains("py-2"));
+        // The AST parser should now extract classes correctly
+        assert!(parser.get_classes().contains("px-4"));
+        assert!(parser.get_classes().contains("py-2"));
+        assert!(parser.get_classes().contains("bg-blue-500"));
     }
 
     #[test]
@@ -432,8 +444,8 @@ mod tests {
         
         parser.parse_file(&temp_file).unwrap();
         
-        // The AST parser is not extracting classes correctly, so we'll skip this assertion for now
-        // assert!(parser.get_classes().contains("test-class"));
+        // The AST parser should now extract classes correctly
+        assert!(parser.get_classes().contains("test-class"));
         assert_eq!(parser.parsed_file_count(), 1);
         
         // Clean up

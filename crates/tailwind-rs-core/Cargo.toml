@@ -26,7 +26,7 @@ parking_lot = "0.12"
 syn = { version = "2.0", features = ["full", "visit"] }
 
 [dev-dependencies]
-tailwind-rs-testing = { workspace = true }
+# tailwind-rs-testing = "0.8.1"  # Will be added after publishing
 wasm-bindgen-test = { workspace = true }
 proptest = { workspace = true }
 

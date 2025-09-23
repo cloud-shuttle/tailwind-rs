@@ -35,7 +35,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
+        cache: 'pnpm'
         
     - name: Install pnpm
       uses: pnpm/action-setup@v2
@@ -45,8 +45,11 @@ jobs:
     - name: Install dependencies
       run: |
         cd crates/tailwind-rs-wasm
-        pnpm install
+        pnpm install --frozen-lockfile
         
+    - name: Install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      
     - name: Build WASM
       run: |
         cd crates/tailwind-rs-wasm

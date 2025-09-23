@@ -1,0 +1,101 @@
+name: Regression Prevention Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: [stable, beta]
+        feature: [text-shadow, mask-utilities, backdrop-filters, container-queries]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ matrix.rust }}
+        components: rustfmt, clippy
+        override: true
+    
+    - name: Run unit tests
+      run: cargo test --workspace --verbose
+    
+    - name: Run feature-specific tests
+      run: cargo test --features ${{ matrix.feature }} --verbose
+    
+    - name: Run clippy
+      run: cargo clippy --workspace -- -D warnings
+    
+    - name: Check formatting
+      run: cargo fmt --workspace -- --check
+    
+    - name: Run property-based tests
+      run: cargo test --features proptest --verbose
+    
+    - name: Run integration tests
+      run: cargo test --features integration-tests --verbose
+
+  performance:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+    
+    - name: Run performance tests
+      run: cargo test --features performance-tests --verbose
+    
+    - name: Check bundle size
+      run: |
+        cd crates/tailwind-rs-wasm
+        wasm-pack build --target web --out-dir pkg --release
+        ls -la pkg/tailwind_rs_wasm_bg.wasm
+        # Fail if bundle size exceeds 25KB
+        if [ $(stat -c%s pkg/tailwind_rs_wasm_bg.wasm) -gt 25000 ]; then
+          echo "Bundle size exceeds 25KB limit"
+          exit 1
+        fi
+
+  browser-tests:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: |
+        cd crates/tailwind-rs-wasm
+        npm install
+    
+    - name: Build WASM
+      run: |
+        cd crates/tailwind-rs-wasm
+        wasm-pack build --target web --out-dir pkg --release
+    
+    - name: Install Playwright
+      run: npm install -D @playwright/test
+    
+    - name: Install Playwright browsers
+      run: npx playwright install
+    
+    - name: Run Playwright tests
+      run: npx playwright test --project=chromium --project=firefox --project=webkit

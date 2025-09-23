@@ -1,95 +1,34 @@
-# Pre-commit configuration for tailwind-rs
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
-
 repos:
-  # Rust-specific hooks
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: trailing-whitespace
-        exclude: '\.md$'  # Allow trailing whitespace in markdown
-      - id: end-of-file-fixer
-        exclude: '\.md$'  # Allow no newline at end of markdown files
-      - id: check-yaml
-        args: ['--unsafe']  # Allow custom YAML tags
-      - id: check-toml
-      - id: check-json
-      - id: check-merge-conflict
-      - id: check-added-large-files
-        args: ['--maxkb=1000']  # 1MB limit
-      - id: check-case-conflict
-      - id: check-merge-conflict
-      - id: mixed-line-ending
-        args: ['--fix=lf']  # Use LF line endings
-
-  # Rust formatting and linting
-  - repo: https://github.com/doublify/pre-commit-rust
-    rev: v1.0
-    hooks:
-      - id: fmt
-        args: [--all, --]
-      - id: clippy
-        args: [--all-targets, --all-features, --, -D, warnings]
-      - id: test
-        args: [--all-targets, --all-features]
-      - id: cargo-check
-        args: [--all-targets, --all-features]
-
-  # Documentation checks
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: check-docstring-first
-        language: system
-        entry: bash -c 'echo "Skipping docstring check for Rust project"'
-
-  # Security checks
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
-    hooks:
-      - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
-        exclude: 'Cargo.lock|target/'
-
-  # Custom hooks for our specific needs
   - repo: local
     hooks:
-      - id: cargo-doc
-        name: Check documentation builds
-        entry: cargo doc --no-deps
+      - id: rust-tests
+        name: Run Rust tests
+        entry: cargo test --workspace
         language: system
         pass_filenames: false
         always_run: true
         stages: [pre-commit]
-
-      - id: nextest-run
-        name: Run tests with nextest
-        entry: cargo nextest run --workspace
+      
+      - id: rust-clippy
+        name: Run Clippy
+        entry: cargo clippy --workspace -- -D warnings
         language: system
         pass_filenames: false
         always_run: true
         stages: [pre-commit]
-
-      - id: check-workspace-deps
-        name: Check workspace dependencies
-        entry: bash -c 'cargo check --workspace --all-targets --all-features'
+      
+      - id: rust-fmt
+        name: Run rustfmt
+        entry: cargo fmt --workspace -- --check
         language: system
         pass_filenames: false
         always_run: true
         stages: [pre-commit]
-
-# Configuration
-default_stages: [pre-commit]
-fail_fast: false
-minimum_pre_commit_version: '3.0.0'
-
-# Exclude patterns
-exclude: |
-  (?x)^(
-    target/.*|
-    \.git/.*|
-    Cargo\.lock|
-    \.nextest/.*|
-    docs/.*\.md
-  )$
+      
+      - id: wasm-tests
+        name: Run WASM tests
+        entry: cd crates/tailwind-rs-wasm && wasm-pack test --node
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

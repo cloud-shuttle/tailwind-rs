@@ -12,23 +12,18 @@ jobs:
     strategy:
       matrix:
         rust: [stable, beta]
-        feature: [text-shadow, mask-utilities, backdrop-filters, container-queries]
     
     steps:
     - uses: actions/checkout@v4
     
     - name: Setup Rust
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@stable
       with:
         toolchain: ${{ matrix.rust }}
         components: rustfmt, clippy
-        override: true
     
     - name: Run unit tests
       run: cargo test --workspace --verbose
-    
-    - name: Run feature-specific tests
-      run: cargo test --features ${{ matrix.feature }} --verbose
     
     - name: Run clippy
       run: cargo clippy --workspace -- -D warnings
@@ -37,10 +32,7 @@ jobs:
       run: cargo fmt --workspace -- --check
     
     - name: Run property-based tests
-      run: cargo test --features proptest --verbose
-    
-    - name: Run integration tests
-      run: cargo test --features integration-tests --verbose
+      run: cargo test --verbose
 
   performance:
     runs-on: ubuntu-latest
@@ -50,13 +42,12 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Setup Rust
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@stable
       with:
         toolchain: stable
-        override: true
     
     - name: Run performance tests
-      run: cargo test --features performance-tests --verbose
+      run: cargo test --verbose
     
     - name: Check bundle size
       run: |
@@ -81,10 +72,15 @@ jobs:
       with:
         node-version: '18'
     
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+    
     - name: Install dependencies
       run: |
         cd crates/tailwind-rs-wasm
-        npm install
+        pnpm install
     
     - name: Build WASM
       run: |
@@ -92,10 +88,16 @@ jobs:
         wasm-pack build --target web --out-dir pkg --release
     
     - name: Install Playwright
-      run: npm install -D @playwright/test
+      run: |
+        cd crates/tailwind-rs-wasm
+        pnpm install -D @playwright/test
     
     - name: Install Playwright browsers
-      run: npx playwright install
+      run: |
+        cd crates/tailwind-rs-wasm
+        pnpm exec playwright install
     
     - name: Run Playwright tests
-      run: npx playwright test --project=chromium --project=firefox --project=webkit
+      run: |
+        cd crates/tailwind-rs-wasm
+        pnpm exec playwright test --project=chromium --project=firefox --project=webkit

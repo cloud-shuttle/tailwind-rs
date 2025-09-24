@@ -19,7 +19,7 @@ authors = ["tailwind-rs contributors"]
 license = "MIT"
 repository = "https://github.com/cloud-shuttle/tailwind-rs"
 homepage = "https://cloud-shuttle.github.io/tailwind-rs/"
-documentation = "https://docs.tailwind-rs.dev"
+documentation = "https://cloud-shuttle.github.io/tailwind-rs/docs/"
 keywords = ["tailwind", "css", "rust", "web", "styling"]
 categories = ["web-programming", "development-tools"]
 

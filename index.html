@@ -19,105 +19,76 @@
         .feature-card { background: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #3b82f6; }
         .status-badge { display: inline-block; background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .links { background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .demo-link { display: inline-block; background: #3b82f6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+        .demo-link:hover { background: #2563eb; text-decoration: none; }
     </style>
 </head>
 <body>
-    <h1>🎨 Tailwind-RS Documentation</h1>
+    <h1>🎨 Tailwind-RS</h1>
     
-    <p>Welcome to the comprehensive documentation for Tailwind-RS, the Rust-native implementation of Tailwind CSS with 95%+ feature parity with Tailwind CSS v4.1.</p>
+    <p>Welcome to Tailwind-RS, the Rust-native implementation of Tailwind CSS with 95%+ feature parity with Tailwind CSS v4.1. Explore our interactive demos and comprehensive documentation.</p>
     
     <div class="nav">
-        <h3>📚 Quick Navigation</h3>
+        <h3>🚀 Quick Navigation</h3>
         <ul>
-            <li><a href="#quick-start">🚀 Quick Start</a></li>
-            <li><a href="#core-docs">📖 Core Documentation</a></li>
-            <li><a href="#api-reference">🔧 API Reference</a></li>
-            <li><a href="#examples">🎨 Examples & Tutorials</a></li>
-            <li><a href="#testing">🧪 Testing & Quality</a></li>
-            <li><a href="#development">🛠️ Development & Contributing</a></li>
+            <li><a href="#demos">🎮 Interactive Demos</a></li>
+            <li><a href="#documentation">📚 Documentation</a></li>
+            <li><a href="#features">✨ Features</a></li>
+            <li><a href="#getting-started">🚀 Getting Started</a></li>
         </ul>
     </div>
     
-    <h2 id="quick-start">🚀 Quick Start</h2>
-    <ul>
-        <li><a href="getting-started/installation.md">Installation Guide</a> - Get started with Tailwind-RS</li>
-        <li><a href="getting-started/basic-usage.md">Basic Usage</a> - Learn the fundamentals</li>
-        <li><a href="getting-started/quick-start.md">Quick Start Guide</a> - Jump right in</li>
-    </ul>
-    
-    <h2 id="core-docs">📚 Core Documentation</h2>
+    <h2 id="demos">🎮 Interactive Demos</h2>
     <div class="feature-grid">
         <div class="feature-card">
-            <h3>🏗️ Architecture & Design</h3>
+            <h3>🎯 Basic Demo</h3>
+            <p>Simple Tailwind-RS demonstration with core features</p>
+            <a href="demo.html" class="demo-link">Launch Basic Demo</a>
+        </div>
+        <div class="feature-card">
+            <h3>🔧 Comprehensive Demo</h3>
+            <p>Full-featured demo showcasing all Tailwind-RS capabilities</p>
+            <a href="comprehensive-demo.html" class="demo-link">Launch Comprehensive Demo</a>
+        </div>
+        <div class="feature-card">
+            <h3>✨ Enhanced Features Demo</h3>
+            <p>Showcase of Tailwind CSS v4.1 features including Text Shadow, Mask, Backdrop Filters, and more</p>
+            <a href="enhanced-features-demo.html" class="demo-link">Launch Enhanced Features</a>
+        </div>
+    </div>
+    
+    <h2 id="documentation">📚 Documentation</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3>📖 Core Documentation</h3>
             <ul>
-                <li><a href="how-tailwind-rs-works.md">How Tailwind-RS Works</a></li>
-                <li><a href="design/css-generation-system.md">CSS Generation System</a></li>
-                <li><a href="design/build-system.md">Build System</a></li>
-                <li><a href="design/CONFIGURATION_SYSTEM_DESIGN.md">Configuration System</a></li>
+                <li><a href="docs/getting-started/installation.md">Installation Guide</a></li>
+                <li><a href="docs/getting-started/basic-usage.md">Basic Usage</a></li>
+                <li><a href="docs/getting-started/quick-start.md">Quick Start</a></li>
+                <li><a href="docs/how-tailwind-rs-works.md">How Tailwind-RS Works</a></li>
             </ul>
         </div>
         <div class="feature-card">
-            <h3>🎯 Features & Capabilities</h3>
+            <h3>🔧 API Reference</h3>
             <ul>
-                <li><a href="features/overview.md">Feature Overview</a></li>
-                <li><a href="features/COMPREHENSIVE_FEATURES.md">Comprehensive Features</a></li>
-                <li><a href="features/statistics-and-benefits.md">Statistics & Benefits</a></li>
+                <li><a href="docs/api/core.md">Core API</a></li>
+                <li><a href="docs/api/macros.md">Macros API</a></li>
+                <li><a href="docs/api/responsive.md">Responsive API</a></li>
+                <li><a href="docs/api/themes.md">Themes API</a></li>
             </ul>
         </div>
         <div class="feature-card">
-            <h3>🔧 Framework Integration</h3>
+            <h3>🎨 Examples & Tutorials</h3>
             <ul>
-                <li><a href="frameworks/leptos.md">Leptos Integration</a></li>
-                <li><a href="frameworks/yew.md">Yew Integration</a></li>
-                <li><a href="frameworks/dioxus.md">Dioxus Integration</a></li>
-                <li><a href="frameworks/generic.md">Generic Usage</a></li>
+                <li><a href="docs/examples/basic-usage.md">Basic Usage</a></li>
+                <li><a href="docs/examples/button-components.md">Button Components</a></li>
+                <li><a href="docs/examples/todo-app.md">Todo App</a></li>
+                <li><a href="docs/examples/wasm-demo.md">WASM Demo</a></li>
             </ul>
         </div>
     </div>
     
-    <h2 id="api-reference">📖 API Reference</h2>
-    <ul>
-        <li><a href="api/core.md">Core API</a> - Core types and utilities</li>
-        <li><a href="api/macros.md">Macros API</a> - Procedural macros</li>
-        <li><a href="api/responsive.md">Responsive API</a> - Responsive design utilities</li>
-        <li><a href="api/themes.md">Themes API</a> - Theme management</li>
-    </ul>
-    
-    <h2 id="examples">🎨 Examples & Tutorials</h2>
-    <ul>
-        <li><a href="examples/basic-usage.md">Basic Usage</a> - Simple examples</li>
-        <li><a href="examples/button-components.md">Button Components</a> - Component examples</li>
-        <li><a href="examples/todo-app.md">Todo App</a> - Complete application example</li>
-        <li><a href="examples/wasm-demo.md">WASM Demo</a> - WebAssembly examples</li>
-    </ul>
-    
-    <h2 id="testing">🧪 Testing & Quality</h2>
-    <ul>
-        <li><a href="testing/README.md">Testing Overview</a> - Testing philosophy</li>
-        <li><a href="testing/IMPLEMENTATION_TESTING_PLAN.md">Implementation Testing Plan</a> - Comprehensive testing strategy</li>
-        <li><a href="testing/REGRESSION_PREVENTION_STRATEGY.md">Regression Prevention</a> - Preventing regressions</li>
-        <li><a href="performance/benchmarks.md">Performance Benchmarks</a> - Performance metrics</li>
-    </ul>
-    
-    <h2 id="development">🛠️ Development & Contributing</h2>
-    <ul>
-        <li><a href="community/contributing.md">Contributing Guide</a> - How to contribute</li>
-        <li><a href="project/CURRENT_STATUS_v0.8.0.md">Current Status</a> - Project status</li>
-        <li><a href="roadmap/README.md">Roadmap</a> - Future plans</li>
-        <li><a href="migration/README.md">Migration Guides</a> - Migration strategies</li>
-    </ul>
-    
-    <div class="links">
-        <h3>🔗 External Links</h3>
-        <ul>
-            <li><strong>GitHub Repository:</strong> <a href="https://github.com/cloud-shuttle/tailwind-rs">cloud-shuttle/tailwind-rs</a></li>
-            <li><strong>Live Demos:</strong> <a href="https://cloud-shuttle.github.io/tailwind-rs/">GitHub Pages</a></li>
-            <li><strong>Enhanced Features Demo:</strong> <a href="https://cloud-shuttle.github.io/tailwind-rs/enhanced-features-demo.html">Enhanced Features Demo</a></li>
-            <li><strong>Comprehensive Demo:</strong> <a href="https://cloud-shuttle.github.io/tailwind-rs/comprehensive-demo.html">Comprehensive Demo</a></li>
-        </ul>
-    </div>
-    
-    <h2>🌟 Key Features</h2>
+    <h2 id="features">✨ Key Features</h2>
     <div class="feature-grid">
         <div class="feature-card">
             <h3>✅ What's Complete</h3>
@@ -152,6 +123,16 @@
         <li><strong>CI/CD:</strong> All workflows passing</li>
         <li><strong>Deployment:</strong> Live on GitHub Pages</li>
     </ul>
+    
+    <div class="links">
+        <h3>🔗 External Links</h3>
+        <ul>
+            <li><strong>GitHub Repository:</strong> <a href="https://github.com/cloud-shuttle/tailwind-rs">cloud-shuttle/tailwind-rs</a></li>
+            <li><strong>Documentation:</strong> <a href="docs/index.md">Full Documentation</a></li>
+            <li><strong>Issues:</strong> <a href="https://github.com/cloud-shuttle/tailwind-rs/issues">GitHub Issues</a></li>
+            <li><strong>Discussions:</strong> <a href="https://github.com/cloud-shuttle/tailwind-rs/discussions">GitHub Discussions</a></li>
+        </ul>
+    </div>
     
     <hr>
     <p><em>This documentation is automatically generated and deployed to GitHub Pages. For the latest updates, visit our <a href="https://github.com/cloud-shuttle/tailwind-rs">GitHub repository</a>.</em></p>

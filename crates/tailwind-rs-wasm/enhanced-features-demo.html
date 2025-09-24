@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind-RS Enhanced Features Demo</title>
+    <meta name="description" content="Comprehensive demo showcasing all Tailwind-RS v4.1 features">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .demo-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="demo-container">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-3xl font-bold gradient-text">
+                        🎨 Tailwind-RS Enhanced Features Demo
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="toggle-theme" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        🌙 Dark Mode
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-1 overflow-x-auto">
+                <button class="nav-tab active px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 whitespace-nowrap" data-tab="text-shadow">
+                    ✨ Text Shadow
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="mask">
+                    🎭 Mask
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="backdrop">
+                    🌈 Backdrop
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="container">
+                    📦 Container
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="grid">
+                    🔲 Grid
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="logical">
+                    🔄 Logical
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="plugins">
+                    🔌 Plugins
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="validation">
+                    ✅ Validation
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="nesting">
+                    🪆 Nesting
+                </button>
+                <button class="nav-tab px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap" data-tab="performance">
+                    ⚡ Performance
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Text Shadow Tab -->
+        <div id="tab-text-shadow" class="tab-content">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            ✨ Text Shadow Utilities
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Modern text shadow effects with Tailwind-RS
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Text Shadow Sizes</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                        <p class="text-lg font-bold text-gray-900 dark:text-gray-100" style="text-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+                                            text-shadow-sm
+                                        </p>
+                                        <code class="text-xs text-gray-600 dark:text-gray-400">text-shadow-sm</code>
+                                    </div>
+                                    <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                        <p class="text-lg font-bold text-gray-900 dark:text-gray-100" style="text-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);">
+                                            text-shadow
+                                        </p>
+                                        <code class="text-xs text-gray-600 dark:text-gray-400">text-shadow</code>
+                                    </div>
+                                    <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                        <p class="text-lg font-bold text-gray-900 dark:text-gray-100" style="text-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);">
+                                            text-shadow-lg
+                                        </p>
+                                        <code class="text-xs text-gray-600 dark:text-gray-400">text-shadow-lg</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Custom Shadows</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                                        <p class="text-lg font-bold text-white" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">
+                                            Glowing Text
+                                        </p>
+                                        <code class="text-xs text-blue-100">text-shadow-[0_0_10px_rgba(255,255,255,0.5)]</code>
+                                    </div>
+                                    <div class="p-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-lg">
+                                        <p class="text-lg font-bold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
+                                            Bold Shadow
+                                        </p>
+                                        <code class="text-xs text-red-100">text-shadow-[2px_2px_4px_rgba(0,0,0,0.8)]</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Interactive Demo</h4>
+                                <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <input type="text" id="text-shadow-input" placeholder="Enter text shadow classes" 
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <div id="text-shadow-preview" class="mt-3 p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                                        <p class="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                            Preview Text
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mask Tab -->
+        <div id="tab-mask" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            🎭 Mask Utilities
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            CSS mask properties for advanced visual effects
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Mask Types</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg" style="mask: linear-gradient(45deg, transparent 30%, black 70%);">
+                                        <p class="text-white font-bold">mask-alpha</p>
+                                    </div>
+                                    <div class="p-4 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg" style="mask: radial-gradient(circle, transparent 40%, black 60%);">
+                                        <p class="text-white font-bold">mask-luminance</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Mask Modes</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-lg" style="mask-mode: alpha;">
+                                        <p class="text-white font-bold">Alpha Mode</p>
+                                    </div>
+                                    <div class="p-4 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg" style="mask-mode: luminance;">
+                                        <p class="text-white font-bold">Luminance Mode</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Mask Clips</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg" style="mask-clip: border-box;">
+                                        <p class="text-white font-bold">Border Box</p>
+                                    </div>
+                                    <div class="p-4 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-lg" style="mask-clip: content-box;">
+                                        <p class="text-white font-bold">Content Box</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backdrop Tab -->
+        <div id="tab-backdrop" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            🌈 Enhanced Backdrop Filters
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Advanced backdrop filter effects
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Backdrop Blur</h4>
+                                <div class="space-y-3">
+                                    <div class="relative p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+                                        <div class="absolute inset-0 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg"></div>
+                                        <p class="relative text-white font-bold">backdrop-blur-sm</p>
+                                    </div>
+                                    <div class="relative p-4 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg">
+                                        <div class="absolute inset-0 bg-white bg-opacity-20 backdrop-blur-md rounded-lg"></div>
+                                        <p class="relative text-white font-bold">backdrop-blur-md</p>
+                                    </div>
+                                    <div class="relative p-4 bg-gradient-to-r from-red-500 to-pink-600 rounded-lg">
+                                        <div class="absolute inset-0 bg-white bg-opacity-20 backdrop-blur-lg rounded-lg"></div>
+                                        <p class="relative text-white font-bold">backdrop-blur-lg</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Backdrop Brightness</h4>
+                                <div class="space-y-3">
+                                    <div class="relative p-4 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg">
+                                        <div class="absolute inset-0 backdrop-brightness-50 rounded-lg"></div>
+                                        <p class="relative text-white font-bold">backdrop-brightness-50</p>
+                                    </div>
+                                    <div class="relative p-4 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg">
+                                        <div class="absolute inset-0 backdrop-brightness-150 rounded-lg"></div>
+                                        <p class="relative text-white font-bold">backdrop-brightness-150</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Backdrop Contrast</h4>
+                                <div class="space-y-3">
+                                    <div class="relative p-4 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-lg">
+                                        <div class="absolute inset-0 backdrop-contrast-75 rounded-lg"></div>
+                                        <p class="relative text-white font-bold">backdrop-contrast-75</p>
+                                    </div>
+                                    <div class="relative p-4 bg-gradient-to-r from-pink-500 to-rose-600 rounded-lg">
+                                        <div class="absolute inset-0 backdrop-contrast-125 rounded-lg"></div>
+                                        <p class="relative text-white font-bold">backdrop-contrast-125</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container Tab -->
+        <div id="tab-container" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            📦 Container Queries
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Responsive design based on container size
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Container Sizes</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                                        <p class="text-blue-900 dark:text-blue-100 font-semibold">@container/inline-size:sm</p>
+                                        <p class="text-sm text-blue-700 dark:text-blue-300">Container width > 640px</p>
+                                    </div>
+                                    <div class="p-4 bg-green-100 dark:bg-green-900 rounded-lg">
+                                        <p class="text-green-900 dark:text-green-100 font-semibold">@container/inline-size:md</p>
+                                        <p class="text-sm text-green-700 dark:text-green-300">Container width > 768px</p>
+                                    </div>
+                                    <div class="p-4 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                                        <p class="text-purple-900 dark:text-purple-100 font-semibold">@container/inline-size:lg</p>
+                                        <p class="text-sm text-purple-700 dark:text-purple-300">Container width > 1024px</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Aspect Ratio Queries</h4>
+                                <div class="space-y-3">
+                                    <div class="p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                                        <p class="text-yellow-900 dark:text-yellow-100 font-semibold">@container/aspect-ratio:square</p>
+                                        <p class="text-sm text-yellow-700 dark:text-yellow-300">1:1 aspect ratio</p>
+                                    </div>
+                                    <div class="p-4 bg-red-100 dark:bg-red-900 rounded-lg">
+                                        <p class="text-red-900 dark:text-red-100 font-semibold">@container/aspect-ratio:widescreen</p>
+                                        <p class="text-sm text-red-700 dark:text-red-300">16:9 aspect ratio</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid Tab -->
+        <div id="tab-grid" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            🔲 CSS Grid Subgrid
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Advanced grid layouts with subgrid support
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Subgrid Columns</h4>
+                                <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <p class="text-gray-900 dark:text-gray-100 font-semibold">grid-cols-subgrid</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Inherits parent grid columns</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Subgrid Rows</h4>
+                                <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <p class="text-gray-900 dark:text-gray-100 font-semibold">grid-rows-subgrid</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Inherits parent grid rows</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logical Tab -->
+        <div id="tab-logical" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            🔄 Logical Properties
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Direction-aware properties for internationalization
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Margin</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">ms-4</code> - margin-inline-start
+                                    </div>
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">me-4</code> - margin-inline-end
+                                    </div>
+                                    <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">
+                                        <code class="text-sm">mt-4</code> - margin-block-start
+                                    </div>
+                                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">
+                                        <code class="text-sm">mb-4</code> - margin-block-end
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Padding</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">ps-4</code> - padding-inline-start
+                                    </div>
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">pe-4</code> - padding-inline-end
+                                    </div>
+                                    <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">
+                                        <code class="text-sm">pt-4</code> - padding-block-start
+                                    </div>
+                                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">
+                                        <code class="text-sm">pb-4</code> - padding-block-end
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Border</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">border-s-4</code> - border-inline-start
+                                    </div>
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">border-e-4</code> - border-inline-end
+                                    </div>
+                                    <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">
+                                        <code class="text-sm">border-t-4</code> - border-block-start
+                                    </div>
+                                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">
+                                        <code class="text-sm">border-b-4</code> - border-block-end
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plugins Tab -->
+        <div id="tab-plugins" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            🔌 Advanced Plugin System
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Extensible plugin architecture for custom functionality
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Plugin Types</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">plugin-type-utility</code>
+                                    </div>
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">plugin-type-component</code>
+                                    </div>
+                                    <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">
+                                        <code class="text-sm">plugin-type-base</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Plugin Priority</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-red-100 dark:bg-red-900 rounded">
+                                        <code class="text-sm">plugin-priority-high</code>
+                                    </div>
+                                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">
+                                        <code class="text-sm">plugin-priority-medium</code>
+                                    </div>
+                                    <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded">
+                                        <code class="text-sm">plugin-priority-low</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Plugin Lifecycle</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-teal-100 dark:bg-teal-900 rounded">
+                                        <code class="text-sm">plugin-lifecycle-init</code>
+                                    </div>
+                                    <div class="p-2 bg-orange-100 dark:bg-orange-900 rounded">
+                                        <code class="text-sm">plugin-lifecycle-execute</code>
+                                    </div>
+                                    <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded">
+                                        <code class="text-sm">plugin-lifecycle-cleanup</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Validation Tab -->
+        <div id="tab-validation" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            ✅ Enhanced Validation
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Comprehensive validation system for better developer experience
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Validation Rules</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">validation-required</code>
+                                    </div>
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">validation-pattern-email</code>
+                                    </div>
+                                    <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">
+                                        <code class="text-sm">validation-length-5-10</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Validation Severity</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-red-100 dark:bg-red-900 rounded">
+                                        <code class="text-sm">validation-error</code>
+                                    </div>
+                                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">
+                                        <code class="text-sm">validation-warning</code>
+                                    </div>
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">validation-info</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Validation Modes</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded">
+                                        <code class="text-sm">validation-strict</code>
+                                    </div>
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">validation-lenient</code>
+                                    </div>
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">validation-auto</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nesting Tab -->
+        <div id="tab-nesting" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            🪆 CSS Nesting
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Modern CSS nesting support with Tailwind-RS
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Nesting Selectors</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">nest-direct-child</code>
+                                    </div>
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">nest-adjacent-sibling</code>
+                                    </div>
+                                    <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">
+                                        <code class="text-sm">nest-general-sibling</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Media Queries</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">
+                                        <code class="text-sm">nest-sm</code>
+                                    </div>
+                                    <div class="p-2 bg-red-100 dark:bg-red-900 rounded">
+                                        <code class="text-sm">nest-md</code>
+                                    </div>
+                                    <div class="p-2 bg-teal-100 dark:bg-teal-900 rounded">
+                                        <code class="text-sm">nest-lg</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Tab -->
+        <div id="tab-performance" class="tab-content hidden">
+            <div class="space-y-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            ⚡ Performance Optimization
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            Advanced optimization features for better performance
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Tree Shaking</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-green-100 dark:bg-green-900 rounded">
+                                        <code class="text-sm">class-analyzer</code>
+                                    </div>
+                                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded">
+                                        <code class="text-sm">css-purger</code>
+                                    </div>
+                                    <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded">
+                                        <code class="text-sm">bundle-analyzer</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Optimization</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-yellow-100 dark:bg-yellow-900 rounded">
+                                        <code class="text-sm">dead-code-elimination</code>
+                                    </div>
+                                    <div class="p-2 bg-red-100 dark:bg-red-900 rounded">
+                                        <code class="text-sm">css-minification</code>
+                                    </div>
+                                    <div class="p-2 bg-teal-100 dark:bg-teal-900 rounded">
+                                        <code class="text-sm">bundle-optimization</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900 dark:text-gray-100">Metrics</h4>
+                                <div class="space-y-2">
+                                    <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded">
+                                        <code class="text-sm">performance-metrics</code>
+                                    </div>
+                                    <div class="p-2 bg-indigo-100 dark:bg-indigo-900 rounded">
+                                        <code class="text-sm">optimization-result</code>
+                                    </div>
+                                    <div class="p-2 bg-pink-100 dark:bg-pink-900 rounded">
+                                        <code class="text-sm">bundle-stats</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-600 dark:text-gray-300">
+                Built with ❤️ using Tailwind-RS and WebAssembly
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                Rust-native Tailwind CSS implementation with type safety and performance
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const toggleTheme = document.getElementById('toggle-theme');
+        const html = document.documentElement;
+        
+        toggleTheme.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            toggleTheme.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        });
+
+        // Navigation tabs
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+                
+                // Update active tab
+                navTabs.forEach(t => {
+                    t.classList.remove('active', 'text-blue-600', 'dark:text-blue-400', 'border-b-2', 'border-blue-600', 'dark:border-blue-400');
+                    t.classList.add('text-gray-600', 'dark:text-gray-300');
+                });
+                
+                tab.classList.add('active', 'text-blue-600', 'dark:text-blue-400', 'border-b-2', 'border-blue-600', 'dark:border-blue-400');
+                tab.classList.remove('text-gray-600', 'dark:text-gray-300');
+                
+                // Show target content
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                document.getElementById(`tab-${targetTab}`).classList.remove('hidden');
+            });
+        });
+
+        // Text shadow input handler
+        const textShadowInput = document.getElementById('text-shadow-input');
+        const textShadowPreview = document.getElementById('text-shadow-preview');
+        
+        if (textShadowInput && textShadowPreview) {
+            textShadowInput.addEventListener('input', (e) => {
+                const classes = e.target.value;
+                textShadowPreview.className = `mt-3 p-4 bg-white dark:bg-gray-800 rounded-lg border ${classes}`;
+            });
+        }
+    </script>
+</body>
+</html>

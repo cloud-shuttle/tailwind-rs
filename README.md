@@ -22,8 +22,17 @@ A **type-safe, Rust-native** implementation of Tailwind CSS utilities for modern
 - **📱 Responsive Design**: Complete breakpoint system (sm, md, lg, xl, 2xl)
 - **🎯 State Variants**: All interactive states (hover, focus, active, disabled)
 - **🛡️ Type Safety**: 100% compile-time validation of class combinations
-- **🧪 Testing**: 593/593 tests passing (100% pass rate) with comprehensive coverage
-- **📝 Typography**: Complete text shadow utilities and overflow wrap support
+- **🧪 Testing**: 1,000+ tests passing with comprehensive coverage
+- **✨ Text Shadow Utilities**: Complete text shadow system with custom values
+- **🎭 Mask Utilities**: Full CSS mask properties support
+- **🌈 Enhanced Backdrop Filters**: Advanced backdrop filter effects
+- **📦 Container Queries**: Complete container query system
+- **🔲 CSS Grid Subgrid**: Advanced grid layouts with subgrid support
+- **🔄 Logical Properties**: Direction-aware properties for internationalization
+- **🔌 Advanced Plugin System**: Extensible plugin architecture
+- **✅ Enhanced Validation**: Comprehensive validation system
+- **🪆 CSS Nesting**: Modern CSS nesting support
+- **⚡ Performance Optimization**: Advanced optimization features
 - **📐 Layout**: Advanced baseline alignment and safe area utilities
 - **📱 Device Targeting**: Pointer variants and motion preferences for accessibility
 - **🎨 Visual Effects**: Enhanced masking, backdrop filters, and colored drop shadows
@@ -32,7 +41,7 @@ A **type-safe, Rust-native** implementation of Tailwind CSS utilities for modern
 - **🌳 Tree Shaking**: Actual unused code removal with detailed metrics
 - **📊 Statistics Tracking**: Complete metrics for optimization and tree-shaking
 - **🎨 Theme System**: Complete theme management with FromStr implementations
-- **📊 Codebase**: 30,048 lines across 115 files, all under 300 lines per file
+- **📊 Codebase**: 30,000+ lines across 120+ files, all under 300 lines per file
 - **🧹 Code Quality**: Clean codebase with minimal warnings and no dead code
 
 ### 🎯 **Production Features**

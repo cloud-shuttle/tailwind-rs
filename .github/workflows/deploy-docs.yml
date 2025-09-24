@@ -40,7 +40,10 @@ jobs:
         
         # Copy demo files from WASM crate
         cp crates/tailwind-rs-wasm/*.html docs-site/
-        cp -r crates/tailwind-rs-wasm/pkg docs-site/
+        # Copy pkg directory if it exists (WASM files)
+        if [ -d "crates/tailwind-rs-wasm/pkg" ]; then
+            cp -r crates/tailwind-rs-wasm/pkg docs-site/
+        fi
         
         # Create a unified index.html that includes both demos and docs
         echo "Building unified site with demos and documentation..."

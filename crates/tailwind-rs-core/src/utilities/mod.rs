@@ -31,6 +31,7 @@ pub mod device_variants;
 pub mod css_nesting;
 pub mod advanced_plugin_system;
 pub mod enhanced_validation;
+pub mod advanced_performance_optimization;
 
 // Re-export all utility traits for easy access
 pub use spacing::*;
@@ -61,3 +62,4 @@ pub use device_variants::*;
 pub use css_nesting::*;
 pub use advanced_plugin_system::*;
 pub use enhanced_validation::*;
+pub use advanced_performance_optimization::*;

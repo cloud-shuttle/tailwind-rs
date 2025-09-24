@@ -1,7 +1,6 @@
 use tailwind_rs_core::utilities::advanced_plugin_system::*;
 use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
-use std::collections::HashMap;
 
 #[cfg(test)]
 mod advanced_plugin_system_baseline_tests {

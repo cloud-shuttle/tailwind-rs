@@ -34,7 +34,8 @@ jobs:
         # Create a unified site structure
         mkdir -p docs-site
         
-        # Copy all documentation files to docs/ subdirectory
+        # Create docs subdirectory and copy all documentation files
+        mkdir -p docs-site/docs
         cp -r docs/* docs-site/docs/
         
         # Copy demo files from WASM crate

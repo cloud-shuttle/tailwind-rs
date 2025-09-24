@@ -22,6 +22,9 @@ jobs:
         toolchain: ${{ matrix.rust }}
         components: rustfmt, clippy
     
+    - name: Build workspace
+      run: cargo build --workspace
+      
     - name: Run unit tests
       run: cargo test --workspace --verbose
     

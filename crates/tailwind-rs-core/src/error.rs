@@ -39,6 +39,10 @@ pub enum TailwindError {
     /// Generic error wrapper
     #[error("Generic error: {0}")]
     Generic(#[from] anyhow::Error),
+
+    /// Regex compilation errors
+    #[error("Regex error: {0}")]
+    Regex(#[from] regex::Error),
 }
 
 impl TailwindError {

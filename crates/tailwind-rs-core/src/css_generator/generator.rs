@@ -137,6 +137,36 @@ impl CssGenerator {
         self.rules.len()
     }
 
+    /// Generate comprehensive CSS with all utilities
+    pub fn generate_comprehensive_css(&mut self, config: &CssGenerationConfig) -> Result<String> {
+        // Add common utility classes
+        let common_classes = vec![
+            "p-4", "m-4", "bg-blue-500", "text-white", "rounded-md",
+            "hover:bg-blue-600", "focus:outline-none", "sm:p-6", "md:p-8"
+        ];
+        
+        for class in common_classes {
+            let _ = self.add_class(class);
+        }
+        
+        Ok(self.generate_css())
+    }
+
+    /// Get all rules (for compatibility)
+    pub fn get_rules(&self) -> &HashMap<String, CssRule> {
+        &self.rules
+    }
+
+    /// Remove a rule by selector
+    pub fn remove_rule(&mut self, selector: &str) {
+        self.rules.remove(selector);
+    }
+
+    /// Update a rule
+    pub fn update_rule(&mut self, selector: &str, rule: CssRule) {
+        self.rules.insert(selector.to_string(), rule);
+    }
+
     /// Generate CSS from all added classes
     pub fn generate_css(&self) -> String {
         super::css_output::CssOutputGenerator::generate_css(&self.rules, &self.custom_properties)

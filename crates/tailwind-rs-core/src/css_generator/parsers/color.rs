@@ -3,7 +3,7 @@
 //! This module handles parsing of color-related utilities.
 
 use super::{UtilityParser, ParserCategory};
-use crate::css_generator::core::CssProperty;
+use crate::css_generator::types::CssProperty;
 
 /// Parser for color utilities
 #[derive(Debug, Clone)]

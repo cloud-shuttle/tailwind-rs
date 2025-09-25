@@ -1,7 +1,7 @@
 //! Flexbox Utilities Parser
 
 use super::{UtilityParser, ParserCategory};
-use crate::css_generator::core::CssProperty;
+use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct FlexboxParser;

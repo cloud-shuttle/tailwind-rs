@@ -27,7 +27,7 @@ pub use animations::AnimationParser;
 /// Common parser interface for all utility parsers
 pub trait UtilityParser {
     /// Parse a class and return CSS properties
-    fn parse_class(&self, class: &str) -> Option<Vec<crate::css_generator::core::CssProperty>>;
+    fn parse_class(&self, class: &str) -> Option<Vec<crate::css_generator::types::CssProperty>>;
     
     /// Get supported patterns for this parser
     fn get_supported_patterns(&self) -> Vec<&'static str>;

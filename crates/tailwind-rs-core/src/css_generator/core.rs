@@ -5,31 +5,12 @@
 
 use crate::error::{Result, TailwindError};
 use crate::responsive::Breakpoint;
+use crate::css_generator::types::{CssProperty, CssRule, CssGenerationConfig};
 use std::collections::HashMap;
 
-/// Represents a CSS rule with selector and properties
-#[derive(Debug, Clone, PartialEq)]
-pub struct CssRule {
-    /// CSS selector (e.g., ".p-4", ".md:bg-blue-500")
-    pub selector: String,
-    /// CSS properties for this rule
-    pub properties: Vec<CssProperty>,
-    /// Media query for responsive rules
-    pub media_query: Option<String>,
-    /// CSS specificity score
-    pub specificity: u32,
-}
+// CssRule is now defined in types.rs
 
-/// Represents a CSS property
-#[derive(Debug, Clone, PartialEq)]
-pub struct CssProperty {
-    /// Property name (e.g., "padding", "background-color")
-    pub name: String,
-    /// Property value (e.g., "1rem", "#3b82f6")
-    pub value: String,
-    /// Whether the property is marked as !important
-    pub important: bool,
-}
+// CssProperty is now defined in types.rs
 
 /// CSS generator that converts Tailwind classes to CSS rules
 #[derive(Debug, Clone)]
@@ -106,7 +87,8 @@ impl CssGenerator {
         
         // Generate CSS for each media query
         for (media_query, rules) in media_queries {
-            if let Some(query) = media_query {
+            let has_media_query = media_query.is_some();
+            if let Some(query) = &media_query {
                 css.push_str(&format!("@media {} {{\n", query));
             }
             
@@ -123,7 +105,7 @@ impl CssGenerator {
                 css.push_str("  }\n");
             }
             
-            if media_query.is_some() {
+            if has_media_query {
                 css.push_str("}\n\n");
             }
         }

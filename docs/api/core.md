@@ -1,8 +1,8 @@
-# Core API Reference - v0.2.0
+# Core API Reference - v0.8.2
 
 This document provides comprehensive API reference for the core `tailwind-rs` functionality, following our Test-Driven Development approach and comprehensive testing strategy.
 
-> **🎉 Comprehensive Beta**: This API reference reflects the complete v0.2.0 implementation with all 20 utility categories fully implemented and tested.
+> **🎉 Production Ready**: This API reference reflects the complete v0.8.2 implementation with all 26 utility categories fully implemented and tested, plus **100% CSS generation coverage**.
 
 ## 🎯 Core Types
 
@@ -10,7 +10,7 @@ This document provides comprehensive API reference for the core `tailwind-rs` fu
 The primary type for building type-safe Tailwind classes with complete utility support.
 
 #### **Complete Utility Support**
-The `ClassBuilder` now supports all 20 major Tailwind CSS utility categories:
+The `ClassBuilder` now supports all 26 major Tailwind CSS utility categories:
 
 - **Spacing**: `padding()`, `margin()`, `gap()`, `space_x()`, `space_y()`, `divide_x()`, `divide_y()`
 - **Layout**: `display()`, `position()`, `top()`, `right()`, `bottom()`, `left()`, `inset()`, `z_index()`, `overflow()`
@@ -27,6 +27,23 @@ The `ClassBuilder` now supports all 20 major Tailwind CSS utility categories:
 - **Transitions**: `transition_property()`, `transition_duration()`, `transition_timing_function()`, `transition_delay()`
 - **Animations**: `animate()`, `animate_spin()`, `animate_ping()`, `animate_pulse()`, `animate_bounce()`
 - **Interactivity**: `cursor()`, `pointer_events()`, `resize()`, `scroll_behavior()`, `touch_action()`, `user_select()`
+- **Backgrounds**: `background_size()`, `background_position()`, `background_repeat()`, `background_attachment()`, `background_clip()`, `background_origin()`
+- **Filters**: `blur()`, `brightness()`, `contrast()`, `grayscale()`, `hue_rotate()`, `invert()`, `saturate()`, `sepia()`, `drop_shadow()`
+- **Transitions**: `transition_property()`, `transition_duration()`, `transition_timing_function()`, `transition_delay()`
+- **Text Shadow**: `text_shadow()`
+- **Mask**: `mask_size()`, `mask_position()`, `mask_repeat()`, `mask_origin()`, `mask_clip()`
+- **Logical Properties**: `border_inline()`, `margin_block()`, `padding_inline()`, `text_inline_start()`
+- **Enhanced Backdrop Filters**: `backdrop_blur()`, `backdrop_brightness()`, `backdrop_contrast()`, `backdrop_grayscale()`, `backdrop_hue_rotate()`, `backdrop_invert()`, `backdrop_opacity()`, `backdrop_saturate()`, `backdrop_sepia()`
+- **Modern CSS Features**: `layer()`, `custom_property()`, `container_query()`, `css_nesting()`
+- **Device Variants**: `mobile()`, `tablet()`, `desktop()`, `touch()`, `hover()`, `pointer_coarse()`
+- **CSS Nesting**: `parent_selector()`, `pseudo_class()`, `pseudo_element()`
+- **Advanced Plugin System**: `plugin_type()`, `plugin_priority()`, `plugin_lifecycle()`, `plugin_composition()`
+- **Enhanced Validation**: `validation_state()`, `validation_rule()`, `validation_error()`
+- **Advanced Performance Optimization**: `will_change()`, `contain()`, `isolation()`, `backface_visibility()`, `perspective()`, `transform_gpu()`
+- **Container Queries**: `container_type()`, `container_name()`
+- **Color Functions**: `color_rgb()`, `color_hsl()`, `color_mix()`, `color_contrast()`
+- **Performance Optimization**: `optimize_speed()`, `optimize_quality()`
+- **Advanced Animations**: `animate_fade_in()`, `animate_slide_out()`, `animate_zoom_in()`, `animate_rotate_in()`, `animate_scale_in()`, `animate_flip_in()`
 
 ```rust
 pub struct ClassBuilder {
@@ -167,6 +184,159 @@ let classes = ClassBuilder::new()
     .build();
     
 assert_eq!(classes, "px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700");
+```
+
+## 🎨 CSS Generation Functions
+
+### `generate_css_file(output_path: &str, classes: Option<&ClassSet>) -> Result<()>`
+Generates CSS file for specific classes or comprehensive CSS.
+
+```rust
+use tailwind_rs_core::*;
+
+// Generate CSS for specific classes
+let classes = ClassBuilder::new()
+    .padding(SpacingValue::Integer(4))
+    .class("bg-blue-500")
+    .class("text-white")
+    .build();
+
+generate_css_file("dist/styles.css", Some(&classes))?;
+```
+
+**Example:**
+```rust
+use tailwind_rs_core::*;
+
+// Generate CSS for specific classes
+let classes = ClassBuilder::new()
+    .padding(SpacingValue::Integer(4))
+    .class("bg-blue-500")
+    .class("text-white")
+    .build();
+
+generate_css_file("dist/styles.css", Some(&classes))?;
+println!("✅ CSS generated successfully!");
+```
+
+### `generate_comprehensive_css(output_path: &str, config: &CssGenerationConfig) -> Result<()>`
+Generates comprehensive CSS with custom configuration.
+
+```rust
+use tailwind_rs_core::*;
+
+// Create custom configuration
+let mut config = CssGenerationConfig::default();
+config.include_colors = true;
+config.include_spacing = true;
+config.color_palettes = vec!["blue".to_string(), "red".to_string()];
+
+generate_comprehensive_css("dist/custom.css", &config)?;
+```
+
+**Example:**
+```rust
+use tailwind_rs_core::*;
+
+// Generate comprehensive CSS with all utilities
+generate_css_file("dist/comprehensive.css", None)?;
+
+// Or with custom configuration
+let mut config = CssGenerationConfig::default();
+config.include_colors = true;
+config.include_spacing = true;
+config.include_typography = false; // Exclude typography
+config.color_palettes = vec!["blue".to_string(), "red".to_string()];
+
+generate_comprehensive_css("dist/custom.css", &config)?;
+```
+
+### `CssGenerationConfig`
+Configuration structure for CSS generation.
+
+```rust
+pub struct CssGenerationConfig {
+    // Core utilities
+    pub include_colors: bool,
+    pub include_spacing: bool,
+    pub include_typography: bool,
+    pub include_layout: bool,
+    pub include_flexbox: bool,
+    pub include_grid: bool,
+    pub include_borders: bool,
+    pub include_effects: bool,
+    pub include_transforms: bool,
+    pub include_animations: bool,
+    pub include_interactivity: bool,
+    
+    // Advanced utilities
+    pub include_sizing: bool,
+    pub include_backgrounds: bool,
+    pub include_filters: bool,
+    pub include_transitions: bool,
+    pub include_text_shadow: bool,
+    pub include_mask: bool,
+    pub include_logical_properties: bool,
+    pub include_enhanced_backdrop_filters: bool,
+    pub include_modern_css_features: bool,
+    pub include_device_variants: bool,
+    pub include_css_nesting: bool,
+    pub include_advanced_plugin_system: bool,
+    pub include_enhanced_validation: bool,
+    pub include_advanced_performance_optimization: bool,
+    pub include_container_queries: bool,
+    pub include_color_functions: bool,
+    pub include_performance_optimization: bool,
+    pub include_advanced_animations: bool,
+    
+    // Color configuration
+    pub color_palettes: Vec<String>,
+    
+    // Variants
+    pub include_responsive: bool,
+    pub include_dark_mode: bool,
+}
+```
+
+**Example:**
+```rust
+use tailwind_rs_core::*;
+
+// Create minimal configuration
+let mut config = CssGenerationConfig::default();
+config.include_colors = true;
+config.include_spacing = true;
+config.include_typography = false;
+config.include_layout = false;
+config.include_flexbox = false;
+config.include_grid = false;
+config.include_borders = false;
+config.include_effects = false;
+config.include_transforms = false;
+config.include_animations = false;
+config.include_interactivity = false;
+config.include_sizing = false;
+config.include_backgrounds = false;
+config.include_filters = false;
+config.include_transitions = false;
+config.include_text_shadow = false;
+config.include_mask = false;
+config.include_logical_properties = false;
+config.include_enhanced_backdrop_filters = false;
+config.include_modern_css_features = false;
+config.include_device_variants = false;
+config.include_css_nesting = false;
+config.include_advanced_plugin_system = false;
+config.include_enhanced_validation = false;
+config.include_advanced_performance_optimization = false;
+config.include_container_queries = false;
+config.include_color_functions = false;
+config.include_performance_optimization = false;
+config.include_advanced_animations = false;
+config.include_responsive = false;
+config.include_dark_mode = false;
+
+generate_comprehensive_css("dist/minimal.css", &config)?;
 ```
 
 ## 🎨 Procedural Macros

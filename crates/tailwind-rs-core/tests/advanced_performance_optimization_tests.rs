@@ -154,11 +154,21 @@ mod advanced_performance_optimization_tests {
         let mut splitter = BundleSplitter::new();
         splitter.strategies = vec![SplitStrategy::SizeBased];
         
-        let large_css = ".test { color: red; } ".repeat(1000); // Create a large CSS string
+        // Create a large CSS string that exceeds the 50KB threshold
+        // Use realistic CSS with newlines for better testing
+        let css_rule = ".test { color: red; background: blue; padding: 10px; margin: 5px; border: 1px solid black; }\n";
+        let large_css = css_rule.repeat(2000); // 2000 rules should exceed 50KB
         let chunks = splitter.split_bundle(&large_css);
         
+        // Debug output
+        println!("CSS size: {} bytes", large_css.len());
+        println!("Number of chunks: {}", chunks.len());
+        for (key, value) in &chunks {
+            println!("Chunk {}: {} bytes", key, value.len());
+        }
+        
         assert!(!chunks.is_empty());
-        assert!(chunks.len() > 1); // Should be split into multiple chunks
+        assert!(chunks.len() > 1, "Expected multiple chunks, got {} chunks", chunks.len()); // Should be split into multiple chunks
     }
 
     #[test]

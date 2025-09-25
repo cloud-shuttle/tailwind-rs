@@ -677,12 +677,25 @@ impl BundleSplitter {
         let mut chunks = HashMap::new();
         let max_chunk_size = 50000; // 50KB chunks
         
+        // If the bundle is smaller than the max chunk size, return it as a single chunk
+        if bundle.len() <= max_chunk_size {
+            chunks.insert("chunk_0".to_string(), bundle.to_string());
+            return chunks;
+        }
+        
         let lines: Vec<&str> = bundle.lines().collect();
+        
+        // If there are no lines (single line), split by character count
+        if lines.len() <= 1 {
+            return self.split_by_character_count(bundle, max_chunk_size);
+        }
+        
         let mut current_chunk = String::new();
         let mut chunk_count = 0;
 
         for line in lines {
-            if current_chunk.len() + line.len() > max_chunk_size && !current_chunk.is_empty() {
+            // Check if adding this line would exceed the chunk size
+            if current_chunk.len() + line.len() + 1 > max_chunk_size && !current_chunk.is_empty() {
                 chunks.insert(format!("chunk_{}", chunk_count), current_chunk);
                 current_chunk = String::new();
                 chunk_count += 1;
@@ -690,10 +703,33 @@ impl BundleSplitter {
             current_chunk.push_str(&format!("{}\n", line));
         }
 
+        // Add the final chunk if it's not empty
         if !current_chunk.is_empty() {
             chunks.insert(format!("chunk_{}", chunk_count), current_chunk);
         }
 
+        // Ensure we have at least one chunk
+        if chunks.is_empty() {
+            chunks.insert("chunk_0".to_string(), bundle.to_string());
+        }
+
+        chunks
+    }
+    
+    /// Split bundle by character count (for single-line content)
+    fn split_by_character_count(&self, bundle: &str, max_chunk_size: usize) -> HashMap<String, String> {
+        let mut chunks = HashMap::new();
+        let mut chunk_count = 0;
+        let mut start = 0;
+        
+        while start < bundle.len() {
+            let end = std::cmp::min(start + max_chunk_size, bundle.len());
+            let chunk = &bundle[start..end];
+            chunks.insert(format!("chunk_{}", chunk_count), chunk.to_string());
+            start = end;
+            chunk_count += 1;
+        }
+        
         chunks
     }
 

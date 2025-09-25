@@ -83,7 +83,7 @@ pub use class_scanner::{ClassScanner, ScanConfig, ScanResults, ScanStats};
 pub use color::Color;
 pub use config::{BuildConfig, TailwindConfig};
 pub use config::parser::ConfigParser;
-pub use css_generator::{CssGenerator, CssProperty, CssRule};
+pub use css_generator::{CssGenerator, CssProperty, CssRule, CssGenerationConfig};
 pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};
 pub use dark_mode::{DarkModeVariant, DarkModeVariantError, DarkModeVariantUtilities};
@@ -103,7 +103,133 @@ pub use theme_new::{
 };
 pub use tree_shaker::{TreeShaker, TreeShakeConfig, TreeShakeResults, TreeShakeStats};
 pub use utilities::*;
-pub use validation::{ClassValidator, ErrorReporter, ValidationError, ValidationRules};
+pub use validation::*;
+
+/// Generate a CSS file with all necessary Tailwind classes
+/// 
+/// This function provides the seamless integration between ClassBuilder and CSS generation
+/// that was requested in the GitHub issue. It automatically generates a comprehensive
+/// CSS file with all the classes that might be used in your application.
+/// 
+/// # Arguments
+/// 
+/// * `output_path` - The path where the CSS file should be written
+/// * `classes` - Optional ClassSet containing classes to include in the CSS
+/// 
+/// # Examples
+/// 
+/// ```rust
+/// use tailwind_rs_core::*;
+/// 
+/// fn main() -> Result<()> {
+///     // Generate CSS with specific classes
+///     let classes = ClassBuilder::new()
+///         .padding(SpacingValue::Integer(4))
+///         .class("bg-blue-500")
+///         .class("text-white")
+///         .build();
+///     
+///     generate_css_file("styles.css", Some(&classes))?;
+///     
+///     // Generate comprehensive CSS with all utilities
+///     generate_css_file("comprehensive.css", None)?;
+///     
+///     Ok(())
+/// }
+/// ```
+pub fn generate_css_file(output_path: &str, classes: Option<&ClassSet>) -> Result<()> {
+    let mut generator = CssGenerator::new();
+    
+    // If specific classes are provided, add them to the generator
+    if let Some(class_set) = classes {
+        // Add base classes
+        for class in &class_set.classes {
+            generator.add_class(class)?;
+        }
+        
+        // Add responsive classes
+        for (breakpoint, responsive_classes) in &class_set.responsive {
+            for class in responsive_classes {
+                generator.add_responsive_class(*breakpoint, class)?;
+            }
+        }
+        
+        // Add conditional classes
+        for (_condition, conditional_classes) in &class_set.conditional {
+            for class in conditional_classes {
+                // For now, treat conditional classes as regular classes
+                // In the future, this could be enhanced to support proper conditional CSS
+                generator.add_class(class)?;
+            }
+        }
+    } else {
+        // Generate comprehensive CSS with all utilities
+        let config = CssGenerationConfig::default();
+        generator.generate_comprehensive_css(&config)?;
+    }
+    
+    // Generate the CSS
+    let css = generator.generate_css();
+    
+    // Ensure the output directory exists
+    if let Some(parent) = std::path::Path::new(output_path).parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+    
+    // Write the CSS file
+    std::fs::write(output_path, css)?;
+    
+    println!("✅ CSS generated successfully at {}", output_path);
+    println!("📊 Generated {} CSS rules", generator.rule_count());
+    
+    Ok(())
+}
+
+/// Generate comprehensive CSS with all Tailwind utilities
+/// 
+/// This function generates a complete CSS file with all available Tailwind utilities,
+/// similar to the full Tailwind CSS framework but generated in Rust.
+/// 
+/// # Arguments
+/// 
+/// * `output_path` - The path where the CSS file should be written
+/// * `config` - Configuration for what utilities to include
+/// 
+/// # Examples
+/// 
+/// ```rust
+/// use tailwind_rs_core::*;
+/// 
+/// fn main() -> Result<()> {
+///     let mut config = CssGenerationConfig::default();
+///     config.include_colors = true;
+///     config.include_spacing = true;
+///     config.color_palettes = vec!["blue".to_string(), "gray".to_string()];
+///     
+///     generate_comprehensive_css("styles.css", &config)?;
+///     
+///     Ok(())
+/// }
+/// ```
+pub fn generate_comprehensive_css(output_path: &str, config: &CssGenerationConfig) -> Result<()> {
+    let mut generator = CssGenerator::new();
+    
+    // Generate comprehensive CSS
+    let css = generator.generate_comprehensive_css(config)?;
+    
+    // Ensure the output directory exists
+    if let Some(parent) = std::path::Path::new(output_path).parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+    
+    // Write the CSS file
+    std::fs::write(output_path, css)?;
+    
+    println!("✅ Comprehensive CSS generated successfully at {}", output_path);
+    println!("📊 Generated {} CSS rules", generator.rule_count());
+    
+    Ok(())
+}
 
 #[cfg(test)]
 mod tests {

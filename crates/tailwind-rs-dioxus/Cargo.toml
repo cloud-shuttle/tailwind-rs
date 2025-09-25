@@ -14,8 +14,8 @@ rust-version = "1.89.0"
 
 [dependencies]
 # Core dependencies
-tailwind-rs-core = { path = "../tailwind-rs-core" }
-tailwind-rs-macros = { path = "../tailwind-rs-macros" }
+tailwind-rs-core = "0.12.1"
+tailwind-rs-macros = "0.12.1"
 
 # Dioxus dependencies
 dioxus = { workspace = true }

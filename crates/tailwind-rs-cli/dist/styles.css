@@ -1,12 +1,12 @@
-.bg-blue-500 {
-  background-color: #3b82f6;
+.rounded-md {
+  border-radius: 0.375rem;
 }
 .text-white {
   color: #ffffff;
 }
-.rounded-md {
-  border-radius: 0.375rem;
-}
 .p-4 {
   padding: 1rem;
+}
+.bg-blue-500 {
+  background-color: #3b82f6;
 }

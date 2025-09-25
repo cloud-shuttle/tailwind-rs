@@ -20,7 +20,7 @@ path = "src/lib.rs"
 proc-macro2 = "1.0"
 quote = "1.0"
 syn = { version = "2.0", features = ["full"] }
-tailwind-rs-core = { path = "../tailwind-rs-core" }
+tailwind-rs-core = "0.12.1"
 
 [dev-dependencies]
 # tailwind-rs-testing = "0.8.1"  # Will be added after publishing

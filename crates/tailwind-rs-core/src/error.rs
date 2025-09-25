@@ -186,3 +186,10 @@ mod tests {
         assert!(matches!(anyhow_tailwind_error, TailwindError::Generic(_)));
     }
 }
+
+#[cfg(feature = "postcss")]
+impl From<tailwind_rs_postcss::PostCSSError> for TailwindError {
+    fn from(err: tailwind_rs_postcss::PostCSSError) -> Self {
+        TailwindError::Generic(anyhow::anyhow!(err))
+    }
+}

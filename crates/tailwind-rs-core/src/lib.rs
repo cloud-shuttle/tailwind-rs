@@ -53,6 +53,13 @@ pub mod error;
 pub mod performance;
 pub mod plugin_system;
 pub mod responsive;
+#[cfg(feature = "postcss")]
+pub mod postcss_integration;
+pub mod enhanced_variants;
+
+#[cfg(feature = "postcss")]
+#[cfg(test)]
+mod postcss_integration_test;
 pub mod theme;
 pub mod theme_new;
 pub mod tree_shaker;
@@ -104,6 +111,13 @@ pub use theme_new::{
 pub use tree_shaker::{TreeShaker, TreeShakeConfig, TreeShakeResults, TreeShakeStats};
 pub use utilities::*;
 pub use validation::*;
+
+#[cfg(feature = "postcss")]
+pub use postcss_integration::{EnhancedCssGenerator, EnhancedCssResult, PostCSSIntegrationConfig};
+pub use enhanced_variants::{
+    EnhancedVariantParser, VariantDefinition, VariantType, CustomVariant as EnhancedCustomVariant,
+    VariantCombination, ParsedVariant, VariantParseResult, VariantMetadata
+};
 
 /// Generate a CSS file with all necessary Tailwind classes
 /// 

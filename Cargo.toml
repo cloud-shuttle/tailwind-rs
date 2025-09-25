@@ -3,6 +3,8 @@ members = [
     "crates/tailwind-rs-core",
     "crates/tailwind-rs-macros", 
     "crates/tailwind-rs-testing",
+    "crates/tailwind-rs-postcss",
+    "crates/tailwind-rs-scanner",
     "crates/tailwind-rs-leptos",
     "crates/tailwind-rs-yew",
     "crates/tailwind-rs-dioxus",
@@ -13,7 +15,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.9.1"
+version = "0.10.0"
 edition = "2021"
 authors = ["tailwind-rs contributors"]
 license = "MIT"
@@ -28,6 +30,8 @@ categories = ["web-programming", "development-tools"]
 tailwind-rs-core = { path = "crates/tailwind-rs-core" }
 tailwind-rs-macros = { path = "crates/tailwind-rs-macros" }
 tailwind-rs-testing = { path = "crates/tailwind-rs-testing" }
+tailwind-rs-postcss = { path = "crates/tailwind-rs-postcss" }
+tailwind-rs-scanner = { path = "crates/tailwind-rs-scanner" }
 
 # Framework integrations
 tailwind-rs-leptos = { path = "crates/tailwind-rs-leptos" }

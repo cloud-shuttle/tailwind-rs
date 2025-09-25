@@ -1,0 +1,57 @@
+[package]
+name = "tailwind-rs-postcss"
+version.workspace = true
+edition = "2021"
+authors = ["Tailwind-RS Contributors"]
+description = "PostCSS integration for Tailwind-RS Core"
+license = "MIT"
+repository = "https://github.com/leptos-rs/tailwind-rs"
+keywords = ["tailwind", "css", "postcss", "rust", "web"]
+categories = ["web-programming", "development-tools"]
+
+[dependencies]
+# Core dependencies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Async runtime
+tokio = { version = "1.0", features = ["full"] }
+futures = "0.3"
+
+# JavaScript bridge (optional)
+wasm-bindgen = { version = "0.2", optional = true }
+js-sys = { version = "0.3", optional = true }
+web-sys = { version = "0.3", optional = true }
+
+# File system and glob
+glob = "0.3"
+walkdir = "2.3"
+
+# Performance
+parking_lot = "0.12"
+dashmap = "5.5"
+
+# CSS processing (placeholder dependencies)
+# css-tree = "0.1"
+# postcss = "0.1"
+
+# Development dependencies
+[dev-dependencies]
+criterion = "0.5"
+proptest = "1.0"
+tempfile = "3.0"
+
+[features]
+default = []
+js-bridge = ["wasm-bindgen", "js-sys", "web-sys"]
+wasm = ["wasm-bindgen"]
+
+[lib]
+name = "tailwind_rs_postcss"
+path = "src/lib.rs"
+
+# [[bench]]
+# name = "postcss_processing"
+# harness = false

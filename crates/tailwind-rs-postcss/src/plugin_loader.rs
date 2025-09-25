@@ -17,8 +17,14 @@ pub struct PluginConfig {
 impl PluginConfig {
     /// Check if plugin requires JavaScript execution
     pub fn requires_js(&self) -> bool {
-        // Placeholder implementation
-        false
+        // Check if plugin is a JavaScript plugin
+        match self.name.as_str() {
+            "autoprefixer" | "cssnano" | "postcss-preset-env" | "postcss-import" => true,
+            _ => {
+                // Check if it's an NPM package
+                self.name.contains('/') || self.name.starts_with('@')
+            }
+        }
     }
 }
 
@@ -56,9 +62,52 @@ impl PluginLoader {
     }
     
     /// Load a plugin
-    pub async fn load_plugin(&self, _config: &PluginConfig) -> Result<PluginResult> {
-        // Placeholder implementation
-        Ok(PluginResult::Native(NativePlugin))
+    pub async fn load_plugin(&self, config: &PluginConfig) -> Result<PluginResult> {
+        if config.requires_js() {
+            // Load JavaScript plugin
+            Ok(PluginResult::JavaScript(JSPlugin {
+                name: config.name.clone(),
+            }))
+        } else {
+            // Load native Rust plugin
+            Ok(PluginResult::Native(NativePlugin))
+        }
+    }
+    
+    /// Load multiple plugins
+    pub async fn load_plugins(&self, configs: &[PluginConfig]) -> Result<Vec<PluginResult>> {
+        let mut results = Vec::new();
+        
+        for config in configs {
+            let result = self.load_plugin(config).await?;
+            results.push(result);
+        }
+        
+        Ok(results)
+    }
+    
+    /// Validate plugin configuration
+    pub fn validate_config(&self, config: &PluginConfig) -> Result<()> {
+        if config.name.is_empty() {
+            return Err(crate::error::PostCSSError::config("Plugin name cannot be empty"));
+        }
+        
+        // Check for valid plugin names
+        if !self.is_valid_plugin_name(&config.name) {
+            return Err(crate::error::PostCSSError::config(
+                &format!("Invalid plugin name: {}", config.name)
+            ));
+        }
+        
+        Ok(())
+    }
+    
+    /// Check if plugin name is valid
+    fn is_valid_plugin_name(&self, name: &str) -> bool {
+        // Basic validation for plugin names
+        !name.is_empty() && 
+        name.len() <= 100 && 
+        name.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_' || c == '/' || c == '@')
     }
 }
 
@@ -68,7 +117,7 @@ mod tests {
 
     #[test]
     fn test_plugin_loader_creation() {
-        let loader = PluginLoader::new();
+        let _loader = PluginLoader::new();
         assert!(true); // Basic test
     }
 }

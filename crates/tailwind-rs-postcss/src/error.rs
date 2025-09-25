@@ -76,6 +76,15 @@ impl From<anyhow::Error> for PostCSSError {
     }
 }
 
+impl PostCSSError {
+    /// Create a configuration error
+    pub fn config(message: &str) -> Self {
+        PostCSSError::ConfigError {
+            message: message.to_string(),
+        }
+    }
+}
+
 /// Error context for better debugging
 #[derive(Debug, Clone)]
 pub struct ErrorContext {

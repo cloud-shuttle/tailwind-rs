@@ -251,6 +251,7 @@ mod tests {
             .dark()
             .build();
         
+        println!("Generated classes: {:?}", classes.classes);
         assert!(classes.classes.contains("light"));
         assert!(classes.classes.contains("dark"));
     }
@@ -270,6 +271,7 @@ mod tests {
         assert!(classes.classes.contains("pointer-fine"));
         assert!(classes.classes.contains("motion-reduce"));
         assert!(classes.classes.contains("motion-safe"));
+        println!("Generated classes: {:?}", classes.classes);
         assert!(classes.classes.contains("light"));
         assert!(classes.classes.contains("dark"));
     }

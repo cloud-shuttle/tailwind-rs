@@ -33,6 +33,13 @@ walkdir = "2.3"
 parking_lot = "0.12"
 dashmap = "5.5"
 
+# Regex and text processing
+regex = "1.0"
+lazy_static = "1.0"
+
+# Parallel processing
+rayon = "1.0"
+
 # CSS processing (placeholder dependencies)
 # css-tree = "0.1"
 # postcss = "0.1"

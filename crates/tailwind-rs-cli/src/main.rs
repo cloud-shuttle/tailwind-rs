@@ -67,8 +67,8 @@ mod tests {
 
     #[test]
     fn test_cli_help() {
-        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
-        cmd.arg("--help");
+        let mut cmd = Command::new("cargo");
+        cmd.args(&["run", "--bin", "tailwind-rs", "--", "--help"]);
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("Tailwind-rs CLI"));
@@ -76,8 +76,8 @@ mod tests {
 
     #[test]
     fn test_cli_version() {
-        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
-        cmd.arg("--version");
+        let mut cmd = Command::new("cargo");
+        cmd.args(&["run", "--bin", "tailwind-rs", "--", "--version"]);
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("tailwind-rs"));
@@ -85,8 +85,8 @@ mod tests {
 
     #[test]
     fn test_build_command_help() {
-        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
-        cmd.args(&["build", "--help"]);
+        let mut cmd = Command::new("cargo");
+        cmd.args(&["run", "--bin", "tailwind-rs", "--", "build", "--help"]);
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("Build Tailwind CSS"));
@@ -94,8 +94,8 @@ mod tests {
 
     #[test]
     fn test_watch_command_help() {
-        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
-        cmd.args(&["watch", "--help"]);
+        let mut cmd = Command::new("cargo");
+        cmd.args(&["run", "--bin", "tailwind-rs", "--", "watch", "--help"]);
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("Watch for changes"));
@@ -103,8 +103,8 @@ mod tests {
 
     #[test]
     fn test_optimize_command_help() {
-        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
-        cmd.args(&["optimize", "--help"]);
+        let mut cmd = Command::new("cargo");
+        cmd.args(&["run", "--bin", "tailwind-rs", "--", "optimize", "--help"]);
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("Optimize CSS output"));
@@ -112,8 +112,8 @@ mod tests {
 
     #[test]
     fn test_config_command_help() {
-        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
-        cmd.args(&["config", "--help"]);
+        let mut cmd = Command::new("cargo");
+        cmd.args(&["run", "--bin", "tailwind-rs", "--", "config", "--help"]);
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("Manage configuration"));
@@ -121,8 +121,8 @@ mod tests {
 
     #[test]
     fn test_stats_command_help() {
-        let mut cmd = Command::cargo_bin("tailwind-rs").unwrap();
-        cmd.args(&["stats", "--help"]);
+        let mut cmd = Command::new("cargo");
+        cmd.args(&["run", "--bin", "tailwind-rs", "--", "stats", "--help"]);
         cmd.assert()
             .success()
             .stdout(predicate::str::contains("Show build statistics"));

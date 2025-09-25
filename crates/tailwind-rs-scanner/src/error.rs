@@ -32,6 +32,9 @@ pub enum ScannerError {
     #[error("Tree-sitter error: {0}")]
     TreeSitterError(String),
     
+    #[error("Unsupported language: {0}")]
+    UnsupportedLanguage(String),
+    
     #[error("Generic error: {0}")]
     Generic(String),
 }

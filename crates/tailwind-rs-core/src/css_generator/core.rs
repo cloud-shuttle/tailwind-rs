@@ -180,6 +180,12 @@ impl CssGenerator {
                 "last" => selector.push_str(":last-child"),
                 "odd" => selector.push_str(":nth-child(odd)"),
                 "even" => selector.push_str(":nth-child(even)"),
+                // Device variants
+                "pointer-coarse" => selector.push_str("@media (pointer: coarse) "),
+                "pointer-fine" => selector.push_str("@media (pointer: fine) "),
+                "motion-reduce" => selector.push_str("@media (prefers-reduced-motion: reduce) "),
+                "motion-safe" => selector.push_str("@media (prefers-reduced-motion: no-preference) "),
+                "light" => selector.push_str("@media (prefers-color-scheme: light) "),
                 _ => {} // Responsive variants handled separately
             }
         }
@@ -238,6 +244,13 @@ impl CssGenerator {
             ("last:", "last"),
             ("odd:", "odd"),
             ("even:", "even"),
+            // Device variants
+            ("pointer-coarse:", "pointer-coarse"),
+            ("pointer-fine:", "pointer-fine"),
+            ("motion-reduce:", "motion-reduce"),
+            ("motion-safe:", "motion-safe"),
+            ("light:", "light"),
+            // Responsive variants
             ("sm:", "sm"),
             ("md:", "md"),
             ("lg:", "lg"),
@@ -407,7 +420,57 @@ impl CssGenerator {
     fn parse_sizing_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_background_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_filter_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_transition_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
+    fn parse_transition_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        if class.starts_with("transition-") {
+            let value = &class[11..];
+            return Some(vec![CssProperty { 
+                name: "transition-property".to_string(), 
+                value: value.to_string(), 
+                important: false 
+            }]);
+        }
+        
+        if class.starts_with("duration-") {
+            let value = &class[9..];
+            return Some(vec![CssProperty { 
+                name: "transition-duration".to_string(), 
+                value: format!("{}ms", value), 
+                important: false 
+            }]);
+        }
+        
+        if class.starts_with("ease-") {
+            let value = &class[5..];
+            return Some(vec![CssProperty { 
+                name: "transition-timing-function".to_string(), 
+                value: self.parse_ease_value(value), 
+                important: false 
+            }]);
+        }
+        
+        if class.starts_with("delay-") {
+            let value = &class[6..];
+            return Some(vec![CssProperty { 
+                name: "transition-delay".to_string(), 
+                value: format!("{}ms", value), 
+                important: false 
+            }]);
+        }
+        
+        None
+    }
+    
+    /// Parse ease values for transition timing functions
+    fn parse_ease_value(&self, value: &str) -> String {
+        match value {
+            "linear" => "linear".to_string(),
+            "in" => "cubic-bezier(0.4, 0, 1, 1)".to_string(),
+            "out" => "cubic-bezier(0, 0, 0.2, 1)".to_string(),
+            "in-out" => "cubic-bezier(0.4, 0, 0.2, 1)".to_string(),
+            _ => value.to_string(),
+        }
+    }
+    
     fn parse_text_shadow_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_mask_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_logical_properties_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }

@@ -74,13 +74,16 @@ mod property_tests;
 mod api_stability;
 
 // #[cfg(test)]
-// mod week18_documentation_tests; // Temporarily disabled for v0.7.0 release
+pub mod week18_documentation_tests;
 
 // #[cfg(test)]
-// mod week19_testing_qa_tests; // Temporarily disabled for v0.7.0 release
+pub mod week19_testing_qa_tests;
 
 // #[cfg(test)]
-// mod week20_release_prep_tests; // Temporarily disabled for v0.7.0 release
+pub mod week20_release_prep_tests;
+
+// API Contracts and Contract Testing
+pub mod api_contracts;
 
 // Re-export commonly used types
 pub use arbitrary::{ArbitraryValue, ArbitraryValueError, ArbitraryValueUtilities};
@@ -90,6 +93,7 @@ pub use class_scanner::{ClassScanner, ScanConfig, ScanResults, ScanStats};
 pub use color::Color;
 pub use config::{BuildConfig, TailwindConfig};
 pub use config::parser::ConfigParser;
+// Use the modular CssGenerator structure
 pub use css_generator::{CssGenerator, CssProperty, CssRule, CssGenerationConfig};
 pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};
@@ -267,7 +271,14 @@ mod tests {
 }
 
 // Build system types
-pub struct TailwindBuilder;
+pub struct TailwindBuilder {
+    source_paths: Vec<std::path::PathBuf>,
+    output_path: Option<std::path::PathBuf>,
+    config_path: Option<std::path::PathBuf>,
+    tree_shaking: bool,
+    minification: bool,
+    source_maps: bool,
+}
 
 impl Default for TailwindBuilder {
     fn default() -> Self {
@@ -277,30 +288,43 @@ impl Default for TailwindBuilder {
 
 impl TailwindBuilder {
     pub fn new() -> Self {
-        Self
+        Self {
+            source_paths: Vec::new(),
+            output_path: None,
+            config_path: None,
+            tree_shaking: false,
+            minification: false,
+            source_maps: false,
+        }
     }
 
-    pub fn scan_source(self, _path: &std::path::Path) -> Self {
+    pub fn scan_source(mut self, path: &std::path::Path) -> Self {
+        self.source_paths.push(path.to_path_buf());
         self
     }
 
-    pub fn output_css(self, _path: &std::path::Path) -> Self {
+    pub fn output_css(mut self, path: &std::path::Path) -> Self {
+        self.output_path = Some(path.to_path_buf());
         self
     }
 
-    pub fn config_file(self, _path: &std::path::Path) -> Self {
+    pub fn config_file(mut self, path: &std::path::Path) -> Self {
+        self.config_path = Some(path.to_path_buf());
         self
     }
 
-    pub fn enable_tree_shaking(self) -> Self {
+    pub fn enable_tree_shaking(mut self) -> Self {
+        self.tree_shaking = true;
         self
     }
 
-    pub fn enable_minification(self) -> Self {
+    pub fn enable_minification(mut self) -> Self {
+        self.minification = true;
         self
     }
 
-    pub fn enable_source_maps(self) -> Self {
+    pub fn enable_source_maps(mut self) -> Self {
+        self.source_maps = true;
         self
     }
 
@@ -308,23 +332,97 @@ impl TailwindBuilder {
         // Create CSS generator
         let mut generator = CssGenerator::new();
         
-        // Add some basic classes for demonstration
-        // In a real implementation, this would scan source files
-        generator.add_class("p-4")?;
-        generator.add_class("bg-blue-500")?;
-        generator.add_class("text-white")?;
-        generator.add_class("rounded-md")?;
+        // Scan source files for classes if paths are provided
+        if !self.source_paths.is_empty() {
+            for path in &self.source_paths {
+                if path.is_file() {
+                    self.scan_file_for_classes(path, &mut generator)?;
+                } else if path.is_dir() {
+                    self.scan_directory_for_classes(path, &mut generator)?;
+                }
+            }
+        } else {
+            // Add some basic classes for demonstration
+            generator.add_class("p-4")?;
+            generator.add_class("bg-blue-500")?;
+            generator.add_class("text-white")?;
+            generator.add_class("rounded-md")?;
+        }
         
         // Generate CSS
-        let css = generator.generate_css();
+        let css = if self.minification {
+            generator.generate_minified_css()
+        } else {
+            generator.generate_css()
+        };
         
-        // Write to default output path
-        let output_path = "dist/styles.css";
-        std::fs::create_dir_all("dist")?;
-        std::fs::write(output_path, css)?;
+        // Determine output path
+        let output_path = self.output_path
+            .unwrap_or_else(|| std::path::PathBuf::from("dist/styles.css"));
         
-        println!("✅ CSS generated successfully at {}", output_path);
+        // Create output directory if it doesn't exist
+        if let Some(parent) = output_path.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
+        
+        // Write CSS to file
+        std::fs::write(&output_path, css)?;
+        
+        println!("✅ CSS generated successfully at {}", output_path.display());
         println!("📊 Generated {} CSS rules", generator.rule_count());
+        
+        if self.tree_shaking {
+            println!("🌳 Tree shaking enabled");
+        }
+        
+        if self.minification {
+            println!("🗜️ Minification enabled");
+        }
+        
+        if self.source_maps {
+            println!("🗺️ Source maps enabled");
+        }
+        
+        Ok(())
+    }
+    
+    /// Scan a single file for Tailwind classes
+    fn scan_file_for_classes(&self, path: &std::path::Path, generator: &mut CssGenerator) -> Result<()> {
+        let content = std::fs::read_to_string(path)?;
+        
+        // Simple regex to find class attributes
+        let class_pattern = regex::Regex::new(r#"class\s*=\s*["']([^"']+)["']"#)?;
+        
+        for cap in class_pattern.captures_iter(&content) {
+            if let Some(class_attr) = cap.get(1) {
+                let classes = class_attr.as_str();
+                for class in classes.split_whitespace() {
+                    if !class.is_empty() {
+                        let _ = generator.add_class(class);
+                    }
+                }
+            }
+        }
+        
+        Ok(())
+    }
+    
+    /// Scan a directory recursively for Tailwind classes
+    fn scan_directory_for_classes(&self, dir: &std::path::Path, generator: &mut CssGenerator) -> Result<()> {
+        for entry in std::fs::read_dir(dir)? {
+            let entry = entry?;
+            let path = entry.path();
+            
+            if path.is_file() {
+                if let Some(ext) = path.extension() {
+                    if ext == "rs" || ext == "html" || ext == "js" || ext == "ts" || ext == "jsx" || ext == "tsx" {
+                        self.scan_file_for_classes(&path, generator)?;
+                    }
+                }
+            } else if path.is_dir() {
+                self.scan_directory_for_classes(&path, generator)?;
+            }
+        }
         
         Ok(())
     }

@@ -1,6 +1,6 @@
 [package]
 name = "tailwind-rs-wasm"
-version = "0.10.0"
+version.workspace = true
 edition = "2021"
 authors = ["Tailwind-RS Team"]
 license = "MIT"
@@ -24,7 +24,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
 # Core dependency
-tailwind-rs-core = "0.10.0"
+tailwind-rs-core = { path = "../tailwind-rs-core" }
 
 # Conditional compilation for WASM vs native
 [target.'cfg(target_arch = "wasm32")'.dependencies]

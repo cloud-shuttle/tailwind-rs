@@ -6,7 +6,7 @@
 //! - Gap (gap-*, gap-x-*, gap-y-*, etc.)
 
 use super::{UtilityParser, ParserCategory};
-use crate::css_generator::core::CssProperty;
+use crate::css_generator::types::CssProperty;
 
 /// Parser for spacing utilities
 #[derive(Debug, Clone)]

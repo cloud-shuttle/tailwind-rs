@@ -1,6 +1,6 @@
 [package]
 name = "tailwind-rs-leptos-demo-working"
-version = "0.1.0"
+version = "0.12.0"
 edition = "2021"
 authors = ["Tailwind-RS Team"]
 license = "MIT"

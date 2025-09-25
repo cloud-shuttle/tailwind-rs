@@ -69,13 +69,147 @@ impl TreeSitterParser {
 
     /// Parse content with tree-sitter
     pub fn parse(&self, content: &str, language: &str) -> Result<ParseResult> {
-        // Placeholder implementation
-        // In a real implementation, this would use tree-sitter for parsing
+        if !self.is_language_supported(language) {
+            return Err(ScannerError::UnsupportedLanguage(language.to_string()));
+        }
+        
+        // For now, implement a basic parser that extracts class names
+        // In a full implementation, this would use the tree-sitter crate
+        let errors = Vec::new();
+        let ast = self.generate_ast(content, language);
+        
         Ok(ParseResult {
-            ast: format!("AST for {}: {}", language, content),
-            errors: Vec::new(),
+            ast,
+            errors,
             language: language.to_string(),
         })
+    }
+    
+    /// Generate a basic AST representation
+    fn generate_ast(&self, content: &str, language: &str) -> String {
+        match language {
+            "html" => self.parse_html_ast(content),
+            "javascript" | "js" => self.parse_js_ast(content),
+            "typescript" | "ts" => self.parse_ts_ast(content),
+            "rust" => self.parse_rust_ast(content),
+            _ => format!("Basic AST for {}: {}", language, content),
+        }
+    }
+    
+    /// Parse HTML and extract class attributes
+    fn parse_html_ast(&self, content: &str) -> String {
+        let mut ast_nodes = Vec::new();
+        let mut in_class_attr = false;
+        let mut current_class = String::new();
+        
+        for (i, c) in content.char_indices() {
+            if content[i..].starts_with("class=") {
+                in_class_attr = true;
+                continue;
+            }
+            
+            if in_class_attr {
+                if c == '"' || c == '\'' {
+                    if !current_class.is_empty() {
+                        ast_nodes.push(format!("class: {}", current_class));
+                        current_class.clear();
+                    }
+                    in_class_attr = false;
+                } else if c != ' ' {
+                    current_class.push(c);
+                }
+            }
+        }
+        
+        if ast_nodes.is_empty() {
+            "HTML AST: No class attributes found".to_string()
+        } else {
+            format!("HTML AST: {}", ast_nodes.join(", "))
+        }
+    }
+    
+    /// Parse JavaScript and extract string literals that might contain classes
+    fn parse_js_ast(&self, content: &str) -> String {
+        let mut ast_nodes = Vec::new();
+        let mut in_string = false;
+        let mut current_string = String::new();
+        let mut string_delimiter = '"';
+        
+        for c in content.chars() {
+            if !in_string && (c == '"' || c == '\'') {
+                in_string = true;
+                string_delimiter = c;
+                current_string.clear();
+            } else if in_string {
+                if c == string_delimiter {
+                    // Check if this string contains potential Tailwind classes
+                    if self.looks_like_tailwind_classes(&current_string) {
+                        ast_nodes.push(format!("string: {}", current_string));
+                    }
+                    in_string = false;
+                } else {
+                    current_string.push(c);
+                }
+            }
+        }
+        
+        if ast_nodes.is_empty() {
+            "JS AST: No class strings found".to_string()
+        } else {
+            format!("JS AST: {}", ast_nodes.join(", "))
+        }
+    }
+    
+    /// Parse TypeScript (similar to JavaScript)
+    fn parse_ts_ast(&self, content: &str) -> String {
+        // TypeScript parsing is similar to JavaScript
+        self.parse_js_ast(content)
+    }
+    
+    /// Parse Rust and extract string literals
+    fn parse_rust_ast(&self, content: &str) -> String {
+        let mut ast_nodes = Vec::new();
+        let mut in_string = false;
+        let mut current_string = String::new();
+        let mut string_delimiter = '"';
+        
+        for c in content.chars() {
+            if !in_string && c == '"' {
+                in_string = true;
+                current_string.clear();
+            } else if in_string {
+                if c == string_delimiter {
+                    // Check if this string contains potential Tailwind classes
+                    if self.looks_like_tailwind_classes(&current_string) {
+                        ast_nodes.push(format!("string: {}", current_string));
+                    }
+                    in_string = false;
+                } else {
+                    current_string.push(c);
+                }
+            }
+        }
+        
+        if ast_nodes.is_empty() {
+            "Rust AST: No class strings found".to_string()
+        } else {
+            format!("Rust AST: {}", ast_nodes.join(", "))
+        }
+    }
+    
+    /// Check if a string looks like it contains Tailwind classes
+    fn looks_like_tailwind_classes(&self, s: &str) -> bool {
+        // Simple heuristic: check for common Tailwind patterns
+        s.contains("bg-") || 
+        s.contains("text-") || 
+        s.contains("p-") || 
+        s.contains("m-") || 
+        s.contains("w-") || 
+        s.contains("h-") ||
+        s.contains("flex") ||
+        s.contains("grid") ||
+        s.contains("hidden") ||
+        s.contains("block")
     }
 
     /// Get supported languages

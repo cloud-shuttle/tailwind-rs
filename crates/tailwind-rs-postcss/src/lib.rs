@@ -45,6 +45,13 @@ pub mod plugin_loader;
 pub mod source_map;
 pub mod error;
 pub mod test_integration;
+pub mod tailwind_processor;
+pub mod purger;
+pub mod autoprefixer;
+pub mod import_processor;
+pub mod css_optimizer;
+pub mod enhanced_plugin_loader;
+pub mod advanced_features;
 
 // Re-export main types
 pub use engine::{PostCSSEngine, PostCSSConfig, ProcessedCSS};
@@ -55,6 +62,13 @@ pub use js_bridge::{JSBridge, JSRuntime};
 pub use plugin_loader::{PluginLoader, PluginConfig, PluginResult};
 pub use source_map::{SourceMapGenerator, SourceMap};
 pub use error::{PostCSSError, Result};
+pub use tailwind_processor::{TailwindProcessor, TailwindConfig, ProcessingResult};
+pub use purger::{CSSPurger, PurgeConfig, PurgeResult, PurgeOptions};
+pub use autoprefixer::{Autoprefixer, AutoprefixerConfig, PrefixResult, PrefixOptions, PrefixStatistics};
+pub use import_processor::{ImportProcessor, ImportConfig, ImportResult, ImportOptions, ImportStatistics};
+pub use css_optimizer::{CSSOptimizer, OptimizationConfig, OptimizationResult, OptimizationMetrics};
+pub use enhanced_plugin_loader::{EnhancedPluginLoader, PluginInstance, PluginMetrics};
+pub use advanced_features::{CSSLinter, LinterConfig, LintResult, AdvancedSourceMapGenerator, PostCSSPerformanceMonitor, PostCSSDevTools};
 
 /// Version information
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

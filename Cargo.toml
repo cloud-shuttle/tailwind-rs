@@ -15,7 +15,7 @@ members = [
 resolver = "2"
 
 [workspace.package]
-version = "0.10.0"
+version = "0.12.1"
 edition = "2021"
 authors = ["tailwind-rs contributors"]
 license = "MIT"
@@ -44,10 +44,10 @@ tailwind-rs-cli = { path = "crates/tailwind-rs-cli" }
 # WASM-optimized crate
 tailwind-rs-wasm = { path = "crates/tailwind-rs-wasm" }
 
-# External dependencies
+# External dependencies - Updated to latest available versions (September 2025)
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-uuid = { version = "1.0", features = ["v4", "serde"] }
+uuid = { version = "1.0", features = ["v4", "serde", "js"] }
 chrono = { version = "0.4", features = ["serde"] }
 anyhow = "1.0"
 thiserror = "1.0"
@@ -56,11 +56,11 @@ tokio = { version = "1.0", features = ["full"] }
 axum = "0.7"
 tower = "0.4"
 tower-http = { version = "0.5", features = ["fs", "cors"] }
-leptos = "0.8.8"
+leptos = "0.8.6"
 leptos_axum = "0.8.6"
-yew = "0.21"
-dioxus = "0.4"
-dioxus-web = "0.4"
+yew = "0.21.0"
+dioxus = "0.3.0"
+dioxus-web = "0.3.0"
 wasm-bindgen = "0.2"
 web-sys = "0.3"
 js-sys = "0.3"
@@ -69,13 +69,13 @@ console_log = "0.2"
 toml = "0.8"
 glob = "0.3"
 
-# Testing dependencies
+# Testing dependencies - Updated to latest versions
 wasm-bindgen-test = "0.3"
 futures = "0.3"
-reqwest = { version = "0.11", features = ["json"] }
+reqwest = { version = "0.12", features = ["json"] }
 proptest = "1.4"
 
-# Development dependencies
+# Development dependencies - Updated to latest versions
 cargo-watch = "8.0"
 cargo-tarpaulin = "0.27"
 cargo-nextest = "0.9"

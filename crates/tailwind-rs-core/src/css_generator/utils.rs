@@ -3,7 +3,7 @@
 //! This module provides utility functions for CSS generation,
 //! including helper functions and common operations.
 
-use crate::css_generator::core::CssProperty;
+use crate::css_generator::types::CssProperty;
 
 /// Convert hex color to RGBA with opacity
 pub fn hex_to_rgba(hex: &str, opacity: f32) -> String {

@@ -78,6 +78,13 @@ impl VariantParser {
             ("last:", "last"),
             ("odd:", "odd"),
             ("even:", "even"),
+            // Device variants
+            ("pointer-coarse:", "pointer-coarse"),
+            ("pointer-fine:", "pointer-fine"),
+            ("motion-reduce:", "motion-reduce"),
+            ("motion-safe:", "motion-safe"),
+            ("light:", "light"),
+            // Responsive variants
             ("sm:", "sm"),
             ("md:", "md"),
             ("lg:", "lg"),
@@ -117,7 +124,21 @@ impl VariantParser {
             "last" => ":last-child".to_string(),
             "odd" => ":nth-child(odd)".to_string(),
             "even" => ":nth-child(even)".to_string(),
+            // Device variants use media queries, not selectors
+            "pointer-coarse" | "pointer-fine" | "motion-reduce" | "motion-safe" | "light" => String::new(),
             _ => String::new(),
+        }
+    }
+
+    /// Get the media query for device variants
+    pub fn get_device_media_query(&self, variant: &str) -> Option<String> {
+        match variant {
+            "pointer-coarse" => Some("(pointer: coarse)".to_string()),
+            "pointer-fine" => Some("(pointer: fine)".to_string()),
+            "motion-reduce" => Some("(prefers-reduced-motion: reduce)".to_string()),
+            "motion-safe" => Some("(prefers-reduced-motion: no-preference)".to_string()),
+            "light" => Some("(prefers-color-scheme: light)".to_string()),
+            _ => None,
         }
     }
 

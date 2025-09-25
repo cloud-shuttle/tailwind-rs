@@ -153,140 +153,233 @@ impl CssGenerator {
         self.rules.insert(selector.to_string(), rule);
     }
 
+    /// Parse variants from a class name and return (variants, base_class)
+    fn parse_variants(&self, class: &str) -> (Vec<String>, String) {
+        let mut variants = Vec::new();
+        let mut remaining = class.to_string();
+        
+        // Parse variants in order of specificity (most specific first)
+        let variant_patterns = [
+            ("dark:", "dark"),
+            ("hover:", "hover"),
+            ("focus:", "focus"),
+            ("active:", "active"),
+            ("visited:", "visited"),
+            ("disabled:", "disabled"),
+            ("group-hover:", "group-hover"),
+            ("group-focus:", "group-focus"),
+            ("group-active:", "group-active"),
+            ("group-disabled:", "group-disabled"),
+            ("peer-hover:", "peer-hover"),
+            ("peer-focus:", "peer-focus"),
+            ("peer-active:", "peer-active"),
+            ("peer-disabled:", "peer-disabled"),
+            ("first:", "first"),
+            ("last:", "last"),
+            ("odd:", "odd"),
+            ("even:", "even"),
+            ("sm:", "sm"),
+            ("md:", "md"),
+            ("lg:", "lg"),
+            ("xl:", "xl"),
+            ("2xl:", "2xl"),
+        ];
+        
+        for (prefix, variant) in variant_patterns {
+            if remaining.starts_with(prefix) {
+                variants.push(variant.to_string());
+                remaining = remaining.strip_prefix(prefix).unwrap_or(&remaining).to_string();
+                break; // Only parse one variant at a time for now
+            }
+        }
+        
+        (variants, remaining)
+    }
+
     /// Convert a class name to a CSS rule
     fn class_to_css_rule(&self, class: &str) -> Result<CssRule> {
-        let selector = format!(".{}", class);
+        let (variants, base_class) = self.parse_variants(class);
         let properties = self.class_to_properties(class)?;
+        
+        // Build selector with variants
+        let mut selector = String::new();
+        for variant in &variants {
+            match variant.as_str() {
+                "dark" => selector.push_str(".dark "),
+                "hover" => selector.push_str(":hover"),
+                "focus" => selector.push_str(":focus"),
+                "active" => selector.push_str(":active"),
+                "visited" => selector.push_str(":visited"),
+                "disabled" => selector.push_str(":disabled"),
+                "group-hover" => selector.push_str(".group:hover "),
+                "group-focus" => selector.push_str(".group:focus "),
+                "group-active" => selector.push_str(".group:active "),
+                "group-disabled" => selector.push_str(".group:disabled "),
+                "peer-hover" => selector.push_str(".peer:hover "),
+                "peer-focus" => selector.push_str(".peer:focus "),
+                "peer-active" => selector.push_str(".peer:active "),
+                "peer-disabled" => selector.push_str(".peer:disabled "),
+                "first" => selector.push_str(":first-child"),
+                "last" => selector.push_str(":last-child"),
+                "odd" => selector.push_str(":nth-child(odd)"),
+                "even" => selector.push_str(":nth-child(even)"),
+                _ => {} // Responsive variants handled separately
+            }
+        }
+        
+        // Add the base class
+        selector.push_str(&format!(".{}", base_class));
+        
+        // Determine media query for responsive variants
+        let media_query = variants.iter()
+            .find(|v| matches!(v.as_str(), "sm" | "md" | "lg" | "xl" | "2xl"))
+            .and_then(|variant| {
+                match variant.as_str() {
+                    "sm" => Some("(min-width: 640px)"),
+                    "md" => Some("(min-width: 768px)"),
+                    "lg" => Some("(min-width: 1024px)"),
+                    "xl" => Some("(min-width: 1280px)"),
+                    "2xl" => Some("(min-width: 1536px)"),
+                    _ => None,
+                }
+            })
+            .map(|s| s.to_string());
+        
+        // Determine specificity based on variants
+        let specificity = 10 + (variants.len() as u32 * 10);
         
         Ok(CssRule {
             selector,
             properties,
-            media_query: None,
-            specificity: 10,
+            media_query,
+            specificity,
         })
     }
 
     /// Convert a class name to CSS properties
     fn class_to_properties(&self, class: &str) -> Result<Vec<CssProperty>> {
-        // Try to parse the class using comprehensive patterns
-        if let Some(properties) = self.parse_spacing_class(class) {
+        // First, parse variants and get the base class
+        let (_variants, base_class) = self.parse_variants(class);
+        
+        // Try to parse the base class using comprehensive patterns
+        if let Some(properties) = self.parse_spacing_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_color_class(class) {
+        if let Some(properties) = self.parse_color_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_typography_class(class) {
+        if let Some(properties) = self.parse_typography_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_layout_class(class) {
+        if let Some(properties) = self.parse_layout_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_flexbox_class(class) {
+        if let Some(properties) = self.parse_flexbox_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_grid_class(class) {
+        if let Some(properties) = self.parse_grid_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_border_class(class) {
+        if let Some(properties) = self.parse_border_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_effects_class(class) {
+        if let Some(properties) = self.parse_effects_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_transform_class(class) {
+        if let Some(properties) = self.parse_transform_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_animation_class(class) {
+        if let Some(properties) = self.parse_animation_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_interactivity_class(class) {
+        if let Some(properties) = self.parse_interactivity_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_sizing_class(class) {
+        if let Some(properties) = self.parse_sizing_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_background_class(class) {
+        if let Some(properties) = self.parse_background_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_filter_class(class) {
+        if let Some(properties) = self.parse_filter_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_transition_class(class) {
+        if let Some(properties) = self.parse_transition_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_text_shadow_class(class) {
+        if let Some(properties) = self.parse_text_shadow_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_mask_class(class) {
+        if let Some(properties) = self.parse_mask_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_logical_properties_class(class) {
+        if let Some(properties) = self.parse_logical_properties_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_enhanced_backdrop_filter_class(class) {
+        if let Some(properties) = self.parse_enhanced_backdrop_filter_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_modern_css_features_class(class) {
+        if let Some(properties) = self.parse_modern_css_features_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_device_variant_class(class) {
+        if let Some(properties) = self.parse_device_variant_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_css_nesting_class(class) {
+        if let Some(properties) = self.parse_css_nesting_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_advanced_plugin_system_class(class) {
+        if let Some(properties) = self.parse_advanced_plugin_system_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_enhanced_validation_class(class) {
+        if let Some(properties) = self.parse_enhanced_validation_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_advanced_performance_optimization_class(class) {
+        if let Some(properties) = self.parse_advanced_performance_optimization_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_container_query_class(class) {
+        if let Some(properties) = self.parse_container_query_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_color_function_class(class) {
+        if let Some(properties) = self.parse_color_function_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_performance_optimization_class(class) {
+        if let Some(properties) = self.parse_performance_optimization_class(&base_class) {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_advanced_animation_class(class) {
+        if let Some(properties) = self.parse_advanced_animation_class(&base_class) {
             return Ok(properties);
         }
         
         // Fallback to hardcoded classes for backwards compatibility
-        match class {
+        match base_class.as_str() {
             // Display utilities
             "block" => Ok(vec![CssProperty { name: "display".to_string(), value: "block".to_string(), important: false }]),
             "inline" => Ok(vec![CssProperty { name: "display".to_string(), value: "inline".to_string(), important: false }]),
@@ -512,11 +605,29 @@ impl CssGenerator {
             ("gray-600", "#4b5563"), ("gray-700", "#374151"), ("gray-800", "#1f2937"), ("gray-900", "#111827"),
             ("gray-950", "#030712"),
             
+            // Zinc colors
+            ("zinc-50", "#fafafa"), ("zinc-100", "#f4f4f5"), ("zinc-200", "#e4e4e7"), 
+            ("zinc-300", "#d4d4d8"), ("zinc-400", "#a1a1aa"), ("zinc-500", "#71717a"),
+            ("zinc-600", "#52525b"), ("zinc-700", "#3f3f46"), ("zinc-800", "#27272a"), ("zinc-900", "#18181b"),
+            ("zinc-950", "#09090b"),
+            
             // Blues
             ("blue-50", "#eff6ff"), ("blue-100", "#dbeafe"), ("blue-200", "#bfdbfe"), 
             ("blue-300", "#93c5fd"), ("blue-400", "#60a5fa"), ("blue-500", "#3b82f6"),
             ("blue-600", "#2563eb"), ("blue-700", "#1d4ed8"), ("blue-800", "#1e40af"), ("blue-900", "#1e3a8a"),
             ("blue-950", "#172554"),
+            
+            // Teal colors
+            ("teal-50", "#f0fdfa"), ("teal-100", "#ccfbf1"), ("teal-200", "#99f6e4"), 
+            ("teal-300", "#5eead4"), ("teal-400", "#2dd4bf"), ("teal-500", "#14b8a6"),
+            ("teal-600", "#0d9488"), ("teal-700", "#0f766e"), ("teal-800", "#115e59"), ("teal-900", "#134e4a"),
+            ("teal-950", "#042f2e"),
+            
+            // Emerald colors
+            ("emerald-50", "#ecfdf5"), ("emerald-100", "#d1fae5"), ("emerald-200", "#a7f3d0"), 
+            ("emerald-300", "#6ee7b7"), ("emerald-400", "#34d399"), ("emerald-500", "#10b981"),
+            ("emerald-600", "#059669"), ("emerald-700", "#047857"), ("emerald-800", "#065f46"), ("emerald-900", "#064e3b"),
+            ("emerald-950", "#022c22"),
             
             // Reds
             ("red-50", "#fef2f2"), ("red-100", "#fee2e2"), ("red-200", "#fecaca"), 
@@ -549,24 +660,62 @@ impl CssGenerator {
         // Parse background colors
         if class.starts_with("bg-") {
             let color = &class[3..];
-            if let Some((_, hex_value)) = color_map.iter().find(|(k, _)| *k == color) {
-                return Some(vec![CssProperty { 
-                    name: "background-color".to_string(), 
-                    value: hex_value.to_string(), 
-                    important: false 
-                }]);
+            
+            // Check for opacity modifier (e.g., bg-blue-500/50)
+            if let Some(slash_pos) = color.find('/') {
+                let base_color = &color[..slash_pos];
+                let opacity_str = &color[slash_pos + 1..];
+                
+                if let Some((_, hex_value)) = color_map.iter().find(|(k, _)| *k == base_color) {
+                    if let Ok(opacity) = opacity_str.parse::<f32>() {
+                        let rgba_value = self.hex_to_rgba(hex_value, opacity / 100.0);
+                        return Some(vec![CssProperty { 
+                            name: "background-color".to_string(), 
+                            value: rgba_value, 
+                            important: false 
+                        }]);
+                    }
+                }
+            } else {
+                // No opacity modifier
+                if let Some((_, hex_value)) = color_map.iter().find(|(k, _)| *k == color) {
+                    return Some(vec![CssProperty { 
+                        name: "background-color".to_string(), 
+                        value: hex_value.to_string(), 
+                        important: false 
+                    }]);
+                }
             }
         }
         
         // Parse text colors
         if class.starts_with("text-") {
             let color = &class[5..];
-            if let Some((_, hex_value)) = color_map.iter().find(|(k, _)| *k == color) {
-                return Some(vec![CssProperty { 
-                    name: "color".to_string(), 
-                    value: hex_value.to_string(), 
-                    important: false 
-                }]);
+            
+            // Check for opacity modifier (e.g., text-blue-500/50)
+            if let Some(slash_pos) = color.find('/') {
+                let base_color = &color[..slash_pos];
+                let opacity_str = &color[slash_pos + 1..];
+                
+                if let Some((_, hex_value)) = color_map.iter().find(|(k, _)| *k == base_color) {
+                    if let Ok(opacity) = opacity_str.parse::<f32>() {
+                        let rgba_value = self.hex_to_rgba(hex_value, opacity / 100.0);
+                        return Some(vec![CssProperty { 
+                            name: "color".to_string(), 
+                            value: rgba_value, 
+                            important: false 
+                        }]);
+                    }
+                }
+            } else {
+                // No opacity modifier
+                if let Some((_, hex_value)) = color_map.iter().find(|(k, _)| *k == color) {
+                    return Some(vec![CssProperty { 
+                        name: "color".to_string(), 
+                        value: hex_value.to_string(), 
+                        important: false 
+                    }]);
+                }
             }
         }
         
@@ -583,6 +732,26 @@ impl CssGenerator {
         }
         
         None
+    }
+    
+    /// Convert hex color to RGBA with opacity
+    fn hex_to_rgba(&self, hex: &str, opacity: f32) -> String {
+        // Remove # if present
+        let hex = hex.trim_start_matches('#');
+        
+        // Parse hex to RGB
+        if hex.len() == 6 {
+            if let (Ok(r), Ok(g), Ok(b)) = (
+                u8::from_str_radix(&hex[0..2], 16),
+                u8::from_str_radix(&hex[2..4], 16),
+                u8::from_str_radix(&hex[4..6], 16),
+            ) {
+                return format!("rgba({}, {}, {}, {})", r, g, b, opacity);
+            }
+        }
+        
+        // Fallback to original hex if parsing fails
+        format!("{}", hex)
     }
     
     /// Parse typography classes
@@ -617,6 +786,14 @@ impl CssGenerator {
             "text-right" => Some(vec![CssProperty { name: "text-align".to_string(), value: "right".to_string(), important: false }]),
             "text-justify" => Some(vec![CssProperty { name: "text-align".to_string(), value: "justify".to_string(), important: false }]),
             
+            // Letter spacing (tracking)
+            "tracking-tighter" => Some(vec![CssProperty { name: "letter-spacing".to_string(), value: "-0.05em".to_string(), important: false }]),
+            "tracking-tight" => Some(vec![CssProperty { name: "letter-spacing".to_string(), value: "-0.025em".to_string(), important: false }]),
+            "tracking-normal" => Some(vec![CssProperty { name: "letter-spacing".to_string(), value: "0em".to_string(), important: false }]),
+            "tracking-wide" => Some(vec![CssProperty { name: "letter-spacing".to_string(), value: "0.025em".to_string(), important: false }]),
+            "tracking-wider" => Some(vec![CssProperty { name: "letter-spacing".to_string(), value: "0.05em".to_string(), important: false }]),
+            "tracking-widest" => Some(vec![CssProperty { name: "letter-spacing".to_string(), value: "0.1em".to_string(), important: false }]),
+            
             _ => None,
         }
     }
@@ -639,6 +816,27 @@ impl CssGenerator {
             "absolute" => Some(vec![CssProperty { name: "position".to_string(), value: "absolute".to_string(), important: false }]),
             "relative" => Some(vec![CssProperty { name: "position".to_string(), value: "relative".to_string(), important: false }]),
             "sticky" => Some(vec![CssProperty { name: "position".to_string(), value: "sticky".to_string(), important: false }]),
+            
+            // Positioning utilities
+            "inset-0" => Some(vec![CssProperty { name: "top".to_string(), value: "0px".to_string(), important: false }, CssProperty { name: "right".to_string(), value: "0px".to_string(), important: false }, CssProperty { name: "bottom".to_string(), value: "0px".to_string(), important: false }, CssProperty { name: "left".to_string(), value: "0px".to_string(), important: false }]),
+            "inset-x-0" => Some(vec![CssProperty { name: "left".to_string(), value: "0px".to_string(), important: false }, CssProperty { name: "right".to_string(), value: "0px".to_string(), important: false }]),
+            "inset-y-0" => Some(vec![CssProperty { name: "top".to_string(), value: "0px".to_string(), important: false }, CssProperty { name: "bottom".to_string(), value: "0px".to_string(), important: false }]),
+            "top-0" => Some(vec![CssProperty { name: "top".to_string(), value: "0px".to_string(), important: false }]),
+            "right-0" => Some(vec![CssProperty { name: "right".to_string(), value: "0px".to_string(), important: false }]),
+            "bottom-0" => Some(vec![CssProperty { name: "bottom".to_string(), value: "0px".to_string(), important: false }]),
+            "left-0" => Some(vec![CssProperty { name: "left".to_string(), value: "0px".to_string(), important: false }]),
+            
+            // Negative positioning
+            "-inset-x-4" => Some(vec![CssProperty { name: "left".to_string(), value: "-1rem".to_string(), important: false }, CssProperty { name: "right".to_string(), value: "-1rem".to_string(), important: false }]),
+            "-inset-y-6" => Some(vec![CssProperty { name: "top".to_string(), value: "-1.5rem".to_string(), important: false }, CssProperty { name: "bottom".to_string(), value: "-1.5rem".to_string(), important: false }]),
+            
+            // Z-index utilities
+            "z-0" => Some(vec![CssProperty { name: "z-index".to_string(), value: "0".to_string(), important: false }]),
+            "z-10" => Some(vec![CssProperty { name: "z-index".to_string(), value: "10".to_string(), important: false }]),
+            "z-20" => Some(vec![CssProperty { name: "z-index".to_string(), value: "20".to_string(), important: false }]),
+            "z-30" => Some(vec![CssProperty { name: "z-index".to_string(), value: "30".to_string(), important: false }]),
+            "z-40" => Some(vec![CssProperty { name: "z-index".to_string(), value: "40".to_string(), important: false }]),
+            "z-50" => Some(vec![CssProperty { name: "z-index".to_string(), value: "50".to_string(), important: false }]),
             
             _ => None,
         }
@@ -668,6 +866,23 @@ impl CssGenerator {
             "items-center" => Some(vec![CssProperty { name: "align-items".to_string(), value: "center".to_string(), important: false }]),
             "items-baseline" => Some(vec![CssProperty { name: "align-items".to_string(), value: "baseline".to_string(), important: false }]),
             "items-stretch" => Some(vec![CssProperty { name: "align-items".to_string(), value: "stretch".to_string(), important: false }]),
+            
+            // Order utilities
+            "order-first" => Some(vec![CssProperty { name: "order".to_string(), value: "-1".to_string(), important: false }]),
+            "order-last" => Some(vec![CssProperty { name: "order".to_string(), value: "9999".to_string(), important: false }]),
+            "order-none" => Some(vec![CssProperty { name: "order".to_string(), value: "0".to_string(), important: false }]),
+            "order-1" => Some(vec![CssProperty { name: "order".to_string(), value: "1".to_string(), important: false }]),
+            "order-2" => Some(vec![CssProperty { name: "order".to_string(), value: "2".to_string(), important: false }]),
+            "order-3" => Some(vec![CssProperty { name: "order".to_string(), value: "3".to_string(), important: false }]),
+            "order-4" => Some(vec![CssProperty { name: "order".to_string(), value: "4".to_string(), important: false }]),
+            "order-5" => Some(vec![CssProperty { name: "order".to_string(), value: "5".to_string(), important: false }]),
+            "order-6" => Some(vec![CssProperty { name: "order".to_string(), value: "6".to_string(), important: false }]),
+            "order-7" => Some(vec![CssProperty { name: "order".to_string(), value: "7".to_string(), important: false }]),
+            "order-8" => Some(vec![CssProperty { name: "order".to_string(), value: "8".to_string(), important: false }]),
+            "order-9" => Some(vec![CssProperty { name: "order".to_string(), value: "9".to_string(), important: false }]),
+            "order-10" => Some(vec![CssProperty { name: "order".to_string(), value: "10".to_string(), important: false }]),
+            "order-11" => Some(vec![CssProperty { name: "order".to_string(), value: "11".to_string(), important: false }]),
+            "order-12" => Some(vec![CssProperty { name: "order".to_string(), value: "12".to_string(), important: false }]),
             
             _ => None,
         }

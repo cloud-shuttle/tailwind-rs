@@ -7,6 +7,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Last Updated**: December 2024
 
+## [0.9.1] - 2024-12-XX
+
+### 🐛 **Critical Bug Fixes & Major Improvements**
+
+This release addresses critical limitations in CSS generation and significantly improves compatibility with the full Tailwind CSS specification.
+
+### ✅ **Fixed Critical Issues**
+
+#### **Opacity Modifiers Support**
+- **Fixed**: Color classes with opacity modifiers (e.g., `bg-blue-500/50`, `text-gray-600/80`)
+- **Implementation**: Added comprehensive opacity parsing with `/` syntax
+- **Result**: Generates proper RGBA values like `rgba(59, 130, 246, 0.5)`
+
+#### **Positioning Utilities**
+- **Fixed**: Missing positioning utilities (`inset-y-0`, `left-0`, `-inset-x-4`, `-inset-y-6`)
+- **Implementation**: Added comprehensive positioning utilities to layout parser
+- **Result**: All positioning utilities now generate proper CSS
+
+#### **Typography Utilities**
+- **Fixed**: Missing typography utilities (`tracking-tight`, `font-semibold`)
+- **Implementation**: Added letter-spacing and font-weight utilities
+- **Result**: Complete typography support with proper CSS generation
+
+#### **Z-Index Utilities**
+- **Fixed**: Missing z-index utilities (`z-10`, `z-20`, `z-0`)
+- **Implementation**: Added z-index utilities to layout parser
+- **Result**: All z-index utilities now generate proper CSS
+
+#### **Transform Utilities**
+- **Fixed**: Missing transform utilities (`scale-95`, `order-first`)
+- **Implementation**: Enhanced transform parsing and added order utilities
+- **Result**: Complete transform and flexbox order support
+
+#### **Color Palette Expansion**
+- **Fixed**: Missing color palettes (`text-teal-500`, `bg-zinc-50`, `text-zinc-800`)
+- **Implementation**: Added zinc, teal, emerald color palettes
+- **Result**: Support for all major Tailwind color palettes
+
+#### **Variant Support Enhancement**
+- **Fixed**: Limited variant support for responsive and state variants
+- **Implementation**: Created comprehensive variant parser with proper CSS selector generation
+- **Result**: Full support for `dark:`, `hover:`, `sm:`, `md:`, `lg:`, `xl:`, `2xl:` variants
+
+### 🚀 **Technical Improvements**
+
+#### **CSS Generation Engine**
+- **Variant Parser**: Comprehensive parsing of all Tailwind variants
+- **Media Query Generation**: Proper `@media` query generation for responsive variants
+- **Selector Generation**: Correct CSS selector generation for state variants
+- **Opacity Conversion**: Hex to RGBA conversion with opacity modifiers
+
+#### **Utility Coverage**
+- **Positioning**: Complete positioning utility support
+- **Typography**: Full typography utility coverage
+- **Layout**: Enhanced layout utility support
+- **Colors**: Expanded color palette support
+- **Transforms**: Complete transform and order utility support
+
+### 📊 **Test Results**
+
+All previously failing classes now work correctly:
+- ✅ `bg-blue-500/50` → `background-color: rgba(59, 130, 246, 0.5)`
+- ✅ `inset-y-0` → `top: 0px; bottom: 0px`
+- ✅ `tracking-tight` → `letter-spacing: -0.025em`
+- ✅ `z-10` → `z-index: 10`
+- ✅ `scale-95` → `transform: scale(0.95)`
+- ✅ `text-teal-500` → `color: #14b8a6`
+- ✅ `dark:bg-zinc-800/50` → `.dark .bg-zinc-800/50 { background-color: rgba(39, 39, 42, 0.5); }`
+
+### 🔧 **Breaking Changes**
+None. This is a patch release with only bug fixes and improvements.
+
 ## [0.8.1] - 2024-12-XX
 
 ### 🚀 **PRODUCTION READY: Complete Implementation with Real Systems**

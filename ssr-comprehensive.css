@@ -1,0 +1,155 @@
+.fixed {
+  position: fixed;
+}
+
+.flex {
+  display: flex;
+}
+
+.text-zinc-600 {
+  color: #000000;
+}
+
+.dark .text-zinc-400 {
+  color: #000000;
+}
+
+.text-xl {
+  color: #000000;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.relative {
+  position: relative;
+}
+
+.dark .text-blue-100 {
+  color: #dbeafe;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.text-zinc-900 {
+  color: #000000;
+}
+
+.border-blue-200 {
+  border-color: #bfdbfe;
+}
+
+:hover.text-zinc-900 {
+  color: #000000;
+}
+
+.text-4xl {
+  color: #000000;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.border-zinc-200 {
+  border-color: #000000;
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+}
+
+.text-center {
+  color: #000000;
+}
+
+.dark .border-zinc-800 {
+  border-color: #000000;
+}
+
+.text-2xl {
+  color: #000000;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.dark .text-zinc-100 {
+  color: #000000;
+}
+
+.text-blue-900 {
+  color: #1e3a8a;
+}
+
+.sticky {
+  position: sticky;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.dark .border-blue-800 {
+  border-color: #1e40af;
+}
+
+.dark .bg-zinc-900 {
+  background-color: #000000;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.dark .text-blue-200 {
+  color: #bfdbfe;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-lg {
+  color: #000000;
+}
+
+@media (min-width: 640px) {
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+}
+
+@media (min-width: 1024px) {
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+}
+

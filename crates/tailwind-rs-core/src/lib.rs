@@ -85,6 +85,9 @@ pub mod week20_release_prep_tests;
 // API Contracts and Contract Testing
 pub mod api_contracts;
 
+#[cfg(test)]
+mod test_improvements;
+
 // Re-export commonly used types
 pub use arbitrary::{ArbitraryValue, ArbitraryValueError, ArbitraryValueUtilities};
 pub use ast_parser::AstParser;

@@ -1,0 +1,113 @@
+.pt-12 {
+  padding-top: 3rem;
+}
+
+.sm\:pt-16 {
+  padding-top: 4rem;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.text-2xl {
+  color: #000000;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-zinc-900 {
+  color: #18181b;
+}
+
+.dark\:text-zinc-100 {
+  color: #f4f4f5;
+}
+
+.hidden {
+  display: none;
+}
+
+.lg\:flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.text-base {
+  color: #000000;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-gray-950 {
+  color: #000000;
+}
+
+.data-hover\:bg-black\/2.5 {
+  background-color: rgba(0, 0, 0, 0.025);
+}
+
+.data-hover\:bg-black\/5 {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.self-center {
+  align-self: center;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.lg\:hidden {
+  display: none;
+}
+

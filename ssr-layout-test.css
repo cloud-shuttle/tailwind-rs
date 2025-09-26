@@ -1,0 +1,12 @@
+.flex {
+  display: flex;
+}
+
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+

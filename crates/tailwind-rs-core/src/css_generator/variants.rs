@@ -59,44 +59,63 @@ impl VariantParser {
         let mut remaining = class.to_string();
         
         // Parse variants in order of specificity (most specific first)
-        let variant_patterns = [
-            ("dark:", "dark"),
-            ("hover:", "hover"),
-            ("focus:", "focus"),
-            ("active:", "active"),
-            ("visited:", "visited"),
-            ("disabled:", "disabled"),
-            ("group-hover:", "group-hover"),
-            ("group-focus:", "group-focus"),
-            ("group-active:", "group-active"),
-            ("group-disabled:", "group-disabled"),
-            ("peer-hover:", "peer-hover"),
-            ("peer-focus:", "peer-focus"),
-            ("peer-active:", "peer-active"),
-            ("peer-disabled:", "peer-disabled"),
-            ("first:", "first"),
-            ("last:", "last"),
-            ("odd:", "odd"),
-            ("even:", "even"),
-            // Device variants
-            ("pointer-coarse:", "pointer-coarse"),
-            ("pointer-fine:", "pointer-fine"),
-            ("motion-reduce:", "motion-reduce"),
-            ("motion-safe:", "motion-safe"),
-            ("light:", "light"),
-            // Responsive variants
-            ("sm:", "sm"),
-            ("md:", "md"),
-            ("lg:", "lg"),
-            ("xl:", "xl"),
-            ("2xl:", "2xl"),
+        // Check for compound variants first
+        let compound_patterns = [
+            ("dark:hover:", vec!["dark", "hover"]),
+            ("dark:group-hover:", vec!["dark", "group-hover"]),
+            ("dark:focus:", vec!["dark", "focus"]),
+            ("dark:active:", vec!["dark", "active"]),
         ];
         
-        for (prefix, variant) in variant_patterns {
+        for (prefix, variant_list) in compound_patterns {
             if remaining.starts_with(prefix) {
-                variants.push(variant.to_string());
+                variants.extend(variant_list.iter().map(|v| v.to_string()));
                 remaining = remaining.strip_prefix(prefix).unwrap_or(&remaining).to_string();
-                break; // Only parse one variant at a time for now
+                break;
+            }
+        }
+        
+        // If no compound variant found, check individual variants
+        if variants.is_empty() {
+            let variant_patterns = [
+                ("dark:", "dark"),
+                ("hover:", "hover"),
+                ("focus:", "focus"),
+                ("active:", "active"),
+                ("visited:", "visited"),
+                ("disabled:", "disabled"),
+                ("group-hover:", "group-hover"),
+                ("group-focus:", "group-focus"),
+                ("group-active:", "group-active"),
+                ("group-disabled:", "group-disabled"),
+                ("peer-hover:", "peer-hover"),
+                ("peer-focus:", "peer-focus"),
+                ("peer-active:", "peer-active"),
+                ("peer-disabled:", "peer-disabled"),
+                ("first:", "first"),
+                ("last:", "last"),
+                ("odd:", "odd"),
+                ("even:", "even"),
+                // Device variants
+                ("pointer-coarse:", "pointer-coarse"),
+                ("pointer-fine:", "pointer-fine"),
+                ("motion-reduce:", "motion-reduce"),
+                ("motion-safe:", "motion-safe"),
+                ("light:", "light"),
+                // Responsive variants
+                ("sm:", "sm"),
+                ("md:", "md"),
+                ("lg:", "lg"),
+                ("xl:", "xl"),
+                ("2xl:", "2xl"),
+            ];
+            
+            for (prefix, variant) in variant_patterns {
+                if remaining.starts_with(prefix) {
+                    variants.push(variant.to_string());
+                    remaining = remaining.strip_prefix(prefix).unwrap_or(&remaining).to_string();
+                    break; // Only parse one variant at a time for now
+                }
             }
         }
         

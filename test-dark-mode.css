@@ -1,0 +1,20 @@
+.dark .text-white {
+  color: #ffffff;
+}
+
+.dark .bg-zinc-800 {
+  background-color: #000000;
+}
+
+.dark .text-zinc-200 {
+  color: #000000;
+}
+
+.dark .border-gray-700 {
+  border-color: #374151;
+}
+
+.dark .bg-gray-800 {
+  background-color: #1f2937;
+}
+

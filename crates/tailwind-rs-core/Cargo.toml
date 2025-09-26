@@ -35,6 +35,7 @@ postcss = ["tokio"]  # postcss feature disabled for v0.12.0
 # tailwind-rs-testing = "0.8.1"  # Will be added after publishing
 wasm-bindgen-test = { workspace = true }
 proptest = { workspace = true }
+leptos = "0.8.9"
 
 [lib]
 name = "tailwind_rs_core"

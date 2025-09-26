@@ -7,7 +7,15 @@ use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 use super::types::{CssRule, CssProperty, CssGenerationConfig};
 use super::variants::VariantParser;
-use super::parsers::{SpacingParser, AnimationParser, UtilityParser};
+use super::parsers::{
+    SpacingParser, AnimationParser, InteractiveParser, UtilityParser,
+    AdvancedSpacingParser, AdvancedColorParser, PositioningParser, TypographyParser,
+    FlexboxParser, LayoutParser, ColorParser, EffectsParser, SizingParser,
+    AdvancedBorderParser, RingParser, TransitionParser, ShadowParser, SvgParser,
+    MarginParser, GroupParser, AdvancedGridParser, ProseParser, DivideParser,
+    GradientParser, ObjectFitParser, TransformParser, ArbitraryParser, DataAttributeParser, 
+    BackgroundPropertiesParser, TransitionPropertiesParser, FractionalTransformsParser
+};
 
 /// CSS generator that converts Tailwind classes to CSS rules
 #[derive(Debug, Clone)]
@@ -22,8 +30,64 @@ pub struct CssGenerator {
     config: CssGenerationConfig,
     /// Spacing parser
     spacing_parser: SpacingParser,
+    /// Advanced spacing parser
+    advanced_spacing_parser: AdvancedSpacingParser,
+    /// Color parser
+    color_parser: ColorParser,
+    /// Advanced color parser
+    advanced_color_parser: AdvancedColorParser,
+    /// Typography parser
+    typography_parser: TypographyParser,
+    /// Layout parser
+    layout_parser: LayoutParser,
+    /// Positioning parser
+    positioning_parser: PositioningParser,
+    /// Flexbox parser
+    flexbox_parser: FlexboxParser,
+    /// Effects parser
+    effects_parser: EffectsParser,
+    /// Sizing parser
+    sizing_parser: SizingParser,
+    /// Advanced border parser
+    advanced_border_parser: AdvancedBorderParser,
+    /// Ring parser
+    ring_parser: RingParser,
+    /// Transition parser
+    transition_parser: TransitionParser,
+    /// Shadow parser
+    shadow_parser: ShadowParser,
+    /// SVG parser
+    svg_parser: SvgParser,
+    /// Margin parser
+    margin_parser: MarginParser,
+    /// Group parser
+    group_parser: GroupParser,
+    /// Advanced grid parser
+    advanced_grid_parser: AdvancedGridParser,
     /// Animation parser
     animation_parser: AnimationParser,
+    /// Interactive parser
+    interactive_parser: InteractiveParser,
+    /// Prose parser
+    prose_parser: ProseParser,
+    /// Divide parser
+    divide_parser: DivideParser,
+    /// Gradient parser
+    gradient_parser: GradientParser,
+    /// Object fit parser
+    object_fit_parser: ObjectFitParser,
+    /// Transform parser
+    transform_parser: TransformParser,
+    /// Arbitrary values parser
+    arbitrary_parser: ArbitraryParser,
+    /// Data attributes parser
+    data_attribute_parser: DataAttributeParser,
+    /// Background properties parser
+    background_properties_parser: BackgroundPropertiesParser,
+    /// Transition properties parser
+    transition_properties_parser: TransitionPropertiesParser,
+    /// Fractional transforms parser
+    fractional_transforms_parser: FractionalTransformsParser,
     /// Variant parser
     variant_parser: VariantParser,
 }
@@ -37,7 +101,35 @@ impl CssGenerator {
             custom_properties: HashMap::new(),
             config: CssGenerationConfig::default(),
             spacing_parser: SpacingParser::new(),
+            advanced_spacing_parser: AdvancedSpacingParser::new(),
+            color_parser: ColorParser::new(),
+            advanced_color_parser: AdvancedColorParser::new(),
+            typography_parser: TypographyParser::new(),
+            layout_parser: LayoutParser::new(),
+            positioning_parser: PositioningParser::new(),
+            flexbox_parser: FlexboxParser::new(),
+            effects_parser: EffectsParser::new(),
+            sizing_parser: SizingParser::new(),
+            advanced_border_parser: AdvancedBorderParser::new(),
+            ring_parser: RingParser::new(),
+            transition_parser: TransitionParser::new(),
+            shadow_parser: ShadowParser::new(),
+            svg_parser: SvgParser::new(),
+            margin_parser: MarginParser::new(),
+            group_parser: GroupParser::new(),
+            advanced_grid_parser: AdvancedGridParser::new(),
             animation_parser: AnimationParser::new(),
+            interactive_parser: InteractiveParser::new(),
+            prose_parser: ProseParser::new(),
+            divide_parser: DivideParser::new(),
+            gradient_parser: GradientParser::new(),
+            object_fit_parser: ObjectFitParser::new(),
+            transform_parser: TransformParser::new(),
+            arbitrary_parser: ArbitraryParser::new(),
+            data_attribute_parser: DataAttributeParser::new(),
+            background_properties_parser: BackgroundPropertiesParser::new(),
+            transition_properties_parser: TransitionPropertiesParser::new(),
+            fractional_transforms_parser: FractionalTransformsParser::new(),
             variant_parser: VariantParser::new(),
         };
         
@@ -59,7 +151,35 @@ impl CssGenerator {
             custom_properties: HashMap::new(),
             config,
             spacing_parser: SpacingParser::new(),
+            advanced_spacing_parser: AdvancedSpacingParser::new(),
+            color_parser: ColorParser::new(),
+            advanced_color_parser: AdvancedColorParser::new(),
+            typography_parser: TypographyParser::new(),
+            layout_parser: LayoutParser::new(),
+            positioning_parser: PositioningParser::new(),
+            flexbox_parser: FlexboxParser::new(),
+            effects_parser: EffectsParser::new(),
+            sizing_parser: SizingParser::new(),
+            advanced_border_parser: AdvancedBorderParser::new(),
+            ring_parser: RingParser::new(),
+            transition_parser: TransitionParser::new(),
+            shadow_parser: ShadowParser::new(),
+            svg_parser: SvgParser::new(),
+            margin_parser: MarginParser::new(),
+            group_parser: GroupParser::new(),
+            advanced_grid_parser: AdvancedGridParser::new(),
             animation_parser: AnimationParser::new(),
+            interactive_parser: InteractiveParser::new(),
+            prose_parser: ProseParser::new(),
+            divide_parser: DivideParser::new(),
+            gradient_parser: GradientParser::new(),
+            object_fit_parser: ObjectFitParser::new(),
+            transform_parser: TransformParser::new(),
+            arbitrary_parser: ArbitraryParser::new(),
+            data_attribute_parser: DataAttributeParser::new(),
+            background_properties_parser: BackgroundPropertiesParser::new(),
+            transition_properties_parser: TransitionPropertiesParser::new(),
+            fractional_transforms_parser: FractionalTransformsParser::new(),
             variant_parser: VariantParser::new(),
         };
         
@@ -220,11 +340,109 @@ impl CssGenerator {
     }
 
     /// Convert a class name to CSS properties
-    fn class_to_properties(&self, class: &str) -> Result<Vec<CssProperty>> {
+    pub fn class_to_properties(&self, class: &str) -> Result<Vec<CssProperty>> {
         // First, parse variants and get the base class
         let (_variants, base_class) = self.parse_variants(class);
         
         // Try to parse the base class using comprehensive patterns
+        // Try advanced parsers first (higher priority)
+        if let Some(properties) = self.advanced_color_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.advanced_spacing_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.positioning_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.flexbox_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.sizing_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.advanced_border_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.ring_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.transition_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.shadow_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.svg_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.margin_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.group_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.advanced_grid_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.prose_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.divide_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.gradient_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.object_fit_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.transform_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.arbitrary_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.data_attribute_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.background_properties_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.transition_properties_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.fractional_transforms_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.typography_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        // Try basic parsers
         if let Some(properties) = self.parse_spacing_class(&base_class) {
             return Ok(properties);
         }
@@ -265,7 +483,7 @@ impl CssGenerator {
             return Ok(properties);
         }
         
-        if let Some(properties) = self.parse_interactivity_class(&base_class) {
+        if let Some(properties) = self.parse_interactive_class(&base_class) {
             return Ok(properties);
         }
         
@@ -307,16 +525,59 @@ impl CssGenerator {
         self.animation_parser.parse_class(class)
     }
     
-    // Stub methods for parsers not yet implemented
-    fn parse_color_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_typography_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_layout_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_flexbox_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_grid_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_border_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_effects_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_transform_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
-    fn parse_interactivity_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
+    // Parser methods - delegate to the actual parser modules
+    fn parse_color_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::ColorParser;
+        let parser = ColorParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_typography_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::TypographyParser;
+        let parser = TypographyParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_layout_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::LayoutParser;
+        let parser = LayoutParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_flexbox_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::FlexboxParser;
+        let parser = FlexboxParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_grid_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::GridParser;
+        let parser = GridParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_border_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::BorderParser;
+        let parser = BorderParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_effects_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::EffectsParser;
+        let parser = EffectsParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_transform_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        use super::parsers::TransformParser;
+        let parser = TransformParser::new();
+        parser.parse_class(class)
+    }
+    
+    fn parse_interactive_class(&self, class: &str) -> Option<Vec<CssProperty>> { 
+        self.interactive_parser.parse_class(class)
+    }
+    
     fn parse_sizing_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_background_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_filter_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }

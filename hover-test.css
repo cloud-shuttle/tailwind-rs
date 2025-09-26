@@ -1,0 +1,12 @@
+:hover.text-zinc-900 {
+  color: #000000;
+}
+
+:hover.text-white {
+  color: #ffffff;
+}
+
+:hover.bg-blue-500 {
+  background-color: #3b82f6;
+}
+

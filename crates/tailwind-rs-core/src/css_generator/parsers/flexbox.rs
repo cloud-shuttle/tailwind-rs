@@ -18,6 +18,8 @@ impl FlexboxParser {
             "flex" => Some(vec![CssProperty { name: "display".to_string(), value: "flex".to_string(), important: false }]),
             "inline-flex" => Some(vec![CssProperty { name: "display".to_string(), value: "inline-flex".to_string(), important: false }]),
             "flex-none" => Some(vec![CssProperty { name: "flex".to_string(), value: "none".to_string(), important: false }]),
+            "flex-grow" => Some(vec![CssProperty { name: "flex-grow".to_string(), value: "1".to_string(), important: false }]),
+            "flex-shrink" => Some(vec![CssProperty { name: "flex-shrink".to_string(), value: "1".to_string(), important: false }]),
             _ => None,
         }
     }

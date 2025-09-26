@@ -20,7 +20,7 @@ use super::parsers::{
     GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser, GapParser, JustifyContentParser,
     JustifyItemsParser, JustifySelfParser, AlignContentParser, AlignItemsParser, AlignSelfParser,
     PlaceContentParser, PlaceItemsParser, PlaceSelfParser, BackgroundParser, BorderUtilitiesParser,
-    EffectsUtilitiesParser, MaskUtilitiesParser
+    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser
 };
 use super::variants::VariantParser;
 
@@ -114,6 +114,10 @@ impl CssGeneratorBuilder for super::CssGenerator {
             background_parser: BackgroundParser::new(),
             border_utilities_parser: BorderUtilitiesParser::new(),
             effects_utilities_parser: EffectsUtilitiesParser::new(),
+            filter_utilities_parser: FilterUtilitiesParser::new(),
+            backdrop_filter_utilities_parser: BackdropFilterUtilitiesParser::new(),
+            accessibility_parser: AccessibilityParser::new(),
+            table_parser: TableParser::new(),
             mask_utilities_parser: MaskUtilitiesParser::new(),
             variant_parser: VariantParser::new(),
         };
@@ -196,6 +200,10 @@ impl CssGeneratorBuilder for super::CssGenerator {
             background_parser: BackgroundParser::new(),
             border_utilities_parser: BorderUtilitiesParser::new(),
             effects_utilities_parser: EffectsUtilitiesParser::new(),
+            filter_utilities_parser: FilterUtilitiesParser::new(),
+            backdrop_filter_utilities_parser: BackdropFilterUtilitiesParser::new(),
+            accessibility_parser: AccessibilityParser::new(),
+            table_parser: TableParser::new(),
             mask_utilities_parser: MaskUtilitiesParser::new(),
             variant_parser: VariantParser::new(),
         };

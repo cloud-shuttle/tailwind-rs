@@ -21,6 +21,15 @@ pub mod svg;
 pub mod margins;
 pub mod groups;
 pub mod effects;
+pub mod filter_utilities;
+pub mod backdrop_filter_utilities;
+pub mod accessibility;
+pub mod table;
+
+pub use filter_utilities::FilterUtilitiesParser;
+pub use backdrop_filter_utilities::BackdropFilterUtilitiesParser;
+pub use accessibility::AccessibilityParser;
+pub use table::TableParser;
 pub mod transforms;
 pub mod transitions;
 pub mod animations;
@@ -178,4 +187,5 @@ pub enum ParserCategory {
     Interactive,
     Background,
     Transitions,
+    Accessibility,
 }

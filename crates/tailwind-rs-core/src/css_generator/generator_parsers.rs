@@ -13,7 +13,7 @@ use super::parsers::{
     GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser, GapParser, JustifyContentParser,
     JustifyItemsParser, JustifySelfParser, AlignContentParser, AlignItemsParser, AlignSelfParser,
     PlaceContentParser, PlaceItemsParser, PlaceSelfParser, BackgroundParser, BorderUtilitiesParser,
-    EffectsUtilitiesParser, MaskUtilitiesParser
+    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser
 };
 
 /// Parser methods trait for CssGenerator
@@ -132,6 +132,22 @@ impl CssGeneratorParsers for super::CssGenerator {
         }
         
         if let Some(properties) = self.effects_utilities_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.filter_utilities_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.backdrop_filter_utilities_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.accessibility_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.table_parser.parse_class(&base_class) {
             return Ok(properties);
         }
         

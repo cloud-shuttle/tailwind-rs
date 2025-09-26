@@ -439,6 +439,11 @@ impl TypographyParser {
     fn parse_line_height_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
             "leading-none" => Some(vec![CssProperty { name: "line-height".to_string(), value: "1".to_string(), important: false }]),
+            "leading-tight" => Some(vec![CssProperty { name: "line-height".to_string(), value: "1.25".to_string(), important: false }]),
+            "leading-snug" => Some(vec![CssProperty { name: "line-height".to_string(), value: "1.375".to_string(), important: false }]),
+            "leading-normal" => Some(vec![CssProperty { name: "line-height".to_string(), value: "1.5".to_string(), important: false }]),
+            "leading-relaxed" => Some(vec![CssProperty { name: "line-height".to_string(), value: "1.625".to_string(), important: false }]),
+            "leading-loose" => Some(vec![CssProperty { name: "line-height".to_string(), value: "2".to_string(), important: false }]),
             _ => {
                 // Leading with number
                 if let Some(value) = class.strip_prefix("leading-") {

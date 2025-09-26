@@ -48,7 +48,89 @@ impl BorderUtilitiesParser {
                     }
                 }
                 
-                // Side-specific border radius
+                // Basic side-specific border radius
+                if class == "rounded-t" {
+                    return Some(vec![CssProperty {
+                        name: "border-top-left-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }, CssProperty {
+                        name: "border-top-right-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                if class == "rounded-r" {
+                    return Some(vec![CssProperty {
+                        name: "border-top-right-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }, CssProperty {
+                        name: "border-bottom-right-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                if class == "rounded-b" {
+                    return Some(vec![CssProperty {
+                        name: "border-bottom-left-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }, CssProperty {
+                        name: "border-bottom-right-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                if class == "rounded-l" {
+                    return Some(vec![CssProperty {
+                        name: "border-top-left-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }, CssProperty {
+                        name: "border-bottom-left-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                // Corner-specific border radius
+                if class == "rounded-tl" {
+                    return Some(vec![CssProperty {
+                        name: "border-top-left-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                if class == "rounded-tr" {
+                    return Some(vec![CssProperty {
+                        name: "border-top-right-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                if class == "rounded-br" {
+                    return Some(vec![CssProperty {
+                        name: "border-bottom-right-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                if class == "rounded-bl" {
+                    return Some(vec![CssProperty {
+                        name: "border-bottom-left-radius".to_string(),
+                        value: "var(--radius)".to_string(),
+                        important: false,
+                    }]);
+                }
+                
+                // Side-specific border radius with sizes
                 if class.starts_with("rounded-t-") {
                     if let Some(size) = class.strip_prefix("rounded-t-") {
                         if let Some(radius_value) = self.get_radius_value(size) {

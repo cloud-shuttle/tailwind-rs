@@ -23,6 +23,7 @@ impl LayoutParser {
             "table" => Some(vec![CssProperty { name: "display".to_string(), value: "table".to_string(), important: false }]),
             "table-cell" => Some(vec![CssProperty { name: "display".to_string(), value: "table-cell".to_string(), important: false }]),
             "table-row" => Some(vec![CssProperty { name: "display".to_string(), value: "table-row".to_string(), important: false }]),
+            "list-item" => Some(vec![CssProperty { name: "display".to_string(), value: "list-item".to_string(), important: false }]),
             "contents" => Some(vec![CssProperty { name: "display".to_string(), value: "contents".to_string(), important: false }]),
             _ => None,
         }

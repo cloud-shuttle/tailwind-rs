@@ -14,28 +14,44 @@ impl SvgParser {
 
     /// Parse stroke color classes
     fn parse_stroke_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        if let Some(color_part) = class.strip_prefix("stroke-") {
-            let color_value = self.get_stroke_color_value(color_part)?;
-            return Some(vec![CssProperty { 
-                name: "stroke".to_string(), 
-                value: color_value, 
-                important: false 
-            }]);
+        match class {
+            "stroke-none" => Some(vec![CssProperty { name: "stroke".to_string(), value: "none".to_string(), important: false }]),
+            "stroke-inherit" => Some(vec![CssProperty { name: "stroke".to_string(), value: "inherit".to_string(), important: false }]),
+            "stroke-current" => Some(vec![CssProperty { name: "stroke".to_string(), value: "currentColor".to_string(), important: false }]),
+            "stroke-transparent" => Some(vec![CssProperty { name: "stroke".to_string(), value: "transparent".to_string(), important: false }]),
+            _ => {
+                if let Some(color_part) = class.strip_prefix("stroke-") {
+                    let color_value = self.get_stroke_color_value(color_part)?;
+                    return Some(vec![CssProperty { 
+                        name: "stroke".to_string(), 
+                        value: color_value, 
+                        important: false 
+                    }]);
+                }
+                None
+            }
         }
-        None
     }
 
     /// Parse fill color classes
     fn parse_fill_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        if let Some(color_part) = class.strip_prefix("fill-") {
-            let color_value = self.get_fill_color_value(color_part)?;
-            return Some(vec![CssProperty { 
-                name: "fill".to_string(), 
-                value: color_value, 
-                important: false 
-            }]);
+        match class {
+            "fill-none" => Some(vec![CssProperty { name: "fill".to_string(), value: "none".to_string(), important: false }]),
+            "fill-inherit" => Some(vec![CssProperty { name: "fill".to_string(), value: "inherit".to_string(), important: false }]),
+            "fill-current" => Some(vec![CssProperty { name: "fill".to_string(), value: "currentColor".to_string(), important: false }]),
+            "fill-transparent" => Some(vec![CssProperty { name: "fill".to_string(), value: "transparent".to_string(), important: false }]),
+            _ => {
+                if let Some(color_part) = class.strip_prefix("fill-") {
+                    let color_value = self.get_fill_color_value(color_part)?;
+                    return Some(vec![CssProperty { 
+                        name: "fill".to_string(), 
+                        value: color_value, 
+                        important: false 
+                    }]);
+                }
+                None
+            }
         }
-        None
     }
 
     /// Parse stroke width classes

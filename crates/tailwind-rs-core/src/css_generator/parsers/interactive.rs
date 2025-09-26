@@ -105,6 +105,23 @@ impl InteractiveParser {
             _ => None,
         }
     }
+    
+    /// Parse touch action classes
+    fn parse_touch_action_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        match class {
+            "touch-auto" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "auto".to_string(), important: false }]),
+            "touch-none" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "none".to_string(), important: false }]),
+            "touch-pan-x" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "pan-x".to_string(), important: false }]),
+            "touch-pan-left" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "pan-left".to_string(), important: false }]),
+            "touch-pan-right" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "pan-right".to_string(), important: false }]),
+            "touch-pan-y" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "pan-y".to_string(), important: false }]),
+            "touch-pan-up" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "pan-up".to_string(), important: false }]),
+            "touch-pan-down" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "pan-down".to_string(), important: false }]),
+            "touch-pinch-zoom" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "pinch-zoom".to_string(), important: false }]),
+            "touch-manipulation" => Some(vec![CssProperty { name: "touch-action".to_string(), value: "manipulation".to_string(), important: false }]),
+            _ => None,
+        }
+    }
 }
 
 impl UtilityParser for InteractiveParser {
@@ -139,12 +156,17 @@ impl UtilityParser for InteractiveParser {
             return Some(properties);
         }
         
+        // Try touch action classes
+        if let Some(properties) = self.parse_touch_action_class(class) {
+            return Some(properties);
+        }
+        
         None
     }
     
     fn get_supported_patterns(&self) -> Vec<&'static str> { 
         vec![
-            "pointer-events-*", "cursor-*", "select-*", "resize-*", "scroll-*", "snap-*"
+            "pointer-events-*", "cursor-*", "select-*", "resize-*", "scroll-*", "snap-*", "touch-*"
         ] 
     }
     fn get_priority(&self) -> u32 { 40 }

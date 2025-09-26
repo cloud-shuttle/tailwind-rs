@@ -34,6 +34,21 @@ impl BackgroundParser {
         }
     }
 
+    /// Parse background-image gradient direction classes
+    fn parse_background_gradient_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        match class {
+            "bg-gradient-to-t" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to top, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-tr" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to top right, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-r" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-br" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to bottom right, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-b" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to bottom, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-bl" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to bottom left, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-l" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to left, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-tl" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to top left, var(--tw-gradient-stops))".to_string(), important: false }]),
+            _ => None,
+        }
+    }
+
     /// Parse background-color classes
     fn parse_background_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
@@ -216,6 +231,15 @@ impl BackgroundParser {
             "bg-bottom-left" => Some(vec![CssProperty { name: "background-position".to_string(), value: "bottom left".to_string(), important: false }]),
             "bg-bottom" => Some(vec![CssProperty { name: "background-position".to_string(), value: "bottom".to_string(), important: false }]),
             "bg-bottom-right" => Some(vec![CssProperty { name: "background-position".to_string(), value: "bottom right".to_string(), important: false }]),
+            "bg-position-top" => Some(vec![CssProperty { name: "background-position".to_string(), value: "top".to_string(), important: false }]),
+            "bg-position-bottom" => Some(vec![CssProperty { name: "background-position".to_string(), value: "bottom".to_string(), important: false }]),
+            "bg-position-left" => Some(vec![CssProperty { name: "background-position".to_string(), value: "left".to_string(), important: false }]),
+            "bg-position-right" => Some(vec![CssProperty { name: "background-position".to_string(), value: "right".to_string(), important: false }]),
+            "bg-position-center" => Some(vec![CssProperty { name: "background-position".to_string(), value: "center".to_string(), important: false }]),
+            "bg-position-top-left" => Some(vec![CssProperty { name: "background-position".to_string(), value: "top left".to_string(), important: false }]),
+            "bg-position-top-right" => Some(vec![CssProperty { name: "background-position".to_string(), value: "top right".to_string(), important: false }]),
+            "bg-position-bottom-left" => Some(vec![CssProperty { name: "background-position".to_string(), value: "bottom left".to_string(), important: false }]),
+            "bg-position-bottom-right" => Some(vec![CssProperty { name: "background-position".to_string(), value: "bottom right".to_string(), important: false }]),
             _ => {
                 // Custom properties for background position
                 if let Some(value) = class.strip_prefix("bg-position-(") {
@@ -263,6 +287,9 @@ impl BackgroundParser {
             "bg-auto" => Some(vec![CssProperty { name: "background-size".to_string(), value: "auto".to_string(), important: false }]),
             "bg-cover" => Some(vec![CssProperty { name: "background-size".to_string(), value: "cover".to_string(), important: false }]),
             "bg-contain" => Some(vec![CssProperty { name: "background-size".to_string(), value: "contain".to_string(), important: false }]),
+            "bg-size-auto" => Some(vec![CssProperty { name: "background-size".to_string(), value: "auto".to_string(), important: false }]),
+            "bg-size-cover" => Some(vec![CssProperty { name: "background-size".to_string(), value: "cover".to_string(), important: false }]),
+            "bg-size-contain" => Some(vec![CssProperty { name: "background-size".to_string(), value: "contain".to_string(), important: false }]),
             _ => {
                 // Custom properties for background size
                 if let Some(value) = class.strip_prefix("bg-size-(") {
@@ -340,6 +367,11 @@ impl UtilityParser for BackgroundParser {
         
         // Background attachment (most specific)
         if let Some(properties) = self.parse_background_attachment_class(class) {
+            return Some(properties);
+        }
+        
+        // Background gradient
+        if let Some(properties) = self.parse_background_gradient_class(class) {
             return Some(properties);
         }
         

@@ -3,16 +3,14 @@
 //! This module provides parsing logic for filter-related Tailwind CSS utilities,
 //! including blur, brightness, contrast, drop-shadow, grayscale, hue-rotate, invert, saturate, and sepia.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct FilterUtilitiesParser;
 
 impl FilterUtilitiesParser {
-    pub fn new() -> Self {
-        Self
-    }
+    pub fn new() -> Self { Self }
 
     /// Parse filter classes
     fn parse_filter_class(&self, class: &str) -> Option<Vec<CssProperty>> {
@@ -33,7 +31,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for filter
                 if let Some(value) = class.strip_prefix("filter-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -44,7 +42,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 None
             }
         }
@@ -104,7 +102,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for blur
                 if let Some(value) = class.strip_prefix("blur-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -115,7 +113,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 None
             }
         }
@@ -135,7 +133,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for brightness
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -146,7 +144,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for brightness
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -174,7 +172,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for contrast
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -185,7 +183,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for contrast
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -248,7 +246,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for drop-shadow
                 if let Some(value) = class.strip_prefix("drop-shadow-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -259,7 +257,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 None
             }
         }
@@ -291,7 +289,7 @@ impl FilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Arbitrary values for grayscale
                         if let Some(value) = value.strip_prefix("[") {
                             if let Some(value) = value.strip_suffix("]") {
@@ -302,7 +300,7 @@ impl FilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Numeric values for grayscale
                         if let Ok(_) = value.parse::<f32>() {
                             return Some(vec![CssProperty {
@@ -332,7 +330,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for hue-rotate
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -343,7 +341,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for hue-rotate
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -394,7 +392,7 @@ impl FilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Arbitrary values for invert
                         if let Some(value) = value.strip_prefix("[") {
                             if let Some(value) = value.strip_suffix("]") {
@@ -405,7 +403,7 @@ impl FilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Numeric values for invert
                         if let Ok(_) = value.parse::<f32>() {
                             return Some(vec![CssProperty {
@@ -435,7 +433,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for saturate
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -446,7 +444,7 @@ impl FilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for saturate
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -486,7 +484,7 @@ impl FilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Arbitrary values for sepia
                         if let Some(value) = value.strip_prefix("[") {
                             if let Some(value) = value.strip_suffix("]") {
@@ -497,7 +495,7 @@ impl FilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Numeric values for sepia
                         if let Ok(_) = value.parse::<f32>() {
                             return Some(vec![CssProperty {
@@ -517,81 +515,69 @@ impl FilterUtilitiesParser {
 impl UtilityParser for FilterUtilitiesParser {
     fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         // Try each parser in order of specificity
-
+        
         // Filter (most specific)
         if let Some(properties) = self.parse_filter_class(class) {
             return Some(properties);
         }
-
+        
         // Blur
         if let Some(properties) = self.parse_blur_class(class) {
             return Some(properties);
         }
-
+        
         // Brightness
         if let Some(properties) = self.parse_brightness_class(class) {
             return Some(properties);
         }
-
+        
         // Contrast
         if let Some(properties) = self.parse_contrast_class(class) {
             return Some(properties);
         }
-
+        
         // Drop shadow
         if let Some(properties) = self.parse_drop_shadow_class(class) {
             return Some(properties);
         }
-
+        
         // Grayscale
         if let Some(properties) = self.parse_grayscale_class(class) {
             return Some(properties);
         }
-
+        
         // Hue rotate
         if let Some(properties) = self.parse_hue_rotate_class(class) {
             return Some(properties);
         }
-
+        
         // Invert
         if let Some(properties) = self.parse_invert_class(class) {
             return Some(properties);
         }
-
+        
         // Saturate
         if let Some(properties) = self.parse_saturate_class(class) {
             return Some(properties);
         }
-
+        
         // Sepia (least specific)
         if let Some(properties) = self.parse_sepia_class(class) {
             return Some(properties);
         }
-
+        
         None
     }
-
-    fn get_supported_patterns(&self) -> Vec<&'static str> {
+    
+    fn get_supported_patterns(&self) -> Vec<&'static str> { 
         vec![
-            "filter-*",
-            "blur-*",
-            "brightness-*",
-            "contrast-*",
-            "drop-shadow-*",
-            "grayscale-*",
-            "hue-rotate-*",
-            "invert-*",
-            "saturate-*",
-            "sepia-*",
-        ]
+            "filter-*", "blur-*", "brightness-*", "contrast-*", "drop-shadow-*", 
+            "grayscale-*", "hue-rotate-*", "invert-*", "saturate-*", "sepia-*"
+        ] 
     }
-
-    fn get_priority(&self) -> u32 {
-        50
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Effects
-    }
+    
+    fn get_priority(&self) -> u32 { 50 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Effects }
 }
 
 impl Default for FilterUtilitiesParser {

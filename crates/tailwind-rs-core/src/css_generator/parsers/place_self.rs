@@ -3,7 +3,7 @@
 //! This module provides parsing logic for Tailwind CSS place-self utilities,
 //! such as `place-self-auto`, `place-self-start`, `place-self-end`, etc.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 use std::collections::HashMap;
 
@@ -20,22 +20,15 @@ impl PlaceSelfParser {
         place_self_map.insert("place-self-end".to_string(), "end".to_string());
         place_self_map.insert("place-self-end-safe".to_string(), "safe end".to_string());
         place_self_map.insert("place-self-center".to_string(), "center".to_string());
-        place_self_map.insert(
-            "place-self-center-safe".to_string(),
-            "safe center".to_string(),
-        );
+        place_self_map.insert("place-self-center-safe".to_string(), "safe center".to_string());
         place_self_map.insert("place-self-stretch".to_string(), "stretch".to_string());
-
+        
         Self { place_self_map }
     }
 
     fn parse_place_self_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(place_self_value) = self.place_self_map.get(class) {
-            return Some(vec![CssProperty {
-                name: "place-self".to_string(),
-                value: place_self_value.clone(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "place-self".to_string(), value: place_self_value.clone(), important: false }]);
         }
         None
     }
@@ -48,26 +41,15 @@ impl UtilityParser for PlaceSelfParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "place-self-auto",
-            "place-self-start",
-            "place-self-end",
-            "place-self-end-safe",
-            "place-self-center",
-            "place-self-center-safe",
-            "place-self-stretch",
+            "place-self-auto", "place-self-start", "place-self-end", "place-self-end-safe",
+            "place-self-center", "place-self-center-safe", "place-self-stretch"
         ]
     }
 
-    fn get_priority(&self) -> u32 {
-        70
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Grid
-    }
+    fn get_priority(&self) -> u32 { 70 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Grid }
 }
 
 impl Default for PlaceSelfParser {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }

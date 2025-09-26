@@ -3,7 +3,7 @@
 //! This module provides parsing logic for Tailwind CSS inset utilities,
 //! such as `top-0`, `right-4`, `bottom-auto`, `left-1/2`, `inset-0`, etc.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 use std::collections::HashMap;
 
@@ -83,51 +83,28 @@ impl InsetParser {
         fraction_map.insert("10/12".to_string(), "83.333333%".to_string());
         fraction_map.insert("11/12".to_string(), "91.666667%".to_string());
 
-        Self {
-            spacing_map,
-            fraction_map,
-        }
+        Self { spacing_map, fraction_map }
     }
 
     fn parse_inset_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("inset-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset".to_string(),
-                    value: spacing_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset".to_string(),
-                    value: fraction_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-inset-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset".to_string(),
-                    value: format!("-{}", spacing_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset".to_string(),
-                    value: format!("-{}", fraction_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         if class == "inset-auto" {
-            return Some(vec![CssProperty {
-                name: "inset".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "inset".to_string(), value: "auto".to_string(), important: false }]);
         }
         None
     }
@@ -135,62 +112,18 @@ impl InsetParser {
     fn parse_inset_x_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("inset-x-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "left".to_string(),
-                        value: spacing_value.clone(),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "right".to_string(),
-                        value: spacing_value.clone(),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: spacing_value.clone(), important: false }, CssProperty { name: "right".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "left".to_string(),
-                        value: fraction_value.clone(),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "right".to_string(),
-                        value: fraction_value.clone(),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: fraction_value.clone(), important: false }, CssProperty { name: "right".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-inset-x-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "left".to_string(),
-                        value: format!("-{}", spacing_value),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "right".to_string(),
-                        value: format!("-{}", spacing_value),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: format!("-{}", spacing_value), important: false }, CssProperty { name: "right".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "left".to_string(),
-                        value: format!("-{}", fraction_value),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "right".to_string(),
-                        value: format!("-{}", fraction_value),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: format!("-{}", fraction_value), important: false }, CssProperty { name: "right".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         None
@@ -199,62 +132,18 @@ impl InsetParser {
     fn parse_inset_y_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("inset-y-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "top".to_string(),
-                        value: spacing_value.clone(),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "bottom".to_string(),
-                        value: spacing_value.clone(),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: spacing_value.clone(), important: false }, CssProperty { name: "bottom".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "top".to_string(),
-                        value: fraction_value.clone(),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "bottom".to_string(),
-                        value: fraction_value.clone(),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: fraction_value.clone(), important: false }, CssProperty { name: "bottom".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-inset-y-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "top".to_string(),
-                        value: format!("-{}", spacing_value),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "bottom".to_string(),
-                        value: format!("-{}", spacing_value),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: format!("-{}", spacing_value), important: false }, CssProperty { name: "bottom".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![
-                    CssProperty {
-                        name: "top".to_string(),
-                        value: format!("-{}", fraction_value),
-                        important: false,
-                    },
-                    CssProperty {
-                        name: "bottom".to_string(),
-                        value: format!("-{}", fraction_value),
-                        important: false,
-                    },
-                ]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: format!("-{}", fraction_value), important: false }, CssProperty { name: "bottom".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         None
@@ -263,42 +152,22 @@ impl InsetParser {
     fn parse_top_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("top-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "top".to_string(),
-                    value: spacing_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "top".to_string(),
-                    value: fraction_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-top-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "top".to_string(),
-                    value: format!("-{}", spacing_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "top".to_string(),
-                    value: format!("-{}", fraction_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         if class == "top-auto" {
-            return Some(vec![CssProperty {
-                name: "top".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "top".to_string(), value: "auto".to_string(), important: false }]);
         }
         None
     }
@@ -306,42 +175,22 @@ impl InsetParser {
     fn parse_right_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("right-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "right".to_string(),
-                    value: spacing_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "right".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "right".to_string(),
-                    value: fraction_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "right".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-right-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "right".to_string(),
-                    value: format!("-{}", spacing_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "right".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "right".to_string(),
-                    value: format!("-{}", fraction_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "right".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         if class == "right-auto" {
-            return Some(vec![CssProperty {
-                name: "right".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "right".to_string(), value: "auto".to_string(), important: false }]);
         }
         None
     }
@@ -349,42 +198,22 @@ impl InsetParser {
     fn parse_bottom_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("bottom-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "bottom".to_string(),
-                    value: spacing_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "bottom".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "bottom".to_string(),
-                    value: fraction_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "bottom".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-bottom-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "bottom".to_string(),
-                    value: format!("-{}", spacing_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "bottom".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "bottom".to_string(),
-                    value: format!("-{}", fraction_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "bottom".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         if class == "bottom-auto" {
-            return Some(vec![CssProperty {
-                name: "bottom".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "bottom".to_string(), value: "auto".to_string(), important: false }]);
         }
         None
     }
@@ -392,42 +221,22 @@ impl InsetParser {
     fn parse_left_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("left-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "left".to_string(),
-                    value: spacing_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "left".to_string(),
-                    value: fraction_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-left-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "left".to_string(),
-                    value: format!("-{}", spacing_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "left".to_string(),
-                    value: format!("-{}", fraction_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         if class == "left-auto" {
-            return Some(vec![CssProperty {
-                name: "left".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "left".to_string(), value: "auto".to_string(), important: false }]);
         }
         None
     }
@@ -435,42 +244,22 @@ impl InsetParser {
     fn parse_start_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("start-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-start".to_string(),
-                    value: spacing_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-start".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-start".to_string(),
-                    value: fraction_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-start".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-start-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-start".to_string(),
-                    value: format!("-{}", spacing_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-start".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-start".to_string(),
-                    value: format!("-{}", fraction_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-start".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         if class == "start-auto" {
-            return Some(vec![CssProperty {
-                name: "inset-inline-start".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "inset-inline-start".to_string(), value: "auto".to_string(), important: false }]);
         }
         None
     }
@@ -478,42 +267,22 @@ impl InsetParser {
     fn parse_end_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("end-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-end".to_string(),
-                    value: spacing_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-end".to_string(), value: spacing_value.clone(), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-end".to_string(),
-                    value: fraction_value.clone(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-end".to_string(), value: fraction_value.clone(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("-end-") {
             if let Some(spacing_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-end".to_string(),
-                    value: format!("-{}", spacing_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-end".to_string(), value: format!("-{}", spacing_value), important: false }]);
             }
             if let Some(fraction_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-end".to_string(),
-                    value: format!("-{}", fraction_value),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-end".to_string(), value: format!("-{}", fraction_value), important: false }]);
             }
         }
         if class == "end-auto" {
-            return Some(vec![CssProperty {
-                name: "inset-inline-end".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "inset-inline-end".to_string(), value: "auto".to_string(), important: false }]);
         }
         None
     }
@@ -521,47 +290,27 @@ impl InsetParser {
     fn parse_arbitrary_inset_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("inset-[") {
             if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "inset".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset".to_string(), value: value.to_string(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("top-[") {
             if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "top".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: value.to_string(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("right-[") {
             if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "right".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "right".to_string(), value: value.to_string(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("bottom-[") {
             if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "bottom".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "bottom".to_string(), value: value.to_string(), important: false }]);
             }
         }
         if let Some(value) = class.strip_prefix("left-[") {
             if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "left".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: value.to_string(), important: false }]);
             }
         }
         None
@@ -570,65 +319,37 @@ impl InsetParser {
     fn parse_custom_property_inset_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(prop) = class.strip_prefix("inset-(") {
             if let Some(prop) = prop.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "inset".to_string(),
-                    value: format!("var({})", prop),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset".to_string(), value: format!("var({})", prop), important: false }]);
             }
         }
         if let Some(prop) = class.strip_prefix("top-(") {
             if let Some(prop) = prop.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "top".to_string(),
-                    value: format!("var({})", prop),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "top".to_string(), value: format!("var({})", prop), important: false }]);
             }
         }
         if let Some(prop) = class.strip_prefix("right-(") {
             if let Some(prop) = prop.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "right".to_string(),
-                    value: format!("var({})", prop),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "right".to_string(), value: format!("var({})", prop), important: false }]);
             }
         }
         if let Some(prop) = class.strip_prefix("bottom-(") {
             if let Some(prop) = prop.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "bottom".to_string(),
-                    value: format!("var({})", prop),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "bottom".to_string(), value: format!("var({})", prop), important: false }]);
             }
         }
         if let Some(prop) = class.strip_prefix("left-(") {
             if let Some(prop) = prop.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "left".to_string(),
-                    value: format!("var({})", prop),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "left".to_string(), value: format!("var({})", prop), important: false }]);
             }
         }
         if let Some(prop) = class.strip_prefix("start-(") {
             if let Some(prop) = prop.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-start".to_string(),
-                    value: format!("var({})", prop),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-start".to_string(), value: format!("var({})", prop), important: false }]);
             }
         }
         if let Some(prop) = class.strip_prefix("end-(") {
             if let Some(prop) = prop.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "inset-inline-end".to_string(),
-                    value: format!("var({})", prop),
-                    important: false,
-                }]);
+                return Some(vec![CssProperty { name: "inset-inline-end".to_string(), value: format!("var({})", prop), important: false }]);
             }
         }
         None
@@ -652,70 +373,19 @@ impl UtilityParser for InsetParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "inset-0",
-            "inset-px",
-            "inset-0.5",
-            "inset-1",
-            "inset-1.5",
-            "inset-2",
-            "inset-2.5",
-            "inset-3",
-            "inset-3.5",
-            "inset-4",
-            "inset-5",
-            "inset-6",
-            "inset-7",
-            "inset-8",
-            "inset-9",
-            "inset-10",
-            "inset-11",
-            "inset-12",
-            "inset-14",
-            "inset-16",
-            "inset-20",
-            "inset-24",
-            "inset-28",
-            "inset-32",
-            "inset-36",
-            "inset-40",
-            "inset-44",
-            "inset-48",
-            "inset-52",
-            "inset-56",
-            "inset-60",
-            "inset-64",
-            "inset-72",
-            "inset-80",
-            "inset-96",
-            "inset-auto",
-            "inset-full",
-            "inset-x-*",
-            "inset-y-*",
-            "top-*",
-            "right-*",
-            "bottom-*",
-            "left-*",
-            "start-*",
-            "end-*",
-            "inset-[*]",
-            "top-[*]",
-            "right-[*]",
-            "bottom-[*]",
-            "left-[*]",
-            "inset-(*)",
+            "inset-0", "inset-px", "inset-0.5", "inset-1", "inset-1.5", "inset-2", "inset-2.5", "inset-3", "inset-3.5", "inset-4",
+            "inset-5", "inset-6", "inset-7", "inset-8", "inset-9", "inset-10", "inset-11", "inset-12", "inset-14", "inset-16",
+            "inset-20", "inset-24", "inset-28", "inset-32", "inset-36", "inset-40", "inset-44", "inset-48", "inset-52", "inset-56",
+            "inset-60", "inset-64", "inset-72", "inset-80", "inset-96", "inset-auto", "inset-full",
+            "inset-x-*", "inset-y-*", "top-*", "right-*", "bottom-*", "left-*", "start-*", "end-*",
+            "inset-[*]", "top-[*]", "right-[*]", "bottom-[*]", "left-[*]", "inset-(*)"
         ]
     }
 
-    fn get_priority(&self) -> u32 {
-        70
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Layout
-    }
+    fn get_priority(&self) -> u32 { 70 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Layout }
 }
 
 impl Default for InsetParser {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }

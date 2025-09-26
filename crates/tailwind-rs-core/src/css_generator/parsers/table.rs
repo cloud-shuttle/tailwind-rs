@@ -3,16 +3,14 @@
 //! This module provides parsing logic for table-related Tailwind CSS utilities,
 //! including table-layout, border-collapse, border-spacing, and caption-side.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct TableParser;
 
 impl TableParser {
-    pub fn new() -> Self {
-        Self
-    }
+    pub fn new() -> Self { Self }
 
     /// Parse table-layout classes
     fn parse_table_layout_class(&self, class: &str) -> Option<Vec<CssProperty>> {
@@ -68,10 +66,7 @@ impl TableParser {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "border-spacing".to_string(),
-                    value: format!(
-                        "calc(var(--spacing) * {}) var(--tw-border-spacing-y)",
-                        spacing
-                    ),
+                    value: format!("calc(var(--spacing) * {}) var(--tw-border-spacing-y)", spacing),
                     important: false,
                 }]);
             }
@@ -85,10 +80,7 @@ impl TableParser {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "border-spacing".to_string(),
-                    value: format!(
-                        "var(--tw-border-spacing-x) calc(var(--spacing) * {})",
-                        spacing
-                    ),
+                    value: format!("var(--tw-border-spacing-x) calc(var(--spacing) * {})", spacing),
                     important: false,
                 }]);
             }
@@ -178,25 +170,15 @@ impl UtilityParser for TableParser {
         }
         None
     }
-
-    fn get_supported_patterns(&self) -> Vec<&'static str> {
+    
+    fn get_supported_patterns(&self) -> Vec<&'static str> { 
         vec![
-            "table-*",
-            "border-collapse",
-            "border-separate",
-            "border-spacing-*",
-            "border-spacing-x-*",
-            "border-spacing-y-*",
-            "caption-*",
-        ]
+            "table-*", "border-collapse", "border-separate", "border-spacing-*", "border-spacing-x-*", "border-spacing-y-*", "caption-*"
+        ] 
     }
-
-    fn get_priority(&self) -> u32 {
-        50
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Layout
-    }
+    
+    fn get_priority(&self) -> u32 { 50 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Layout }
 }
 
 impl Default for TableParser {

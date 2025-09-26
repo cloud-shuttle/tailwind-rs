@@ -3,16 +3,14 @@
 //! This module provides parsing logic for advanced spacing-related Tailwind CSS utilities,
 //! including space utilities, gap utilities, and complex spacing patterns.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct AdvancedSpacingParser;
 
 impl AdvancedSpacingParser {
-    pub fn new() -> Self {
-        Self
-    }
+    pub fn new() -> Self { Self }
 
     /// Parse space utilities (space-y-*, space-x-*)
     fn parse_space_class(&self, class: &str) -> Option<Vec<CssProperty>> {
@@ -20,30 +18,30 @@ impl AdvancedSpacingParser {
             if let Some(value) = direction_and_value.strip_prefix("y-") {
                 let spacing_value = self.parse_spacing_value(value)?;
                 return Some(vec![
-                    CssProperty {
-                        name: "margin-top".to_string(),
-                        value: format!("calc({} * 0.5)", spacing_value),
-                        important: false,
+                    CssProperty { 
+                        name: "margin-top".to_string(), 
+                        value: format!("calc({} * 0.5)", spacing_value), 
+                        important: false 
                     },
-                    CssProperty {
-                        name: "margin-bottom".to_string(),
-                        value: format!("calc({} * 0.5)", spacing_value),
-                        important: false,
+                    CssProperty { 
+                        name: "margin-bottom".to_string(), 
+                        value: format!("calc({} * 0.5)", spacing_value), 
+                        important: false 
                     },
                 ]);
             }
             if let Some(value) = direction_and_value.strip_prefix("x-") {
                 let spacing_value = self.parse_spacing_value(value)?;
                 return Some(vec![
-                    CssProperty {
-                        name: "margin-left".to_string(),
-                        value: format!("calc({} * 0.5)", spacing_value),
-                        important: false,
+                    CssProperty { 
+                        name: "margin-left".to_string(), 
+                        value: format!("calc({} * 0.5)", spacing_value), 
+                        important: false 
                     },
-                    CssProperty {
-                        name: "margin-right".to_string(),
-                        value: format!("calc({} * 0.5)", spacing_value),
-                        important: false,
+                    CssProperty { 
+                        name: "margin-right".to_string(), 
+                        value: format!("calc({} * 0.5)", spacing_value), 
+                        important: false 
                     },
                 ]);
             }
@@ -55,27 +53,15 @@ impl AdvancedSpacingParser {
     fn parse_gap_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("gap-") {
             let spacing_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty {
-                name: "gap".to_string(),
-                value: spacing_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "gap".to_string(), value: spacing_value, important: false }]);
         }
         if let Some(value) = class.strip_prefix("gap-x-") {
             let spacing_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty {
-                name: "column-gap".to_string(),
-                value: spacing_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "column-gap".to_string(), value: spacing_value, important: false }]);
         }
         if let Some(value) = class.strip_prefix("gap-y-") {
             let spacing_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty {
-                name: "row-gap".to_string(),
-                value: spacing_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "row-gap".to_string(), value: spacing_value, important: false }]);
         }
         None
     }
@@ -129,12 +115,12 @@ impl UtilityParser for AdvancedSpacingParser {
         if let Some(properties) = self.parse_space_class(class) {
             return Some(properties);
         }
-
+        
         // Try gap utilities
         if let Some(properties) = self.parse_gap_class(class) {
             return Some(properties);
         }
-
+        
         None
     }
 
@@ -142,16 +128,10 @@ impl UtilityParser for AdvancedSpacingParser {
         vec!["space-y-*", "space-x-*", "gap-*", "gap-x-*", "gap-y-*"]
     }
 
-    fn get_priority(&self) -> u32 {
-        50
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Spacing
-    }
+    fn get_priority(&self) -> u32 { 50 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Spacing }
 }
 
 impl Default for AdvancedSpacingParser {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }

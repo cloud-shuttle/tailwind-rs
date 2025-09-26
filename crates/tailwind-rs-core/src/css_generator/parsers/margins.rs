@@ -3,64 +3,30 @@
 //! This module provides parsing logic for margin-related Tailwind CSS utilities,
 //! including margin sides, margin auto, and margin values.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct MarginParser;
 
 impl MarginParser {
-    pub fn new() -> Self {
-        Self
-    }
+    pub fn new() -> Self { Self }
 
     /// Parse margin auto classes
     fn parse_margin_auto_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
             "mx-auto" => Some(vec![
-                CssProperty {
-                    name: "margin-left".to_string(),
-                    value: "auto".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "margin-right".to_string(),
-                    value: "auto".to_string(),
-                    important: false,
-                },
+                CssProperty { name: "margin-left".to_string(), value: "auto".to_string(), important: false },
+                CssProperty { name: "margin-right".to_string(), value: "auto".to_string(), important: false },
             ]),
             "my-auto" => Some(vec![
-                CssProperty {
-                    name: "margin-top".to_string(),
-                    value: "auto".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "margin-bottom".to_string(),
-                    value: "auto".to_string(),
-                    important: false,
-                },
+                CssProperty { name: "margin-top".to_string(), value: "auto".to_string(), important: false },
+                CssProperty { name: "margin-bottom".to_string(), value: "auto".to_string(), important: false },
             ]),
-            "mt-auto" => Some(vec![CssProperty {
-                name: "margin-top".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]),
-            "mr-auto" => Some(vec![CssProperty {
-                name: "margin-right".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]),
-            "mb-auto" => Some(vec![CssProperty {
-                name: "margin-bottom".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]),
-            "ml-auto" => Some(vec![CssProperty {
-                name: "margin-left".to_string(),
-                value: "auto".to_string(),
-                important: false,
-            }]),
+            "mt-auto" => Some(vec![CssProperty { name: "margin-top".to_string(), value: "auto".to_string(), important: false }]),
+            "mr-auto" => Some(vec![CssProperty { name: "margin-right".to_string(), value: "auto".to_string(), important: false }]),
+            "mb-auto" => Some(vec![CssProperty { name: "margin-bottom".to_string(), value: "auto".to_string(), important: false }]),
+            "ml-auto" => Some(vec![CssProperty { name: "margin-left".to_string(), value: "auto".to_string(), important: false }]),
             _ => None,
         }
     }
@@ -69,126 +35,62 @@ impl MarginParser {
     fn parse_margin_side_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("mt-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-top".to_string(),
-                value: margin_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-top".to_string(), value: margin_value, important: false }]);
         }
         if let Some(value) = class.strip_prefix("-mt-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-top".to_string(),
-                value: format!("-{}", margin_value),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-top".to_string(), value: format!("-{}", margin_value), important: false }]);
         }
         if let Some(value) = class.strip_prefix("mr-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-right".to_string(),
-                value: margin_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-right".to_string(), value: margin_value, important: false }]);
         }
         if let Some(value) = class.strip_prefix("-mr-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-right".to_string(),
-                value: format!("-{}", margin_value),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-right".to_string(), value: format!("-{}", margin_value), important: false }]);
         }
         if let Some(value) = class.strip_prefix("mb-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-bottom".to_string(),
-                value: margin_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-bottom".to_string(), value: margin_value, important: false }]);
         }
         if let Some(value) = class.strip_prefix("-mb-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-bottom".to_string(),
-                value: format!("-{}", margin_value),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-bottom".to_string(), value: format!("-{}", margin_value), important: false }]);
         }
         if let Some(value) = class.strip_prefix("ml-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-left".to_string(),
-                value: margin_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-left".to_string(), value: margin_value, important: false }]);
         }
         if let Some(value) = class.strip_prefix("-ml-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin-left".to_string(),
-                value: format!("-{}", margin_value),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin-left".to_string(), value: format!("-{}", margin_value), important: false }]);
         }
         if let Some(value) = class.strip_prefix("mx-") {
             let margin_value = self.parse_margin_value(value)?;
             return Some(vec![
-                CssProperty {
-                    name: "margin-left".to_string(),
-                    value: margin_value.clone(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "margin-right".to_string(),
-                    value: margin_value,
-                    important: false,
-                },
+                CssProperty { name: "margin-left".to_string(), value: margin_value.clone(), important: false },
+                CssProperty { name: "margin-right".to_string(), value: margin_value, important: false },
             ]);
         }
         if let Some(value) = class.strip_prefix("-mx-") {
             let margin_value = self.parse_margin_value(value)?;
             return Some(vec![
-                CssProperty {
-                    name: "margin-left".to_string(),
-                    value: format!("-{}", margin_value.clone()),
-                    important: false,
-                },
-                CssProperty {
-                    name: "margin-right".to_string(),
-                    value: format!("-{}", margin_value),
-                    important: false,
-                },
+                CssProperty { name: "margin-left".to_string(), value: format!("-{}", margin_value.clone()), important: false },
+                CssProperty { name: "margin-right".to_string(), value: format!("-{}", margin_value), important: false },
             ]);
         }
         if let Some(value) = class.strip_prefix("my-") {
             let margin_value = self.parse_margin_value(value)?;
             return Some(vec![
-                CssProperty {
-                    name: "margin-top".to_string(),
-                    value: margin_value.clone(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "margin-bottom".to_string(),
-                    value: margin_value,
-                    important: false,
-                },
+                CssProperty { name: "margin-top".to_string(), value: margin_value.clone(), important: false },
+                CssProperty { name: "margin-bottom".to_string(), value: margin_value, important: false },
             ]);
         }
         if let Some(value) = class.strip_prefix("-my-") {
             let margin_value = self.parse_margin_value(value)?;
             return Some(vec![
-                CssProperty {
-                    name: "margin-top".to_string(),
-                    value: format!("-{}", margin_value.clone()),
-                    important: false,
-                },
-                CssProperty {
-                    name: "margin-bottom".to_string(),
-                    value: format!("-{}", margin_value),
-                    important: false,
-                },
+                CssProperty { name: "margin-top".to_string(), value: format!("-{}", margin_value.clone()), important: false },
+                CssProperty { name: "margin-bottom".to_string(), value: format!("-{}", margin_value), important: false },
             ]);
         }
         None
@@ -241,19 +143,11 @@ impl MarginParser {
     fn parse_margin_general_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("m-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin".to_string(),
-                value: margin_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin".to_string(), value: margin_value, important: false }]);
         }
         if let Some(value) = class.strip_prefix("-m-") {
             let margin_value = self.parse_margin_value(value)?;
-            return Some(vec![CssProperty {
-                name: "margin".to_string(),
-                value: format!("-{}", margin_value),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "margin".to_string(), value: format!("-{}", margin_value), important: false }]);
         }
         None
     }
@@ -275,22 +169,13 @@ impl UtilityParser for MarginParser {
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
-        vec![
-            "mx-auto", "my-auto", "mt-auto", "mr-auto", "mb-auto", "ml-auto", "mt-*", "mr-*",
-            "mb-*", "ml-*", "mx-*", "my-*",
-        ]
+        vec!["mx-auto", "my-auto", "mt-auto", "mr-auto", "mb-auto", "ml-auto", "mt-*", "mr-*", "mb-*", "ml-*", "mx-*", "my-*"]
     }
 
-    fn get_priority(&self) -> u32 {
-        70
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Spacing
-    }
+    fn get_priority(&self) -> u32 { 70 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Spacing }
 }
 
 impl Default for MarginParser {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }

@@ -72,7 +72,7 @@ fn main() {
         .class("focus:ring-2 focus:ring-blue-500")
         .build();
     
-    let classes = class_set.classes().join(" ");
+    let classes = class_set.to_css_classes();
     println!("ClassBuilder result: {}", classes);
     
     println!();
@@ -148,7 +148,7 @@ fn main() {
             ButtonSize::Large => builder = builder.class("px-6 py-3 text-lg"),
         };
         
-        builder.build().classes().join(" ")
+        builder.build().to_css_classes()
     }
     
     // Test both approaches
@@ -194,7 +194,7 @@ fn main() {
             .class("font-medium")
             .class("bg-blue-600")
             .class("text-white")
-            .hover("hover:bg-blue-700")
+            .class("hover:bg-blue-700")
             .class("transition-colors")
             .build();
     }

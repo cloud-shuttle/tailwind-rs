@@ -3,7 +3,7 @@
 //! This module provides parsing logic for Tailwind CSS align-items utilities,
 //! such as `items-start`, `items-end`, `items-center`, `items-baseline`, etc.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 use std::collections::HashMap;
 
@@ -21,22 +21,15 @@ impl AlignItemsParser {
         items_map.insert("items-center".to_string(), "center".to_string());
         items_map.insert("items-center-safe".to_string(), "safe center".to_string());
         items_map.insert("items-baseline".to_string(), "baseline".to_string());
-        items_map.insert(
-            "items-baseline-last".to_string(),
-            "last baseline".to_string(),
-        );
+        items_map.insert("items-baseline-last".to_string(), "last baseline".to_string());
         items_map.insert("items-stretch".to_string(), "stretch".to_string());
-
+        
         Self { items_map }
     }
 
     fn parse_items_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(items_value) = self.items_map.get(class) {
-            return Some(vec![CssProperty {
-                name: "align-items".to_string(),
-                value: items_value.clone(),
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "align-items".to_string(), value: items_value.clone(), important: false }]);
         }
         None
     }
@@ -49,27 +42,15 @@ impl UtilityParser for AlignItemsParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "items-start",
-            "items-end",
-            "items-end-safe",
-            "items-center",
-            "items-center-safe",
-            "items-baseline",
-            "items-baseline-last",
-            "items-stretch",
+            "items-start", "items-end", "items-end-safe", "items-center", "items-center-safe",
+            "items-baseline", "items-baseline-last", "items-stretch"
         ]
     }
 
-    fn get_priority(&self) -> u32 {
-        70
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Flexbox
-    }
+    fn get_priority(&self) -> u32 { 70 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Flexbox }
 }
 
 impl Default for AlignItemsParser {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }

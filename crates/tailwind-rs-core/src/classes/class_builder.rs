@@ -2,8 +2,8 @@
 //!
 //! This module contains the ClassBuilder struct and its methods.
 
-use super::ClassSet;
 use crate::responsive::Breakpoint;
+use super::ClassSet;
 
 /// Builder for creating class sets
 #[derive(Debug, Clone)]
@@ -53,7 +53,7 @@ impl ClassBuilder {
     pub fn custom_variant(mut self, variant: impl Into<String>, class: impl Into<String>) -> Self {
         let variant = variant.into();
         let class = class.into();
-
+        
         // Add the variant as a conditional class
         self.class_set.add_conditional_class(variant, class);
         self
@@ -66,12 +66,7 @@ impl ClassBuilder {
     }
 
     /// Add a data variant class
-    pub fn data(
-        self,
-        data_attr: impl Into<String>,
-        value: Option<String>,
-        class: impl Into<String>,
-    ) -> Self {
+    pub fn data(self, data_attr: impl Into<String>, value: Option<String>, class: impl Into<String>) -> Self {
         let variant = if let Some(val) = value {
             format!("data-{}={}", data_attr.into(), val)
         } else {

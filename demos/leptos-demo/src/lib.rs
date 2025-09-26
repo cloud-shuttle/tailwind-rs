@@ -6,10 +6,12 @@ mod memory_analysis;
 mod performance_testing;
 mod advanced_signal_management;
 mod css_generator;
+mod css_validation;
+mod comprehensive_validation;
 use memory_analysis::{MemoryAnalysisDemo, PerformanceTestDemo};
 use performance_testing::PerformanceTestingDemo;
 use advanced_signal_management::{AdvancedSignalManagementDemo, BatchedUpdatesDemo};
-use css_generator::CssGenerator;
+use css_generator::DemoCssGenerator;
 
 /// Simple WASM-compatible demo component
 #[component]
@@ -18,7 +20,7 @@ fn App() -> impl IntoView {
     let (name, set_name) = signal("Tailwind-RS".to_string());
 
     // Generate CSS on component mount
-    let css_generator = CssGenerator::new();
+    let mut css_generator = DemoCssGenerator::new();
     let _ = css_generator.generate_all_css_files();
 
     view! {

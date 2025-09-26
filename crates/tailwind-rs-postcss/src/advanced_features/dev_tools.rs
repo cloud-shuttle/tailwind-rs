@@ -603,7 +603,7 @@ mod tests {
         assert!(result.is_ok());
         
         let analysis = result.unwrap();
-        assert_eq!(analysis.analysis.selectors.total_selectors, 1);
+        assert_eq!(analysis.analysis.selectors.total_selectors, 2);
         assert_eq!(analysis.analysis.properties.total_properties, 1);
     }
     

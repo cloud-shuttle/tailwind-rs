@@ -5,9 +5,11 @@ use leptos::attr::global::ClassAttribute;
 mod memory_analysis;
 mod performance_testing;
 mod advanced_signal_management;
+mod css_generator;
 use memory_analysis::{MemoryAnalysisDemo, PerformanceTestDemo};
 use performance_testing::PerformanceTestingDemo;
 use advanced_signal_management::{AdvancedSignalManagementDemo, BatchedUpdatesDemo};
+use css_generator::CssGenerator;
 
 /// Simple WASM-compatible demo component
 #[component]
@@ -15,8 +17,25 @@ fn App() -> impl IntoView {
     let (count, set_count) = signal(0);
     let (name, set_name) = signal("Tailwind-RS".to_string());
 
+    // Generate CSS on component mount
+    let css_generator = CssGenerator::new();
+    let _ = css_generator.generate_all_css_files();
+
     view! {
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <Html lang="en">
+            <Head>
+                <Title text="Peter Hanssens - Data Engineer & Community Leader"/>
+                <Meta charset="utf-8"/>
+                <Meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <Meta name="description" content="Interactive demo showcasing Tailwind-RS v0.15.0 capabilities with Leptos"/>
+                
+                // Load generated CSS files
+                <Link rel="stylesheet" href="/comprehensive-styles.css"/>
+                <Link rel="stylesheet" href="/custom-styles.css"/>
+                <Link rel="stylesheet" href="/generated-styles.css"/>
+            </Head>
+            <Body>
+                <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             <div class="container mx-auto px-4 py-8">
                 <h1 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-8">
                     "Tailwind-RS Leptos Demo"
@@ -97,11 +116,13 @@ fn App() -> impl IntoView {
                 
                 <div class="mt-8 text-center">
                     <p class="text-gray-600 dark:text-gray-400">
-                        "Built with Leptos v0.8.8, Tailwind-RS, and Signal Management"
+                        "Built with Leptos v0.8.8, Tailwind-RS v0.15.0, and Signal Management"
                     </p>
                 </div>
             </div>
         </div>
+            </Body>
+        </Html>
     }
 }
 

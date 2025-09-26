@@ -15,11 +15,11 @@ impl Color {
     pub fn new(palette: ColorPalette, shade: ColorShade) -> Self {
         Self { palette, shade }
     }
-    
+
     pub fn to_class_name(&self) -> String {
         format!("{}-{}", self.palette, self.shade)
     }
-    
+
     pub fn to_css_value(&self) -> String {
         // This would contain the actual CSS color values
         // For now, returning a placeholder

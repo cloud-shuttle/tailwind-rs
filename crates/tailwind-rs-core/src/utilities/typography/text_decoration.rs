@@ -79,7 +79,7 @@ impl TextDecoration {
             TextDecoration::LineThrough => "line-through".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TextDecoration::None => "none".to_string(),
@@ -100,7 +100,7 @@ impl TextDecorationStyle {
             TextDecorationStyle::Wavy => "wavy".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TextDecorationStyle::Solid => "solid".to_string(),
@@ -124,7 +124,7 @@ impl TextDecorationThickness {
             TextDecorationThickness::Eight => "8".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TextDecorationThickness::Auto => "auto".to_string(),
@@ -149,7 +149,7 @@ impl TextUnderlineOffset {
             TextUnderlineOffset::Eight => "8".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TextUnderlineOffset::Auto => "auto".to_string(),
@@ -193,14 +193,14 @@ pub trait TextDecorationUtilities {
     fn overline(&mut self) -> &mut Self;
     fn line_through(&mut self) -> &mut Self;
     fn no_underline(&mut self) -> &mut Self;
-    
+
     fn decoration_style(&mut self, style: TextDecorationStyle) -> &mut Self;
     fn decoration_solid(&mut self) -> &mut Self;
     fn decoration_double(&mut self) -> &mut Self;
     fn decoration_dotted(&mut self) -> &mut Self;
     fn decoration_dashed(&mut self) -> &mut Self;
     fn decoration_wavy(&mut self) -> &mut Self;
-    
+
     fn decoration_thickness(&mut self, thickness: TextDecorationThickness) -> &mut Self;
     fn decoration_auto(&mut self) -> &mut Self;
     fn decoration_from_font(&mut self) -> &mut Self;
@@ -209,7 +209,7 @@ pub trait TextDecorationUtilities {
     fn decoration_2(&mut self) -> &mut Self;
     fn decoration_4(&mut self) -> &mut Self;
     fn decoration_8(&mut self) -> &mut Self;
-    
+
     fn underline_offset(&mut self, offset: TextUnderlineOffset) -> &mut Self;
     fn underline_offset_auto(&mut self) -> &mut Self;
     fn underline_offset_0(&mut self) -> &mut Self;
@@ -242,7 +242,9 @@ impl TextDecorationUtilities for ClassBuilder {
     }
 
     fn decoration_style(&mut self, style: TextDecorationStyle) -> &mut Self {
-        *self = self.clone().class(&format!("decoration-{}", style.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("decoration-{}", style.to_class_name()));
         self
     }
 
@@ -267,7 +269,9 @@ impl TextDecorationUtilities for ClassBuilder {
     }
 
     fn decoration_thickness(&mut self, thickness: TextDecorationThickness) -> &mut Self {
-        *self = self.clone().class(&format!("decoration-{}", thickness.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("decoration-{}", thickness.to_class_name()));
         self
     }
 
@@ -300,7 +304,9 @@ impl TextDecorationUtilities for ClassBuilder {
     }
 
     fn underline_offset(&mut self, offset: TextUnderlineOffset) -> &mut Self {
-        *self = self.clone().class(&format!("underline-offset-{}", offset.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("underline-offset-{}", offset.to_class_name()));
         self
     }
 

@@ -55,7 +55,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .grid_auto_flow(GridAutoFlow::Row)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("grid-flow-row"));
     }
 }

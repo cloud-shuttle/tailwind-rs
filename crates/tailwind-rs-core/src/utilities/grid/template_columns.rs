@@ -88,7 +88,10 @@ mod tests {
         assert_eq!(GridTemplateColumns::Cols11.to_string(), "grid-cols-11");
         assert_eq!(GridTemplateColumns::Cols12.to_string(), "grid-cols-12");
         assert_eq!(GridTemplateColumns::None.to_string(), "grid-cols-none");
-        assert_eq!(GridTemplateColumns::Subgrid.to_string(), "grid-cols-subgrid");
+        assert_eq!(
+            GridTemplateColumns::Subgrid.to_string(),
+            "grid-cols-subgrid"
+        );
     }
 
     #[test]
@@ -96,7 +99,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .grid_template_columns(GridTemplateColumns::Cols3)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("grid-cols-3"));
     }
 

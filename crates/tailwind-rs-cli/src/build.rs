@@ -2,11 +2,11 @@
 //!
 //! This module handles the build command for generating Tailwind CSS from Rust source files.
 
+use crate::utils::{FileUtils, LogUtils};
 use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
 use tailwind_rs_core::TailwindBuilder;
-use crate::utils::{FileUtils, LogUtils};
 
 /// Build Tailwind CSS from Rust source files
 #[derive(Parser)]
@@ -44,7 +44,7 @@ impl BuildCommand {
     /// Execute the build command
     pub async fn execute(&self) -> Result<()> {
         LogUtils::info("Starting Tailwind CSS build...");
-        
+
         if self.verbose {
             LogUtils::info(&format!("Source directory: {:?}", self.source));
             LogUtils::info(&format!("Output file: {:?}", self.output));
@@ -52,7 +52,10 @@ impl BuildCommand {
 
         // Validate source directory exists
         if !FileUtils::file_exists(&self.source) {
-            LogUtils::error(&format!("Source directory does not exist: {:?}", self.source));
+            LogUtils::error(&format!(
+                "Source directory does not exist: {:?}",
+                self.source
+            ));
             return Err(anyhow::anyhow!("Source directory not found"));
         }
 
@@ -182,7 +185,7 @@ mod tests {
     #[test]
     fn test_build_command_parsing() {
         use crate::Cli;
-        
+
         let args = vec![
             "tailwind-rs",
             "build",
@@ -196,7 +199,7 @@ mod tests {
         ];
 
         let cli = Cli::try_parse_from(args).unwrap();
-        
+
         match cli.command {
             crate::Commands::Build(cmd) => {
                 assert_eq!(cmd.source, PathBuf::from("custom-src"));

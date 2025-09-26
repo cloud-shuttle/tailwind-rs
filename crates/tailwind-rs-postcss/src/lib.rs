@@ -36,39 +36,48 @@
 //! }
 //! ```
 
-pub mod engine;
-pub mod ast;
-pub mod parser;
-pub mod transformer;
-pub mod js_bridge;
-pub mod plugin_loader;
-pub mod source_map;
-pub mod error;
-pub mod test_integration;
-pub mod tailwind_processor;
-pub mod purger;
-pub mod autoprefixer;
-pub mod import_processor;
-pub mod css_optimizer;
-pub mod enhanced_plugin_loader;
 pub mod advanced_features;
+pub mod ast;
+pub mod autoprefixer;
+pub mod css_optimizer;
+pub mod engine;
+pub mod enhanced_plugin_loader;
+pub mod error;
+pub mod import_processor;
+pub mod js_bridge;
+pub mod parser;
+pub mod plugin_loader;
+pub mod purger;
+pub mod source_map;
+pub mod tailwind_processor;
+pub mod test_integration;
+pub mod transformer;
 
 // Re-export main types
-pub use engine::{PostCSSEngine, PostCSSConfig, ProcessedCSS};
-pub use ast::{CSSNode, CSSRule, CSSDeclaration, CSSAtRule};
-pub use parser::{CSSParser, ParseOptions};
-pub use transformer::{CSSTransformer, TransformOptions};
-pub use js_bridge::{JSBridge, JSRuntime};
-pub use plugin_loader::{PluginLoader, PluginConfig, PluginResult};
-pub use source_map::{SourceMapGenerator, SourceMap};
-pub use error::{PostCSSError, Result};
-pub use tailwind_processor::{TailwindProcessor, TailwindConfig, ProcessingResult};
-pub use purger::{CSSPurger, PurgeConfig, PurgeResult, PurgeOptions};
-pub use autoprefixer::{Autoprefixer, AutoprefixerConfig, PrefixResult, PrefixOptions, PrefixStatistics};
-pub use import_processor::{ImportProcessor, ImportConfig, ImportResult, ImportOptions, ImportStatistics};
-pub use css_optimizer::{CSSOptimizer, OptimizationConfig, OptimizationResult, OptimizationMetrics};
+pub use advanced_features::{
+    AdvancedSourceMapGenerator, CSSLinter, LintResult, LinterConfig, PostCSSDevTools,
+    PostCSSPerformanceMonitor,
+};
+pub use ast::{CSSAtRule, CSSDeclaration, CSSNode, CSSRule};
+pub use autoprefixer::{
+    Autoprefixer, AutoprefixerConfig, PrefixOptions, PrefixResult, PrefixStatistics,
+};
+pub use css_optimizer::{
+    CSSOptimizer, OptimizationConfig, OptimizationMetrics, OptimizationResult,
+};
+pub use engine::{PostCSSConfig, PostCSSEngine, ProcessedCSS};
 pub use enhanced_plugin_loader::{EnhancedPluginLoader, PluginInstance, PluginMetrics};
-pub use advanced_features::{CSSLinter, LinterConfig, LintResult, AdvancedSourceMapGenerator, PostCSSPerformanceMonitor, PostCSSDevTools};
+pub use error::{PostCSSError, Result};
+pub use import_processor::{
+    ImportConfig, ImportOptions, ImportProcessor, ImportResult, ImportStatistics,
+};
+pub use js_bridge::{JSBridge, JSRuntime};
+pub use parser::{CSSParser, ParseOptions};
+pub use plugin_loader::{PluginConfig, PluginLoader, PluginResult};
+pub use purger::{CSSPurger, PurgeConfig, PurgeOptions, PurgeResult};
+pub use source_map::{SourceMap, SourceMapGenerator};
+pub use tailwind_processor::{ProcessingResult, TailwindConfig, TailwindProcessor};
+pub use transformer::{CSSTransformer, TransformOptions};
 
 /// Version information
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -111,7 +120,7 @@ mod tests {
         let input = ".test { color: red; }";
         let result = process_css(input).await;
         assert!(result.is_ok());
-        
+
         let css = result.unwrap();
         assert!(css.css.contains(".test"));
         assert!(css.css.contains("color: red"));

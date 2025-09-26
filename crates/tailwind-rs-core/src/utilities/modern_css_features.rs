@@ -266,7 +266,10 @@ mod tests {
         assert_eq!(CascadeLayer::Base.to_string(), "base");
         assert_eq!(CascadeLayer::Components.to_string(), "components");
         assert_eq!(CascadeLayer::Utilities.to_string(), "utilities");
-        assert_eq!(CascadeLayer::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            CascadeLayer::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
@@ -274,23 +277,50 @@ mod tests {
         assert_eq!(CascadeLayer::Base.to_class_name(), "layer-base");
         assert_eq!(CascadeLayer::Components.to_class_name(), "layer-components");
         assert_eq!(CascadeLayer::Utilities.to_class_name(), "layer-utilities");
-        assert_eq!(CascadeLayer::Custom("custom".to_string()).to_class_name(), "layer-custom");
+        assert_eq!(
+            CascadeLayer::Custom("custom".to_string()).to_class_name(),
+            "layer-custom"
+        );
     }
 
     #[test]
     fn test_custom_property_enum_values() {
-        assert_eq!(CustomProperty::Color("red".to_string()).to_string(), "--color: red");
-        assert_eq!(CustomProperty::Spacing("1rem".to_string()).to_string(), "--spacing: 1rem");
-        assert_eq!(CustomProperty::FontSize("16px".to_string()).to_string(), "--font-size: 16px");
-        assert_eq!(CustomProperty::Generic("custom".to_string(), "value".to_string()).to_string(), "--custom: value");
+        assert_eq!(
+            CustomProperty::Color("red".to_string()).to_string(),
+            "--color: red"
+        );
+        assert_eq!(
+            CustomProperty::Spacing("1rem".to_string()).to_string(),
+            "--spacing: 1rem"
+        );
+        assert_eq!(
+            CustomProperty::FontSize("16px".to_string()).to_string(),
+            "--font-size: 16px"
+        );
+        assert_eq!(
+            CustomProperty::Generic("custom".to_string(), "value".to_string()).to_string(),
+            "--custom: value"
+        );
     }
 
     #[test]
     fn test_custom_property_class_names() {
-        assert_eq!(CustomProperty::Color("red".to_string()).to_class_name(), "custom-color");
-        assert_eq!(CustomProperty::Spacing("1rem".to_string()).to_class_name(), "custom-spacing");
-        assert_eq!(CustomProperty::FontSize("16px".to_string()).to_class_name(), "custom-font-size");
-        assert_eq!(CustomProperty::Generic("custom".to_string(), "value".to_string()).to_class_name(), "custom-custom");
+        assert_eq!(
+            CustomProperty::Color("red".to_string()).to_class_name(),
+            "custom-color"
+        );
+        assert_eq!(
+            CustomProperty::Spacing("1rem".to_string()).to_class_name(),
+            "custom-spacing"
+        );
+        assert_eq!(
+            CustomProperty::FontSize("16px".to_string()).to_class_name(),
+            "custom-font-size"
+        );
+        assert_eq!(
+            CustomProperty::Generic("custom".to_string(), "value".to_string()).to_class_name(),
+            "custom-custom"
+        );
     }
 
     #[test]
@@ -299,16 +329,34 @@ mod tests {
         assert_eq!(ModernContainerQuery::Medium.to_string(), "medium");
         assert_eq!(ModernContainerQuery::Large.to_string(), "large");
         assert_eq!(ModernContainerQuery::ExtraLarge.to_string(), "extra-large");
-        assert_eq!(ModernContainerQuery::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            ModernContainerQuery::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_container_query_class_names() {
-        assert_eq!(ModernContainerQuery::Small.to_class_name(), "container-small");
-        assert_eq!(ModernContainerQuery::Medium.to_class_name(), "container-medium");
-        assert_eq!(ModernContainerQuery::Large.to_class_name(), "container-large");
-        assert_eq!(ModernContainerQuery::ExtraLarge.to_class_name(), "container-extra-large");
-        assert_eq!(ModernContainerQuery::Custom("custom".to_string()).to_class_name(), "container-custom");
+        assert_eq!(
+            ModernContainerQuery::Small.to_class_name(),
+            "container-small"
+        );
+        assert_eq!(
+            ModernContainerQuery::Medium.to_class_name(),
+            "container-medium"
+        );
+        assert_eq!(
+            ModernContainerQuery::Large.to_class_name(),
+            "container-large"
+        );
+        assert_eq!(
+            ModernContainerQuery::ExtraLarge.to_class_name(),
+            "container-extra-large"
+        );
+        assert_eq!(
+            ModernContainerQuery::Custom("custom".to_string()).to_class_name(),
+            "container-custom"
+        );
     }
 
     #[test]
@@ -341,8 +389,14 @@ mod tests {
         assert_eq!(CascadeLayer::Base.to_css_value(), "base");
         assert_eq!(CascadeLayer::Components.to_css_value(), "components");
         assert_eq!(CascadeLayer::Utilities.to_css_value(), "utilities");
-        assert_eq!(CustomProperty::Color("red".to_string()).to_css_value(), "--color: red");
-        assert_eq!(CustomProperty::Spacing("1rem".to_string()).to_css_value(), "--spacing: 1rem");
+        assert_eq!(
+            CustomProperty::Color("red".to_string()).to_css_value(),
+            "--color: red"
+        );
+        assert_eq!(
+            CustomProperty::Spacing("1rem".to_string()).to_css_value(),
+            "--spacing: 1rem"
+        );
         assert_eq!(ModernContainerQuery::Small.to_css_value(), "small");
         assert_eq!(ModernContainerQuery::Medium.to_css_value(), "medium");
         assert_eq!(ModernContainerQuery::Large.to_css_value(), "large");
@@ -378,9 +432,15 @@ mod tests {
         let result = classes.build();
         assert!(result.classes.contains("layer-theme"));
         assert!(result.custom.contains_key("primary-color"));
-        assert_eq!(result.custom.get("primary-color"), Some(&"#3b82f6".to_string()));
+        assert_eq!(
+            result.custom.get("primary-color"),
+            Some(&"#3b82f6".to_string())
+        );
         assert!(result.custom.contains_key("secondary-color"));
-        assert_eq!(result.custom.get("secondary-color"), Some(&"#64748b".to_string()));
+        assert_eq!(
+            result.custom.get("secondary-color"),
+            Some(&"#64748b".to_string())
+        );
         assert!(result.classes.contains("container-sidebar"));
         assert!(result.classes.contains("container-main"));
     }
@@ -444,17 +504,29 @@ mod tests {
         assert!(result.custom.contains_key("border-radius"));
         assert_eq!(result.custom.get("border-radius"), Some(&"8px".to_string()));
         assert!(result.custom.contains_key("box-shadow"));
-        assert_eq!(result.custom.get("box-shadow"), Some(&"0 4px 6px -1px rgb(0 0 0 / 0.1)".to_string()));
+        assert_eq!(
+            result.custom.get("box-shadow"),
+            Some(&"0 4px 6px -1px rgb(0 0 0 / 0.1)".to_string())
+        );
         assert!(result.custom.contains_key("z-index"));
         assert_eq!(result.custom.get("z-index"), Some(&"10".to_string()));
         assert!(result.custom.contains_key("opacity"));
         assert_eq!(result.custom.get("opacity"), Some(&"0.8".to_string()));
         assert!(result.custom.contains_key("transform"));
-        assert_eq!(result.custom.get("transform"), Some(&"rotate(45deg)".to_string()));
+        assert_eq!(
+            result.custom.get("transform"),
+            Some(&"rotate(45deg)".to_string())
+        );
         assert!(result.custom.contains_key("animation"));
-        assert_eq!(result.custom.get("animation"), Some(&"fadeIn 0.5s ease-in-out".to_string()));
+        assert_eq!(
+            result.custom.get("animation"),
+            Some(&"fadeIn 0.5s ease-in-out".to_string())
+        );
         assert!(result.custom.contains_key("transition"));
-        assert_eq!(result.custom.get("transition"), Some(&"all 0.3s ease".to_string()));
+        assert_eq!(
+            result.custom.get("transition"),
+            Some(&"all 0.3s ease".to_string())
+        );
         assert!(result.classes.contains("container-small"));
         assert!(result.classes.contains("container-medium"));
         assert!(result.classes.contains("container-large"));

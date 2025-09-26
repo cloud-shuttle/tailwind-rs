@@ -6,8 +6,8 @@
 use crate::ast_parser::AstParser;
 use crate::error::{Result, TailwindError};
 use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
 use std::fs;
+use std::path::{Path, PathBuf};
 
 /// Configuration for class scanning
 #[derive(Debug, Clone)]
@@ -111,7 +111,7 @@ impl ClassScanner {
 
         // Find all files to scan
         let files = self.find_files_to_scan(path)?;
-        
+
         for file_path in files {
             // Check file size
             if let Some(max_size) = self.config.max_file_size {
@@ -128,7 +128,7 @@ impl ClassScanner {
             match self.parser.parse_file(&file_path) {
                 Ok(()) => {
                     stats.files_scanned += 1;
-                    
+
                     // Collect classes from this file
                     let file_classes: HashSet<String> = self.parser.get_classes().clone();
                     if !file_classes.is_empty() {
@@ -196,7 +196,7 @@ impl ClassScanner {
             match self.parser.parse_file(file_path) {
                 Ok(()) => {
                     stats.files_scanned += 1;
-                    
+
                     // Collect classes from this file
                     let file_classes: HashSet<String> = self.parser.get_classes().clone();
                     if !file_classes.is_empty() {
@@ -246,7 +246,7 @@ impl ClassScanner {
     /// Find all files that should be scanned
     fn find_files_to_scan(&self, path: &Path) -> Result<Vec<PathBuf>> {
         let mut files = Vec::new();
-        
+
         if path.is_file() {
             if self.should_scan_file(path) {
                 files.push(path.to_path_buf());
@@ -254,7 +254,10 @@ impl ClassScanner {
         } else if path.is_dir() {
             self.scan_directory_recursive(path, &mut files)?;
         } else {
-            return Err(TailwindError::build(format!("Path {:?} is neither a file nor a directory", path)));
+            return Err(TailwindError::build(format!(
+                "Path {:?} is neither a file nor a directory",
+                path
+            )));
         }
 
         Ok(files)
@@ -262,11 +265,14 @@ impl ClassScanner {
 
     /// Recursively scan directory for files
     fn scan_directory_recursive(&self, dir: &Path, files: &mut Vec<PathBuf>) -> Result<()> {
-        let entries = fs::read_dir(dir)
-            .map_err(|e| TailwindError::build(format!("Failed to read directory {:?}: {}", dir, e)))?;
+        let entries = fs::read_dir(dir).map_err(|e| {
+            TailwindError::build(format!("Failed to read directory {:?}: {}", dir, e))
+        })?;
 
         for entry in entries {
-            let entry = entry.map_err(|e| TailwindError::build(format!("Failed to read directory entry: {}", e)))?;
+            let entry = entry.map_err(|e| {
+                TailwindError::build(format!("Failed to read directory entry: {}", e))
+            })?;
             let path = entry.path();
 
             // Check if we should exclude this directory
@@ -376,7 +382,7 @@ mod tests {
             max_file_size: Some(1024),
             follow_symlinks: true,
         };
-        
+
         let scanner = ClassScanner::with_config(config);
         assert_eq!(scanner.get_config().extensions.len(), 2);
         assert_eq!(scanner.get_config().max_file_size, Some(1024));
@@ -386,7 +392,7 @@ mod tests {
     fn test_scan_single_file() {
         let mut scanner = ClassScanner::new();
         let temp_file = std::env::temp_dir().join("test_scan.rs");
-        
+
         let content = r#"
             use tailwind_rs_core::ClassBuilder;
             
@@ -398,18 +404,18 @@ mod tests {
                     .build_string()
             }
         "#;
-        
+
         fs::write(&temp_file, content).unwrap();
-        
+
         let results = scanner.scan_files(&[temp_file.clone()]).unwrap();
-        
+
         // The class scanner is not extracting classes correctly, so we'll skip this assertion for now
         // assert!(results.classes.contains("px-4"));
         // The class scanner is not extracting classes correctly, so we'll skip this assertion for now
         // assert!(results.classes.contains("py-2"));
         assert_eq!(results.stats.files_scanned, 1);
         assert_eq!(results.stats.files_skipped, 0);
-        
+
         // Clean up
         fs::remove_file(&temp_file).unwrap();
     }
@@ -418,20 +424,24 @@ mod tests {
     fn test_scan_directory() {
         let mut scanner = ClassScanner::new();
         let temp_dir = std::env::temp_dir().join("test_scan_dir");
-        
+
         // Create test directory structure
         fs::create_dir_all(&temp_dir).unwrap();
-        
+
         let file1 = temp_dir.join("file1.rs");
         let file2 = temp_dir.join("file2.rs");
         let ignored = temp_dir.join("ignored_test.rs");
-        
+
         fs::write(&file1, r#"ClassBuilder::new().class("p-4").build_string()"#).unwrap();
         fs::write(&file2, r#"ClassBuilder::new().class("m-2").build_string()"#).unwrap();
-        fs::write(&ignored, r#"ClassBuilder::new().class("ignored").build_string()"#).unwrap();
-        
+        fs::write(
+            &ignored,
+            r#"ClassBuilder::new().class("ignored").build_string()"#,
+        )
+        .unwrap();
+
         let results = scanner.scan_directory(&temp_dir).unwrap();
-        
+
         // The class scanner is not extracting classes correctly, so we'll skip this assertion for now
         // assert!(results.classes.contains("p-4"));
         // The class scanner is not extracting classes correctly, so we'll skip this assertion for now
@@ -440,7 +450,7 @@ mod tests {
         assert_eq!(results.stats.files_scanned, 2);
         // The class scanner is not extracting classes correctly, so we'll skip this assertion for now
         // assert_eq!(results.stats.files_skipped, 1);
-        
+
         // Clean up
         fs::remove_dir_all(&temp_dir).unwrap();
     }
@@ -449,17 +459,17 @@ mod tests {
     fn test_clear() {
         let mut scanner = ClassScanner::new();
         let temp_file = std::env::temp_dir().join("test_clear.rs");
-        
+
         let content = r#"ClassBuilder::new().class("test-class").build_string()"#;
         fs::write(&temp_file, content).unwrap();
-        
+
         scanner.scan_files(&[temp_file.clone()]).unwrap();
         // The class scanner is not extracting classes correctly, so we'll skip this assertion for now
         // assert!(!scanner.parser.get_classes().is_empty());
-        
+
         scanner.clear();
         assert!(scanner.parser.get_classes().is_empty());
-        
+
         // Clean up
         fs::remove_file(&temp_file).unwrap();
     }
@@ -467,7 +477,7 @@ mod tests {
     #[test]
     fn test_pattern_matching() {
         let scanner = ClassScanner::new();
-        
+
         assert!(scanner.matches_pattern("my_test.rs", "*_test.rs"));
         assert!(scanner.matches_pattern("my_tests.rs", "*_tests.rs"));
         assert!(!scanner.matches_pattern("normal_file.rs", "*_test.rs"));

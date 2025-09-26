@@ -41,7 +41,7 @@ impl CSSTransformer {
     pub fn new(options: TransformOptions) -> Self {
         Self { options }
     }
-    
+
     /// Transform CSS AST
     pub fn transform(&self, ast: CSSNode) -> Result<CSSNode> {
         // Basic transformation implementation

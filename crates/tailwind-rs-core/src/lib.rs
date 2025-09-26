@@ -40,8 +40,8 @@
 
 pub mod arbitrary;
 pub mod ast_parser;
-pub mod classes;
 pub mod class_scanner;
+pub mod classes;
 pub mod color;
 pub mod config;
 pub mod css_generator;
@@ -50,21 +50,18 @@ pub mod custom_variant;
 pub mod dark_mode;
 pub mod error;
 // pub mod gradients; // Temporarily disabled due to API issues
+pub mod enhanced_variants;
 pub mod performance;
 pub mod plugin_system;
-pub mod responsive;
 #[cfg(feature = "postcss")]
 pub mod postcss_integration;
-pub mod enhanced_variants;
+pub mod responsive;
 
-#[cfg(feature = "postcss")]
-#[cfg(test)]
-mod postcss_integration_test;
 pub mod theme;
 pub mod theme_new;
 pub mod tree_shaker;
-pub mod utils;
 pub mod utilities;
+pub mod utils;
 pub mod validation;
 
 #[cfg(test)]
@@ -76,13 +73,13 @@ pub mod api_contracts;
 // Re-export commonly used types
 pub use arbitrary::{ArbitraryValue, ArbitraryValueError, ArbitraryValueUtilities};
 pub use ast_parser::AstParser;
-pub use classes::{ClassBuilder, ClassSet};
 pub use class_scanner::{ClassScanner, ScanConfig, ScanResults, ScanStats};
+pub use classes::{ClassBuilder, ClassSet};
 pub use color::Color;
-pub use config::{BuildConfig, TailwindConfig};
 pub use config::parser::ConfigParser;
+pub use config::{BuildConfig, TailwindConfig};
 // Use the modular CssGenerator structure
-pub use css_generator::{CssGenerator, CssProperty, CssRule, CssGenerationConfig};
+pub use css_generator::{CssGenerationConfig, CssGenerator, CssProperty, CssRule};
 pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};
 pub use dark_mode::{DarkModeVariant, DarkModeVariantError, DarkModeVariantUtilities};
@@ -100,33 +97,34 @@ pub use theme_new::{
     LineHeightScale, ShadowScale, SpacingScale, SpacingSize, Theme as NewTheme, ThemePreset,
     ThemeVariant, ThemedComponent, TypographyScale,
 };
-pub use tree_shaker::{TreeShaker, TreeShakeConfig, TreeShakeResults, TreeShakeStats};
+pub use tree_shaker::{TreeShakeConfig, TreeShakeResults, TreeShakeStats, TreeShaker};
 pub use utilities::*;
 pub use validation::*;
 
-#[cfg(feature = "postcss")]
-pub use postcss_integration::{EnhancedCssGenerator, EnhancedCssResult, PostCSSIntegrationConfig};
 pub use enhanced_variants::{
-    EnhancedVariantParser, VariantDefinition, VariantType, CustomVariant as EnhancedCustomVariant,
-    VariantCombination, ParsedVariant, VariantParseResult, VariantMetadata
+    CustomVariant as EnhancedCustomVariant, EnhancedVariantParser, ParsedVariant,
+    VariantCombination, VariantDefinition, VariantMetadata, VariantParseResult, VariantType,
 };
 
+#[cfg(feature = "postcss")]
+pub use postcss_integration::{EnhancedCssGenerator, EnhancedCssResult, PostCSSIntegrationConfig};
+
 /// Generate a CSS file with all necessary Tailwind classes
-/// 
+///
 /// This function provides the seamless integration between ClassBuilder and CSS generation
 /// that was requested in the GitHub issue. It automatically generates a comprehensive
 /// CSS file with all the classes that might be used in your application.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `output_path` - The path where the CSS file should be written
 /// * `classes` - Optional ClassSet containing classes to include in the CSS
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```rust
 /// use tailwind_rs_core::*;
-/// 
+///
 /// fn main() -> Result<()> {
 ///     // Generate CSS with specific classes
 ///     let classes = ClassBuilder::new()
@@ -145,21 +143,21 @@ pub use enhanced_variants::{
 /// ```
 pub fn generate_css_file(output_path: &str, classes: Option<&ClassSet>) -> Result<()> {
     let mut generator = CssGenerator::new();
-    
+
     // If specific classes are provided, add them to the generator
     if let Some(class_set) = classes {
         // Add base classes
         for class in &class_set.classes {
             generator.add_class(class)?;
         }
-        
+
         // Add responsive classes
         for (breakpoint, responsive_classes) in &class_set.responsive {
             for class in responsive_classes {
                 generator.add_responsive_class(*breakpoint, class)?;
             }
         }
-        
+
         // Add conditional classes
         for (_condition, conditional_classes) in &class_set.conditional {
             for class in conditional_classes {
@@ -173,39 +171,39 @@ pub fn generate_css_file(output_path: &str, classes: Option<&ClassSet>) -> Resul
         let config = CssGenerationConfig::default();
         generator.generate_comprehensive_css(&config)?;
     }
-    
+
     // Generate the CSS
     let css = generator.generate_css();
-    
+
     // Ensure the output directory exists
     if let Some(parent) = std::path::Path::new(output_path).parent() {
         std::fs::create_dir_all(parent)?;
     }
-    
+
     // Write the CSS file
     std::fs::write(output_path, css)?;
-    
+
     println!("✅ CSS generated successfully at {}", output_path);
     println!("📊 Generated {} CSS rules", generator.rule_count());
-    
+
     Ok(())
 }
 
 /// Generate comprehensive CSS with all Tailwind utilities
-/// 
+///
 /// This function generates a complete CSS file with all available Tailwind utilities,
 /// similar to the full Tailwind CSS framework but generated in Rust.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `output_path` - The path where the CSS file should be written
 /// * `config` - Configuration for what utilities to include
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```rust
 /// use tailwind_rs_core::*;
-/// 
+///
 /// fn main() -> Result<()> {
 ///     let mut config = CssGenerationConfig::default();
 ///     config.include_colors = true;
@@ -219,21 +217,24 @@ pub fn generate_css_file(output_path: &str, classes: Option<&ClassSet>) -> Resul
 /// ```
 pub fn generate_comprehensive_css(output_path: &str, config: &CssGenerationConfig) -> Result<()> {
     let mut generator = CssGenerator::new();
-    
+
     // Generate comprehensive CSS
     let css = generator.generate_comprehensive_css(config)?;
-    
+
     // Ensure the output directory exists
     if let Some(parent) = std::path::Path::new(output_path).parent() {
         std::fs::create_dir_all(parent)?;
     }
-    
+
     // Write the CSS file
     std::fs::write(output_path, css)?;
-    
-    println!("✅ Comprehensive CSS generated successfully at {}", output_path);
+
+    println!(
+        "✅ Comprehensive CSS generated successfully at {}",
+        output_path
+    );
     println!("📊 Generated {} CSS rules", generator.rule_count());
-    
+
     Ok(())
 }
 
@@ -241,7 +242,7 @@ pub fn generate_comprehensive_css(output_path: &str, config: &CssGenerationConfi
 mod tests {
     mod sync_api_tests;
     // mod tailwind_v4_1_missing_features_tests; // Temporarily disabled for v0.7.0 release
-    
+
     use super::*;
 
     #[test]
@@ -319,7 +320,7 @@ impl TailwindBuilder {
     pub fn build(self) -> Result<()> {
         // Create CSS generator
         let mut generator = CssGenerator::new();
-        
+
         // Scan source files for classes if paths are provided
         if !self.source_paths.is_empty() {
             for path in &self.source_paths {
@@ -336,51 +337,56 @@ impl TailwindBuilder {
             generator.add_class("text-white")?;
             generator.add_class("rounded-md")?;
         }
-        
+
         // Generate CSS
         let css = if self.minification {
             generator.generate_minified_css()
         } else {
             generator.generate_css()
         };
-        
+
         // Determine output path
-        let output_path = self.output_path
+        let output_path = self
+            .output_path
             .unwrap_or_else(|| std::path::PathBuf::from("dist/styles.css"));
-        
+
         // Create output directory if it doesn't exist
         if let Some(parent) = output_path.parent() {
             std::fs::create_dir_all(parent)?;
         }
-        
+
         // Write CSS to file
         std::fs::write(&output_path, css)?;
-        
+
         println!("✅ CSS generated successfully at {}", output_path.display());
         println!("📊 Generated {} CSS rules", generator.rule_count());
-        
+
         if self.tree_shaking {
             println!("🌳 Tree shaking enabled");
         }
-        
+
         if self.minification {
             println!("🗜️ Minification enabled");
         }
-        
+
         if self.source_maps {
             println!("🗺️ Source maps enabled");
         }
-        
+
         Ok(())
     }
-    
+
     /// Scan a single file for Tailwind classes
-    fn scan_file_for_classes(&self, path: &std::path::Path, generator: &mut CssGenerator) -> Result<()> {
+    fn scan_file_for_classes(
+        &self,
+        path: &std::path::Path,
+        generator: &mut CssGenerator,
+    ) -> Result<()> {
         let content = std::fs::read_to_string(path)?;
-        
+
         // Simple regex to find class attributes
         let class_pattern = regex::Regex::new(r#"class\s*=\s*["']([^"']+)["']"#)?;
-        
+
         for cap in class_pattern.captures_iter(&content) {
             if let Some(class_attr) = cap.get(1) {
                 let classes = class_attr.as_str();
@@ -391,19 +397,29 @@ impl TailwindBuilder {
                 }
             }
         }
-        
+
         Ok(())
     }
-    
+
     /// Scan a directory recursively for Tailwind classes
-    fn scan_directory_for_classes(&self, dir: &std::path::Path, generator: &mut CssGenerator) -> Result<()> {
+    fn scan_directory_for_classes(
+        &self,
+        dir: &std::path::Path,
+        generator: &mut CssGenerator,
+    ) -> Result<()> {
         for entry in std::fs::read_dir(dir)? {
             let entry = entry?;
             let path = entry.path();
-            
+
             if path.is_file() {
                 if let Some(ext) = path.extension() {
-                    if ext == "rs" || ext == "html" || ext == "js" || ext == "ts" || ext == "jsx" || ext == "tsx" {
+                    if ext == "rs"
+                        || ext == "html"
+                        || ext == "js"
+                        || ext == "ts"
+                        || ext == "jsx"
+                        || ext == "tsx"
+                    {
                         self.scan_file_for_classes(&path, generator)?;
                     }
                 }
@@ -411,11 +427,10 @@ impl TailwindBuilder {
                 self.scan_directory_for_classes(&path, generator)?;
             }
         }
-        
+
         Ok(())
     }
 }
-
 
 /// Version information
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -432,4 +447,3 @@ pub mod defaults {
         Color::Blue
     }
 }
-

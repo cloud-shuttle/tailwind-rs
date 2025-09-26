@@ -48,7 +48,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .flex_direction(FlexDirection::Row)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("flex-row"));
     }
 }

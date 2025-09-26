@@ -3,7 +3,7 @@
 //! This module provides comprehensive CSS optimization features including minification,
 //! compression, rule merging, and performance optimizations.
 
-use crate::css_generator::{CssGenerator, CssRule, CssProperty};
+use crate::css_generator::{CssGenerator, CssProperty, CssRule};
 use crate::error::Result;
 use std::collections::HashMap;
 
@@ -116,7 +116,7 @@ impl CssOptimizer {
     /// Optimize CSS from a generator
     pub fn optimize(&self, generator: &mut CssGenerator) -> Result<OptimizationResults> {
         let start_time = std::time::Instant::now();
-        
+
         // Get original metrics
         let original_css = generator.generate_css();
         let original_size = original_css.len();
@@ -153,7 +153,7 @@ impl CssOptimizer {
         } else {
             generator.generate_css()
         };
-        
+
         let optimized_size = optimized_css.len();
         let optimized_rules = generator.rule_count();
         let optimized_properties = self.count_properties(generator);
@@ -191,13 +191,13 @@ impl CssOptimizer {
     /// Optimize CSS from a string
     pub fn optimize_css(&self, css: &str) -> Result<String> {
         let mut generator = CssGenerator::new();
-        
+
         // Parse CSS into generator (simplified implementation)
         self.parse_css_into_generator(css, &mut generator)?;
-        
+
         // Optimize
         self.optimize(&mut generator)?;
-        
+
         // Return optimized CSS
         if self.config.minify {
             Ok(generator.generate_minified_css())
@@ -218,7 +218,9 @@ impl CssOptimizer {
 
     /// Count total properties in generator
     fn count_properties(&self, generator: &CssGenerator) -> usize {
-        generator.get_rules().values()
+        generator
+            .get_rules()
+            .values()
             .map(|rule| rule.properties.len())
             .sum()
     }
@@ -243,13 +245,13 @@ impl CssOptimizer {
         for (selector, rule) in rules {
             let mut seen_properties = std::collections::HashSet::new();
             let mut unique_properties = Vec::new();
-            
+
             for property in &rule.properties {
                 if seen_properties.insert(&property.name) {
                     unique_properties.push(property.clone());
                 }
             }
-            
+
             let removed_count = rule.properties.len() - unique_properties.len();
             if removed_count > 0 {
                 total_removed += removed_count;
@@ -270,7 +272,7 @@ impl CssOptimizer {
         let rules = generator.get_rules().clone();
         for (selector, rule) in rules {
             let mut optimized_properties = Vec::new();
-            
+
             for property in &rule.properties {
                 let optimized_property = CssProperty {
                     name: property.name.clone(),
@@ -279,7 +281,7 @@ impl CssOptimizer {
                 };
                 optimized_properties.push(optimized_property);
             }
-            
+
             // Update the rule with optimized properties
             let updated_rule = CssRule {
                 selector: rule.selector.clone(),
@@ -294,16 +296,16 @@ impl CssOptimizer {
     /// Optimize a single property value
     fn optimize_property_value(&self, value: &str) -> String {
         let mut optimized = value.to_string();
-        
+
         // Convert 0px to 0
         optimized = optimized.replace("0px", "0");
         optimized = optimized.replace("0em", "0");
         optimized = optimized.replace("0rem", "0");
-        
+
         // Convert redundant units
         optimized = optimized.replace("0.0", "0");
         optimized = optimized.replace("1.0", "1");
-        
+
         optimized
     }
 
@@ -311,13 +313,17 @@ impl CssOptimizer {
     fn merge_compatible_rules(&self, generator: &mut CssGenerator) {
         let rules = generator.get_rules().clone();
         let mut merged_rules: HashMap<String, CssRule> = HashMap::new();
-        
+
         for (selector, rule) in rules {
             // Simple merging: combine rules with same properties
             if let Some(existing_rule) = merged_rules.get_mut(&selector) {
                 // Merge properties
                 for property in &rule.properties {
-                    if !existing_rule.properties.iter().any(|p| p.name == property.name) {
+                    if !existing_rule
+                        .properties
+                        .iter()
+                        .any(|p| p.name == property.name)
+                    {
                         existing_rule.properties.push(property.clone());
                     }
                 }
@@ -325,7 +331,7 @@ impl CssOptimizer {
                 merged_rules.insert(selector, rule);
             }
         }
-        
+
         // Update generator with merged rules
         for (selector, rule) in merged_rules {
             generator.update_rule(&selector, rule);
@@ -335,11 +341,11 @@ impl CssOptimizer {
     /// Sort CSS properties for better compression
     fn sort_properties(&self, generator: &mut CssGenerator) {
         let rules = generator.get_rules().clone();
-        
+
         for (selector, rule) in rules {
             let mut sorted_properties = rule.properties.clone();
             sorted_properties.sort_by(|a, b| a.name.cmp(&b.name));
-            
+
             let sorted_rule = CssRule {
                 selector: rule.selector.clone(),
                 properties: sorted_properties,
@@ -355,18 +361,18 @@ impl CssOptimizer {
         // Simple CSS parsing - extract basic rules
         let lines: Vec<&str> = css.lines().collect();
         let mut i = 0;
-        
+
         while i < lines.len() {
             let line = lines[i].trim();
-            
+
             // Look for CSS rules (simplified pattern matching)
             if line.ends_with('{') && line.contains('.') {
                 let selector = line.replace('{', "").trim().to_string();
-                
+
                 // Collect properties until we find the closing brace
                 let mut properties = Vec::new();
                 i += 1;
-                
+
                 while i < lines.len() && !lines[i].trim().starts_with('}') {
                     let prop_line = lines[i].trim();
                     if prop_line.contains(':') && prop_line.ends_with(';') {
@@ -383,7 +389,7 @@ impl CssOptimizer {
                     }
                     i += 1;
                 }
-                
+
                 // Add the rule to the generator
                 let rule = CssRule {
                     selector,
@@ -396,7 +402,7 @@ impl CssOptimizer {
             }
             i += 1;
         }
-        
+
         Ok(())
     }
 
@@ -407,25 +413,24 @@ impl CssOptimizer {
         // Always remove comments and optimize, regardless of advanced_compression setting
         // Remove comments
         compressed = self.remove_comments(&compressed);
-        
+
         // Remove unnecessary whitespace
         compressed = self.remove_unnecessary_whitespace(&compressed);
-        
+
         // Optimize colors
         compressed = self.optimize_colors(&compressed);
-        
+
         // Optimize units
         compressed = self.optimize_units(&compressed);
 
         Ok(compressed)
     }
 
-
     /// Remove CSS comments
     fn remove_comments(&self, css: &str) -> String {
         let mut result = String::new();
         let mut chars = css.chars().peekable();
-        
+
         while let Some(c) = chars.next() {
             if c == '/' && chars.peek() == Some(&'*') {
                 // Skip comment
@@ -440,7 +445,7 @@ impl CssOptimizer {
                 result.push(c);
             }
         }
-        
+
         result
     }
 
@@ -460,27 +465,29 @@ impl CssOptimizer {
     /// Optimize color values
     fn optimize_colors(&self, css: &str) -> String {
         let mut optimized = css.to_string();
-        
+
         // Convert #ffffff to #fff (simplified without backreferences)
-        optimized = regex::Regex::new(r"#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])")
-            .unwrap()
-            .replace_all(&optimized, |caps: &regex::Captures| {
-                let r1 = &caps[1];
-                let g1 = &caps[2];
-                let b1 = &caps[3];
-                let r2 = &caps[4];
-                let g2 = &caps[5];
-                let b2 = &caps[6];
-                
-                // Only compress if all pairs are the same
-                if r1 == r2 && g1 == g2 && b1 == b2 {
-                    format!("#{}{}{}", r1, g1, b1)
-                } else {
-                    caps[0].to_string()
-                }
-            })
-            .to_string();
-        
+        optimized = regex::Regex::new(
+            r"#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])",
+        )
+        .unwrap()
+        .replace_all(&optimized, |caps: &regex::Captures| {
+            let r1 = &caps[1];
+            let g1 = &caps[2];
+            let b1 = &caps[3];
+            let r2 = &caps[4];
+            let g2 = &caps[5];
+            let b2 = &caps[6];
+
+            // Only compress if all pairs are the same
+            if r1 == r2 && g1 == g2 && b1 == b2 {
+                format!("#{}{}{}", r1, g1, b1)
+            } else {
+                caps[0].to_string()
+            }
+        })
+        .to_string();
+
         // Convert rgb(255, 255, 255) to #ffffff (simplified without backreferences)
         optimized = regex::Regex::new(r"rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)")
             .unwrap()
@@ -491,26 +498,26 @@ impl CssOptimizer {
                 format!("#{:02x}{:02x}{:02x}", r, g, b)
             })
             .to_string();
-        
+
         optimized
     }
 
     /// Optimize CSS units
     fn optimize_units(&self, css: &str) -> String {
         let mut optimized = css.to_string();
-        
+
         // Convert 0px to 0
         optimized = regex::Regex::new(r"(\d+)px")
             .unwrap()
             .replace_all(&optimized, "$1")
             .to_string();
-        
+
         // Convert 0em to 0
         optimized = regex::Regex::new(r"(\d+)em")
             .unwrap()
             .replace_all(&optimized, "$1")
             .to_string();
-        
+
         optimized
     }
 }
@@ -545,7 +552,7 @@ mod tests {
             advanced_compression: true,
             compression_level: 9,
         };
-        
+
         let optimizer = CssOptimizer::with_config(config);
         assert!(!optimizer.get_config().minify);
         assert!(optimizer.get_config().advanced_compression);
@@ -562,7 +569,7 @@ mod tests {
                 color: #ffffff;
             }
         "#;
-        
+
         let result = optimizer.optimize_css(css).unwrap();
         assert!(result.len() <= css.len());
     }
@@ -578,7 +585,7 @@ mod tests {
                 color: #ffffff;
             }
         "#;
-        
+
         let compressed = optimizer.compress_css(css).unwrap();
         assert!(!compressed.contains("/*"));
         assert!(!compressed.contains("*/"));
@@ -626,10 +633,10 @@ mod tests {
         let mut generator = CssGenerator::new();
         generator.add_class("p-4").unwrap();
         generator.add_class("bg-blue-500").unwrap();
-        
+
         let optimizer = CssOptimizer::new();
         let results = optimizer.optimize(&mut generator).unwrap();
-        
+
         assert!(results.original_size > 0);
         assert!(results.optimized_size > 0);
         assert!(results.reduction_percentage >= 0.0);

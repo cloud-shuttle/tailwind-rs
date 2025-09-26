@@ -11,11 +11,12 @@ members = [
     "crates/tailwind-rs-cli",
     "crates/tailwind-rs-wasm",
     "demos/leptos-demo",
+    "demos/ssr-demo",
 ]
 resolver = "2"
 
 [workspace.package]
-version = "0.15.0"
+version = "0.16.0"
 edition = "2021"
 authors = ["tailwind-rs contributors"]
 license = "MIT"
@@ -27,22 +28,22 @@ categories = ["web-programming", "development-tools"]
 
 [workspace.dependencies]
 # Core dependencies
-tailwind-rs-core = { path = "crates/tailwind-rs-core" }
-tailwind-rs-macros = { path = "crates/tailwind-rs-macros" }
-tailwind-rs-testing = { path = "crates/tailwind-rs-testing" }
-tailwind-rs-postcss = { path = "crates/tailwind-rs-postcss" }
-tailwind-rs-scanner = { path = "crates/tailwind-rs-scanner" }
+tailwind-rs-core = { path = "crates/tailwind-rs-core", version = "0.16.0" }
+tailwind-rs-macros = { path = "crates/tailwind-rs-macros", version = "0.16.0" }
+tailwind-rs-testing = { path = "crates/tailwind-rs-testing", version = "0.16.0" }
+tailwind-rs-postcss = { path = "crates/tailwind-rs-postcss", version = "0.16.0" }
+tailwind-rs-scanner = { path = "crates/tailwind-rs-scanner", version = "0.16.0" }
 
 # Framework integrations
-tailwind-rs-leptos = { path = "crates/tailwind-rs-leptos" }
-tailwind-rs-yew = { path = "crates/tailwind-rs-yew" }
-tailwind-rs-dioxus = { path = "crates/tailwind-rs-dioxus" }
+tailwind-rs-leptos = { path = "crates/tailwind-rs-leptos", version = "0.16.0" }
+tailwind-rs-yew = { path = "crates/tailwind-rs-yew", version = "0.16.0" }
+tailwind-rs-dioxus = { path = "crates/tailwind-rs-dioxus", version = "0.16.0" }
 
 # CLI tool
-tailwind-rs-cli = { path = "crates/tailwind-rs-cli" }
+tailwind-rs-cli = { path = "crates/tailwind-rs-cli", version = "0.16.0" }
 
 # WASM-optimized crate
-tailwind-rs-wasm = { path = "crates/tailwind-rs-wasm" }
+tailwind-rs-wasm = { path = "crates/tailwind-rs-wasm", version = "0.16.0" }
 
 # External dependencies - Updated to latest available versions (September 2025)
 serde = { version = "1.0", features = ["derive"] }
@@ -56,7 +57,7 @@ tokio = { version = "1.0", features = ["full"] }
 axum = "0.7"
 tower = "0.4"
 tower-http = { version = "0.5", features = ["fs", "cors"] }
-leptos = "0.8.6"
+leptos = "0.8.8"
 leptos_axum = "0.8.6"
 yew = "0.21.0"
 dioxus = "0.3.0"

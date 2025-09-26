@@ -1,130 +1,87 @@
-use leptos::prelude::*;
 use leptos::mount::mount_to_body;
-use leptos::attr::global::ClassAttribute;
+use leptos::prelude::*;
 
-mod memory_analysis;
-mod performance_testing;
-mod advanced_signal_management;
 mod css_generator;
-mod css_validation;
-mod comprehensive_validation;
-use memory_analysis::{MemoryAnalysisDemo, PerformanceTestDemo};
-use performance_testing::PerformanceTestingDemo;
-use advanced_signal_management::{AdvancedSignalManagementDemo, BatchedUpdatesDemo};
 use css_generator::DemoCssGenerator;
 
-/// Simple WASM-compatible demo component
+/// Simple demo that actually uses Tailwind-RS core functionality
 #[component]
 fn App() -> impl IntoView {
-    let (count, set_count) = signal(0);
-    let (name, set_name) = signal("Tailwind-RS".to_string());
+    let (dynamic_classes, set_dynamic_classes) =
+        signal("bg-blue-500 text-white p-4 rounded-lg".to_string());
+    let (generated_css, set_generated_css) = signal(String::new());
 
-    // Generate CSS on component mount
-    let mut css_generator = DemoCssGenerator::new();
-    let _ = css_generator.generate_all_css_files();
+    // Actually use Tailwind-RS core functionality
+    let update_css = move || {
+        let mut generator = DemoCssGenerator::new();
+        let classes = vec![
+            "bg-blue-500",
+            "text-white",
+            "p-4",
+            "rounded-lg",
+            "bg-red-500",
+            "text-black",
+            "p-2",
+            "rounded",
+            "bg-green-500",
+            "text-white",
+            "p-6",
+            "rounded-xl",
+        ];
+
+        for class in classes {
+            let _ = generator.generator.add_class(class);
+        }
+
+        let css = generator.generator.generate_css();
+        set_generated_css.set(css);
+    };
+
+    // Update CSS when component mounts
+    update_css();
 
     view! {
-        <Html lang="en">
-            <Head>
-                <Title text="Peter Hanssens - Data Engineer & Community Leader"/>
-                <Meta charset="utf-8"/>
-                <Meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-                <Meta name="description" content="Interactive demo showcasing Tailwind-RS v0.15.0 capabilities with Leptos"/>
-                
-                // Load generated CSS files
-                <Link rel="stylesheet" href="/comprehensive-styles.css"/>
-                <Link rel="stylesheet" href="/custom-styles.css"/>
-                <Link rel="stylesheet" href="/generated-styles.css"/>
-            </Head>
-            <Body>
-                <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen bg-gray-100" data-testid="app">
             <div class="container mx-auto px-4 py-8">
-                <h1 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-8">
-                    "Tailwind-RS Leptos Demo"
+                <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">
+                    "Tailwind-RS Demo - Actually Using Core Models!"
                 </h1>
-                
-                <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-                        "Interactive Counter"
-                    </h2>
-                    
-                    <div class="text-center mb-4">
-                        <span class="text-6xl font-bold text-blue-600 dark:text-blue-400">
-                            {move || count.get()}
-                        </span>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">"Dynamic Class Preview"</h2>
+                    <div class=format!("w-full h-32 rounded-lg border-2 border-dashed flex items-center justify-center text-gray-500 {}", dynamic_classes.get())>
+                        "Preview Area"
                     </div>
-                    
-                    <div class="flex gap-2 justify-center mb-4">
-                        <button
-                            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-                            on:click=move |_| set_count.update(|c| *c += 1)
-                        >
-                            "Increment"
-                        </button>
-                        <button
-                            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
-                            on:click=move |_| set_count.update(|c| *c -= 1)
-                        >
-                            "Decrement"
-                        </button>
-                        <button
-                            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
-                            on:click=move |_| set_count.set(0)
-                        >
-                            "Reset"
-                        </button>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            "Name:"
+
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            "Enter Tailwind classes:"
                         </label>
                         <input
                             type="text"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                            prop:value=move || name.get()
-                            on:input=move |ev| set_name.set(event_target_value(&ev))
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter Tailwind classes"
+                            prop:value=dynamic_classes
+                            on:input=move |ev| set_dynamic_classes.set(event_target_value(&ev))
                         />
-                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                            "Hello, " {move || name.get()} "!"
-                        </p>
                     </div>
                 </div>
-                
-                // Memory Analysis Demo
-                <div class="mt-8">
-                    <MemoryAnalysisDemo />
+
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">"Generated CSS (from Tailwind-RS Core)"</h2>
+                    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
+                        {generated_css.get()}
+                    </pre>
                 </div>
-                
-                // Performance Test Demo
-                <div class="mt-8">
-                    <PerformanceTestDemo />
-                </div>
-                
-                // Comprehensive Performance Testing Demo
-                <div class="mt-8">
-                    <PerformanceTestingDemo />
-                </div>
-                
-                // Advanced Signal Management Demo
-                <div class="mt-8">
-                    <AdvancedSignalManagementDemo />
-                </div>
-                
-                // Batched Updates Demo
-                <div class="mt-8">
-                    <BatchedUpdatesDemo />
-                </div>
-                
-                <div class="mt-8 text-center">
-                    <p class="text-gray-600 dark:text-gray-400">
-                        "Built with Leptos v0.8.8, Tailwind-RS v0.15.0, and Signal Management"
-                    </p>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">"Current Classes"</h2>
+                    <code class="text-sm text-gray-700 bg-gray-100 px-2 py-1 rounded">
+                        {dynamic_classes.get()}
+                    </code>
                 </div>
             </div>
         </div>
-            </Body>
-        </Html>
     }
 }
 

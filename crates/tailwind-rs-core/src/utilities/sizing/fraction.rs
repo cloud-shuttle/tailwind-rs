@@ -97,7 +97,7 @@ impl Fraction {
     pub fn to_class_name(&self) -> String {
         self.to_string()
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Fraction::Half => "50%".to_string(),

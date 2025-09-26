@@ -66,7 +66,6 @@ pub trait LogicalPropertiesUtilities {
     fn inset_block_start(self, value: SpacingValue) -> Self;
     /// Set inset block end
     fn inset_block_end(self, value: SpacingValue) -> Self;
-
 }
 
 impl LogicalPropertiesUtilities for ClassBuilder {
@@ -149,7 +148,6 @@ impl LogicalPropertiesUtilities for ClassBuilder {
         let class_name = format!("bottom-{}", value.to_string());
         self.class(class_name)
     }
-
 }
 
 /// Convenience methods for common spacing values

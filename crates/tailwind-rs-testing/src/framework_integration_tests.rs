@@ -5,11 +5,7 @@
 
 use proptest::prelude::*;
 
-use tailwind_rs_core::{
-    classes::ClassBuilder,
-    responsive::Breakpoint,
-};
-
+use tailwind_rs_core::{classes::ClassBuilder, responsive::Breakpoint};
 
 /// Generate valid Tailwind CSS class names for framework testing
 pub fn valid_framework_class() -> impl Strategy<Value = String> {
@@ -91,34 +87,34 @@ mod yew_integration_property_tests {
         ) {
             // Create a ClassBuilder with the generated classes
             let mut builder = ClassBuilder::new();
-            
+
             // Add base classes
             for class in &base_classes {
                 builder = builder.class(class);
             }
-            
+
             // Add variant classes
             for class in &variant_classes {
                 builder = builder.class(class);
             }
-            
+
             // Add size classes
             for class in &size_classes {
                 builder = builder.class(class);
             }
-            
+
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
-            
+
             // Property: All input classes should be present in output
             for class in base_classes.iter().chain(variant_classes.iter()).chain(size_classes.iter()) {
-                assert!(class_string.contains(class), 
+                assert!(class_string.contains(class),
                     "Generated classes should contain: {}", class);
             }
-            
+
             // Property: Class string should not be empty
             assert!(!class_string.is_empty(), "Class string should not be empty");
-            
+
             // Property: Class string should be valid CSS classes
             let classes: Vec<&str> = class_string.split_whitespace().collect();
             assert!(!classes.is_empty(), "Should have at least one class");
@@ -139,31 +135,31 @@ mod yew_integration_property_tests {
             )
         ) {
             let mut builder = ClassBuilder::new();
-            
+
             // Add base classes
             for class in &base_classes {
                 builder = builder.class(class);
             }
-            
+
             // Add responsive classes
             for (breakpoint, class) in &responsive_classes {
                 let responsive_class = format!("{}{}", breakpoint.prefix(), class);
                 builder = builder.class(&responsive_class);
             }
-            
+
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
-            
+
             // Property: All base classes should be present
             for class in &base_classes {
-                assert!(class_string.contains(class), 
+                assert!(class_string.contains(class),
                     "Base classes should be present: {}", class);
             }
-            
+
             // Property: All responsive classes should be present
             for (breakpoint, class) in &responsive_classes {
                 let responsive_class = format!("{}{}", breakpoint.prefix(), class);
-                assert!(class_string.contains(&responsive_class), 
+                assert!(class_string.contains(&responsive_class),
                     "Responsive classes should be present: {}", responsive_class);
             }
         }
@@ -178,22 +174,22 @@ mod yew_integration_property_tests {
                 let mut builder = ClassBuilder::new();
                 builder = builder.class(variant_class);
                 builder = builder.class(size_class);
-                
+
                 if *disabled {
                     builder = builder.class("disabled:opacity-50");
                 }
-                
+
                 let class_set = builder.build();
                 let class_string = class_set.to_css_classes();
-                
+
                 // Property: Props should generate valid classes
-                assert!(class_string.contains(variant_class), 
+                assert!(class_string.contains(variant_class),
                     "Variant class should be present: {}", variant_class);
-                assert!(class_string.contains(size_class), 
+                assert!(class_string.contains(size_class),
                     "Size class should be present: {}", size_class);
-                
+
                 if *disabled {
-                    assert!(class_string.contains("disabled:opacity-50"), 
+                    assert!(class_string.contains("disabled:opacity-50"),
                         "Disabled class should be present");
                 }
             }
@@ -207,22 +203,22 @@ mod yew_integration_property_tests {
             // Simulate class caching behavior
             let mut builder1 = ClassBuilder::new();
             let mut builder2 = ClassBuilder::new();
-            
+
             for class in &classes {
                 builder1 = builder1.class(class);
                 builder2 = builder2.class(class);
             }
-            
+
             let class_set1 = builder1.build();
             let class_set2 = builder2.build();
-            
+
             let class_string1 = class_set1.to_css_classes();
             let class_string2 = class_set2.to_css_classes();
-            
+
             // Property: Same input should produce same output
-            assert_eq!(class_string1, class_string2, 
+            assert_eq!(class_string1, class_string2,
                 "Same input should produce same output");
-            
+
             // Property: Output should be deterministic
             assert!(!class_string1.is_empty(), "Output should not be empty");
         }
@@ -249,21 +245,21 @@ mod framework_edge_case_tests {
             }
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
-            
+
             // Property: Empty input should produce empty output
-            assert!(class_string.is_empty() || class_string.trim().is_empty(), 
+            assert!(class_string.is_empty() || class_string.trim().is_empty(),
                 "Empty input should produce empty output");
-            
+
             // Test single class
             let mut builder = ClassBuilder::new();
             builder = builder.class(&single_class);
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
-            
+
             // Property: Single class should be preserved
-            assert!(class_string.contains(&single_class), 
+            assert!(class_string.contains(&single_class),
                 "Single class should be preserved: {}", single_class);
-            
+
             // Test many classes
             let mut builder = ClassBuilder::new();
             for class in &many_classes {
@@ -271,10 +267,10 @@ mod framework_edge_case_tests {
             }
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
-            
+
             // Property: Many classes should all be present
             for class in &many_classes {
-                assert!(class_string.contains(class), 
+                assert!(class_string.contains(class),
                     "Many classes should all be present: {}", class);
             }
         }
@@ -292,14 +288,14 @@ mod framework_edge_case_tests {
                 let mut builder = ClassBuilder::new();
                 builder = builder.class(class1);
                 builder = builder.class(class2);
-                
+
                 let class_set = builder.build();
                 let class_string = class_set.to_css_classes();
-                
+
                 // Property: Both classes should be present (framework handles conflicts)
-                assert!(class_string.contains(class1), 
+                assert!(class_string.contains(class1),
                     "First class should be present: {}", class1);
-                assert!(class_string.contains(class2), 
+                assert!(class_string.contains(class2),
                     "Second class should be present: {}", class2);
             }
         }
@@ -311,23 +307,23 @@ mod framework_edge_case_tests {
         ) {
             // Test that large numbers of classes don't break the system
             let mut builder = ClassBuilder::new();
-            
+
             for class in &classes {
                 builder = builder.class(class);
             }
-            
+
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
-            
+
             // Property: Large input should produce valid output
             assert!(!class_string.is_empty(), "Large input should produce valid output");
-            
+
             // Property: Output should contain all input classes
             for class in &classes {
-                assert!(class_string.contains(class), 
+                assert!(class_string.contains(class),
                     "Output should contain all input classes: {}", class);
             }
-            
+
             // Property: Output should be reasonable length
             assert!(class_string.len() < 10000, "Output should be reasonable length");
         }
@@ -351,36 +347,36 @@ mod framework_compatibility_tests {
             let mut yew_builder = ClassBuilder::new();
             let mut leptos_builder = ClassBuilder::new();
             let mut dioxus_builder = ClassBuilder::new();
-            
+
             for class in &yew_classes {
                 yew_builder = yew_builder.class(class);
             }
-            
+
             for class in &leptos_classes {
                 leptos_builder = leptos_builder.class(class);
             }
-            
+
             for class in &dioxus_classes {
                 dioxus_builder = dioxus_builder.class(class);
             }
-            
+
             let yew_result = yew_builder.build().to_css_classes();
             let leptos_result = leptos_builder.build().to_css_classes();
             let dioxus_result = dioxus_builder.build().to_css_classes();
-            
+
             // Property: Same classes should produce same results across frameworks
             if yew_classes == leptos_classes {
-                assert_eq!(yew_result, leptos_result, 
+                assert_eq!(yew_result, leptos_result,
                     "Same classes should produce same results across frameworks");
             }
-            
+
             if leptos_classes == dioxus_classes {
-                assert_eq!(leptos_result, dioxus_result, 
+                assert_eq!(leptos_result, dioxus_result,
                     "Same classes should produce same results across frameworks");
             }
-            
+
             if yew_classes == dioxus_classes {
-                assert_eq!(yew_result, dioxus_result, 
+                assert_eq!(yew_result, dioxus_result,
                     "Same classes should produce same results across frameworks");
             }
         }
@@ -393,7 +389,7 @@ mod framework_compatibility_tests {
             // Test that the API remains stable across different usage patterns
             let mut builder1 = ClassBuilder::new();
             let mut builder2 = ClassBuilder::new();
-            
+
             // Add classes in different orders
             for (i, class) in classes.iter().enumerate() {
                 if i % 2 == 0 {
@@ -402,7 +398,7 @@ mod framework_compatibility_tests {
                     builder2 = builder2.class(class);
                 }
             }
-            
+
             // Add remaining classes
             for (i, class) in classes.iter().enumerate() {
                 if i % 2 == 1 {
@@ -411,12 +407,12 @@ mod framework_compatibility_tests {
                     builder2 = builder2.class(class);
                 }
             }
-            
+
             let result1 = builder1.build().to_css_classes();
             let result2 = builder2.build().to_css_classes();
-            
+
             // Property: Different order should produce same result
-            assert_eq!(result1, result2, 
+            assert_eq!(result1, result2,
                 "Different order should produce same result");
         }
     }

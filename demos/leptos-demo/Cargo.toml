@@ -1,24 +1,22 @@
 [package]
 name = "tailwind-rs-leptos-demo-working"
-version = "0.15.0"
+version = "0.1.0"
 edition = "2021"
 authors = ["Tailwind-RS Team"]
 license = "MIT"
-description = "Tailwind-RS v0.15.0 Leptos demo with comprehensive CSS generation"
+description = "Working WASM Leptos demo using published tailwind-rs-wasm crate"
 rust-version = "1.89.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-path = "src/lib.rs"
+path = "src/lib_working.rs"
 
 [dependencies]
 # Leptos dependencies
-leptos = { version = "0.8.8", features = ["csr"] }
+leptos = { version = "0.8.9", features = ["csr"] }
 
-# Tailwind-RS v0.15.0 packages
-tailwind-rs-core = "0.15.0"
-tailwind-rs-postcss = "0.15.0"
-tailwind-rs-scanner = "0.15.0"
+# Use the published tailwind-rs-wasm crate (WORKING SOLUTION)
+tailwind-rs-wasm = "0.1.0"
 
 # Web dependencies (only for WASM builds)
 [target.'cfg(target_arch = "wasm32")'.dependencies]

@@ -10,15 +10,40 @@ use std::fmt;
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ColorFunction {
     /// RGB color function: rgb(255, 0, 0)
-    Rgb { r: u8, g: u8, b: u8, alpha: Option<f32> },
+    Rgb {
+        r: u8,
+        g: u8,
+        b: u8,
+        alpha: Option<f32>,
+    },
     /// HSL color function: hsl(0, 100%, 50%)
-    Hsl { h: u16, s: u8, l: u8, alpha: Option<f32> },
+    Hsl {
+        h: u16,
+        s: u8,
+        l: u8,
+        alpha: Option<f32>,
+    },
     /// OKLCH color function: oklch(0.7 0.15 0)
-    Oklch { l: f32, c: f32, h: f32, alpha: Option<f32> },
+    Oklch {
+        l: f32,
+        c: f32,
+        h: f32,
+        alpha: Option<f32>,
+    },
     /// LAB color function: lab(70% 0 0)
-    Lab { l: f32, a: f32, b: f32, alpha: Option<f32> },
+    Lab {
+        l: f32,
+        a: f32,
+        b: f32,
+        alpha: Option<f32>,
+    },
     /// LCH color function: lch(70% 0 0)
-    Lch { l: f32, c: f32, h: f32, alpha: Option<f32> },
+    Lch {
+        l: f32,
+        c: f32,
+        h: f32,
+        alpha: Option<f32>,
+    },
 }
 
 /// CSS variable reference
@@ -33,32 +58,62 @@ pub struct CssVariable {
 impl ColorFunction {
     /// Create a new RGB color function
     pub fn rgb(r: u8, g: u8, b: u8) -> Self {
-        Self::Rgb { r, g, b, alpha: None }
+        Self::Rgb {
+            r,
+            g,
+            b,
+            alpha: None,
+        }
     }
 
     /// Create a new RGB color function with alpha
     pub fn rgba(r: u8, g: u8, b: u8, alpha: f32) -> Self {
-        Self::Rgb { r, g, b, alpha: Some(alpha) }
+        Self::Rgb {
+            r,
+            g,
+            b,
+            alpha: Some(alpha),
+        }
     }
 
     /// Create a new HSL color function
     pub fn hsl(h: u16, s: u8, l: u8) -> Self {
-        Self::Hsl { h, s, l, alpha: None }
+        Self::Hsl {
+            h,
+            s,
+            l,
+            alpha: None,
+        }
     }
 
     /// Create a new HSL color function with alpha
     pub fn hsla(h: u16, s: u8, l: u8, alpha: f32) -> Self {
-        Self::Hsl { h, s, l, alpha: Some(alpha) }
+        Self::Hsl {
+            h,
+            s,
+            l,
+            alpha: Some(alpha),
+        }
     }
 
     /// Create a new OKLCH color function
     pub fn oklch(l: f32, c: f32, h: f32) -> Self {
-        Self::Oklch { l, c, h, alpha: None }
+        Self::Oklch {
+            l,
+            c,
+            h,
+            alpha: None,
+        }
     }
 
     /// Create a new OKLCH color function with alpha
     pub fn oklcha(l: f32, c: f32, h: f32, alpha: f32) -> Self {
-        Self::Oklch { l, c, h, alpha: Some(alpha) }
+        Self::Oklch {
+            l,
+            c,
+            h,
+            alpha: Some(alpha),
+        }
     }
 
     /// Convert to CSS value
@@ -147,12 +202,18 @@ impl ColorFunction {
 impl CssVariable {
     /// Create a new CSS variable reference
     pub fn new(name: String) -> Self {
-        Self { name, fallback: None }
+        Self {
+            name,
+            fallback: None,
+        }
     }
 
     /// Create a new CSS variable reference with fallback
     pub fn with_fallback(name: String, fallback: String) -> Self {
-        Self { name, fallback: Some(fallback) }
+        Self {
+            name,
+            fallback: Some(fallback),
+        }
     }
 
     /// Convert to CSS value
@@ -234,14 +295,24 @@ mod tests {
 
     #[test]
     fn test_lab_color_function() {
-        let color = ColorFunction::Lab { l: 70.0, a: 0.0, b: 0.0, alpha: None };
+        let color = ColorFunction::Lab {
+            l: 70.0,
+            a: 0.0,
+            b: 0.0,
+            alpha: None,
+        };
         assert_eq!(color.to_css_value(), "lab(70% 0 0)");
         assert_eq!(color.to_class_name(), "bg-[lab(70% 0 0)]");
     }
 
     #[test]
     fn test_lch_color_function() {
-        let color = ColorFunction::Lch { l: 70.0, c: 0.0, h: 0.0, alpha: None };
+        let color = ColorFunction::Lch {
+            l: 70.0,
+            c: 0.0,
+            h: 0.0,
+            alpha: None,
+        };
         assert_eq!(color.to_css_value(), "lch(70% 0 0)");
         assert_eq!(color.to_class_name(), "bg-[lch(70% 0 0)]");
     }

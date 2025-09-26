@@ -4,8 +4,8 @@
 //! including build settings, theme configuration, and responsive breakpoints.
 
 pub mod build;
-pub mod toml_config;
 pub mod parser;
+pub mod toml_config;
 
 // Re-export main types
 pub use build::BuildConfig;
@@ -91,11 +91,15 @@ impl TailwindConfig {
     pub fn validate(&self) -> Result<()> {
         // Basic validation
         if self.build.output.is_empty() {
-            return Err(TailwindError::config("Build output path cannot be empty".to_string()));
+            return Err(TailwindError::config(
+                "Build output path cannot be empty".to_string(),
+            ));
         }
 
         if self.build.input.is_empty() {
-            return Err(TailwindError::config("Build input paths cannot be empty".to_string()));
+            return Err(TailwindError::config(
+                "Build input paths cannot be empty".to_string(),
+            ));
         }
 
         // Validate theme
@@ -108,14 +112,29 @@ impl TailwindConfig {
     }
 
     /// Convert TOML values to JSON values
-    fn convert_toml_to_json_values(toml_values: HashMap<String, toml::Value>) -> HashMap<String, serde_json::Value> {
+    fn convert_toml_to_json_values(
+        toml_values: HashMap<String, toml::Value>,
+    ) -> HashMap<String, serde_json::Value> {
         let mut json_values = HashMap::new();
         for (key, value) in toml_values {
             match value {
-                toml::Value::String(s) => { json_values.insert(key.clone(), serde_json::Value::String(s)); }
-                toml::Value::Integer(i) => { json_values.insert(key.clone(), serde_json::Value::Number(i.into())); }
-                toml::Value::Float(f) => { json_values.insert(key, serde_json::Value::Number(serde_json::Number::from_f64(f).unwrap_or(serde_json::Number::from(0)))); }
-                toml::Value::Boolean(b) => { json_values.insert(key, serde_json::Value::Bool(b)); }
+                toml::Value::String(s) => {
+                    json_values.insert(key.clone(), serde_json::Value::String(s));
+                }
+                toml::Value::Integer(i) => {
+                    json_values.insert(key.clone(), serde_json::Value::Number(i.into()));
+                }
+                toml::Value::Float(f) => {
+                    json_values.insert(
+                        key,
+                        serde_json::Value::Number(
+                            serde_json::Number::from_f64(f).unwrap_or(serde_json::Number::from(0)),
+                        ),
+                    );
+                }
+                toml::Value::Boolean(b) => {
+                    json_values.insert(key, serde_json::Value::Bool(b));
+                }
                 _ => {} // Skip complex types for now
             }
         }
@@ -123,11 +142,15 @@ impl TailwindConfig {
     }
 
     /// Convert JSON values to TOML values
-    fn convert_json_to_toml_values(json_values: &HashMap<String, serde_json::Value>) -> HashMap<String, toml::Value> {
+    fn convert_json_to_toml_values(
+        json_values: &HashMap<String, serde_json::Value>,
+    ) -> HashMap<String, toml::Value> {
         let mut toml_values = HashMap::new();
         for (key, value) in json_values {
             match value {
-                serde_json::Value::String(s) => { toml_values.insert(key.clone(), toml::Value::String(s.clone())); }
+                serde_json::Value::String(s) => {
+                    toml_values.insert(key.clone(), toml::Value::String(s.clone()));
+                }
                 serde_json::Value::Number(n) => {
                     if let Some(i) = n.as_i64() {
                         toml_values.insert(key.clone(), toml::Value::Integer(i));
@@ -135,7 +158,9 @@ impl TailwindConfig {
                         toml_values.insert(key.clone(), toml::Value::Float(f));
                     }
                 }
-                serde_json::Value::Bool(b) => { toml_values.insert(key.clone(), toml::Value::Boolean(*b)); }
+                serde_json::Value::Bool(b) => {
+                    toml_values.insert(key.clone(), toml::Value::Boolean(*b));
+                }
                 _ => {} // Skip complex types for now
             }
         }
@@ -143,7 +168,12 @@ impl TailwindConfig {
     }
 
     /// Convert breakpoints to TOML format
-    fn convert_breakpoints_to_toml(breakpoints: &HashMap<crate::responsive::Breakpoint, crate::responsive::responsive_config::BreakpointConfig>) -> HashMap<String, u32> {
+    fn convert_breakpoints_to_toml(
+        breakpoints: &HashMap<
+            crate::responsive::Breakpoint,
+            crate::responsive::responsive_config::BreakpointConfig,
+        >,
+    ) -> HashMap<String, u32> {
         let mut toml_breakpoints = HashMap::new();
         for (breakpoint, config) in breakpoints {
             toml_breakpoints.insert(breakpoint.to_string().to_lowercase(), config.min_width);

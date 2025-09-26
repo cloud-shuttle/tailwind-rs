@@ -54,7 +54,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .justify_content(JustifyContent::Center)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("justify-center"));
     }
 }

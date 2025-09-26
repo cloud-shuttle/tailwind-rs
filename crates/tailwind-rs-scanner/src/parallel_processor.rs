@@ -3,11 +3,11 @@
 //! This module provides parallel file processing capabilities for
 //! efficient content scanning.
 
-use crate::file_scanner::FileInfo;
-use crate::class_extractor::ExtractedClass;
 use crate::class_extractor::ClassExtractor;
+use crate::class_extractor::ExtractedClass;
 use crate::content_config::ScanConfig;
-use crate::error::{ScannerError, Result};
+use crate::error::{Result, ScannerError};
+use crate::file_scanner::FileInfo;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -69,15 +69,17 @@ impl ParallelProcessor {
     ) -> Result<HashMap<PathBuf, Vec<ExtractedClass>>> {
         let start_time = Instant::now();
         let mut results = HashMap::new();
-        
+
         if self.enabled && files.len() > 1 {
             // Parallel processing
-            self.process_files_parallel(files, extractor, &mut results).await?;
+            self.process_files_parallel(files, extractor, &mut results)
+                .await?;
         } else {
             // Sequential processing
-            self.process_files_sequential(files, extractor, &mut results).await?;
+            self.process_files_sequential(files, extractor, &mut results)
+                .await?;
         }
-        
+
         Ok(results)
     }
 
@@ -105,7 +107,8 @@ impl ParallelProcessor {
     ) -> Result<()> {
         // For now, use sequential processing
         // In a real implementation, this would use rayon or tokio for parallel processing
-        self.process_files_sequential(files, extractor, results).await
+        self.process_files_sequential(files, extractor, results)
+            .await
     }
 }
 

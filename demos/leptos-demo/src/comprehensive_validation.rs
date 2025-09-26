@@ -298,7 +298,7 @@ pub struct ValidationReport {
 impl ValidationReport {
     pub fn print_report(&self) {
         println!("\n📊 Comprehensive Validation Report");
-        println!("=" .repeat(50));
+        println!("{}", "=".repeat(50));
         println!("Total Steps: {}", self.total_steps);
         println!("✅ Success: {}", self.success_steps);
         println!("⚠️  Warnings: {}", self.warning_steps);

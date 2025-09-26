@@ -3,7 +3,7 @@
 //! This module provides parsing logic for Tailwind CSS flex-direction utilities,
 //! such as `flex-row`, `flex-row-reverse`, `flex-col`, `flex-col-reverse`.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 use std::collections::HashMap;
 
@@ -19,13 +19,17 @@ impl FlexDirectionParser {
         direction_map.insert("flex-row-reverse".to_string(), "row-reverse".to_string());
         direction_map.insert("flex-col".to_string(), "column".to_string());
         direction_map.insert("flex-col-reverse".to_string(), "column-reverse".to_string());
-        
+
         Self { direction_map }
     }
 
     fn parse_flex_direction_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(direction_value) = self.direction_map.get(class) {
-            return Some(vec![CssProperty { name: "flex-direction".to_string(), value: direction_value.clone(), important: false }]);
+            return Some(vec![CssProperty {
+                name: "flex-direction".to_string(),
+                value: direction_value.clone(),
+                important: false,
+            }]);
         }
         None
     }
@@ -38,14 +42,23 @@ impl UtilityParser for FlexDirectionParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "flex-row", "flex-row-reverse", "flex-col", "flex-col-reverse"
+            "flex-row",
+            "flex-row-reverse",
+            "flex-col",
+            "flex-col-reverse",
         ]
     }
 
-    fn get_priority(&self) -> u32 { 70 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Flexbox }
+    fn get_priority(&self) -> u32 {
+        70
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Flexbox
+    }
 }
 
 impl Default for FlexDirectionParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

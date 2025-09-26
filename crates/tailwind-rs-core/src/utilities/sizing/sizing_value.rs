@@ -61,7 +61,7 @@ impl SizingValue {
             SizingValue::Px(value) => format!("{}px", value),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             SizingValue::Auto => "auto".to_string(),

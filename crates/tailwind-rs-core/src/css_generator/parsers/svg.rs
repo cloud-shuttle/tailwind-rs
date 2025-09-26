@@ -3,29 +3,47 @@
 //! This module provides parsing logic for SVG-related Tailwind CSS utilities,
 //! including stroke, fill, and other SVG properties.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct SvgParser;
 
 impl SvgParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse stroke color classes
     fn parse_stroke_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "stroke-none" => Some(vec![CssProperty { name: "stroke".to_string(), value: "none".to_string(), important: false }]),
-            "stroke-inherit" => Some(vec![CssProperty { name: "stroke".to_string(), value: "inherit".to_string(), important: false }]),
-            "stroke-current" => Some(vec![CssProperty { name: "stroke".to_string(), value: "currentColor".to_string(), important: false }]),
-            "stroke-transparent" => Some(vec![CssProperty { name: "stroke".to_string(), value: "transparent".to_string(), important: false }]),
+            "stroke-none" => Some(vec![CssProperty {
+                name: "stroke".to_string(),
+                value: "none".to_string(),
+                important: false,
+            }]),
+            "stroke-inherit" => Some(vec![CssProperty {
+                name: "stroke".to_string(),
+                value: "inherit".to_string(),
+                important: false,
+            }]),
+            "stroke-current" => Some(vec![CssProperty {
+                name: "stroke".to_string(),
+                value: "currentColor".to_string(),
+                important: false,
+            }]),
+            "stroke-transparent" => Some(vec![CssProperty {
+                name: "stroke".to_string(),
+                value: "transparent".to_string(),
+                important: false,
+            }]),
             _ => {
                 if let Some(color_part) = class.strip_prefix("stroke-") {
                     let color_value = self.get_stroke_color_value(color_part)?;
-                    return Some(vec![CssProperty { 
-                        name: "stroke".to_string(), 
-                        value: color_value, 
-                        important: false 
+                    return Some(vec![CssProperty {
+                        name: "stroke".to_string(),
+                        value: color_value,
+                        important: false,
                     }]);
                 }
                 None
@@ -36,17 +54,33 @@ impl SvgParser {
     /// Parse fill color classes
     fn parse_fill_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "fill-none" => Some(vec![CssProperty { name: "fill".to_string(), value: "none".to_string(), important: false }]),
-            "fill-inherit" => Some(vec![CssProperty { name: "fill".to_string(), value: "inherit".to_string(), important: false }]),
-            "fill-current" => Some(vec![CssProperty { name: "fill".to_string(), value: "currentColor".to_string(), important: false }]),
-            "fill-transparent" => Some(vec![CssProperty { name: "fill".to_string(), value: "transparent".to_string(), important: false }]),
+            "fill-none" => Some(vec![CssProperty {
+                name: "fill".to_string(),
+                value: "none".to_string(),
+                important: false,
+            }]),
+            "fill-inherit" => Some(vec![CssProperty {
+                name: "fill".to_string(),
+                value: "inherit".to_string(),
+                important: false,
+            }]),
+            "fill-current" => Some(vec![CssProperty {
+                name: "fill".to_string(),
+                value: "currentColor".to_string(),
+                important: false,
+            }]),
+            "fill-transparent" => Some(vec![CssProperty {
+                name: "fill".to_string(),
+                value: "transparent".to_string(),
+                important: false,
+            }]),
             _ => {
                 if let Some(color_part) = class.strip_prefix("fill-") {
                     let color_value = self.get_fill_color_value(color_part)?;
-                    return Some(vec![CssProperty { 
-                        name: "fill".to_string(), 
-                        value: color_value, 
-                        important: false 
+                    return Some(vec![CssProperty {
+                        name: "fill".to_string(),
+                        value: color_value,
+                        important: false,
                     }]);
                 }
                 None
@@ -58,10 +92,10 @@ impl SvgParser {
     fn parse_stroke_width_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(width) = class.strip_prefix("stroke-") {
             let width_value = self.parse_stroke_width_value(width)?;
-            return Some(vec![CssProperty { 
-                name: "stroke-width".to_string(), 
-                value: width_value, 
-                important: false 
+            return Some(vec![CssProperty {
+                name: "stroke-width".to_string(),
+                value: width_value,
+                important: false,
             }]);
         }
         None
@@ -155,10 +189,16 @@ impl UtilityParser for SvgParser {
         vec!["stroke-*", "fill-*"]
     }
 
-    fn get_priority(&self) -> u32 { 90 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Effects }
+    fn get_priority(&self) -> u32 {
+        90
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Effects
+    }
 }
 
 impl Default for SvgParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

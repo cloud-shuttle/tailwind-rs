@@ -81,7 +81,7 @@ impl GridGapUtilities for ClassBuilder {
     fn grid_gap(self, gap: GridGap) -> Self {
         self.class(gap.to_string())
     }
-    
+
     fn gap(self, gap: SpacingValue) -> Self {
         self.class(format!("gap-{}", gap.to_class_name()))
     }
@@ -101,10 +101,8 @@ mod tests {
 
     #[test]
     fn test_grid_gap_utilities() {
-        let classes = ClassBuilder::new()
-            .grid_gap(GridGap::Gap4)
-            .build();
-        
+        let classes = ClassBuilder::new().grid_gap(GridGap::Gap4).build();
+
         assert!(classes.to_css_classes().contains("gap-4"));
     }
 }

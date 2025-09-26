@@ -8,14 +8,21 @@
 
 A **type-safe, Rust-native** implementation of Tailwind CSS utilities for modern web development with **complete WASM compatibility** for Leptos, Yew, and Dioxus.
 
-## 🌐 **Current Status: World-Class Production Ready v0.15.0**
+## 🌐 **Current Status: World-Class Production Ready v0.16.0**
 
 > **🎉 MAJOR MILESTONE ACHIEVED**: Tailwind-RS has reached **world-class repository state** with comprehensive utility coverage, robust testing (1815+ tests), and full framework integration. All 10 packages published to crates.io!  
 > **📅 Last Updated**: January 2025
 
-### ✅ **What's Complete in v0.15.0**
+### ✅ **What's Complete in v0.16.0**
 
-#### **🎨 New Major Features**
+#### **🎨 New Major Features in v0.16.0**
+- **🚀 Server-Side Rendering (SSR) Demo**: Real Rust HTTP server with dynamic HTML generation
+- **🎨 Fancy Tailwind CSS Features**: Glass morphism, gradient animations, custom effects
+- **🔧 Tailwind-RS Objects Demo**: Direct usage of `CssGenerator` and `ClassBuilder` APIs
+- **✨ Enhanced Error Handling**: Proper `Result<TailwindError>` handling throughout
+- **🎯 Framework Integration**: Full support for Leptos, Yew, and Dioxus with v0.16.0
+
+#### **🎨 Previous Major Features (v0.15.0)**
 - **🎨 Comprehensive Filter Utilities**: Complete CSS filter support (`blur-*`, `brightness-*`, `contrast-*`, `drop-shadow-*`, `grayscale`, `hue-rotate-*`, `invert`, `saturate-*`, `sepia`)
 - **🌈 Backdrop Filter Utilities**: Full backdrop filter implementation (`backdrop-blur-*`, `backdrop-brightness-*`, `backdrop-contrast-*`, `backdrop-grayscale`, `backdrop-hue-rotate-*`, `backdrop-invert`, `backdrop-opacity-*`, `backdrop-saturate-*`, `backdrop-sepia`)
 - **♿ Accessibility Utilities**: New accessibility parser (`forced-color-adjust-auto`, `forced-color-adjust-none`)
@@ -29,16 +36,16 @@ A **type-safe, Rust-native** implementation of Tailwind CSS utilities for modern
 - **🎨 Background Utilities**: Improved support for `bg-gradient-to-*`, `bg-size-*`, `bg-position-*` classes
 
 #### **📦 Published Packages (All 10 Packages Live on Crates.io)**
-- **`tailwind-rs-core v0.15.0`** - Core CSS generation functionality
-- **`tailwind-rs-macros v0.15.0`** - Procedural macros for Tailwind-RS
-- **`tailwind-rs-testing v0.15.0`** - Testing utilities and helpers
-- **`tailwind-rs-postcss v0.15.0`** - PostCSS integration
-- **`tailwind-rs-scanner v0.15.0`** - File scanning utilities
-- **`tailwind-rs-leptos v0.15.0`** - Leptos framework integration
-- **`tailwind-rs-yew v0.15.0`** - Yew framework integration
-- **`tailwind-rs-dioxus v0.15.0`** - Dioxus framework integration
-- **`tailwind-rs-cli v0.15.0`** - CLI tool
-- **`tailwind-rs-wasm v0.15.0`** - WASM-optimized crate
+- **`tailwind-rs-core v0.16.0`** - Core CSS generation functionality
+- **`tailwind-rs-macros v0.16.0`** - Procedural macros for Tailwind-RS
+- **`tailwind-rs-testing v0.16.0`** - Testing utilities and helpers
+- **`tailwind-rs-postcss v0.16.0`** - PostCSS integration
+- **`tailwind-rs-scanner v0.16.0`** - File scanning utilities
+- **`tailwind-rs-leptos v0.16.0`** - Leptos framework integration
+- **`tailwind-rs-yew v0.16.0`** - Yew framework integration
+- **`tailwind-rs-dioxus v0.16.0`** - Dioxus framework integration
+- **`tailwind-rs-cli v0.16.0`** - CLI tool
+- **`tailwind-rs-wasm v0.16.0`** - WASM-optimized crate
 
 #### **🧪 Testing & Quality (World-Class)**
 - **🧪 Comprehensive Test Suite**: 1815+ passing tests

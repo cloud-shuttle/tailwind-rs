@@ -5,8 +5,8 @@
 
 use crate::classes::ClassBuilder;
 use serde::{Deserialize, Serialize};
-use std::fmt;
 use std::collections::HashMap;
+use std::fmt;
 
 /// Plugin type enumeration
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -117,7 +117,8 @@ impl fmt::Display for PluginConfig {
             PluginConfig::Enable => write!(f, "enable"),
             PluginConfig::Disable => write!(f, "disable"),
             PluginConfig::Configure(options) => {
-                let options_str = options.iter()
+                let options_str = options
+                    .iter()
                     .map(|(k, v)| format!("{}:{}", k, v))
                     .collect::<Vec<_>>()
                     .join(",");
@@ -371,7 +372,10 @@ mod tests {
         assert_eq!(PluginType::Component.to_string(), "component");
         assert_eq!(PluginType::Base.to_string(), "base");
         assert_eq!(PluginType::Variant.to_string(), "variant");
-        assert_eq!(PluginType::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            PluginType::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
@@ -380,7 +384,10 @@ mod tests {
         assert_eq!(PluginType::Component.to_class_name(), "plugin-component");
         assert_eq!(PluginType::Base.to_class_name(), "plugin-base");
         assert_eq!(PluginType::Variant.to_class_name(), "plugin-variant");
-        assert_eq!(PluginType::Custom("custom".to_string()).to_class_name(), "plugin-custom");
+        assert_eq!(
+            PluginType::Custom("custom".to_string()).to_class_name(),
+            "plugin-custom"
+        );
     }
 
     #[test]
@@ -395,24 +402,42 @@ mod tests {
     #[test]
     fn test_plugin_priority_class_names() {
         assert_eq!(PluginPriority::Low.to_class_name(), "plugin-priority-low");
-        assert_eq!(PluginPriority::Normal.to_class_name(), "plugin-priority-normal");
+        assert_eq!(
+            PluginPriority::Normal.to_class_name(),
+            "plugin-priority-normal"
+        );
         assert_eq!(PluginPriority::High.to_class_name(), "plugin-priority-high");
-        assert_eq!(PluginPriority::Critical.to_class_name(), "plugin-priority-critical");
-        assert_eq!(PluginPriority::Custom(42).to_class_name(), "plugin-priority-42");
+        assert_eq!(
+            PluginPriority::Critical.to_class_name(),
+            "plugin-priority-critical"
+        );
+        assert_eq!(
+            PluginPriority::Custom(42).to_class_name(),
+            "plugin-priority-42"
+        );
     }
 
     #[test]
     fn test_plugin_config_enum_values() {
         assert_eq!(PluginConfig::Enable.to_string(), "enable");
         assert_eq!(PluginConfig::Disable.to_string(), "disable");
-        assert_eq!(PluginConfig::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            PluginConfig::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_plugin_config_class_names() {
         assert_eq!(PluginConfig::Enable.to_class_name(), "plugin-config-enable");
-        assert_eq!(PluginConfig::Disable.to_class_name(), "plugin-config-disable");
-        assert_eq!(PluginConfig::Custom("custom".to_string()).to_class_name(), "plugin-config-custom");
+        assert_eq!(
+            PluginConfig::Disable.to_class_name(),
+            "plugin-config-disable"
+        );
+        assert_eq!(
+            PluginConfig::Custom("custom".to_string()).to_class_name(),
+            "plugin-config-custom"
+        );
     }
 
     #[test]
@@ -422,17 +447,38 @@ mod tests {
         assert_eq!(PluginComposition::Extend.to_string(), "extend");
         assert_eq!(PluginComposition::Prepend.to_string(), "prepend");
         assert_eq!(PluginComposition::Append.to_string(), "append");
-        assert_eq!(PluginComposition::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            PluginComposition::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_plugin_composition_class_names() {
-        assert_eq!(PluginComposition::Replace.to_class_name(), "plugin-composition-replace");
-        assert_eq!(PluginComposition::Merge.to_class_name(), "plugin-composition-merge");
-        assert_eq!(PluginComposition::Extend.to_class_name(), "plugin-composition-extend");
-        assert_eq!(PluginComposition::Prepend.to_class_name(), "plugin-composition-prepend");
-        assert_eq!(PluginComposition::Append.to_class_name(), "plugin-composition-append");
-        assert_eq!(PluginComposition::Custom("custom".to_string()).to_class_name(), "plugin-composition-custom");
+        assert_eq!(
+            PluginComposition::Replace.to_class_name(),
+            "plugin-composition-replace"
+        );
+        assert_eq!(
+            PluginComposition::Merge.to_class_name(),
+            "plugin-composition-merge"
+        );
+        assert_eq!(
+            PluginComposition::Extend.to_class_name(),
+            "plugin-composition-extend"
+        );
+        assert_eq!(
+            PluginComposition::Prepend.to_class_name(),
+            "plugin-composition-prepend"
+        );
+        assert_eq!(
+            PluginComposition::Append.to_class_name(),
+            "plugin-composition-append"
+        );
+        assert_eq!(
+            PluginComposition::Custom("custom".to_string()).to_class_name(),
+            "plugin-composition-custom"
+        );
     }
 
     #[test]
@@ -441,16 +487,34 @@ mod tests {
         assert_eq!(PluginLifecycle::Configure.to_string(), "configure");
         assert_eq!(PluginLifecycle::Execute.to_string(), "execute");
         assert_eq!(PluginLifecycle::Cleanup.to_string(), "cleanup");
-        assert_eq!(PluginLifecycle::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            PluginLifecycle::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_plugin_lifecycle_class_names() {
-        assert_eq!(PluginLifecycle::Initialize.to_class_name(), "plugin-lifecycle-initialize");
-        assert_eq!(PluginLifecycle::Configure.to_class_name(), "plugin-lifecycle-configure");
-        assert_eq!(PluginLifecycle::Execute.to_class_name(), "plugin-lifecycle-execute");
-        assert_eq!(PluginLifecycle::Cleanup.to_class_name(), "plugin-lifecycle-cleanup");
-        assert_eq!(PluginLifecycle::Custom("custom".to_string()).to_class_name(), "plugin-lifecycle-custom");
+        assert_eq!(
+            PluginLifecycle::Initialize.to_class_name(),
+            "plugin-lifecycle-initialize"
+        );
+        assert_eq!(
+            PluginLifecycle::Configure.to_class_name(),
+            "plugin-lifecycle-configure"
+        );
+        assert_eq!(
+            PluginLifecycle::Execute.to_class_name(),
+            "plugin-lifecycle-execute"
+        );
+        assert_eq!(
+            PluginLifecycle::Cleanup.to_class_name(),
+            "plugin-lifecycle-cleanup"
+        );
+        assert_eq!(
+            PluginLifecycle::Custom("custom".to_string()).to_class_name(),
+            "plugin-lifecycle-custom"
+        );
     }
 
     #[test]

@@ -10,31 +10,31 @@ use thiserror::Error;
 pub enum ScannerError {
     #[error("File I/O error: {0}")]
     IoError(String),
-    
+
     #[error("File content not available: {0}")]
     FileContentNotAvailable(String),
-    
+
     #[error("Pattern matching error: {0}")]
     PatternError(String),
-    
+
     #[error("Parse error: {0}")]
     ParseError(String),
-    
+
     #[error("Configuration error: {0}")]
     ConfigError(String),
-    
+
     #[error("Cache error: {0}")]
     CacheError(String),
-    
+
     #[error("Watch error: {0}")]
     WatchError(String),
-    
+
     #[error("Tree-sitter error: {0}")]
     TreeSitterError(String),
-    
+
     #[error("Unsupported language: {0}")]
     UnsupportedLanguage(String),
-    
+
     #[error("Generic error: {0}")]
     Generic(String),
 }

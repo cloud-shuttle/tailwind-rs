@@ -230,16 +230,16 @@ pub struct OptimizationStatistics {
 pub enum OptimizationError {
     #[error("CSS parsing failed: {error}")]
     ParsingFailed { error: String },
-    
+
     #[error("Optimization failed: {error}")]
     OptimizationFailed { error: String },
-    
+
     #[error("Invalid CSS syntax: {error}")]
     InvalidCSS { error: String },
-    
+
     #[error("Memory limit exceeded")]
     MemoryLimitExceeded,
-    
+
     #[error("Processing timeout")]
     ProcessingTimeout,
 }

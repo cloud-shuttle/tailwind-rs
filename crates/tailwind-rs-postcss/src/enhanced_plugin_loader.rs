@@ -1,11 +1,11 @@
 //! Enhanced Plugin System
-//! 
+//!
 //! This module provides comprehensive plugin system functionality including
 //! NPM plugin execution, advanced configuration, and ecosystem compatibility.
 
+use serde_json::Value;
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
-use serde_json::Value;
 use thiserror::Error;
 
 /// Enhanced plugin loader with NPM and native plugin support
@@ -30,19 +30,28 @@ impl EnhancedPluginLoader {
             cache: PluginCache::new(),
         }
     }
-    
+
     /// Load and execute NPM plugins
-    pub fn load_npm_plugin(&mut self, plugin_name: &str, config: &PluginConfig) -> Result<PluginInstance, PluginError> {
+    pub fn load_npm_plugin(
+        &mut self,
+        plugin_name: &str,
+        config: &PluginConfig,
+    ) -> Result<PluginInstance, PluginError> {
         let start_time = Instant::now();
-        
+
         // Check cache first
-        if let Some(cached) = self.cache.get_plugin(plugin_name, config.version.as_deref()) {
+        if let Some(cached) = self
+            .cache
+            .get_plugin(plugin_name, config.version.as_deref())
+        {
             return Ok(cached.clone());
         }
-        
+
         // Load plugin from NPM
-        let plugin_info = self.npm_loader.install_plugin(plugin_name, config.version.as_deref())?;
-        
+        let plugin_info = self
+            .npm_loader
+            .install_plugin(plugin_name, config.version.as_deref())?;
+
         // Create plugin instance
         let instance = PluginInstance {
             name: plugin_info.name.clone(),
@@ -52,24 +61,30 @@ impl EnhancedPluginLoader {
             execution_mode: config.execution_mode.clone(),
             security_level: config.security_level.clone(),
         };
-        
+
         // Cache the plugin
-        self.cache.cache_plugin(plugin_name, config.version.as_deref(), &instance);
-        
+        self.cache
+            .cache_plugin(plugin_name, config.version.as_deref(), &instance);
+
         // Record loading time
         let loading_time = start_time.elapsed();
-        self.performance_monitor.record_loading(&instance, loading_time);
-        
+        self.performance_monitor
+            .record_loading(&instance, loading_time);
+
         Ok(instance)
     }
-    
+
     /// Load native Rust plugins
-    pub fn load_native_plugin(&mut self, plugin_path: &str, config: &PluginConfig) -> Result<PluginInstance, PluginError> {
+    pub fn load_native_plugin(
+        &mut self,
+        plugin_path: &str,
+        config: &PluginConfig,
+    ) -> Result<PluginInstance, PluginError> {
         let start_time = Instant::now();
-        
+
         // Load native plugin
         let plugin_info = self.native_loader.load_plugin(plugin_path)?;
-        
+
         // Create plugin instance
         let instance = PluginInstance {
             name: plugin_info.name.clone(),
@@ -79,18 +94,23 @@ impl EnhancedPluginLoader {
             execution_mode: ExecutionMode::Native,
             security_level: config.security_level.clone(),
         };
-        
+
         // Record loading time
         let loading_time = start_time.elapsed();
-        self.performance_monitor.record_loading(&instance, loading_time);
-        
+        self.performance_monitor
+            .record_loading(&instance, loading_time);
+
         Ok(instance)
     }
-    
+
     /// Execute plugin with monitoring
-    pub fn execute_plugin(&mut self, plugin: &PluginInstance, css: &str) -> Result<PluginResult, PluginError> {
+    pub fn execute_plugin(
+        &mut self,
+        plugin: &PluginInstance,
+        css: &str,
+    ) -> Result<PluginResult, PluginError> {
         let start_time = Instant::now();
-        
+
         // Execute plugin based on mode
         let result = match plugin.execution_mode {
             ExecutionMode::Native => self.execute_native_plugin(plugin, css)?,
@@ -98,7 +118,7 @@ impl EnhancedPluginLoader {
             ExecutionMode::WebAssembly => self.execute_wasm_plugin(plugin, css)?,
             ExecutionMode::Sandboxed => self.execute_sandboxed_plugin(plugin, css)?,
         };
-        
+
         // Record execution metrics
         let execution_time = start_time.elapsed();
         let metrics = PluginMetrics {
@@ -113,66 +133,87 @@ impl EnhancedPluginLoader {
             min_time: execution_time,
             loading_time: Duration::from_secs(0),
         };
-        
-        self.performance_monitor.record_execution(plugin, execution_time, metrics);
-        
+
+        self.performance_monitor
+            .record_execution(plugin, execution_time, metrics);
+
         Ok(result)
     }
-    
+
     /// Execute plugin pipeline
-    pub fn execute_plugin_pipeline(&mut self, plugins: &[PluginInstance], css: &str) -> Result<String, PluginError> {
+    pub fn execute_plugin_pipeline(
+        &mut self,
+        plugins: &[PluginInstance],
+        css: &str,
+    ) -> Result<String, PluginError> {
         let mut processed_css = css.to_string();
-        
+
         for plugin in plugins {
             let result = self.execute_plugin(plugin, &processed_css)?;
             processed_css = result.css;
         }
-        
+
         Ok(processed_css)
     }
-    
+
     /// Execute plugins in parallel
-    pub fn execute_plugins_parallel(&self, plugins: &[PluginInstance], css: &str) -> Result<String, PluginError> {
+    pub fn execute_plugins_parallel(
+        &self,
+        plugins: &[PluginInstance],
+        css: &str,
+    ) -> Result<String, PluginError> {
         use rayon::prelude::*;
-        
+
         // Split plugins into chunks for parallel processing
         let chunks: Vec<&[PluginInstance]> = plugins.chunks(4).collect();
-        
+
         let results: Result<Vec<String>, PluginError> = chunks
             .par_iter()
             .map(|chunk| self.execute_plugin_chunk_parallel(chunk, css))
             .collect();
-        
+
         let results = results?;
         Ok(results.join("\n"))
     }
-    
+
     /// Execute a chunk of plugins
-    fn execute_plugin_chunk(&mut self, plugins: &[PluginInstance], css: &str) -> Result<String, PluginError> {
+    fn execute_plugin_chunk(
+        &mut self,
+        plugins: &[PluginInstance],
+        css: &str,
+    ) -> Result<String, PluginError> {
         let mut processed_css = css.to_string();
-        
+
         for plugin in plugins {
             let result = self.execute_plugin(plugin, &processed_css)?;
             processed_css = result.css;
         }
-        
+
         Ok(processed_css)
     }
-    
+
     /// Execute a chunk of plugins in parallel
-    fn execute_plugin_chunk_parallel(&self, plugins: &[PluginInstance], css: &str) -> Result<String, PluginError> {
+    fn execute_plugin_chunk_parallel(
+        &self,
+        plugins: &[PluginInstance],
+        css: &str,
+    ) -> Result<String, PluginError> {
         let mut processed_css = css.to_string();
-        
+
         for plugin in plugins {
             // Simplified execution for parallel processing
             processed_css = format!("/* Processed by {} */\n{}", plugin.name, processed_css);
         }
-        
+
         Ok(processed_css)
     }
-    
+
     /// Execute native plugin
-    fn execute_native_plugin(&self, _plugin: &PluginInstance, css: &str) -> Result<PluginResult, PluginError> {
+    fn execute_native_plugin(
+        &self,
+        _plugin: &PluginInstance,
+        css: &str,
+    ) -> Result<PluginResult, PluginError> {
         // Simplified implementation - would integrate with native plugin system
         Ok(PluginResult {
             css: css.to_string(),
@@ -182,14 +223,23 @@ impl EnhancedPluginLoader {
             errors: Vec::new(),
         })
     }
-    
+
     /// Execute NPM plugin
-    fn execute_npm_plugin(&self, plugin: &PluginInstance, css: &str) -> Result<PluginResult, PluginError> {
-        self.npm_loader.execute_plugin(&plugin.info, css, &plugin.config.options)
+    fn execute_npm_plugin(
+        &self,
+        plugin: &PluginInstance,
+        css: &str,
+    ) -> Result<PluginResult, PluginError> {
+        self.npm_loader
+            .execute_plugin(&plugin.info, css, &plugin.config.options)
     }
-    
+
     /// Execute WebAssembly plugin
-    fn execute_wasm_plugin(&self, _plugin: &PluginInstance, css: &str) -> Result<PluginResult, PluginError> {
+    fn execute_wasm_plugin(
+        &self,
+        _plugin: &PluginInstance,
+        css: &str,
+    ) -> Result<PluginResult, PluginError> {
         // Simplified implementation - would integrate with WebAssembly runtime
         Ok(PluginResult {
             css: css.to_string(),
@@ -199,30 +249,37 @@ impl EnhancedPluginLoader {
             errors: Vec::new(),
         })
     }
-    
+
     /// Execute sandboxed plugin
-    fn execute_sandboxed_plugin(&self, plugin: &PluginInstance, css: &str) -> Result<PluginResult, PluginError> {
+    fn execute_sandboxed_plugin(
+        &self,
+        plugin: &PluginInstance,
+        css: &str,
+    ) -> Result<PluginResult, PluginError> {
         // Create sandbox environment
         let sandbox = PluginSandbox::new(plugin.security_level.clone());
-        
+
         // Execute in sandbox
         sandbox.execute_safely(&plugin.info.name, css, &plugin.config.options)
     }
-    
+
     /// Get plugin statistics
     pub fn get_statistics(&self) -> PluginStatistics {
         self.performance_monitor.get_statistics()
     }
-    
+
     /// Discover plugins in directory
-    pub fn discover_plugins(&self, search_paths: &[String]) -> Result<Vec<PluginInfo>, PluginError> {
+    pub fn discover_plugins(
+        &self,
+        search_paths: &[String],
+    ) -> Result<Vec<PluginInfo>, PluginError> {
         let mut plugins = Vec::new();
-        
+
         for path in search_paths {
             let discovered = self.npm_loader.discover_plugins(path)?;
             plugins.extend(discovered);
         }
-        
+
         Ok(plugins)
     }
 }
@@ -243,61 +300,73 @@ impl NPMPluginLoader {
             sandbox: PluginSandbox::new(SecurityLevel::Sandboxed),
         }
     }
-    
+
     /// Install NPM plugin
-    pub fn install_plugin(&self, plugin_name: &str, version: Option<&str>) -> Result<PluginInfo, PluginError> {
+    pub fn install_plugin(
+        &self,
+        plugin_name: &str,
+        version: Option<&str>,
+    ) -> Result<PluginInfo, PluginError> {
         // Check cache first
         if let Some(cached) = self.cache.get_plugin(plugin_name, version) {
             return Ok(cached.info.clone());
         }
-        
+
         // Install plugin
         let plugin_info = self.npm_client.install(plugin_name, version)?;
-        
+
         // Install dependencies
         for dependency in &plugin_info.dependencies {
             self.install_plugin(&dependency.name, Some(&dependency.version))?;
         }
-        
+
         // Validate plugin
         self.validate_plugin(&plugin_info)?;
-        
+
         Ok(plugin_info)
     }
-    
+
     /// Resolve plugin dependencies
-    pub fn resolve_dependencies(&self, plugin_name: &str) -> Result<Vec<PluginDependency>, PluginError> {
+    pub fn resolve_dependencies(
+        &self,
+        plugin_name: &str,
+    ) -> Result<Vec<PluginDependency>, PluginError> {
         self.npm_client.get_dependencies(plugin_name)
     }
-    
+
     /// Execute plugin in sandbox
-    pub fn execute_plugin(&self, plugin_info: &PluginInfo, css: &str, config: &HashMap<String, Value>) -> Result<PluginResult, PluginError> {
+    pub fn execute_plugin(
+        &self,
+        plugin_info: &PluginInfo,
+        css: &str,
+        config: &HashMap<String, Value>,
+    ) -> Result<PluginResult, PluginError> {
         self.sandbox.execute_safely(&plugin_info.name, css, config)
     }
-    
+
     /// Discover plugins in directory
     pub fn discover_plugins(&self, _path: &str) -> Result<Vec<PluginInfo>, PluginError> {
         let mut plugins = Vec::new();
-        
+
         // Find package.json files
         let package_files = self.find_package_files(_path)?;
-        
+
         for package_file in package_files {
             let plugin_info = self.parse_package_json(&package_file)?;
             if self.is_postcss_plugin(&plugin_info) {
                 plugins.push(plugin_info);
             }
         }
-        
+
         Ok(plugins)
     }
-    
+
     /// Find package.json files
     fn find_package_files(&self, _path: &str) -> Result<Vec<String>, PluginError> {
         // Simplified implementation - would use walkdir or similar
         Ok(Vec::new())
     }
-    
+
     /// Parse package.json file
     fn parse_package_json(&self, _file_path: &str) -> Result<PluginInfo, PluginError> {
         // Simplified implementation - would parse JSON
@@ -315,28 +384,35 @@ impl NPMPluginLoader {
             capabilities: vec![PluginCapability::Transform],
         })
     }
-    
+
     /// Check if plugin is a PostCSS plugin
     fn is_postcss_plugin(&self, plugin_info: &PluginInfo) -> bool {
-        plugin_info.capabilities.contains(&PluginCapability::Transform) ||
-        plugin_info.name.contains("postcss") ||
-        plugin_info.dependencies.iter().any(|dep| dep.name == "postcss")
+        plugin_info
+            .capabilities
+            .contains(&PluginCapability::Transform)
+            || plugin_info.name.contains("postcss")
+            || plugin_info
+                .dependencies
+                .iter()
+                .any(|dep| dep.name == "postcss")
     }
-    
+
     /// Validate plugin
     fn validate_plugin(&self, plugin_info: &PluginInfo) -> Result<(), PluginError> {
         // Check if plugin has required fields
         if plugin_info.name.is_empty() {
-            return Err(PluginError::PluginNotFound { name: "".to_string() });
-        }
-        
-        // Check PostCSS version compatibility
-        if plugin_info.postcss_version != "8.0.0" {
-            return Err(PluginError::CompatibilityError { 
-                error: "Incompatible PostCSS version".to_string() 
+            return Err(PluginError::PluginNotFound {
+                name: "".to_string(),
             });
         }
-        
+
+        // Check PostCSS version compatibility
+        if plugin_info.postcss_version != "8.0.0" {
+            return Err(PluginError::CompatibilityError {
+                error: "Incompatible PostCSS version".to_string(),
+            });
+        }
+
         Ok(())
     }
 }
@@ -349,7 +425,7 @@ impl NativePluginLoader {
     pub fn new() -> Self {
         Self
     }
-    
+
     /// Load native plugin
     pub fn load_plugin(&self, plugin_path: &str) -> Result<PluginInfo, PluginError> {
         // Simplified implementation - would load native Rust plugins
@@ -385,40 +461,42 @@ impl PluginRegistry {
             compatibility_matrix: HashMap::new(),
         }
     }
-    
+
     /// Register plugin
     pub fn register_plugin(&mut self, plugin: PluginInfo) -> Result<(), PluginError> {
         // Validate plugin
         if plugin.name.is_empty() {
-            return Err(PluginError::PluginNotFound { name: "".to_string() });
-        }
-        
-        // Check for conflicts
-        if self.plugins.contains_key(&plugin.name) {
-            return Err(PluginError::CompatibilityError { 
-                error: "Plugin already registered".to_string() 
+            return Err(PluginError::PluginNotFound {
+                name: "".to_string(),
             });
         }
-        
+
+        // Check for conflicts
+        if self.plugins.contains_key(&plugin.name) {
+            return Err(PluginError::CompatibilityError {
+                error: "Plugin already registered".to_string(),
+            });
+        }
+
         // Register plugin
         self.plugins.insert(plugin.name.clone(), plugin);
-        
+
         Ok(())
     }
-    
+
     /// Find compatible plugins
     pub fn find_compatible_plugins(&self, requirements: &PluginRequirements) -> Vec<PluginInfo> {
         let mut compatible = Vec::new();
-        
+
         for (_name, plugin) in &self.plugins {
             if self.is_compatible(plugin, requirements) {
                 compatible.push(plugin.clone());
             }
         }
-        
+
         compatible
     }
-    
+
     /// Check if plugin is compatible
     fn is_compatible(&self, plugin: &PluginInfo, requirements: &PluginRequirements) -> bool {
         // Check capabilities
@@ -427,21 +505,27 @@ impl PluginRegistry {
                 return false;
             }
         }
-        
+
         // Check PostCSS version
         if plugin.postcss_version != requirements.postcss_version {
             return false;
         }
-        
+
         true
     }
-    
+
     /// Get plugin dependencies
     pub fn get_plugin_dependencies(&self, plugin_name: &str) -> Result<Vec<String>, PluginError> {
         if let Some(plugin) = self.plugins.get(plugin_name) {
-            Ok(plugin.dependencies.iter().map(|dep| dep.name.clone()).collect())
+            Ok(plugin
+                .dependencies
+                .iter()
+                .map(|dep| dep.name.clone())
+                .collect())
         } else {
-            Err(PluginError::PluginNotFound { name: plugin_name.to_string() })
+            Err(PluginError::PluginNotFound {
+                name: plugin_name.to_string(),
+            })
         }
     }
 }
@@ -460,9 +544,13 @@ impl PluginConfigManager {
             templates: HashMap::new(),
         }
     }
-    
+
     /// Load plugin configuration
-    pub fn load_config(&self, plugin_name: &str, _config_path: &str) -> Result<PluginConfig, PluginError> {
+    pub fn load_config(
+        &self,
+        plugin_name: &str,
+        _config_path: &str,
+    ) -> Result<PluginConfig, PluginError> {
         // Simplified implementation - would load from file
         Ok(PluginConfig {
             name: plugin_name.to_string(),
@@ -473,7 +561,7 @@ impl PluginConfigManager {
             security_level: SecurityLevel::Sandboxed,
         })
     }
-    
+
     /// Generate configuration template
     pub fn generate_template(&self, plugin_name: &str) -> Result<ConfigTemplate, PluginError> {
         // Simplified implementation - would generate template
@@ -483,26 +571,31 @@ impl PluginConfigManager {
             documentation: "Example configuration".to_string(),
         })
     }
-    
+
     /// Validate configuration
-    pub fn validate_config(&self, config: &PluginConfig) -> Result<Vec<ConfigValidationError>, PluginError> {
+    pub fn validate_config(
+        &self,
+        config: &PluginConfig,
+    ) -> Result<Vec<ConfigValidationError>, PluginError> {
         let mut errors = Vec::new();
-        
+
         // Validate required fields
         if config.name.is_empty() {
             errors.push(ConfigValidationError::MissingField("name".to_string()));
         }
-        
+
         // Validate dependencies
         for dependency in &config.dependencies {
             if !self.is_dependency_available(&dependency.name) {
-                errors.push(ConfigValidationError::MissingDependency(dependency.name.clone()));
+                errors.push(ConfigValidationError::MissingDependency(
+                    dependency.name.clone(),
+                ));
             }
         }
-        
+
         Ok(errors)
     }
-    
+
     /// Check if dependency is available
     fn is_dependency_available(&self, _dependency_name: &str) -> bool {
         // Simplified implementation - would check if dependency is installed
@@ -524,35 +617,41 @@ impl PluginPerformanceMonitor {
             alerts: Vec::new(),
         }
     }
-    
+
     /// Record plugin execution metrics
-    pub fn record_execution(&mut self, plugin: &PluginInstance, duration: Duration, metrics: PluginMetrics) {
+    pub fn record_execution(
+        &mut self,
+        plugin: &PluginInstance,
+        duration: Duration,
+        metrics: PluginMetrics,
+    ) {
         let plugin_name = &plugin.name;
-        
+
         if let Some(existing_metrics) = self.metrics.get_mut(plugin_name) {
             existing_metrics.total_executions += 1;
             existing_metrics.total_time += duration;
-            existing_metrics.avg_time = existing_metrics.total_time / existing_metrics.total_executions;
+            existing_metrics.avg_time =
+                existing_metrics.total_time / existing_metrics.total_executions;
             existing_metrics.max_time = existing_metrics.max_time.max(duration);
             existing_metrics.min_time = existing_metrics.min_time.min(duration);
         } else {
             self.metrics.insert(plugin_name.clone(), metrics);
         }
-        
+
         // Check for performance alerts
         self.check_performance_alerts(plugin_name, duration);
     }
-    
+
     /// Record plugin loading metrics
     pub fn record_loading(&mut self, plugin: &PluginInstance, duration: Duration) {
         // Record loading time for plugin
         let plugin_name = &plugin.name;
-        
+
         if let Some(existing_metrics) = self.metrics.get_mut(plugin_name) {
             existing_metrics.loading_time = duration;
         }
     }
-    
+
     /// Check for performance issues
     fn check_performance_alerts(&mut self, plugin_name: &str, duration: Duration) {
         if duration > Duration::from_millis(1000) {
@@ -564,13 +663,14 @@ impl PluginPerformanceMonitor {
             });
         }
     }
-    
+
     /// Get plugin statistics
     pub fn get_statistics(&self) -> PluginStatistics {
         PluginStatistics {
             total_plugins: self.metrics.len(),
             total_executions: self.metrics.values().map(|m| m.total_executions).sum(),
-            average_execution_time: self.metrics.values().map(|m| m.avg_time).sum::<Duration>() / self.metrics.len().max(1) as u32,
+            average_execution_time: self.metrics.values().map(|m| m.avg_time).sum::<Duration>()
+                / self.metrics.len().max(1) as u32,
             performance_alerts: self.alerts.len(),
         }
     }
@@ -592,24 +692,29 @@ impl PluginSandbox {
             allowed_apis: std::collections::HashSet::new(),
         }
     }
-    
+
     /// Execute plugin in sandbox
-    pub fn execute_safely(&self, plugin_name: &str, css: &str, config: &HashMap<String, Value>) -> Result<PluginResult, PluginError> {
+    pub fn execute_safely(
+        &self,
+        plugin_name: &str,
+        css: &str,
+        config: &HashMap<String, Value>,
+    ) -> Result<PluginResult, PluginError> {
         // Create isolated environment
         let sandbox_env = self.create_sandbox_environment();
-        
+
         // Set resource limits
         self.apply_resource_limits(&sandbox_env);
-        
+
         // Execute plugin with security constraints
         let result = self.execute_with_constraints(plugin_name, css, config)?;
-        
+
         // Validate output
         self.validate_output(&result.css)?;
-        
+
         Ok(result)
     }
-    
+
     /// Create sandbox environment
     fn create_sandbox_environment(&self) -> SandboxEnvironment {
         SandboxEnvironment {
@@ -618,14 +723,19 @@ impl PluginSandbox {
             allowed_apis: self.allowed_apis.clone(),
         }
     }
-    
+
     /// Apply resource limits
     fn apply_resource_limits(&self, _env: &SandboxEnvironment) {
         // Simplified implementation - would apply actual limits
     }
-    
+
     /// Execute with security constraints
-    fn execute_with_constraints(&self, _plugin_name: &str, css: &str, _config: &HashMap<String, Value>) -> Result<PluginResult, PluginError> {
+    fn execute_with_constraints(
+        &self,
+        _plugin_name: &str,
+        css: &str,
+        _config: &HashMap<String, Value>,
+    ) -> Result<PluginResult, PluginError> {
         // Simplified implementation - would execute with constraints
         Ok(PluginResult {
             css: css.to_string(),
@@ -635,19 +745,19 @@ impl PluginSandbox {
             errors: Vec::new(),
         })
     }
-    
+
     /// Validate plugin output
     fn validate_output(&self, output: &str) -> Result<(), PluginError> {
         // Check for malicious content
         if output.contains("<script>") || output.contains("javascript:") {
             return Err(PluginError::SecurityViolation);
         }
-        
+
         // Check output size
         if output.len() > self.resource_limits.max_output_size {
             return Err(PluginError::ResourceLimitExceeded);
         }
-        
+
         Ok(())
     }
 }
@@ -668,24 +778,25 @@ impl PluginCache {
             dependency_cache: HashMap::new(),
         }
     }
-    
+
     /// Cache plugin for faster loading
     pub fn cache_plugin(&mut self, name: &str, version: Option<&str>, plugin: &PluginInstance) {
         let key = format!("{}:{}", name, version.unwrap_or("latest"));
         self.plugin_cache.insert(key, plugin.clone());
     }
-    
+
     /// Get cached plugin
     pub fn get_plugin(&self, name: &str, version: Option<&str>) -> Option<&PluginInstance> {
         let key = format!("{}:{}", name, version.unwrap_or("latest"));
         self.plugin_cache.get(&key)
     }
-    
+
     /// Cache execution result
     pub fn cache_execution(&mut self, key: &str, result: &str) {
-        self.execution_cache.insert(key.to_string(), result.to_string());
+        self.execution_cache
+            .insert(key.to_string(), result.to_string());
     }
-    
+
     /// Get cached execution result
     pub fn get_cached_execution(&self, key: &str) -> Option<&String> {
         self.execution_cache.get(key)
@@ -700,9 +811,13 @@ impl NPMClient {
     pub fn new() -> Self {
         Self
     }
-    
+
     /// Install NPM package
-    pub fn install(&self, package_name: &str, version: Option<&str>) -> Result<PluginInfo, PluginError> {
+    pub fn install(
+        &self,
+        package_name: &str,
+        version: Option<&str>,
+    ) -> Result<PluginInfo, PluginError> {
         // Simplified implementation - would use actual NPM client
         Ok(PluginInfo {
             name: package_name.to_string(),
@@ -718,9 +833,12 @@ impl NPMClient {
             capabilities: vec![PluginCapability::Transform],
         })
     }
-    
+
     /// Get package dependencies
-    pub fn get_dependencies(&self, _package_name: &str) -> Result<Vec<PluginDependency>, PluginError> {
+    pub fn get_dependencies(
+        &self,
+        _package_name: &str,
+    ) -> Result<Vec<PluginDependency>, PluginError> {
         // Simplified implementation - would get actual dependencies
         Ok(Vec::new())
     }
@@ -940,22 +1058,22 @@ pub struct SandboxEnvironment {
 pub enum PluginError {
     #[error("Plugin not found: {name}")]
     PluginNotFound { name: String },
-    
+
     #[error("Plugin installation failed: {error}")]
     InstallationFailed { error: String },
-    
+
     #[error("Plugin execution failed: {error}")]
     ExecutionFailed { error: String },
-    
+
     #[error("Security violation detected")]
     SecurityViolation,
-    
+
     #[error("Resource limit exceeded")]
     ResourceLimitExceeded,
-    
+
     #[error("Plugin compatibility error: {error}")]
     CompatibilityError { error: String },
-    
+
     #[error("Configuration validation failed: {errors:?}")]
     ConfigValidationFailed { errors: Vec<ConfigValidationError> },
 }
@@ -963,13 +1081,13 @@ pub enum PluginError {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_enhanced_plugin_loader_creation() {
         let loader = EnhancedPluginLoader::new();
         assert!(loader.get_statistics().total_plugins == 0);
     }
-    
+
     #[test]
     fn test_plugin_config_creation() {
         let config = PluginConfig {
@@ -980,22 +1098,22 @@ mod tests {
             execution_mode: ExecutionMode::NPM,
             security_level: SecurityLevel::Sandboxed,
         };
-        
+
         assert_eq!(config.name, "test-plugin");
         assert_eq!(config.version, Some("1.0.0".to_string()));
     }
-    
+
     #[test]
     fn test_plugin_metrics_creation() {
         let metrics = PluginMetrics::new();
         assert_eq!(metrics.total_executions, 0);
         assert_eq!(metrics.memory_usage, 0);
     }
-    
+
     #[test]
     fn test_plugin_registry_operations() {
         let mut registry = PluginRegistry::new();
-        
+
         let plugin = PluginInfo {
             name: "test-plugin".to_string(),
             version: "1.0.0".to_string(),
@@ -1009,15 +1127,15 @@ mod tests {
             rust_version: None,
             capabilities: vec![PluginCapability::Transform],
         };
-        
+
         let result = registry.register_plugin(plugin);
         assert!(result.is_ok());
     }
-    
+
     #[test]
     fn test_plugin_cache_operations() {
         let mut cache = PluginCache::new();
-        
+
         let plugin = PluginInstance {
             name: "test-plugin".to_string(),
             version: "1.0.0".to_string(),
@@ -1045,7 +1163,7 @@ mod tests {
             execution_mode: ExecutionMode::NPM,
             security_level: SecurityLevel::Sandboxed,
         };
-        
+
         cache.cache_plugin("test-plugin", Some("1.0.0"), &plugin);
         let cached = cache.get_plugin("test-plugin", Some("1.0.0"));
         assert!(cached.is_some());

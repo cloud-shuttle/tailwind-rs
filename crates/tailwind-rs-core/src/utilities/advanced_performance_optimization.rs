@@ -353,9 +353,13 @@ impl AdvancedCssMinifier {
                 MinificationStrategy::SelectorOptimization => self.optimize_selectors(&result),
                 MinificationStrategy::RuleMerging => self.merge_duplicate_rules(&result),
                 MinificationStrategy::PropertyOptimization => self.optimize_properties(&result),
-                MinificationStrategy::UnusedPropertyRemoval => self.remove_unused_properties(&result),
+                MinificationStrategy::UnusedPropertyRemoval => {
+                    self.remove_unused_properties(&result)
+                }
                 MinificationStrategy::ColorCompression => self.compress_colors(&result),
-                MinificationStrategy::MediaQueryOptimization => self.optimize_media_queries(&result),
+                MinificationStrategy::MediaQueryOptimization => {
+                    self.optimize_media_queries(&result)
+                }
             };
         }
 
@@ -457,11 +461,11 @@ impl CriticalCssExtractor {
                 current_rule = line.to_string();
             } else if trimmed == "}" && in_rule {
                 current_rule.push_str(&format!("{}\n", line));
-                
+
                 if self.is_critical_rule(&current_rule) {
                     critical_css.push_str(&current_rule);
                 }
-                
+
                 in_rule = false;
                 current_rule.clear();
             } else if in_rule {
@@ -488,11 +492,9 @@ impl CriticalCssExtractor {
 
         // Check for common critical selectors
         let critical_patterns = [
-            "html", "body", "head", "title", "meta", "link",
-            "h1", "h2", "h3", "h4", "h5", "h6",
-            "p", "div", "span", "a", "img", "button",
-            "header", "nav", "main", "section", "article",
-            "footer", "aside", "ul", "ol", "li"
+            "html", "body", "head", "title", "meta", "link", "h1", "h2", "h3", "h4", "h5", "h6",
+            "p", "div", "span", "a", "img", "button", "header", "nav", "main", "section",
+            "article", "footer", "aside", "ul", "ol", "li",
         ];
 
         for pattern in &critical_patterns {
@@ -546,8 +548,7 @@ document.querySelectorAll('[data-lazy-classes]').forEach(el => {{
     observer.observe(el);
 }});
 "#,
-            self.observer_options.root_margin,
-            self.observer_options.threshold
+            self.observer_options.root_margin, self.observer_options.threshold
         )
     }
 
@@ -579,7 +580,8 @@ document.querySelectorAll('[data-lazy-classes]').forEach(el => {{
 html, body { margin: 0; padding: 0; }
 .container { max-width: 1200px; margin: 0 auto; }
 .header { background: #fff; padding: 1rem; }
-"#.to_string()
+"#
+        .to_string()
     }
 }
 
@@ -625,21 +627,30 @@ impl BundleSplitter {
     /// Split bundle by feature
     fn split_by_feature(&self, bundle: &str) -> HashMap<String, String> {
         let mut chunks = HashMap::new();
-        
+
         // Split by CSS feature categories
         let features = vec![
             ("layout", vec!["display", "position", "float", "clear"]),
             ("spacing", vec!["margin", "padding", "gap", "space"]),
             ("sizing", vec!["width", "height", "max-width", "min-width"]),
-            ("typography", vec!["font", "text", "line-height", "letter-spacing"]),
-            ("colors", vec!["color", "background", "border-color", "fill"]),
-            ("effects", vec!["box-shadow", "text-shadow", "opacity", "filter"]),
+            (
+                "typography",
+                vec!["font", "text", "line-height", "letter-spacing"],
+            ),
+            (
+                "colors",
+                vec!["color", "background", "border-color", "fill"],
+            ),
+            (
+                "effects",
+                vec!["box-shadow", "text-shadow", "opacity", "filter"],
+            ),
         ];
 
         for (feature_name, properties) in &features {
             let mut feature_css = String::new();
             let lines: Vec<&str> = bundle.lines().collect();
-            
+
             for line in lines {
                 for property in properties {
                     if line.contains(property) {
@@ -648,7 +659,7 @@ impl BundleSplitter {
                     }
                 }
             }
-            
+
             if !feature_css.is_empty() {
                 chunks.insert(feature_name.to_string(), feature_css);
             }
@@ -676,20 +687,20 @@ impl BundleSplitter {
     fn split_by_size(&self, bundle: &str) -> HashMap<String, String> {
         let mut chunks = HashMap::new();
         let max_chunk_size = 50000; // 50KB chunks
-        
+
         // If the bundle is smaller than the max chunk size, return it as a single chunk
         if bundle.len() <= max_chunk_size {
             chunks.insert("chunk_0".to_string(), bundle.to_string());
             return chunks;
         }
-        
+
         let lines: Vec<&str> = bundle.lines().collect();
-        
+
         // If there are no lines (single line), split by character count
         if lines.len() <= 1 {
             return self.split_by_character_count(bundle, max_chunk_size);
         }
-        
+
         let mut current_chunk = String::new();
         let mut chunk_count = 0;
 
@@ -715,13 +726,17 @@ impl BundleSplitter {
 
         chunks
     }
-    
+
     /// Split bundle by character count (for single-line content)
-    fn split_by_character_count(&self, bundle: &str, max_chunk_size: usize) -> HashMap<String, String> {
+    fn split_by_character_count(
+        &self,
+        bundle: &str,
+        max_chunk_size: usize,
+    ) -> HashMap<String, String> {
         let mut chunks = HashMap::new();
         let mut chunk_count = 0;
         let mut start = 0;
-        
+
         while start < bundle.len() {
             let end = std::cmp::min(start + max_chunk_size, bundle.len());
             let chunk = &bundle[start..end];
@@ -729,7 +744,7 @@ impl BundleSplitter {
             start = end;
             chunk_count += 1;
         }
-        
+
         chunks
     }
 
@@ -772,9 +787,13 @@ impl MemoryOptimizer {
             result = match strategy {
                 MemoryOptimizationStrategy::ObjectPooling => self.apply_object_pooling(&result),
                 MemoryOptimizationStrategy::StringInterning => self.apply_string_interning(&result),
-                MemoryOptimizationStrategy::LazyInitialization => self.apply_lazy_initialization(&result),
+                MemoryOptimizationStrategy::LazyInitialization => {
+                    self.apply_lazy_initialization(&result)
+                }
                 MemoryOptimizationStrategy::WeakReferences => self.apply_weak_references(&result),
-                MemoryOptimizationStrategy::MemoryCompression => self.apply_memory_compression(&result),
+                MemoryOptimizationStrategy::MemoryCompression => {
+                    self.apply_memory_compression(&result)
+                }
                 MemoryOptimizationStrategy::GcOptimization => self.apply_gc_optimization(&result),
             };
         }
@@ -836,7 +855,7 @@ impl PerformanceMonitor {
             thresholds: PerformanceThresholds {
                 max_cpu_usage: 80.0,
                 max_memory_usage: 100 * 1024 * 1024, // 100MB
-                max_render_time: 16.67, // 60fps
+                max_render_time: 16.67,              // 60fps
                 min_frame_rate: 30.0,
                 max_js_execution_time: 5.0,
             },
@@ -890,38 +909,68 @@ impl PerformanceMonitor {
 impl fmt::Display for AdvancedOptimizationResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Advanced Optimization Result:\n")?;
-        write!(f, "  Original: {} bytes, {} classes, {} rules\n", 
-               self.original_metrics.bundle_size,
-               self.original_metrics.class_count,
-               self.original_metrics.rule_count)?;
-        write!(f, "  Optimized: {} bytes, {} classes, {} rules\n",
-               self.optimized_metrics.bundle_size,
-               self.optimized_metrics.class_count,
-               self.optimized_metrics.rule_count)?;
-        write!(f, "  Size Reduction: {:.1}%\n", self.improvements.size_reduction)?;
-        write!(f, "  Parse Time Improvement: {:.1}%\n", self.improvements.parse_time_improvement)?;
-        write!(f, "  Render Time Improvement: {:.1}%\n", self.improvements.render_time_improvement)?;
-        write!(f, "  Memory Reduction: {:.1}%\n", self.improvements.memory_reduction)?;
-        write!(f, "  CPU Reduction: {:.1}%\n", self.improvements.cpu_reduction)?;
-        
+        write!(
+            f,
+            "  Original: {} bytes, {} classes, {} rules\n",
+            self.original_metrics.bundle_size,
+            self.original_metrics.class_count,
+            self.original_metrics.rule_count
+        )?;
+        write!(
+            f,
+            "  Optimized: {} bytes, {} classes, {} rules\n",
+            self.optimized_metrics.bundle_size,
+            self.optimized_metrics.class_count,
+            self.optimized_metrics.rule_count
+        )?;
+        write!(
+            f,
+            "  Size Reduction: {:.1}%\n",
+            self.improvements.size_reduction
+        )?;
+        write!(
+            f,
+            "  Parse Time Improvement: {:.1}%\n",
+            self.improvements.parse_time_improvement
+        )?;
+        write!(
+            f,
+            "  Render Time Improvement: {:.1}%\n",
+            self.improvements.render_time_improvement
+        )?;
+        write!(
+            f,
+            "  Memory Reduction: {:.1}%\n",
+            self.improvements.memory_reduction
+        )?;
+        write!(
+            f,
+            "  CPU Reduction: {:.1}%\n",
+            self.improvements.cpu_reduction
+        )?;
+
         if !self.strategies_applied.is_empty() {
-            write!(f, "  Strategies Applied: {}\n", self.strategies_applied.join(", "))?;
+            write!(
+                f,
+                "  Strategies Applied: {}\n",
+                self.strategies_applied.join(", ")
+            )?;
         }
-        
+
         if !self.recommendations.is_empty() {
             write!(f, "  Recommendations:\n")?;
             for rec in &self.recommendations {
                 write!(f, "    - {}\n", rec)?;
             }
         }
-        
+
         if !self.warnings.is_empty() {
             write!(f, "  Warnings:\n")?;
             for warning in &self.warnings {
                 write!(f, "    - {}\n", warning)?;
             }
         }
-        
+
         Ok(())
     }
 }
@@ -943,7 +992,7 @@ mod tests {
     fn test_css_minification() {
         let minifier = AdvancedCssMinifier::new();
         let css = ".test-class { color: red; }";
-        
+
         let minified = minifier.minify(css);
         // Just check that we get some output and it doesn't contain comments
         assert!(!minified.is_empty());
@@ -958,7 +1007,7 @@ mod tests {
         .header { background: #fff; }
         .footer { background: #000; }
         "#;
-        
+
         let critical = extractor.extract_critical_css(css);
         assert!(critical.contains("body"));
         assert!(critical.contains("header"));
@@ -980,7 +1029,7 @@ mod tests {
         .margin-4 { margin: 1rem; }
         .color-red { color: red; }
         "#;
-        
+
         let chunks = splitter.split_bundle(css);
         assert!(!chunks.is_empty());
     }
@@ -1033,7 +1082,7 @@ mod tests {
             recommendations: vec!["Consider using CSS modules".to_string()],
             warnings: vec!["Some optimizations may affect functionality".to_string()],
         };
-        
+
         let display = format!("{}", result);
         assert!(display.contains("Advanced Optimization Result"));
         assert!(display.contains("50.0%"));

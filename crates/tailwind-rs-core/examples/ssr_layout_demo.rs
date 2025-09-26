@@ -1,6 +1,6 @@
-use tailwind_rs_core::*;
-use leptos::*;
 use leptos::prelude::*;
+use leptos::*;
+use tailwind_rs_core::*;
 
 /// SSR Layout Component Demo using Tailwind-RS v0.12.1
 /// This demonstrates server-side rendering with Leptos and Tailwind-RS
@@ -9,55 +9,122 @@ use leptos::prelude::*;
 fn layout_classes() -> Vec<&'static str> {
     vec![
         // Fixed positioning and layout
-        "fixed", "inset-0", "flex", "justify-center",
+        "fixed",
+        "inset-0",
+        "flex",
+        "justify-center",
         // Responsive padding
         "sm:px-8",
         // Container styling
-        "flex", "w-full", "max-w-7xl", "lg:px-8",
+        "flex",
+        "w-full",
+        "max-w-7xl",
+        "lg:px-8",
         // Background and ring
-        "w-full", "bg-white", "ring-1", "ring-zinc-100",
+        "w-full",
+        "bg-white",
+        "ring-1",
+        "ring-zinc-100",
         // Dark mode variants
-        "dark:bg-zinc-900", "dark:ring-zinc-300/20",
+        "dark:bg-zinc-900",
+        "dark:ring-zinc-300/20",
         // Flex layout
-        "relative", "flex", "w-full", "flex-col",
-        "flex-auto"
+        "relative",
+        "flex",
+        "w-full",
+        "flex-col",
+        "flex-auto",
     ]
 }
 
 /// Header component classes
 fn header_classes() -> Vec<&'static str> {
     vec![
-        "sticky", "top-0", "z-50", "w-full", "backdrop-blur-md",
-        "border-b", "border-zinc-200", "bg-white/80",
-        "dark:border-zinc-800", "dark:bg-zinc-900/80",
-        "mx-auto", "max-w-7xl", "px-4", "sm:px-6", "lg:px-8",
-        "flex", "h-16", "items-center", "justify-between",
-        "text-xl", "font-semibold", "text-zinc-900", "dark:text-zinc-100",
-        "text-zinc-600", "hover:text-zinc-900", "dark:text-zinc-400", "dark:hover:text-zinc-100"
+        "sticky",
+        "top-0",
+        "z-50",
+        "w-full",
+        "backdrop-blur-md",
+        "border-b",
+        "border-zinc-200",
+        "bg-white/80",
+        "dark:border-zinc-800",
+        "dark:bg-zinc-900/80",
+        "mx-auto",
+        "max-w-7xl",
+        "px-4",
+        "sm:px-6",
+        "lg:px-8",
+        "flex",
+        "h-16",
+        "items-center",
+        "justify-between",
+        "text-xl",
+        "font-semibold",
+        "text-zinc-900",
+        "dark:text-zinc-100",
+        "text-zinc-600",
+        "hover:text-zinc-900",
+        "dark:text-zinc-400",
+        "dark:hover:text-zinc-100",
     ]
 }
 
 /// Footer component classes
 fn footer_classes() -> Vec<&'static str> {
     vec![
-        "border-t", "border-zinc-200", "bg-zinc-50",
-        "dark:border-zinc-800", "dark:bg-zinc-900",
-        "mx-auto", "max-w-7xl", "px-4", "sm:px-6", "lg:px-8", "py-8",
-        "text-center", "text-zinc-600", "dark:text-zinc-400"
+        "border-t",
+        "border-zinc-200",
+        "bg-zinc-50",
+        "dark:border-zinc-800",
+        "dark:bg-zinc-900",
+        "mx-auto",
+        "max-w-7xl",
+        "px-4",
+        "sm:px-6",
+        "lg:px-8",
+        "py-8",
+        "text-center",
+        "text-zinc-600",
+        "dark:text-zinc-400",
     ]
 }
 
 /// Main content classes
 fn content_classes() -> Vec<&'static str> {
     vec![
-        "prose", "prose-zinc", "max-w-none",
-        "dark:prose-invert", "prose-headings:text-zinc-900",
+        "prose",
+        "prose-zinc",
+        "max-w-none",
+        "dark:prose-invert",
+        "prose-headings:text-zinc-900",
         "dark:prose-headings:text-zinc-100",
-        "text-4xl", "font-bold", "text-zinc-900", "dark:text-zinc-100", "mb-8",
-        "text-lg", "text-zinc-600", "dark:text-zinc-400", "mb-6",
-        "bg-blue-50", "dark:bg-blue-900/20", "p-6", "rounded-lg", "border", "border-blue-200", "dark:border-blue-800",
-        "text-2xl", "font-semibold", "text-blue-900", "dark:text-blue-100", "mb-4",
-        "list-disc", "list-inside", "space-y-2", "text-blue-800", "dark:text-blue-200"
+        "text-4xl",
+        "font-bold",
+        "text-zinc-900",
+        "dark:text-zinc-100",
+        "mb-8",
+        "text-lg",
+        "text-zinc-600",
+        "dark:text-zinc-400",
+        "mb-6",
+        "bg-blue-50",
+        "dark:bg-blue-900/20",
+        "p-6",
+        "rounded-lg",
+        "border",
+        "border-blue-200",
+        "dark:border-blue-800",
+        "text-2xl",
+        "font-semibold",
+        "text-blue-900",
+        "dark:text-blue-100",
+        "mb-4",
+        "list-disc",
+        "list-inside",
+        "space-y-2",
+        "text-blue-800",
+        "dark:text-blue-200",
     ]
 }
 
@@ -66,15 +133,15 @@ fn content_classes() -> Vec<&'static str> {
 pub fn SSRLayout(children: Children) -> impl IntoView {
     // Generate CSS for the layout component
     let mut generator = CssGenerator::new();
-    
+
     // Add all the classes used in the React component
     for class in layout_classes() {
         let _ = generator.add_class(class);
     }
-    
+
     // Generate the CSS for SSR
     let css = generator.generate_css();
-    
+
     view! {
         <>
             <style>{css}</style>
@@ -96,15 +163,15 @@ pub fn SSRLayout(children: Children) -> impl IntoView {
 #[component]
 pub fn SSRHeader() -> impl IntoView {
     let mut generator = CssGenerator::new();
-    
+
     // Add header-specific classes
     for class in header_classes() {
         let _ = generator.add_class(class);
     }
-    
+
     // Generate CSS for header
     let css = generator.generate_css();
-    
+
     view! {
         <>
             <style>{css}</style>
@@ -135,15 +202,15 @@ pub fn SSRHeader() -> impl IntoView {
 #[component]
 pub fn SSRFooter() -> impl IntoView {
     let mut generator = CssGenerator::new();
-    
+
     // Add footer-specific classes
     for class in footer_classes() {
         let _ = generator.add_class(class);
     }
-    
+
     // Generate CSS for footer
     let css = generator.generate_css();
-    
+
     view! {
         <>
             <style>{css}</style>
@@ -162,15 +229,15 @@ pub fn SSRFooter() -> impl IntoView {
 #[component]
 pub fn SSRMainContent() -> impl IntoView {
     let mut generator = CssGenerator::new();
-    
+
     // Add content-specific classes
     for class in content_classes() {
         let _ = generator.add_class(class);
     }
-    
+
     // Generate CSS for content
     let css = generator.generate_css();
-    
+
     view! {
         <>
             <style>{css}</style>
@@ -213,22 +280,22 @@ pub fn SSRApp() -> impl IntoView {
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("🧪 Tailwind-RS SSR Layout Component Demo");
     println!("{}", "=".repeat(50));
-    
+
     // Test the layout classes
     test_layout_classes()?;
-    
+
     // Test responsive classes
     test_responsive_classes()?;
-    
+
     // Test dark mode classes
     test_dark_mode_classes()?;
-    
+
     // Test hover states
     test_hover_states()?;
-    
+
     // Generate comprehensive CSS for SSR
     generate_ssr_css()?;
-    
+
     println!("\n✅ SSR Layout component demo completed!");
     println!("\n📊 Summary:");
     println!("  - Layout classes: ✅ Working");
@@ -238,19 +305,25 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("  - Background colors: ✅ Working");
     println!("  - Flexbox utilities: ✅ Working");
     println!("  - SSR CSS generation: ✅ Working");
-    
+
     Ok(())
 }
 
 fn test_layout_classes() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 Testing Layout Classes...");
-    
+
     let mut generator = CssGenerator::new();
     let layout_classes = vec![
-        "fixed", "inset-0", "flex", "justify-center",
-        "w-full", "max-w-7xl", "relative", "flex-col"
+        "fixed",
+        "inset-0",
+        "flex",
+        "justify-center",
+        "w-full",
+        "max-w-7xl",
+        "relative",
+        "flex-col",
     ];
-    
+
     for class in layout_classes {
         let result = generator.add_class(class);
         if result.is_ok() {
@@ -259,27 +332,25 @@ fn test_layout_classes() -> std::result::Result<(), Box<dyn std::error::Error>> 
             println!("  ❌ Failed: {}", class);
         }
     }
-    
+
     let css = generator.generate_css();
     match std::fs::write("ssr-layout-test.css", css) {
         Ok(_) => {
             println!("  ✅ CSS generated successfully");
             analyze_css_file("ssr-layout-test.css");
-        },
+        }
         Err(e) => println!("  ❌ CSS generation failed: {}", e),
     }
-    
+
     Ok(())
 }
 
 fn test_responsive_classes() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 Testing Responsive Classes...");
-    
+
     let mut generator = CssGenerator::new();
-    let responsive_classes = vec![
-        "sm:px-8", "lg:px-8", "sm:px-6", "lg:px-8"
-    ];
-    
+    let responsive_classes = vec!["sm:px-8", "lg:px-8", "sm:px-6", "lg:px-8"];
+
     for class in responsive_classes {
         let result = generator.add_class(class);
         if result.is_ok() {
@@ -288,28 +359,32 @@ fn test_responsive_classes() -> std::result::Result<(), Box<dyn std::error::Erro
             println!("  ❌ Failed: {}", class);
         }
     }
-    
+
     let css = generator.generate_css();
     match std::fs::write("ssr-responsive-test.css", css) {
         Ok(_) => {
             println!("  ✅ CSS generated successfully");
             analyze_css_file("ssr-responsive-test.css");
-        },
+        }
         Err(e) => println!("  ❌ CSS generation failed: {}", e),
     }
-    
+
     Ok(())
 }
 
 fn test_dark_mode_classes() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 Testing Dark Mode Classes...");
-    
+
     let mut generator = CssGenerator::new();
     let dark_classes = vec![
-        "dark:bg-zinc-900", "dark:ring-zinc-300/20", "dark:border-zinc-800",
-        "dark:bg-zinc-900/80", "dark:text-zinc-100", "dark:text-zinc-400"
+        "dark:bg-zinc-900",
+        "dark:ring-zinc-300/20",
+        "dark:border-zinc-800",
+        "dark:bg-zinc-900/80",
+        "dark:text-zinc-100",
+        "dark:text-zinc-400",
     ];
-    
+
     for class in dark_classes {
         let result = generator.add_class(class);
         if result.is_ok() {
@@ -318,28 +393,30 @@ fn test_dark_mode_classes() -> std::result::Result<(), Box<dyn std::error::Error
             println!("  ❌ Failed: {}", class);
         }
     }
-    
+
     let css = generator.generate_css();
     match std::fs::write("ssr-dark-mode-test.css", css) {
         Ok(_) => {
             println!("  ✅ CSS generated successfully");
             analyze_css_file("ssr-dark-mode-test.css");
-        },
+        }
         Err(e) => println!("  ❌ CSS generation failed: {}", e),
     }
-    
+
     Ok(())
 }
 
 fn test_hover_states() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 Testing Hover States...");
-    
+
     let mut generator = CssGenerator::new();
     let hover_classes = vec![
-        "hover:text-zinc-900", "dark:hover:text-zinc-100",
-        "hover:bg-blue-500", "hover:text-white"
+        "hover:text-zinc-900",
+        "dark:hover:text-zinc-100",
+        "hover:bg-blue-500",
+        "hover:text-white",
     ];
-    
+
     for class in hover_classes {
         let result = generator.add_class(class);
         if result.is_ok() {
@@ -348,45 +425,46 @@ fn test_hover_states() -> std::result::Result<(), Box<dyn std::error::Error>> {
             println!("  ❌ Failed: {}", class);
         }
     }
-    
+
     let css = generator.generate_css();
     match std::fs::write("ssr-hover-test.css", css) {
         Ok(_) => {
             println!("  ✅ CSS generated successfully");
             analyze_css_file("ssr-hover-test.css");
-        },
+        }
         Err(e) => println!("  ❌ CSS generation failed: {}", e),
     }
-    
+
     Ok(())
 }
 
 fn generate_ssr_css() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("\n🔧 Generating Comprehensive SSR CSS...");
-    
+
     let mut generator = CssGenerator::new();
-    
+
     // Add all classes from all components
     let all_classes = [
         layout_classes(),
         header_classes(),
         footer_classes(),
         content_classes(),
-    ].concat();
-    
+    ]
+    .concat();
+
     for class in all_classes {
         let _ = generator.add_class(class);
     }
-    
+
     let css = generator.generate_css();
     match std::fs::write("ssr-comprehensive.css", css) {
         Ok(_) => {
             println!("  ✅ Comprehensive SSR CSS generated successfully");
             analyze_css_file("ssr-comprehensive.css");
-        },
+        }
         Err(e) => println!("  ❌ CSS generation failed: {}", e),
     }
-    
+
     Ok(())
 }
 
@@ -395,23 +473,23 @@ fn analyze_css_file(filename: &str) {
     if let Ok(content) = std::fs::read_to_string(filename) {
         let lines = content.lines().count();
         println!("  📊 Generated {} lines of CSS", lines);
-        
+
         if content.contains(":hover") {
             println!("  ✅ Contains hover states");
         }
-        
+
         if content.contains(".dark") {
             println!("  ✅ Contains dark mode");
         }
-        
+
         if content.contains("@media") {
             println!("  ✅ Contains responsive design");
         }
-        
+
         if content.contains("backdrop-filter") {
             println!("  ✅ Contains backdrop effects");
         }
-        
+
         if content.contains("ring-") {
             println!("  ✅ Contains ring utilities");
         }

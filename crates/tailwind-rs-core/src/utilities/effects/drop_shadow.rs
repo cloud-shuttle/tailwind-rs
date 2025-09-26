@@ -113,7 +113,7 @@ impl fmt::Display for DropShadow {
 /// Trait for adding drop shadow utilities to a class builder
 pub trait DropShadowUtilities {
     fn drop_shadow(self, shadow: DropShadow) -> Self;
-    
+
     // Convenience methods for colored drop shadows
     fn drop_shadow_red(self) -> Self;
     fn drop_shadow_blue(self) -> Self;
@@ -143,91 +143,91 @@ impl DropShadowUtilities for ClassBuilder {
     fn drop_shadow(self, shadow: DropShadow) -> Self {
         self.class(shadow.to_string())
     }
-    
+
     fn drop_shadow_red(self) -> Self {
         self.drop_shadow(DropShadow::Red)
     }
-    
+
     fn drop_shadow_blue(self) -> Self {
         self.drop_shadow(DropShadow::Blue)
     }
-    
+
     fn drop_shadow_green(self) -> Self {
         self.drop_shadow(DropShadow::Green)
     }
-    
+
     fn drop_shadow_yellow(self) -> Self {
         self.drop_shadow(DropShadow::Yellow)
     }
-    
+
     fn drop_shadow_purple(self) -> Self {
         self.drop_shadow(DropShadow::Purple)
     }
-    
+
     fn drop_shadow_pink(self) -> Self {
         self.drop_shadow(DropShadow::Pink)
     }
-    
+
     fn drop_shadow_orange(self) -> Self {
         self.drop_shadow(DropShadow::Orange)
     }
-    
+
     fn drop_shadow_indigo(self) -> Self {
         self.drop_shadow(DropShadow::Indigo)
     }
-    
+
     fn drop_shadow_cyan(self) -> Self {
         self.drop_shadow(DropShadow::Cyan)
     }
-    
+
     fn drop_shadow_teal(self) -> Self {
         self.drop_shadow(DropShadow::Teal)
     }
-    
+
     fn drop_shadow_lime(self) -> Self {
         self.drop_shadow(DropShadow::Lime)
     }
-    
+
     fn drop_shadow_emerald(self) -> Self {
         self.drop_shadow(DropShadow::Emerald)
     }
-    
+
     fn drop_shadow_rose(self) -> Self {
         self.drop_shadow(DropShadow::Rose)
     }
-    
+
     fn drop_shadow_violet(self) -> Self {
         self.drop_shadow(DropShadow::Violet)
     }
-    
+
     fn drop_shadow_fuchsia(self) -> Self {
         self.drop_shadow(DropShadow::Fuchsia)
     }
-    
+
     fn drop_shadow_sky(self) -> Self {
         self.drop_shadow(DropShadow::Sky)
     }
-    
+
     fn drop_shadow_amber(self) -> Self {
         self.drop_shadow(DropShadow::Amber)
     }
-    
+
     fn drop_shadow_stone(self) -> Self {
         self.drop_shadow(DropShadow::Stone)
     }
-    
+
     fn drop_shadow_neutral(self) -> Self {
         self.drop_shadow(DropShadow::Neutral)
     }
-    
+
     fn drop_shadow_zinc(self) -> Self {
         self.drop_shadow(DropShadow::Zinc)
     }
-    
+
     fn drop_shadow_gray(self) -> Self {
         self.drop_shadow(DropShadow::Gray)
     }
-    
+
     fn drop_shadow_slate(self) -> Self {
         self.drop_shadow(DropShadow::Slate)
     }
@@ -247,7 +247,7 @@ mod tests {
         assert_eq!(DropShadow::Xl.to_string(), "drop-shadow-xl");
         assert_eq!(DropShadow::Xl2.to_string(), "drop-shadow-2xl");
         assert_eq!(DropShadow::Xl3.to_string(), "drop-shadow-3xl");
-        
+
         // Test colored drop shadows
         assert_eq!(DropShadow::Red.to_string(), "drop-shadow-red");
         assert_eq!(DropShadow::Blue.to_string(), "drop-shadow-blue");
@@ -275,10 +275,8 @@ mod tests {
 
     #[test]
     fn test_drop_shadow_utilities() {
-        let classes = ClassBuilder::new()
-            .drop_shadow(DropShadow::Lg)
-            .build();
-        
+        let classes = ClassBuilder::new().drop_shadow(DropShadow::Lg).build();
+
         assert!(classes.to_css_classes().contains("drop-shadow-lg"));
     }
 
@@ -289,7 +287,7 @@ mod tests {
             .drop_shadow_blue()
             .drop_shadow_green()
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("drop-shadow-red"));
         assert!(css_classes.contains("drop-shadow-blue"));
@@ -309,14 +307,14 @@ mod tests {
         let drop_shadow1 = DropShadow::Lg;
         let drop_shadow2 = DropShadow::Lg;
         let drop_shadow3 = DropShadow::Md;
-        
+
         assert_eq!(drop_shadow1, drop_shadow2);
         assert_ne!(drop_shadow1, drop_shadow3);
-        
+
         // Test that equal effects have the same hash
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         let mut hasher2 = DefaultHasher::new();
         drop_shadow1.hash(&mut hasher1);

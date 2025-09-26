@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::text_shadow::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod text_shadow_baseline_tests {
@@ -8,13 +8,11 @@ mod text_shadow_baseline_tests {
 
     #[test]
     fn test_text_shadow_css_output_baseline() {
-        let builder = ClassBuilder::new()
-            .text_shadow_sm()
-            .text_shadow_lg();
-        
+        let builder = ClassBuilder::new().text_shadow_sm().text_shadow_lg();
+
         let class_set = builder.build();
         let classes = class_set.to_css_classes();
-        
+
         // Baseline: Should contain both shadow classes
         assert!(classes.contains("text-shadow-sm"));
         assert!(classes.contains("text-shadow-lg"));
@@ -25,10 +23,10 @@ mod text_shadow_baseline_tests {
         let builder = ClassBuilder::new()
             .text_shadow_lg()
             .text_shadow_custom(TextShadow::Xl);
-        
+
         let class_set = builder.build();
         let classes = class_set.to_css_classes();
-        
+
         // Baseline: Should contain both shadow classes
         assert!(classes.contains("text-shadow-lg"));
         assert!(classes.contains("text-shadow-xl"));
@@ -39,7 +37,7 @@ mod text_shadow_baseline_tests {
         let shadow = TextShadow::Sm;
         let css = shadow.to_css_value();
         let class_name = shadow.to_class_name();
-        
+
         // Baseline CSS output
         assert_eq!(css, "0 1px 2px 0 rgb(0 0 0 / 0.05)");
         assert_eq!(class_name, "text-shadow-sm");
@@ -50,9 +48,12 @@ mod text_shadow_baseline_tests {
         let shadow = TextShadow::Lg;
         let css = shadow.to_css_value();
         let class_name = shadow.to_class_name();
-        
+
         // Baseline CSS output
-        assert_eq!(css, "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
+        assert_eq!(
+            css,
+            "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"
+        );
         assert_eq!(class_name, "text-shadow-lg");
     }
 
@@ -61,9 +62,12 @@ mod text_shadow_baseline_tests {
         let shadow = TextShadow::Xl;
         let css = shadow.to_css_value();
         let class_name = shadow.to_class_name();
-        
+
         // Baseline CSS output
-        assert_eq!(css, "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
+        assert_eq!(
+            css,
+            "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
+        );
         assert_eq!(class_name, "text-shadow-xl");
     }
 
@@ -72,7 +76,7 @@ mod text_shadow_baseline_tests {
         let shadow = TextShadow::None;
         let css = shadow.to_css_value();
         let class_name = shadow.to_class_name();
-        
+
         // Baseline CSS output
         assert_eq!(css, "none");
         assert_eq!(class_name, "text-shadow-none");
@@ -82,10 +86,10 @@ mod text_shadow_baseline_tests {
     fn test_text_shadow_serialization_baseline() {
         let shadow = TextShadow::Lg;
         let serialized = serde_json::to_string(&shadow).unwrap();
-        
+
         // Baseline: Should serialize to JSON
         assert!(serialized.contains("Lg"));
-        
+
         // Should deserialize back to the same value
         let deserialized: TextShadow = serde_json::from_str(&serialized).unwrap();
         assert_eq!(shadow, deserialized);
@@ -95,7 +99,7 @@ mod text_shadow_baseline_tests {
     fn test_text_shadow_display_baseline() {
         let shadow = TextShadow::Sm;
         let display_string = format!("{}", shadow);
-        
+
         // Baseline: Should display as CSS value
         assert_eq!(display_string, "0 1px 2px 0 rgb(0 0 0 / 0.05)");
     }
@@ -105,7 +109,7 @@ mod text_shadow_baseline_tests {
         let shadow1 = TextShadow::Sm;
         let shadow2 = TextShadow::Sm;
         let shadow3 = TextShadow::Lg;
-        
+
         // Baseline: Same variants should be equal
         assert_eq!(shadow1, shadow2);
         assert_ne!(shadow1, shadow3);
@@ -115,10 +119,10 @@ mod text_shadow_baseline_tests {
     fn test_text_shadow_clone_baseline() {
         let shadow = TextShadow::Lg;
         let cloned = shadow.clone();
-        
+
         // Baseline: Cloned shadow should be equal to original
         assert_eq!(shadow, cloned);
-        
+
         // Cloned shadow should have the same CSS output
         assert_eq!(shadow.to_css_value(), cloned.to_css_value());
         assert_eq!(shadow.to_class_name(), cloned.to_class_name());
@@ -133,9 +137,9 @@ mod text_shadow_baseline_tests {
             .responsive(Breakpoint::Md, "text-shadow-lg")
             .conditional("hover", "text-shadow-xl")
             .build();
-        
+
         let classes = class_set.to_css_classes();
-        
+
         // Baseline: Should contain expected classes
         assert!(classes.contains("text-shadow-sm"));
         assert!(classes.contains("text-blue-500"));

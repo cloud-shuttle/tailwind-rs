@@ -48,10 +48,8 @@ mod tests {
 
     #[test]
     fn test_flex_basis_utilities() {
-        let classes = ClassBuilder::new()
-            .flex_basis(FlexBasis::Auto)
-            .build();
-        
+        let classes = ClassBuilder::new().flex_basis(FlexBasis::Auto).build();
+
         assert!(classes.to_css_classes().contains("basis-auto"));
     }
 }

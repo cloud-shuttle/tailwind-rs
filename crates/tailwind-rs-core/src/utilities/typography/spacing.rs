@@ -112,7 +112,7 @@ impl LineHeight {
             LineHeight::Loose => "loose".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             LineHeight::None => "1".to_string(),
@@ -144,7 +144,7 @@ impl LetterSpacing {
             LetterSpacing::Widest => "widest".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             LetterSpacing::Tighter => "-0.05em".to_string(),
@@ -201,7 +201,9 @@ pub trait LetterSpacingUtilities {
 
 impl LineHeightUtilities for ClassBuilder {
     fn leading(&mut self, height: LineHeight) -> &mut Self {
-        *self = self.clone().class(&format!("leading-{}", height.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("leading-{}", height.to_class_name()));
         self
     }
 
@@ -264,7 +266,9 @@ impl LineHeightUtilities for ClassBuilder {
 
 impl LetterSpacingUtilities for ClassBuilder {
     fn tracking(&mut self, spacing: LetterSpacing) -> &mut Self {
-        *self = self.clone().class(&format!("tracking-{}", spacing.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("tracking-{}", spacing.to_class_name()));
         self
     }
 

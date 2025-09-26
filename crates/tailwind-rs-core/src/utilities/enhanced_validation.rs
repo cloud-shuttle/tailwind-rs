@@ -5,8 +5,8 @@
 
 use crate::classes::ClassBuilder;
 use serde::{Deserialize, Serialize};
-use std::fmt;
 use std::collections::HashMap;
+use std::fmt;
 
 /// Validation rule types
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -40,10 +40,39 @@ impl ValidationRule {
     pub fn to_class_name(&self) -> String {
         match self {
             ValidationRule::Required => "validation-required".to_string(),
-            ValidationRule::Pattern(pattern) => format!("validation-pattern-{}", pattern.replace(":", "-").replace("(", "").replace(")", "").replace("*", "star").replace("+", "plus").replace("?", "question").replace("^", "caret").replace("$", "dollar").replace("|", "pipe").replace("\\", "backslash").replace("/", "slash").replace(" ", "-")),
+            ValidationRule::Pattern(pattern) => format!(
+                "validation-pattern-{}",
+                pattern
+                    .replace(":", "-")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("*", "star")
+                    .replace("+", "plus")
+                    .replace("?", "question")
+                    .replace("^", "caret")
+                    .replace("$", "dollar")
+                    .replace("|", "pipe")
+                    .replace("\\", "backslash")
+                    .replace("/", "slash")
+                    .replace(" ", "-")
+            ),
             ValidationRule::Length(min, max) => format!("validation-length-{}-{}", min, max),
             ValidationRule::Range(min, max) => format!("validation-range-{}-{}", min, max),
-            ValidationRule::Custom(rule) => format!("validation-{}", rule.replace(":", "-").replace("(", "").replace(")", "").replace("*", "star").replace("+", "plus").replace("?", "question").replace("^", "caret").replace("$", "dollar").replace("|", "pipe").replace("\\", "backslash").replace("/", "slash").replace(" ", "-")),
+            ValidationRule::Custom(rule) => format!(
+                "validation-{}",
+                rule.replace(":", "-")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("*", "star")
+                    .replace("+", "plus")
+                    .replace("?", "question")
+                    .replace("^", "caret")
+                    .replace("$", "dollar")
+                    .replace("|", "pipe")
+                    .replace("\\", "backslash")
+                    .replace("/", "slash")
+                    .replace(" ", "-")
+            ),
         }
     }
 
@@ -410,19 +439,40 @@ mod tests {
     #[test]
     fn test_validation_rule_enum_values() {
         assert_eq!(ValidationRule::Required.to_string(), "required");
-        assert_eq!(ValidationRule::Pattern("test".to_string()).to_string(), "pattern:test");
+        assert_eq!(
+            ValidationRule::Pattern("test".to_string()).to_string(),
+            "pattern:test"
+        );
         assert_eq!(ValidationRule::Length(1, 10).to_string(), "length:1-10");
         assert_eq!(ValidationRule::Range(0.0, 100.0).to_string(), "range:0-100");
-        assert_eq!(ValidationRule::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            ValidationRule::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_validation_rule_class_names() {
-        assert_eq!(ValidationRule::Required.to_class_name(), "validation-required");
-        assert_eq!(ValidationRule::Pattern("test".to_string()).to_class_name(), "validation-pattern-test");
-        assert_eq!(ValidationRule::Length(1, 10).to_class_name(), "validation-length-1-10");
-        assert_eq!(ValidationRule::Range(0.0, 100.0).to_class_name(), "validation-range-0-100");
-        assert_eq!(ValidationRule::Custom("custom".to_string()).to_class_name(), "validation-custom");
+        assert_eq!(
+            ValidationRule::Required.to_class_name(),
+            "validation-required"
+        );
+        assert_eq!(
+            ValidationRule::Pattern("test".to_string()).to_class_name(),
+            "validation-pattern-test"
+        );
+        assert_eq!(
+            ValidationRule::Length(1, 10).to_class_name(),
+            "validation-length-1-10"
+        );
+        assert_eq!(
+            ValidationRule::Range(0.0, 100.0).to_class_name(),
+            "validation-range-0-100"
+        );
+        assert_eq!(
+            ValidationRule::Custom("custom".to_string()).to_class_name(),
+            "validation-custom"
+        );
     }
 
     #[test]
@@ -431,16 +481,31 @@ mod tests {
         assert_eq!(ValidationSeverity::Warning.to_string(), "warning");
         assert_eq!(ValidationSeverity::Info.to_string(), "info");
         assert_eq!(ValidationSeverity::Success.to_string(), "success");
-        assert_eq!(ValidationSeverity::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            ValidationSeverity::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_validation_severity_class_names() {
-        assert_eq!(ValidationSeverity::Error.to_class_name(), "validation-error");
-        assert_eq!(ValidationSeverity::Warning.to_class_name(), "validation-warning");
+        assert_eq!(
+            ValidationSeverity::Error.to_class_name(),
+            "validation-error"
+        );
+        assert_eq!(
+            ValidationSeverity::Warning.to_class_name(),
+            "validation-warning"
+        );
         assert_eq!(ValidationSeverity::Info.to_class_name(), "validation-info");
-        assert_eq!(ValidationSeverity::Success.to_class_name(), "validation-success");
-        assert_eq!(ValidationSeverity::Custom("custom".to_string()).to_class_name(), "validation-custom");
+        assert_eq!(
+            ValidationSeverity::Success.to_class_name(),
+            "validation-success"
+        );
+        assert_eq!(
+            ValidationSeverity::Custom("custom".to_string()).to_class_name(),
+            "validation-custom"
+        );
     }
 
     #[test]
@@ -449,16 +514,25 @@ mod tests {
         assert_eq!(ValidationScope::Local.to_string(), "local");
         assert_eq!(ValidationScope::Component.to_string(), "component");
         assert_eq!(ValidationScope::Page.to_string(), "page");
-        assert_eq!(ValidationScope::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            ValidationScope::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_validation_scope_class_names() {
         assert_eq!(ValidationScope::Global.to_class_name(), "validation-global");
         assert_eq!(ValidationScope::Local.to_class_name(), "validation-local");
-        assert_eq!(ValidationScope::Component.to_class_name(), "validation-component");
+        assert_eq!(
+            ValidationScope::Component.to_class_name(),
+            "validation-component"
+        );
         assert_eq!(ValidationScope::Page.to_class_name(), "validation-page");
-        assert_eq!(ValidationScope::Custom("custom".to_string()).to_class_name(), "validation-custom");
+        assert_eq!(
+            ValidationScope::Custom("custom".to_string()).to_class_name(),
+            "validation-custom"
+        );
     }
 
     #[test]
@@ -467,7 +541,10 @@ mod tests {
         assert_eq!(ValidationMode::Loose.to_string(), "loose");
         assert_eq!(ValidationMode::Custom.to_string(), "custom");
         assert_eq!(ValidationMode::Disabled.to_string(), "disabled");
-        assert_eq!(ValidationMode::CustomMode("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            ValidationMode::CustomMode("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
@@ -475,26 +552,56 @@ mod tests {
         assert_eq!(ValidationMode::Strict.to_class_name(), "validation-strict");
         assert_eq!(ValidationMode::Loose.to_class_name(), "validation-loose");
         assert_eq!(ValidationMode::Custom.to_class_name(), "validation-custom");
-        assert_eq!(ValidationMode::Disabled.to_class_name(), "validation-disabled");
-        assert_eq!(ValidationMode::CustomMode("custom".to_string()).to_class_name(), "validation-custom");
+        assert_eq!(
+            ValidationMode::Disabled.to_class_name(),
+            "validation-disabled"
+        );
+        assert_eq!(
+            ValidationMode::CustomMode("custom".to_string()).to_class_name(),
+            "validation-custom"
+        );
     }
 
     #[test]
     fn test_validation_result_enum_values() {
         assert_eq!(ValidationResult::Valid.to_string(), "valid");
-        assert_eq!(ValidationResult::Invalid("message".to_string()).to_string(), "invalid:message");
-        assert_eq!(ValidationResult::Warning("message".to_string()).to_string(), "warning:message");
-        assert_eq!(ValidationResult::Info("message".to_string()).to_string(), "info:message");
-        assert_eq!(ValidationResult::Custom("custom".to_string()).to_string(), "custom");
+        assert_eq!(
+            ValidationResult::Invalid("message".to_string()).to_string(),
+            "invalid:message"
+        );
+        assert_eq!(
+            ValidationResult::Warning("message".to_string()).to_string(),
+            "warning:message"
+        );
+        assert_eq!(
+            ValidationResult::Info("message".to_string()).to_string(),
+            "info:message"
+        );
+        assert_eq!(
+            ValidationResult::Custom("custom".to_string()).to_string(),
+            "custom"
+        );
     }
 
     #[test]
     fn test_validation_result_class_names() {
         assert_eq!(ValidationResult::Valid.to_class_name(), "validation-valid");
-        assert_eq!(ValidationResult::Invalid("message".to_string()).to_class_name(), "validation-invalid");
-        assert_eq!(ValidationResult::Warning("message".to_string()).to_class_name(), "validation-warning");
-        assert_eq!(ValidationResult::Info("message".to_string()).to_class_name(), "validation-info");
-        assert_eq!(ValidationResult::Custom("custom".to_string()).to_class_name(), "validation-custom");
+        assert_eq!(
+            ValidationResult::Invalid("message".to_string()).to_class_name(),
+            "validation-invalid"
+        );
+        assert_eq!(
+            ValidationResult::Warning("message".to_string()).to_class_name(),
+            "validation-warning"
+        );
+        assert_eq!(
+            ValidationResult::Info("message".to_string()).to_class_name(),
+            "validation-info"
+        );
+        assert_eq!(
+            ValidationResult::Custom("custom".to_string()).to_class_name(),
+            "validation-custom"
+        );
     }
 
     #[test]

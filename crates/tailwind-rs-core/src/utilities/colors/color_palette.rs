@@ -7,17 +7,33 @@ use std::fmt;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ColorPalette {
     // Grays
-    Gray, Slate, Zinc, Neutral, Stone,
+    Gray,
+    Slate,
+    Zinc,
+    Neutral,
+    Stone,
     // Reds
-    Red, Rose, Pink,
+    Red,
+    Rose,
+    Pink,
     // Oranges
-    Orange, Amber, Yellow,
+    Orange,
+    Amber,
+    Yellow,
     // Greens
-    Lime, Green, Emerald, Teal, Cyan,
+    Lime,
+    Green,
+    Emerald,
+    Teal,
+    Cyan,
     // Blues
-    Sky, Blue, Indigo, Violet,
+    Sky,
+    Blue,
+    Indigo,
+    Violet,
     // Purples
-    Purple, Fuchsia,
+    Purple,
+    Fuchsia,
 }
 
 impl fmt::Display for ColorPalette {

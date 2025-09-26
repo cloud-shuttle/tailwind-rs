@@ -2,7 +2,7 @@ use tailwind_rs_core::css_generator::CssGenerator;
 
 fn main() {
     let mut generator = CssGenerator::new();
-    
+
     // Test header/navbar classes from Header.tsx
     let header_classes = vec![
         // Basic layout
@@ -16,7 +16,6 @@ fn main() {
         "pt-6",
         "top-0",
         "z-10",
-        
         // Navigation
         "group",
         "flex",
@@ -37,7 +36,6 @@ fn main() {
         "dark:text-zinc-200",
         "dark:ring-white/10",
         "dark:hover:ring-white/20",
-        
         // Mobile navigation
         "ml-3",
         "h-auto",
@@ -45,14 +43,12 @@ fn main() {
         "stroke-zinc-500",
         "group-hover:stroke-zinc-700",
         "dark:group-hover:stroke-zinc-400",
-        
         // Backdrop
         "fixed",
         "inset-0",
         "z-50",
         "bg-zinc-800/40",
         "backdrop-blur-xs",
-        
         // Panel
         "fixed",
         "inset-x-4",
@@ -66,7 +62,6 @@ fn main() {
         "ring-zinc-900/5",
         "dark:bg-zinc-900",
         "dark:ring-zinc-800",
-        
         // Navigation items
         "flex",
         "flex-row-reverse",
@@ -90,7 +85,6 @@ fn main() {
         "text-zinc-800",
         "dark:divide-zinc-100/5",
         "dark:text-zinc-300",
-        
         // Desktop navigation
         "flex",
         "rounded-full",
@@ -107,7 +101,6 @@ fn main() {
         "dark:bg-zinc-800/90",
         "dark:text-zinc-200",
         "dark:ring-white/10",
-        
         // Nav items
         "relative",
         "block",
@@ -129,7 +122,6 @@ fn main() {
         "dark:from-teal-400/0",
         "dark:via-teal-400/40",
         "dark:to-teal-400/0",
-        
         // Theme toggle
         "group",
         "rounded-full",
@@ -160,7 +152,6 @@ fn main() {
         "stroke-zinc-500",
         "transition",
         "dark:block",
-        
         // Avatar
         "h-10",
         "w-10",
@@ -183,7 +174,6 @@ fn main() {
         "w-16",
         "h-9",
         "w-9",
-        
         // Container
         "flex",
         "gap-4",
@@ -198,13 +188,13 @@ fn main() {
         "md:flex-1",
         "pointer-events-auto",
     ];
-    
+
     println!("🔍 Testing Header/Navbar Classes");
     println!("================================");
-    
+
     let mut working_count = 0;
     let mut broken_count = 0;
-    
+
     for class in header_classes {
         match generator.add_class(class) {
             Ok(_) => {
@@ -217,21 +207,24 @@ fn main() {
             }
         }
     }
-    
+
     println!("\n📊 Header/Navbar Test Results:");
     println!("  ✅ Working classes: {}", working_count);
     println!("  ❌ Broken classes: {}", broken_count);
-    println!("  📊 Coverage: {:.1}%", (working_count as f32 / (working_count + broken_count) as f32) * 100.0);
-    
+    println!(
+        "  📊 Coverage: {:.1}%",
+        (working_count as f32 / (working_count + broken_count) as f32) * 100.0
+    );
+
     println!("\n🎨 Generated CSS:");
     println!("==================");
     let css = generator.generate_css();
     println!("{}", css);
-    
+
     // Write CSS to file
     std::fs::write("header-demo.css", &css).expect("Failed to write CSS file");
     println!("\n✅ CSS written to header-demo.css");
-    
+
     // Create a simple HTML demo
     let html = format!(
         "<!DOCTYPE html>\n\
@@ -323,7 +316,7 @@ fn main() {
         </html>",
         css, working_count, broken_count, (working_count as f32 / (working_count + broken_count) as f32) * 100.0
     );
-    
+
     std::fs::write("header-demo.html", &html).expect("Failed to write HTML file");
     println!("✅ HTML demo written to header-demo.html");
     println!("🌐 Open header-demo.html in your browser to see the header/navbar demo!");

@@ -42,10 +42,8 @@ mod tests {
 
     #[test]
     fn test_flex_wrap_utilities() {
-        let classes = ClassBuilder::new()
-            .flex_wrap(FlexWrap::Wrap)
-            .build();
-        
+        let classes = ClassBuilder::new().flex_wrap(FlexWrap::Wrap).build();
+
         assert!(classes.to_css_classes().contains("flex-wrap"));
     }
 }

@@ -2,9 +2,9 @@
 //!
 //! This module provides common prop types for Yew components with Tailwind styling.
 
+use std::collections::HashMap;
 use tailwind_rs_core::ClassBuilder;
 use yew::prelude::*;
-use std::collections::HashMap;
 
 /// Common props for styled components
 #[derive(Properties, PartialEq, Clone)]

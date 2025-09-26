@@ -48,10 +48,8 @@ mod tests {
 
     #[test]
     fn test_align_items_utilities() {
-        let classes = ClassBuilder::new()
-            .align_items(AlignItems::Center)
-            .build();
-        
+        let classes = ClassBuilder::new().align_items(AlignItems::Center).build();
+
         assert!(classes.to_css_classes().contains("items-center"));
     }
 }

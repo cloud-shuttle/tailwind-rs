@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::modern_css_features::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod registered_custom_properties_unit_tests {
@@ -57,9 +57,15 @@ mod registered_custom_properties_unit_tests {
     #[test]
     fn test_custom_property_box_shadow() {
         let property = CustomProperty::BoxShadow("0 4px 6px -1px rgb(0 0 0 / 0.1)".to_string());
-        assert_eq!(property.to_string(), "--box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1)");
+        assert_eq!(
+            property.to_string(),
+            "--box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1)"
+        );
         assert_eq!(property.to_class_name(), "custom-box-shadow");
-        assert_eq!(property.to_css_value(), "--box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1)");
+        assert_eq!(
+            property.to_css_value(),
+            "--box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1)"
+        );
     }
 
     #[test]
@@ -91,7 +97,10 @@ mod registered_custom_properties_unit_tests {
         let property = CustomProperty::Animation("fadeIn 0.5s ease-in-out".to_string());
         assert_eq!(property.to_string(), "--animation: fadeIn 0.5s ease-in-out");
         assert_eq!(property.to_class_name(), "custom-animation");
-        assert_eq!(property.to_css_value(), "--animation: fadeIn 0.5s ease-in-out");
+        assert_eq!(
+            property.to_css_value(),
+            "--animation: fadeIn 0.5s ease-in-out"
+        );
     }
 
     #[test]
@@ -130,7 +139,7 @@ mod registered_custom_properties_unit_tests {
         let property1 = CustomProperty::Color("red".to_string());
         let property2 = CustomProperty::Color("red".to_string());
         let property3 = CustomProperty::Color("blue".to_string());
-        
+
         assert_eq!(property1, property2);
         assert_ne!(property1, property3);
     }
@@ -140,22 +149,22 @@ mod registered_custom_properties_unit_tests {
         let property1 = CustomProperty::Color("red".to_string());
         let property2 = CustomProperty::Color("red".to_string());
         let property3 = CustomProperty::Color("blue".to_string());
-        
+
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         property1.hash(&mut hasher1);
         let hash1 = hasher1.finish();
-        
+
         let mut hasher2 = DefaultHasher::new();
         property2.hash(&mut hasher2);
         let hash2 = hasher2.finish();
-        
+
         let mut hasher3 = DefaultHasher::new();
         property3.hash(&mut hasher3);
         let hash3 = hasher3.finish();
-        
+
         assert_eq!(hash1, hash2);
         assert_ne!(hash1, hash3);
     }
@@ -185,7 +194,7 @@ mod registered_custom_properties_unit_tests {
             CustomProperty::Transition("all 0.3s ease".to_string()),
             CustomProperty::Generic("custom".to_string(), "value".to_string()),
         ];
-        
+
         let class_names: Vec<String> = properties.iter().map(|p| p.to_class_name()).collect();
         assert!(class_names.contains(&"custom-color".to_string()));
         assert!(class_names.contains(&"custom-spacing".to_string()));
@@ -209,9 +218,8 @@ mod registered_custom_properties_integration_tests {
 
     #[test]
     fn test_custom_property_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .custom_property("color", "red");
-        
+        let builder = ClassBuilder::new().custom_property("color", "red");
+
         let class_set = builder.build();
         assert!(class_set.custom.contains_key("color"));
         assert_eq!(class_set.custom.get("color"), Some(&"red".to_string()));
@@ -219,9 +227,9 @@ mod registered_custom_properties_integration_tests {
 
     #[test]
     fn test_custom_property_value_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .custom_property_value(CustomProperty::Color("red".to_string()));
-        
+        let builder =
+            ClassBuilder::new().custom_property_value(CustomProperty::Color("red".to_string()));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("custom-color"));
     }
@@ -232,7 +240,7 @@ mod registered_custom_properties_integration_tests {
             .custom_property("color", "red")
             .custom_property("spacing", "1rem")
             .custom_property("font-size", "16px");
-        
+
         let class_set = builder.build();
         assert!(class_set.custom.contains_key("color"));
         assert_eq!(class_set.custom.get("color"), Some(&"red".to_string()));
@@ -248,7 +256,7 @@ mod registered_custom_properties_integration_tests {
             .custom_property("color", "red")
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.custom.contains_key("color"));
         assert_eq!(class_set.custom.get("color"), Some(&"red".to_string()));
@@ -261,12 +269,16 @@ mod registered_custom_properties_integration_tests {
         let builder = ClassBuilder::new()
             .custom_property("color", "red")
             .responsive(Breakpoint::Md, "text-blue-500");
-        
+
         let class_set = builder.build();
         assert!(class_set.custom.contains_key("color"));
         assert_eq!(class_set.custom.get("color"), Some(&"red".to_string()));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("text-blue-500"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("text-blue-500"));
     }
 
     #[test]
@@ -274,12 +286,16 @@ mod registered_custom_properties_integration_tests {
         let builder = ClassBuilder::new()
             .custom_property("color", "red")
             .conditional("hover", "text-blue-500");
-        
+
         let class_set = builder.build();
         assert!(class_set.custom.contains_key("color"));
         assert_eq!(class_set.custom.get("color"), Some(&"red".to_string()));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("text-blue-500"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("text-blue-500"));
     }
 
     #[test]
@@ -287,12 +303,16 @@ mod registered_custom_properties_integration_tests {
         let builder = ClassBuilder::new()
             .custom_property("color", "red")
             .custom_variant("dark", "text-blue-500");
-        
+
         let class_set = builder.build();
         assert!(class_set.custom.contains_key("color"));
         assert_eq!(class_set.custom.get("color"), Some(&"red".to_string()));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("text-blue-500"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("text-blue-500"));
     }
 
     #[test]
@@ -301,7 +321,7 @@ mod registered_custom_properties_integration_tests {
             .custom_property("color", "red")
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("text-blue-500"));
     }
 
@@ -311,7 +331,7 @@ mod registered_custom_properties_integration_tests {
             .custom_property("color", "red")
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("font-bold"));
     }
@@ -324,12 +344,18 @@ mod registered_custom_properties_integration_tests {
             .custom_property("font-size", "16px")
             .custom_property("spacing", "1rem")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(class_set.custom.contains_key("primary-color"));
-        assert_eq!(class_set.custom.get("primary-color"), Some(&"#3b82f6".to_string()));
+        assert_eq!(
+            class_set.custom.get("primary-color"),
+            Some(&"#3b82f6".to_string())
+        );
         assert!(class_set.custom.contains_key("secondary-color"));
-        assert_eq!(class_set.custom.get("secondary-color"), Some(&"#64748b".to_string()));
+        assert_eq!(
+            class_set.custom.get("secondary-color"),
+            Some(&"#64748b".to_string())
+        );
         assert!(class_set.custom.contains_key("font-size"));
         assert_eq!(class_set.custom.get("font-size"), Some(&"16px".to_string()));
         assert!(class_set.custom.contains_key("spacing"));
@@ -353,7 +379,7 @@ mod registered_custom_properties_integration_tests {
             .custom_property("transition", "all 0.3s ease")
             .custom_property("custom", "value")
             .build();
-        
+
         // Test that all custom properties are present
         assert!(class_set.custom.contains_key("color"));
         assert_eq!(class_set.custom.get("color"), Some(&"red".to_string()));
@@ -362,23 +388,44 @@ mod registered_custom_properties_integration_tests {
         assert!(class_set.custom.contains_key("font-size"));
         assert_eq!(class_set.custom.get("font-size"), Some(&"16px".to_string()));
         assert!(class_set.custom.contains_key("font-weight"));
-        assert_eq!(class_set.custom.get("font-weight"), Some(&"bold".to_string()));
+        assert_eq!(
+            class_set.custom.get("font-weight"),
+            Some(&"bold".to_string())
+        );
         assert!(class_set.custom.contains_key("line-height"));
-        assert_eq!(class_set.custom.get("line-height"), Some(&"1.5".to_string()));
+        assert_eq!(
+            class_set.custom.get("line-height"),
+            Some(&"1.5".to_string())
+        );
         assert!(class_set.custom.contains_key("border-radius"));
-        assert_eq!(class_set.custom.get("border-radius"), Some(&"8px".to_string()));
+        assert_eq!(
+            class_set.custom.get("border-radius"),
+            Some(&"8px".to_string())
+        );
         assert!(class_set.custom.contains_key("box-shadow"));
-        assert_eq!(class_set.custom.get("box-shadow"), Some(&"0 4px 6px -1px rgb(0 0 0 / 0.1)".to_string()));
+        assert_eq!(
+            class_set.custom.get("box-shadow"),
+            Some(&"0 4px 6px -1px rgb(0 0 0 / 0.1)".to_string())
+        );
         assert!(class_set.custom.contains_key("z-index"));
         assert_eq!(class_set.custom.get("z-index"), Some(&"10".to_string()));
         assert!(class_set.custom.contains_key("opacity"));
         assert_eq!(class_set.custom.get("opacity"), Some(&"0.8".to_string()));
         assert!(class_set.custom.contains_key("transform"));
-        assert_eq!(class_set.custom.get("transform"), Some(&"rotate(45deg)".to_string()));
+        assert_eq!(
+            class_set.custom.get("transform"),
+            Some(&"rotate(45deg)".to_string())
+        );
         assert!(class_set.custom.contains_key("animation"));
-        assert_eq!(class_set.custom.get("animation"), Some(&"fadeIn 0.5s ease-in-out".to_string()));
+        assert_eq!(
+            class_set.custom.get("animation"),
+            Some(&"fadeIn 0.5s ease-in-out".to_string())
+        );
         assert!(class_set.custom.contains_key("transition"));
-        assert_eq!(class_set.custom.get("transition"), Some(&"all 0.3s ease".to_string()));
+        assert_eq!(
+            class_set.custom.get("transition"),
+            Some(&"all 0.3s ease".to_string())
+        );
         assert!(class_set.custom.contains_key("custom"));
         assert_eq!(class_set.custom.get("custom"), Some(&"value".to_string()));
     }

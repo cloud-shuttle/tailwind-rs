@@ -146,7 +146,7 @@ impl BackgroundAttachment {
             BackgroundAttachment::Scroll => "scroll".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BackgroundAttachment::Fixed => "fixed".to_string(),
@@ -165,7 +165,7 @@ impl BackgroundClip {
             BackgroundClip::Text => "text".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BackgroundClip::Border => "border-box".to_string(),
@@ -184,7 +184,7 @@ impl BackgroundOrigin {
             BackgroundOrigin::Content => "content".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BackgroundOrigin::Border => "border-box".to_string(),
@@ -208,7 +208,7 @@ impl BackgroundPosition {
             BackgroundPosition::Top => "top".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BackgroundPosition::Bottom => "bottom".to_string(),
@@ -235,7 +235,7 @@ impl BackgroundRepeat {
             BackgroundRepeat::Space => "space".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BackgroundRepeat::NoRepeat => "no-repeat".to_string(),
@@ -256,7 +256,7 @@ impl BackgroundSize {
             BackgroundSize::Contain => "contain".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BackgroundSize::Auto => "auto".to_string(),
@@ -275,13 +275,19 @@ impl BackgroundImage {
             BackgroundImage::ConicGradient => "conic-gradient".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BackgroundImage::None => "none".to_string(),
-            BackgroundImage::LinearGradient => "linear-gradient(to right, var(--tw-gradient-stops))".to_string(),
-            BackgroundImage::RadialGradient => "radial-gradient(ellipse at center, var(--tw-gradient-stops))".to_string(),
-            BackgroundImage::ConicGradient => "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))".to_string(),
+            BackgroundImage::LinearGradient => {
+                "linear-gradient(to right, var(--tw-gradient-stops))".to_string()
+            }
+            BackgroundImage::RadialGradient => {
+                "radial-gradient(ellipse at center, var(--tw-gradient-stops))".to_string()
+            }
+            BackgroundImage::ConicGradient => {
+                "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))".to_string()
+            }
         }
     }
 }
@@ -299,7 +305,7 @@ impl GradientDirection {
             GradientDirection::ToBottomLeft => "to-bl".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             GradientDirection::ToRight => "to right".to_string(),
@@ -322,7 +328,7 @@ impl GradientStop {
             GradientStop::To => "to".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             GradientStop::From => "from".to_string(),
@@ -485,11 +491,11 @@ impl GradientStopUtilities for ClassBuilder {
     fn gradient_from(self, color: crate::utilities::colors::Color) -> Self {
         self.class(format!("from-{}", color.to_class_name()))
     }
-    
+
     fn gradient_via(self, color: crate::utilities::colors::Color) -> Self {
         self.class(format!("via-{}", color.to_class_name()))
     }
-    
+
     fn gradient_to(self, color: crate::utilities::colors::Color) -> Self {
         self.class(format!("to-{}", color.to_class_name()))
     }
@@ -499,7 +505,7 @@ impl GradientStopUtilities for ClassBuilder {
 mod tests {
     use super::*;
     use crate::utilities::colors::{Color, ColorPalette, ColorShade};
-    
+
     #[test]
     fn test_background_attachment_utilities() {
         let classes = ClassBuilder::new()
@@ -507,13 +513,13 @@ mod tests {
             .background_attachment(BackgroundAttachment::Local)
             .background_attachment(BackgroundAttachment::Scroll)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-fixed"));
         assert!(css_classes.contains("bg-local"));
         assert!(css_classes.contains("bg-scroll"));
     }
-    
+
     #[test]
     fn test_background_clip_utilities() {
         let classes = ClassBuilder::new()
@@ -522,14 +528,14 @@ mod tests {
             .background_clip(BackgroundClip::Content)
             .background_clip(BackgroundClip::Text)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-clip-border"));
         assert!(css_classes.contains("bg-clip-padding"));
         assert!(css_classes.contains("bg-clip-content"));
         assert!(css_classes.contains("bg-clip-text"));
     }
-    
+
     #[test]
     fn test_background_origin_utilities() {
         let classes = ClassBuilder::new()
@@ -537,13 +543,13 @@ mod tests {
             .background_origin(BackgroundOrigin::Padding)
             .background_origin(BackgroundOrigin::Content)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-origin-border"));
         assert!(css_classes.contains("bg-origin-padding"));
         assert!(css_classes.contains("bg-origin-content"));
     }
-    
+
     #[test]
     fn test_background_position_utilities() {
         let classes = ClassBuilder::new()
@@ -553,7 +559,7 @@ mod tests {
             .background_position(BackgroundPosition::Right)
             .background_position(BackgroundPosition::Top)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-bottom"));
         assert!(css_classes.contains("bg-center"));
@@ -561,7 +567,7 @@ mod tests {
         assert!(css_classes.contains("bg-right"));
         assert!(css_classes.contains("bg-top"));
     }
-    
+
     #[test]
     fn test_background_repeat_utilities() {
         let classes = ClassBuilder::new()
@@ -572,7 +578,7 @@ mod tests {
             .background_repeat(BackgroundRepeat::Round)
             .background_repeat(BackgroundRepeat::Space)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-no-repeat"));
         assert!(css_classes.contains("bg-repeat"));
@@ -581,7 +587,7 @@ mod tests {
         assert!(css_classes.contains("bg-round"));
         assert!(css_classes.contains("bg-space"));
     }
-    
+
     #[test]
     fn test_background_size_utilities() {
         let classes = ClassBuilder::new()
@@ -589,13 +595,13 @@ mod tests {
             .background_size(BackgroundSize::Cover)
             .background_size(BackgroundSize::Contain)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-auto"));
         assert!(css_classes.contains("bg-cover"));
         assert!(css_classes.contains("bg-contain"));
     }
-    
+
     #[test]
     fn test_background_image_utilities() {
         let classes = ClassBuilder::new()
@@ -604,14 +610,14 @@ mod tests {
             .background_image(BackgroundImage::RadialGradient)
             .background_image(BackgroundImage::ConicGradient)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-none"));
         assert!(css_classes.contains("bg-gradient-to-r"));
         assert!(css_classes.contains("bg-radial-gradient"));
         assert!(css_classes.contains("bg-conic-gradient"));
     }
-    
+
     #[test]
     fn test_gradient_direction_utilities() {
         let classes = ClassBuilder::new()
@@ -624,7 +630,7 @@ mod tests {
             .gradient_direction(GradientDirection::ToBottomRight)
             .gradient_direction(GradientDirection::ToBottomLeft)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-gradient-to-r"));
         assert!(css_classes.contains("bg-gradient-to-l"));
@@ -635,7 +641,7 @@ mod tests {
         assert!(css_classes.contains("bg-gradient-to-br"));
         assert!(css_classes.contains("bg-gradient-to-bl"));
     }
-    
+
     #[test]
     fn test_gradient_stop_utilities() {
         let classes = ClassBuilder::new()
@@ -643,13 +649,13 @@ mod tests {
             .gradient_via(Color::new(ColorPalette::Purple, ColorShade::Shade500))
             .gradient_to(Color::new(ColorPalette::Pink, ColorShade::Shade500))
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("from-blue-500"));
         assert!(css_classes.contains("via-purple-500"));
         assert!(css_classes.contains("to-pink-500"));
     }
-    
+
     #[test]
     fn test_complex_background_combination() {
         let classes = ClassBuilder::new()
@@ -664,7 +670,7 @@ mod tests {
             .gradient_from(Color::new(ColorPalette::Blue, ColorShade::Shade500))
             .gradient_to(Color::new(ColorPalette::Red, ColorShade::Shade500))
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("bg-fixed"));
         assert!(css_classes.contains("bg-clip-padding"));
@@ -676,7 +682,7 @@ mod tests {
         assert!(css_classes.contains("from-blue-500"));
         assert!(css_classes.contains("to-red-500"));
     }
-    
+
     /// Test that all Week 8 background utilities are implemented
     #[test]
     fn test_week8_background_utilities() {
@@ -705,9 +711,9 @@ mod tests {
             .background_size(BackgroundSize::Cover)
             .background_size(BackgroundSize::Contain)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
-        
+
         // Background Properties
         assert!(css_classes.contains("bg-fixed"));
         assert!(css_classes.contains("bg-local"));

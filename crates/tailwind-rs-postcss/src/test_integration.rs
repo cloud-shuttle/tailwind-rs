@@ -3,19 +3,19 @@
 //! This module provides basic integration tests to verify that the PostCSS
 //! engine works correctly with the existing Tailwind-RS Core.
 
+use crate::engine::{PerformanceOptions, SourceMapOptions};
 use crate::*;
-use crate::engine::{SourceMapOptions, PerformanceOptions};
 
 /// Test basic PostCSS engine functionality
 pub async fn test_basic_postcss_processing() -> Result<()> {
     let engine = PostCSSEngine::new(PostCSSConfig::default())?;
     let input_css = ".test { color: red; font-size: 16px; }";
     let result = engine.process_css(input_css).await?;
-    
+
     assert!(result.css.contains(".test"));
     assert!(result.css.contains("color: red"));
     assert!(result.css.contains("font-size: 16px"));
-    
+
     Ok(())
 }
 
@@ -24,7 +24,7 @@ pub fn test_css_parsing() -> Result<()> {
     let parser = CSSParser::new(ParseOptions::default());
     let input = ".test { color: red; }";
     let result = parser.parse(input)?;
-    
+
     match result {
         CSSNode::Stylesheet(rules) => {
             assert_eq!(rules.len(), 1);
@@ -35,7 +35,7 @@ pub fn test_css_parsing() -> Result<()> {
         }
         _ => panic!("Expected stylesheet"),
     }
-    
+
     Ok(())
 }
 
@@ -43,7 +43,7 @@ pub fn test_css_parsing() -> Result<()> {
 pub fn test_error_handling() {
     let parser = CSSParser::new(ParseOptions::default());
     let invalid_css = ".test { color: red; font-size: }"; // Missing value
-    
+
     // This should either parse successfully (if we're lenient) or fail gracefully
     let result = parser.parse(invalid_css);
     // For now, we'll just ensure it doesn't panic
@@ -84,10 +84,10 @@ pub async fn test_configuration() -> Result<()> {
         },
         plugins: Vec::new(),
     };
-    
+
     let engine = PostCSSEngine::new(config)?;
     assert!(engine.get_metrics().await.plugins_loaded == 0);
-    
+
     Ok(())
 }
 
@@ -104,7 +104,7 @@ mod tests {
     fn test_error_handling() {
         let parser = CSSParser::new(ParseOptions::default());
         let invalid_css = ".test { color: red; font-size: }"; // Missing value
-        
+
         // This should either parse successfully (if we're lenient) or fail gracefully
         let result = parser.parse(invalid_css);
         // For now, we'll just ensure it doesn't panic

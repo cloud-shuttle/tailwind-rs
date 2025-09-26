@@ -34,7 +34,7 @@ impl Breakpoint {
             Breakpoint::Xl2 => 1536,
         }
     }
-    
+
     /// Get the CSS media query for this breakpoint
     pub fn media_query(&self) -> &'static str {
         match self {
@@ -46,7 +46,7 @@ impl Breakpoint {
             Breakpoint::Xl2 => "(min-width: 1536px)",
         }
     }
-    
+
     /// Get the Tailwind CSS prefix for this breakpoint
     pub fn prefix(&self) -> &'static str {
         match self {
@@ -58,7 +58,7 @@ impl Breakpoint {
             Breakpoint::Xl2 => "2xl:",
         }
     }
-    
+
     /// Get all breakpoints in order
     pub fn all() -> Vec<Breakpoint> {
         vec![
@@ -70,7 +70,7 @@ impl Breakpoint {
             Breakpoint::Xl2,
         ]
     }
-    
+
     /// Get the next breakpoint in the sequence
     pub fn next(&self) -> Option<Breakpoint> {
         match self {
@@ -82,7 +82,7 @@ impl Breakpoint {
             Breakpoint::Xl2 => None,
         }
     }
-    
+
     /// Get the previous breakpoint in the sequence
     pub fn previous(&self) -> Option<Breakpoint> {
         match self {
@@ -98,7 +98,7 @@ impl Breakpoint {
 
 impl FromStr for Breakpoint {
     type Err = String;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
             "" | "base" => Ok(Breakpoint::Base),

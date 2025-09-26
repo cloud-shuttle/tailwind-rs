@@ -41,26 +41,26 @@
 //! }
 //! ```
 
-pub mod file_scanner;
-pub mod glob_matcher;
-pub mod content_config;
-pub mod parallel_processor;
 pub mod cache;
 pub mod class_extractor;
-pub mod file_watcher;
-pub mod tree_sitter_parser;
+pub mod content_config;
 pub mod error;
+pub mod file_scanner;
+pub mod file_watcher;
+pub mod glob_matcher;
+pub mod parallel_processor;
+pub mod tree_sitter_parser;
 
 // Re-export main types
-pub use file_scanner::{FileScanner, FileInfo, FileType, ContentScanner, ClassSet};
+pub use cache::{CacheEntry, CacheStats, ScanCache};
+pub use class_extractor::{ClassContext, ClassExtractor, ExtractedClass};
+pub use content_config::{ContentConfig, FilePattern, ScanConfig};
+pub use error::{Result, ScannerError};
+pub use file_scanner::{ClassSet, ContentScanner, FileInfo, FileScanner, FileType};
+pub use file_watcher::{FileWatcher, WatchConfig, WatchEvent};
 pub use glob_matcher::{GlobMatcher, GlobPattern};
-pub use content_config::{ScanConfig, ContentConfig, FilePattern};
 pub use parallel_processor::{ParallelProcessor, ProcessingStats};
-pub use cache::{ScanCache, CacheEntry, CacheStats};
-pub use class_extractor::{ClassExtractor, ExtractedClass, ClassContext};
-pub use file_watcher::{FileWatcher, WatchEvent, WatchConfig};
-pub use tree_sitter_parser::{TreeSitterParser, ParseResult, LanguageSupport};
-pub use error::{ScannerError, Result};
+pub use tree_sitter_parser::{LanguageSupport, ParseResult, TreeSitterParser};
 
 /// Version information
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

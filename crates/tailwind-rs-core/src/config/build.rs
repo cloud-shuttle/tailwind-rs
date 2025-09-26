@@ -121,8 +121,12 @@ impl Default for BuildConfig {
 impl From<super::toml_config::BuildConfigToml> for BuildConfig {
     fn from(toml_config: super::toml_config::BuildConfigToml) -> Self {
         Self {
-            input: toml_config.input.unwrap_or_else(|| vec!["src/**/*.rs".to_string()]),
-            output: toml_config.output.unwrap_or_else(|| "dist/styles.css".to_string()),
+            input: toml_config
+                .input
+                .unwrap_or_else(|| vec!["src/**/*.rs".to_string()]),
+            output: toml_config
+                .output
+                .unwrap_or_else(|| "dist/styles.css".to_string()),
             watch: toml_config.watch.unwrap_or(false),
             minify: toml_config.minify.unwrap_or(false),
             source_maps: toml_config.source_maps.unwrap_or(false),
@@ -163,7 +167,7 @@ mod tests {
     #[test]
     fn test_build_config_methods() {
         let mut config = BuildConfig::new();
-        
+
         config.add_input("src/**/*.rsx");
         assert!(config.input.contains(&"src/**/*.rsx".to_string()));
 
@@ -177,6 +181,8 @@ mod tests {
         assert!(config.minify);
 
         config.add_css("src/custom.css");
-        assert!(config.additional_css.contains(&"src/custom.css".to_string()));
+        assert!(config
+            .additional_css
+            .contains(&"src/custom.css".to_string()));
     }
 }

@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::css_nesting::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod css_nesting_unit_tests {
@@ -240,7 +240,7 @@ mod css_nesting_unit_tests {
         let selector1 = NestingSelector::DirectChild;
         let selector2 = NestingSelector::DirectChild;
         let selector3 = NestingSelector::Descendant;
-        
+
         assert_eq!(selector1, selector2);
         assert_ne!(selector1, selector3);
     }
@@ -250,7 +250,7 @@ mod css_nesting_unit_tests {
         let pseudo_class1 = NestingPseudoClass::Hover;
         let pseudo_class2 = NestingPseudoClass::Hover;
         let pseudo_class3 = NestingPseudoClass::Focus;
-        
+
         assert_eq!(pseudo_class1, pseudo_class2);
         assert_ne!(pseudo_class1, pseudo_class3);
     }
@@ -260,7 +260,7 @@ mod css_nesting_unit_tests {
         let media_query1 = NestingMediaQuery::Small;
         let media_query2 = NestingMediaQuery::Small;
         let media_query3 = NestingMediaQuery::Medium;
-        
+
         assert_eq!(media_query1, media_query2);
         assert_ne!(media_query1, media_query3);
     }
@@ -270,22 +270,22 @@ mod css_nesting_unit_tests {
         let selector1 = NestingSelector::DirectChild;
         let selector2 = NestingSelector::DirectChild;
         let selector3 = NestingSelector::Descendant;
-        
+
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         selector1.hash(&mut hasher1);
         let hash1 = hasher1.finish();
-        
+
         let mut hasher2 = DefaultHasher::new();
         selector2.hash(&mut hasher2);
         let hash2 = hasher2.finish();
-        
+
         let mut hasher3 = DefaultHasher::new();
         selector3.hash(&mut hasher3);
         let hash3 = hasher3.finish();
-        
+
         assert_eq!(hash1, hash2);
         assert_ne!(hash1, hash3);
     }
@@ -306,7 +306,7 @@ mod css_nesting_unit_tests {
             NestingSelector::GeneralSibling,
             NestingSelector::Custom("div".to_string()),
         ];
-        
+
         let class_names: Vec<String> = selectors.iter().map(|s| s.to_class_name()).collect();
         assert!(class_names.contains(&"nest-child".to_string()));
         assert!(class_names.contains(&"nest-descendant".to_string()));
@@ -322,54 +322,51 @@ mod css_nesting_integration_tests {
 
     #[test]
     fn test_css_nesting_selector_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .nesting_selector(NestingSelector::DirectChild);
-        
+        let builder = ClassBuilder::new().nesting_selector(NestingSelector::DirectChild);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-child"));
     }
 
     #[test]
     fn test_css_nesting_pseudo_class_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .nesting_pseudo_class(NestingPseudoClass::Hover);
-        
+        let builder = ClassBuilder::new().nesting_pseudo_class(NestingPseudoClass::Hover);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-hover"));
     }
 
     #[test]
     fn test_css_nesting_media_query_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .nesting_media_query(NestingMediaQuery::Small);
-        
+        let builder = ClassBuilder::new().nesting_media_query(NestingMediaQuery::Small);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-sm"));
     }
 
     #[test]
     fn test_css_nesting_nested_class_with_selector() {
-        let builder = ClassBuilder::new()
-            .nested_class(NestingSelector::Descendant, "text-blue-500");
-        
+        let builder =
+            ClassBuilder::new().nested_class(NestingSelector::Descendant, "text-blue-500");
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-descendant-text-blue-500"));
     }
 
     #[test]
     fn test_css_nesting_nested_class_with_pseudo_class() {
-        let builder = ClassBuilder::new()
-            .nested_pseudo_class(NestingPseudoClass::Hover, "text-red-500");
-        
+        let builder =
+            ClassBuilder::new().nested_pseudo_class(NestingPseudoClass::Hover, "text-red-500");
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-hover-text-red-500"));
     }
 
     #[test]
     fn test_css_nesting_nested_class_with_media_query() {
-        let builder = ClassBuilder::new()
-            .nested_media_query(NestingMediaQuery::Medium, "text-green-500");
-        
+        let builder =
+            ClassBuilder::new().nested_media_query(NestingMediaQuery::Medium, "text-green-500");
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-md-text-green-500"));
     }
@@ -387,13 +384,17 @@ mod css_nesting_integration_tests {
             .nested_lg("text-cyan-500")
             .nested_dark("text-gray-500")
             .nested_light("text-white");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-hover-text-blue-500"));
         assert!(class_set.classes.contains("nest-focus-text-red-500"));
         assert!(class_set.classes.contains("nest-active-text-green-500"));
-        assert!(class_set.classes.contains("nest-first-child-text-yellow-500"));
-        assert!(class_set.classes.contains("nest-last-child-text-purple-500"));
+        assert!(class_set
+            .classes
+            .contains("nest-first-child-text-yellow-500"));
+        assert!(class_set
+            .classes
+            .contains("nest-last-child-text-purple-500"));
         assert!(class_set.classes.contains("nest-sm-text-pink-500"));
         assert!(class_set.classes.contains("nest-md-text-indigo-500"));
         assert!(class_set.classes.contains("nest-lg-text-cyan-500"));
@@ -407,7 +408,7 @@ mod css_nesting_integration_tests {
             .nesting_selector(NestingSelector::DirectChild)
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-child"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -419,11 +420,15 @@ mod css_nesting_integration_tests {
         let builder = ClassBuilder::new()
             .nesting_selector(NestingSelector::DirectChild)
             .responsive(Breakpoint::Md, "nest-descendant");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-child"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("nest-descendant"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("nest-descendant"));
     }
 
     #[test]
@@ -431,11 +436,15 @@ mod css_nesting_integration_tests {
         let builder = ClassBuilder::new()
             .nesting_selector(NestingSelector::DirectChild)
             .conditional("hover", "nest-hover");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-child"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("nest-hover"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("nest-hover"));
     }
 
     #[test]
@@ -443,11 +452,15 @@ mod css_nesting_integration_tests {
         let builder = ClassBuilder::new()
             .nesting_selector(NestingSelector::DirectChild)
             .custom_variant("dark", "nest-dark");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-child"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("nest-dark"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("nest-dark"));
     }
 
     #[test]
@@ -456,7 +469,7 @@ mod css_nesting_integration_tests {
             .nesting_selector(NestingSelector::DirectChild)
             .nesting_pseudo_class(NestingPseudoClass::Hover)
             .nesting_media_query(NestingMediaQuery::Small);
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("nest-child"));
         assert!(class_set.classes.contains("nest-hover"));
@@ -469,7 +482,7 @@ mod css_nesting_integration_tests {
             .nesting_selector(NestingSelector::DirectChild)
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("nest-child"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -480,7 +493,7 @@ mod css_nesting_integration_tests {
             .nesting_selector(NestingSelector::DirectChild)
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("nest-child"));
         assert!(css_classes.contains("font-bold"));
@@ -506,7 +519,7 @@ mod css_nesting_integration_tests {
             .nested_dark("text-gray-100")
             .nested_light("text-gray-900")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("nest-child"));
         assert!(css_classes.contains("nest-hover"));
@@ -553,9 +566,9 @@ mod css_nesting_integration_tests {
             .nesting_media_query(NestingMediaQuery::Screen)
             .nesting_media_query(NestingMediaQuery::Custom("(max-width: 600px)".to_string()))
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all CSS nesting utilities are present
         assert!(css_classes.contains("nest-child"));
         assert!(css_classes.contains("nest-descendant"));

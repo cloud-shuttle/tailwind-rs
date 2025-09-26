@@ -1,5 +1,5 @@
 //! Custom variant system for tailwind-rs
-//! 
+//!
 //! Implements Tailwind CSS v4.1.13 @custom-variant features
 //! This replaces the old aria, data, and supports theme keys with a unified system
 
@@ -45,22 +45,29 @@ impl CustomVariantType {
     /// Validate a custom variant name
     pub fn validate_name(name: &str) -> Result<()> {
         if name.is_empty() {
-            return Err(TailwindError::validation("Custom variant name cannot be empty"));
+            return Err(TailwindError::validation(
+                "Custom variant name cannot be empty",
+            ));
         }
 
         // Custom variants cannot start or end with - or _
-        if name.starts_with('-') || name.starts_with('_') || 
-           name.ends_with('-') || name.ends_with('_') {
-            return Err(TailwindError::validation(
-                format!("Custom variant '{}' cannot start or end with '-' or '_'", name)
-            ));
+        if name.starts_with('-')
+            || name.starts_with('_')
+            || name.ends_with('-')
+            || name.ends_with('_')
+        {
+            return Err(TailwindError::validation(format!(
+                "Custom variant '{}' cannot start or end with '-' or '_'",
+                name
+            )));
         }
 
         // Custom variants cannot start with @-
         if name.starts_with("@-") {
-            return Err(TailwindError::validation(
-                format!("Custom variant '{}' cannot start with '@-'", name)
-            ));
+            return Err(TailwindError::validation(format!(
+                "Custom variant '{}' cannot start with '@-'",
+                name
+            )));
         }
 
         Ok(())
@@ -84,7 +91,11 @@ pub struct CustomVariant {
 
 impl CustomVariant {
     /// Create a new custom variant
-    pub fn new(variant_type: CustomVariantType, name: String, value: Option<String>) -> Result<Self> {
+    pub fn new(
+        variant_type: CustomVariantType,
+        name: String,
+        value: Option<String>,
+    ) -> Result<Self> {
         // Validate the name
         CustomVariantType::validate_name(&name)?;
 
@@ -131,7 +142,7 @@ impl CustomVariant {
     pub fn to_variant_string(&self) -> String {
         let prefix = self.variant_type.prefix();
         let base = format!("{}{}", prefix, self.name);
-        
+
         if let Some(value) = &self.value {
             format!("{}={}", base, value)
         } else {
@@ -214,12 +225,13 @@ impl CustomVariantManager {
     /// Register a custom variant
     pub fn register(&mut self, variant: CustomVariant) -> Result<()> {
         let key = variant.to_variant_string();
-        
+
         // Check for conflicts
         if self.variants.contains_key(&key) {
-            return Err(TailwindError::validation(
-                format!("Custom variant '{}' is already registered", key)
-            ));
+            return Err(TailwindError::validation(format!(
+                "Custom variant '{}' is already registered",
+                key
+            )));
         }
 
         self.variants.insert(key, variant);
@@ -267,7 +279,7 @@ impl CustomVariantManager {
     /// Get suggestions for a variant
     pub fn get_suggestions(&self, partial: &str) -> Vec<String> {
         let mut suggestions = Vec::new();
-        
+
         // Add exact matches
         for key in self.variants.keys() {
             if key.starts_with(partial) {
@@ -297,26 +309,32 @@ impl CustomVariantManager {
         }
 
         // Check if it matches a known pattern
-        if variant.starts_with("aria-") || 
-           variant.starts_with("data-") || 
-           variant.starts_with("supports-") ||
-           variant.starts_with("container-") ||
-           variant.starts_with("media-") {
+        if variant.starts_with("aria-")
+            || variant.starts_with("data-")
+            || variant.starts_with("supports-")
+            || variant.starts_with("container-")
+            || variant.starts_with("media-")
+        {
             return Ok(());
         }
 
         // Check for invalid patterns
         if variant.starts_with("@-") {
-            return Err(TailwindError::validation(
-                format!("Variant '{}' cannot start with '@-'", variant)
-            ));
+            return Err(TailwindError::validation(format!(
+                "Variant '{}' cannot start with '@-'",
+                variant
+            )));
         }
 
-        if variant.starts_with('-') || variant.starts_with('_') || 
-           variant.ends_with('-') || variant.ends_with('_') {
-            return Err(TailwindError::validation(
-                format!("Variant '{}' cannot start or end with '-' or '_'", variant)
-            ));
+        if variant.starts_with('-')
+            || variant.starts_with('_')
+            || variant.ends_with('-')
+            || variant.ends_with('_')
+        {
+            return Err(TailwindError::validation(format!(
+                "Variant '{}' cannot start or end with '-' or '_'",
+                variant
+            )));
         }
 
         Ok(())
@@ -325,7 +343,7 @@ impl CustomVariantManager {
     /// Create default variants (migrated from old theme keys)
     pub fn with_defaults() -> Self {
         let mut manager = Self::new();
-        
+
         // Add common ARIA variants
         let aria_variants = vec![
             ("checked", None),
@@ -358,11 +376,7 @@ impl CustomVariantManager {
         }
 
         // Add common supports variants
-        let supports_variants = vec![
-            ("backdrop-filter", None),
-            ("grid", None),
-            ("flexbox", None),
-        ];
+        let supports_variants = vec![("backdrop-filter", None), ("grid", None), ("flexbox", None)];
 
         for (name, value) in supports_variants {
             if let Ok(variant) = CustomVariant::supports(name.to_string(), value) {
@@ -421,10 +435,10 @@ mod tests {
     #[test]
     fn test_custom_variant_manager() {
         let mut manager = CustomVariantManager::new();
-        
+
         let variant = CustomVariant::aria("checked".to_string(), None).unwrap();
         manager.register(variant).unwrap();
-        
+
         assert!(manager.contains("aria-checked"));
         assert!(manager.get("aria-checked").is_some());
     }
@@ -432,7 +446,7 @@ mod tests {
     #[test]
     fn test_custom_variant_suggestions() {
         let manager = CustomVariantManager::with_defaults();
-        
+
         let suggestions = manager.get_suggestions("aria-");
         assert!(!suggestions.is_empty());
         assert!(suggestions.contains(&"aria-checked".to_string()));
@@ -441,11 +455,11 @@ mod tests {
     #[test]
     fn test_custom_variant_validation_in_manager() {
         let manager = CustomVariantManager::with_defaults();
-        
+
         // Valid variants
         assert!(manager.validate_variant("aria-checked").is_ok());
         assert!(manager.validate_variant("data-theme=dark").is_ok());
-        
+
         // Invalid variants
         assert!(manager.validate_variant("@-invalid").is_err());
         assert!(manager.validate_variant("-invalid").is_err());

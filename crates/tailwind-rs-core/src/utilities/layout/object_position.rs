@@ -63,7 +63,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .object_position(ObjectPosition::Center)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("object-center"));
     }
 }

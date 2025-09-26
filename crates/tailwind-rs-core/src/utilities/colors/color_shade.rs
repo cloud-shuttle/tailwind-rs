@@ -6,8 +6,17 @@ use std::fmt;
 /// Color shade values
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ColorShade {
-    Shade50, Shade100, Shade200, Shade300, Shade400,
-    Shade500, Shade600, Shade700, Shade800, Shade900, Shade950,
+    Shade50,
+    Shade100,
+    Shade200,
+    Shade300,
+    Shade400,
+    Shade500,
+    Shade600,
+    Shade700,
+    Shade800,
+    Shade900,
+    Shade950,
 }
 
 impl fmt::Display for ColorShade {

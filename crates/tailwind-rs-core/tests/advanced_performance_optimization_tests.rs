@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod advanced_performance_optimization_tests {
-    use tailwind_rs_core::utilities::advanced_performance_optimization::*;
     use std::time::Duration;
+    use tailwind_rs_core::utilities::advanced_performance_optimization::*;
 
     #[test]
     fn test_advanced_css_minifier_creation() {
@@ -21,7 +21,7 @@ mod advanced_performance_optimization_tests {
             background: blue;
         }
         "#;
-        
+
         let minified = minifier.minify(css);
         assert!(!minified.contains("\n"));
         assert!(minified.contains(".test-class"));
@@ -36,7 +36,7 @@ mod advanced_performance_optimization_tests {
             color: red;
         }
         "#;
-        
+
         let minified = minifier.minify(css);
         assert!(!minified.contains("/* This is a comment */"));
     }
@@ -50,7 +50,7 @@ mod advanced_performance_optimization_tests {
             background: #000000;
         }
         "#;
-        
+
         let minified = minifier.minify(css);
         assert!(minified.contains("#fff"));
         assert!(minified.contains("#000"));
@@ -73,7 +73,7 @@ mod advanced_performance_optimization_tests {
         .footer { background: #000; }
         .sidebar { width: 200px; }
         "#;
-        
+
         let critical = extractor.extract_critical_css(css);
         assert!(critical.contains("body"));
         assert!(critical.contains("header"));
@@ -82,13 +82,15 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_critical_css_extraction_with_custom_selectors() {
         let mut extractor = CriticalCssExtractor::new();
-        extractor.critical_selectors.insert(".custom-critical".to_string());
-        
+        extractor
+            .critical_selectors
+            .insert(".custom-critical".to_string());
+
         let css = r#"
         .custom-critical { color: red; }
         .non-critical { color: blue; }
         "#;
-        
+
         let critical = extractor.extract_critical_css(css);
         assert!(critical.contains("custom-critical"));
     }
@@ -105,7 +107,7 @@ mod advanced_performance_optimization_tests {
     fn test_lazy_loading_js_generation() {
         let optimizer = LazyLoadingOptimizer::new();
         let js = optimizer.generate_lazy_loading_js();
-        
+
         assert!(js.contains("IntersectionObserver"));
         assert!(js.contains("data-lazy-classes"));
         assert!(js.contains("50px")); // rootMargin
@@ -116,7 +118,7 @@ mod advanced_performance_optimization_tests {
     fn test_lazy_loading_css_generation() {
         let optimizer = LazyLoadingOptimizer::new();
         let css = optimizer.generate_lazy_loading_css();
-        
+
         assert!(css.contains("[data-lazy-classes]"));
         assert!(css.contains("opacity: 0"));
         assert!(css.contains("transition"));
@@ -140,35 +142,43 @@ mod advanced_performance_optimization_tests {
         .color-red { color: red; }
         .font-bold { font-weight: bold; }
         "#;
-        
+
         let chunks = splitter.split_bundle(css);
         assert!(!chunks.is_empty());
-        
+
         // Should have layout, spacing, colors, and typography chunks
-        assert!(chunks.contains_key("layout") || chunks.contains_key("spacing") || 
-                chunks.contains_key("colors") || chunks.contains_key("typography"));
+        assert!(
+            chunks.contains_key("layout")
+                || chunks.contains_key("spacing")
+                || chunks.contains_key("colors")
+                || chunks.contains_key("typography")
+        );
     }
 
     #[test]
     fn test_bundle_splitting_by_size() {
         let mut splitter = BundleSplitter::new();
         splitter.strategies = vec![SplitStrategy::SizeBased];
-        
+
         // Create a large CSS string that exceeds the 50KB threshold
         // Use realistic CSS with newlines for better testing
         let css_rule = ".test { color: red; background: blue; padding: 10px; margin: 5px; border: 1px solid black; }\n";
         let large_css = css_rule.repeat(2000); // 2000 rules should exceed 50KB
         let chunks = splitter.split_bundle(&large_css);
-        
+
         // Debug output
         println!("CSS size: {} bytes", large_css.len());
         println!("Number of chunks: {}", chunks.len());
         for (key, value) in &chunks {
             println!("Chunk {}: {} bytes", key, value.len());
         }
-        
+
         assert!(!chunks.is_empty());
-        assert!(chunks.len() > 1, "Expected multiple chunks, got {} chunks", chunks.len()); // Should be split into multiple chunks
+        assert!(
+            chunks.len() > 1,
+            "Expected multiple chunks, got {} chunks",
+            chunks.len()
+        ); // Should be split into multiple chunks
     }
 
     #[test]
@@ -184,7 +194,7 @@ mod advanced_performance_optimization_tests {
         let optimizer = MemoryOptimizer::new();
         let data = "test data for optimization";
         let optimized = optimizer.optimize_memory(data);
-        
+
         assert_eq!(optimized, data); // Basic implementation returns same data
     }
 
@@ -192,7 +202,7 @@ mod advanced_performance_optimization_tests {
     fn test_performance_monitor_creation() {
         let monitor = PerformanceMonitor::new();
         let metrics = monitor.get_metrics();
-        
+
         assert_eq!(metrics.cpu_usage, 0.0);
         assert_eq!(metrics.memory_usage, 0);
         assert_eq!(metrics.render_time, 0.0);
@@ -202,14 +212,14 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_performance_threshold_checking() {
         let mut monitor = PerformanceMonitor::new();
-        
+
         // Set metrics that exceed thresholds
         monitor.metrics.cpu_usage = 90.0; // Above 80% threshold
         monitor.metrics.memory_usage = 150 * 1024 * 1024; // Above 100MB threshold
         monitor.metrics.render_time = 20.0; // Above 16.67ms threshold
         monitor.metrics.frame_rate = 25.0; // Below 30fps threshold
         monitor.metrics.js_execution_time = 6.0; // Above 5s threshold
-        
+
         let alerts = monitor.check_thresholds();
         assert!(alerts.contains(&AlertType::CpuUsage));
         assert!(alerts.contains(&AlertType::MemoryUsage));
@@ -250,7 +260,7 @@ mod advanced_performance_optimization_tests {
             recommendations: vec!["Consider using CSS modules".to_string()],
             warnings: vec!["Some optimizations may affect functionality".to_string()],
         };
-        
+
         assert_eq!(result.original_metrics.bundle_size, 100000);
         assert_eq!(result.optimized_metrics.bundle_size, 50000);
         assert_eq!(result.improvements.size_reduction, 50.0);
@@ -291,7 +301,7 @@ mod advanced_performance_optimization_tests {
             recommendations: vec!["Consider using CSS modules".to_string()],
             warnings: vec!["Some optimizations may affect functionality".to_string()],
         };
-        
+
         let display = format!("{}", result);
         assert!(display.contains("Advanced Optimization Result"));
         assert!(display.contains("100000 bytes"));
@@ -311,7 +321,7 @@ mod advanced_performance_optimization_tests {
             MinificationStrategy::RuleMerging,
             MinificationStrategy::PropertyOptimization,
         ];
-        
+
         assert_eq!(strategies.len(), 5);
     }
 
@@ -324,7 +334,7 @@ mod advanced_performance_optimization_tests {
             LazyLoadingStrategy::FocusBased,
             LazyLoadingStrategy::MediaQueryBased,
         ];
-        
+
         assert_eq!(strategies.len(), 5);
     }
 
@@ -337,7 +347,7 @@ mod advanced_performance_optimization_tests {
             SplitStrategy::SizeBased,
             SplitStrategy::CriticalPathBased,
         ];
-        
+
         assert_eq!(strategies.len(), 5);
     }
 
@@ -351,7 +361,7 @@ mod advanced_performance_optimization_tests {
             MemoryOptimizationStrategy::MemoryCompression,
             MemoryOptimizationStrategy::GcOptimization,
         ];
-        
+
         assert_eq!(strategies.len(), 6);
     }
 
@@ -363,7 +373,7 @@ mod advanced_performance_optimization_tests {
             GcTrigger::TimeInterval(Duration::from_secs(30)),
             GcTrigger::IdleTime,
         ];
-        
+
         assert_eq!(triggers.len(), 4);
     }
 
@@ -376,7 +386,7 @@ mod advanced_performance_optimization_tests {
             AlertType::FrameRate,
             AlertType::JsExecutionTime,
         ];
-        
+
         assert_eq!(alert_types.len(), 5);
     }
 
@@ -387,7 +397,7 @@ mod advanced_performance_optimization_tests {
             threshold: 0.1,
             observe_once: true,
         };
-        
+
         assert_eq!(options.root_margin, "50px");
         assert_eq!(options.threshold, 0.1);
         assert!(options.observe_once);
@@ -401,7 +411,7 @@ mod advanced_performance_optimization_tests {
             max_string_length: 1000,
             max_array_size: 500,
         };
-        
+
         assert_eq!(limits.max_heap_size, 100 * 1024 * 1024);
         assert_eq!(limits.max_object_count, 5000);
         assert_eq!(limits.max_string_length, 1000);
@@ -417,7 +427,7 @@ mod advanced_performance_optimization_tests {
             min_frame_rate: 30.0,
             max_js_execution_time: 5.0,
         };
-        
+
         assert_eq!(thresholds.max_cpu_usage, 80.0);
         assert_eq!(thresholds.max_memory_usage, 100 * 1024 * 1024);
         assert_eq!(thresholds.max_render_time, 16.67);
@@ -432,7 +442,7 @@ mod advanced_performance_optimization_tests {
             metrics: vec!["cpu_usage".to_string(), "memory_usage".to_string()],
             callback: "handle_metrics".to_string(),
         };
-        
+
         assert_eq!(interval.duration, Duration::from_secs(1));
         assert_eq!(interval.metrics.len(), 2);
         assert_eq!(interval.callback, "handle_metrics");
@@ -446,7 +456,7 @@ mod advanced_performance_optimization_tests {
             handler: "handle_cpu_alert".to_string(),
             enabled: true,
         };
-        
+
         assert!(matches!(handler.alert_type, AlertType::CpuUsage));
         assert_eq!(handler.threshold, 80.0);
         assert_eq!(handler.handler, "handle_cpu_alert");

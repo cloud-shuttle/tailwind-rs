@@ -14,8 +14,8 @@ rust-version = "1.89.0"
 
 [dependencies]
 # Core dependencies
-tailwind-rs-core = "0.15.0"
-tailwind-rs-macros = "0.15.0"
+tailwind-rs-core = "0.16.0"
+tailwind-rs-macros = "0.16.0"
 
 # Dioxus dependencies
 dioxus = { workspace = true }
@@ -39,8 +39,6 @@ futures = { workspace = true }
 reqwest = { workspace = true }
 
 # Development tools
-cargo-watch = { workspace = true }
-cargo-tarpaulin = { workspace = true }
 
 [features]
 default = ["web"]

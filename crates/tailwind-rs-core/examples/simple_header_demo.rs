@@ -2,7 +2,7 @@ use tailwind_rs_core::css_generator::CssGenerator;
 
 fn main() {
     let mut generator = CssGenerator::new();
-    
+
     // Test header/navbar classes from Header.tsx
     let header_classes = vec![
         // Basic layout
@@ -16,7 +16,6 @@ fn main() {
         "pt-6",
         "top-0",
         "z-10",
-        
         // Navigation
         "group",
         "flex",
@@ -37,7 +36,6 @@ fn main() {
         "dark:text-zinc-200",
         "dark:ring-white/10",
         "dark:hover:ring-white/20",
-        
         // Mobile navigation
         "ml-3",
         "h-auto",
@@ -45,7 +43,6 @@ fn main() {
         "stroke-zinc-500",
         "group-hover:stroke-zinc-700",
         "dark:group-hover:stroke-zinc-400",
-        
         // Backdrop
         "fixed",
         "inset-x-0",
@@ -54,13 +51,11 @@ fn main() {
         "h-px",
         "bg-zinc-900/10",
         "dark:bg-white/10",
-        
         // Navigation items
         "divide-y",
         "divide-zinc-100",
         "dark:divide-zinc-100/5",
         "dark:divide-zinc-100/5",
-        
         // Nav items
         "relative",
         "block",
@@ -82,7 +77,6 @@ fn main() {
         "dark:from-teal-400/0",
         "dark:via-teal-400/40",
         "dark:to-teal-400/0",
-        
         // Theme toggle
         "group",
         "rounded-full",
@@ -108,7 +102,6 @@ fn main() {
         "hidden",
         "fill-zinc-700",
         "dark:block",
-        
         // Main content
         "container",
         "mx-auto",
@@ -123,7 +116,6 @@ fn main() {
         "text-zinc-600",
         "dark:text-zinc-400",
         "mb-8",
-        
         // Grid layout
         "grid",
         "grid-cols-1",
@@ -142,13 +134,13 @@ fn main() {
         "mb-2",
         "space-y-1",
     ];
-    
+
     println!("🧪 Testing Simple Header Demo Classes");
     println!("=====================================");
-    
+
     let mut working_count = 0;
     let mut broken_count = 0;
-    
+
     for class in &header_classes {
         match generator.add_class(class) {
             Ok(_) => {
@@ -161,18 +153,26 @@ fn main() {
             }
         }
     }
-    
+
     println!("\n📊 Results:");
-    println!("✅ Classes added: {}/{}", working_count, header_classes.len());
-    println!("❌ Classes failed: {}/{}", broken_count, header_classes.len());
-    
+    println!(
+        "✅ Classes added: {}/{}",
+        working_count,
+        header_classes.len()
+    );
+    println!(
+        "❌ Classes failed: {}/{}",
+        broken_count,
+        header_classes.len()
+    );
+
     let css = generator.generate_css();
     println!("📊 Generated {} CSS rules", css.lines().count());
-    
+
     // Write CSS to file
     std::fs::write("simple-header-demo.css", &css).expect("Failed to write CSS file");
     println!("\n✅ CSS written to simple-header-demo.css");
-    
+
     // Create a simple HTML demo
     let html_template = "<!DOCTYPE html>\n\
         <html lang=\"en\">\n\
@@ -260,12 +260,18 @@ fn main() {
             </div>\n\
         </body>\n\
         </html>";
-    
+
     let html = html_template
         .replace("{}", &working_count.to_string())
         .replace("{}", &broken_count.to_string())
-        .replace("{}", &format!("{:.1}", (working_count as f32 / (working_count + broken_count) as f32) * 100.0));
-    
+        .replace(
+            "{}",
+            &format!(
+                "{:.1}",
+                (working_count as f32 / (working_count + broken_count) as f32) * 100.0
+            ),
+        );
+
     std::fs::write("simple-header-demo.html", &html).expect("Failed to write HTML file");
     println!("✅ HTML demo written to simple-header-demo.html");
     println!("🌐 Open simple-header-demo.html in your browser to see the simple header demo!");

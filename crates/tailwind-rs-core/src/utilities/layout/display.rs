@@ -93,10 +93,8 @@ mod tests {
 
     #[test]
     fn test_display_utilities() {
-        let classes = ClassBuilder::new()
-            .display(Display::Flex)
-            .build();
-        
+        let classes = ClassBuilder::new().display(Display::Flex).build();
+
         assert!(classes.to_css_classes().contains("flex"));
     }
 }

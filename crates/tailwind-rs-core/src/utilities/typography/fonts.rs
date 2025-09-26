@@ -79,7 +79,7 @@ impl FontFamily {
             FontFamily::Mono => "mono".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             FontFamily::Sans => "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"".to_string(),
@@ -107,7 +107,7 @@ impl FontSize {
             FontSize::Xl9 => "9xl".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             FontSize::Xs => "0.75rem".to_string(),
@@ -141,7 +141,7 @@ impl FontWeight {
             FontWeight::Black => "black".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             FontWeight::Thin => "100".to_string(),
@@ -217,7 +217,9 @@ pub trait FontWeightUtilities {
 
 impl FontFamilyUtilities for ClassBuilder {
     fn font_family(&mut self, family: FontFamily) -> &mut Self {
-        *self = self.clone().class(&format!("font-{}", family.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("font-{}", family.to_class_name()));
         self
     }
 
@@ -236,7 +238,9 @@ impl FontFamilyUtilities for ClassBuilder {
 
 impl FontSizeUtilities for ClassBuilder {
     fn text_size(&mut self, size: FontSize) -> &mut Self {
-        *self = self.clone().class(&format!("text-{}", size.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("text-{}", size.to_class_name()));
         self
     }
 
@@ -295,7 +299,9 @@ impl FontSizeUtilities for ClassBuilder {
 
 impl FontWeightUtilities for ClassBuilder {
     fn font_weight(&mut self, weight: FontWeight) -> &mut Self {
-        *self = self.clone().class(&format!("font-{}", weight.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("font-{}", weight.to_class_name()));
         self
     }
 

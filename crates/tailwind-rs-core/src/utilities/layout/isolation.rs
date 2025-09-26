@@ -39,10 +39,8 @@ mod tests {
 
     #[test]
     fn test_isolation_utilities() {
-        let classes = ClassBuilder::new()
-            .isolation(Isolation::Isolate)
-            .build();
-        
+        let classes = ClassBuilder::new().isolation(Isolation::Isolate).build();
+
         assert!(classes.to_css_classes().contains("isolate"));
     }
 }

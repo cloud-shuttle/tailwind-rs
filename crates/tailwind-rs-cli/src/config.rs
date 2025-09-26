@@ -2,11 +2,11 @@
 //!
 //! This module handles the config command for managing Tailwind-rs configuration.
 
+use crate::utils::{FileUtils, LogUtils};
 use anyhow::Result;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
-use crate::utils::{FileUtils, LogUtils};
 
 /// Manage configuration
 #[derive(Parser)]
@@ -196,21 +196,19 @@ mod tests {
     #[test]
     fn test_config_command_parsing() {
         use crate::Cli;
-        
+
         let args = vec!["tailwind-rs", "config", "init", "--file", "custom.toml"];
 
         let cli = Cli::try_parse_from(args).unwrap();
-        
+
         match cli.command {
-            crate::Commands::Config(cmd) => {
-                match cmd.action {
-                    ConfigAction::Init { file, default } => {
-                        assert_eq!(file, PathBuf::from("custom.toml"));
-                        assert!(!default);
-                    }
-                    _ => panic!("Expected Init action"),
+            crate::Commands::Config(cmd) => match cmd.action {
+                ConfigAction::Init { file, default } => {
+                    assert_eq!(file, PathBuf::from("custom.toml"));
+                    assert!(!default);
                 }
-            }
+                _ => panic!("Expected Init action"),
+            },
             _ => panic!("Expected Config command"),
         }
     }

@@ -39,10 +39,8 @@ mod tests {
 
     #[test]
     fn test_visibility_utilities() {
-        let classes = ClassBuilder::new()
-            .visibility(Visibility::Visible)
-            .build();
-        
+        let classes = ClassBuilder::new().visibility(Visibility::Visible).build();
+
         assert!(classes.to_css_classes().contains("visible"));
     }
 }

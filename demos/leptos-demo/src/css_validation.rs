@@ -196,7 +196,7 @@ impl ValidationReport {
     /// Print a detailed validation report
     pub fn print_report(&self) {
         println!("🎨 Tailwind-RS v0.15.0 CSS Validation Report");
-        println!("=" .repeat(50));
+        println!("{}", "=".repeat(50));
         println!("📊 Overall Statistics:");
         println!("   Total Classes: {}", self.total_classes);
         println!("   Found Classes: {}", self.found_classes);

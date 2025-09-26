@@ -99,10 +99,8 @@ mod tests {
 
     #[test]
     fn test_opacity_utilities() {
-        let classes = ClassBuilder::new()
-            .opacity(Opacity::Fifty)
-            .build();
-        
+        let classes = ClassBuilder::new().opacity(Opacity::Fifty).build();
+
         assert!(classes.to_css_classes().contains("opacity-50"));
     }
 
@@ -119,14 +117,14 @@ mod tests {
         let opacity1 = Opacity::Fifty;
         let opacity2 = Opacity::Fifty;
         let opacity3 = Opacity::SeventyFive;
-        
+
         assert_eq!(opacity1, opacity2);
         assert_ne!(opacity1, opacity3);
-        
+
         // Test that equal effects have the same hash
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         let mut hasher2 = DefaultHasher::new();
         opacity1.hash(&mut hasher1);

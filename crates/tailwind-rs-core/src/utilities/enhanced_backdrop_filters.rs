@@ -449,14 +449,26 @@ mod tests {
 
     #[test]
     fn test_enhanced_backdrop_blur_class_names() {
-        assert_eq!(EnhancedBackdropBlur::None.to_class_name(), "backdrop-blur-none");
+        assert_eq!(
+            EnhancedBackdropBlur::None.to_class_name(),
+            "backdrop-blur-none"
+        );
         assert_eq!(EnhancedBackdropBlur::Sm.to_class_name(), "backdrop-blur-sm");
-        assert_eq!(EnhancedBackdropBlur::Default.to_class_name(), "backdrop-blur");
+        assert_eq!(
+            EnhancedBackdropBlur::Default.to_class_name(),
+            "backdrop-blur"
+        );
         assert_eq!(EnhancedBackdropBlur::Md.to_class_name(), "backdrop-blur-md");
         assert_eq!(EnhancedBackdropBlur::Lg.to_class_name(), "backdrop-blur-lg");
         assert_eq!(EnhancedBackdropBlur::Xl.to_class_name(), "backdrop-blur-xl");
-        assert_eq!(EnhancedBackdropBlur::Xl2.to_class_name(), "backdrop-blur-2xl");
-        assert_eq!(EnhancedBackdropBlur::Xl3.to_class_name(), "backdrop-blur-3xl");
+        assert_eq!(
+            EnhancedBackdropBlur::Xl2.to_class_name(),
+            "backdrop-blur-2xl"
+        );
+        assert_eq!(
+            EnhancedBackdropBlur::Xl3.to_class_name(),
+            "backdrop-blur-3xl"
+        );
     }
 
     #[test]
@@ -531,7 +543,10 @@ mod tests {
         assert_eq!(EnhancedBackdropBrightness::Zero.to_string(), "0");
         assert_eq!(EnhancedBackdropBrightness::Half.to_string(), "0.5");
         assert_eq!(EnhancedBackdropBrightness::Default.to_string(), "1");
-        assert_eq!(EnhancedBackdropBrightness::OneHundredFifty.to_string(), "1.5");
+        assert_eq!(
+            EnhancedBackdropBrightness::OneHundredFifty.to_string(),
+            "1.5"
+        );
         assert_eq!(EnhancedBackdropBrightness::TwoHundred.to_string(), "2");
     }
 
@@ -559,8 +574,14 @@ mod tests {
         assert_eq!(EnhancedBackdropHueRotate::Fifteen.to_string(), "15deg");
         assert_eq!(EnhancedBackdropHueRotate::Thirty.to_string(), "30deg");
         assert_eq!(EnhancedBackdropHueRotate::Ninety.to_string(), "90deg");
-        assert_eq!(EnhancedBackdropHueRotate::OneHundredEighty.to_string(), "180deg");
-        assert_eq!(EnhancedBackdropHueRotate::TwoHundredSeventy.to_string(), "270deg");
+        assert_eq!(
+            EnhancedBackdropHueRotate::OneHundredEighty.to_string(),
+            "180deg"
+        );
+        assert_eq!(
+            EnhancedBackdropHueRotate::TwoHundredSeventy.to_string(),
+            "270deg"
+        );
     }
 
     #[test]

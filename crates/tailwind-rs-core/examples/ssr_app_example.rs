@@ -1,6 +1,6 @@
-use tailwind_rs_core::*;
-use leptos::*;
 use leptos::prelude::*;
+use leptos::*;
+use tailwind_rs_core::*;
 
 /// Complete SSR App Example using Tailwind-RS v0.12.1
 /// This demonstrates a full server-side rendered application with Tailwind-RS
@@ -8,55 +8,140 @@ use leptos::prelude::*;
 /// Generate CSS for the entire application
 fn generate_app_css() -> String {
     let mut generator = CssGenerator::new();
-    
+
     // Add all classes used throughout the application
     let app_classes = vec![
         // Layout classes
-        "fixed", "inset-0", "flex", "justify-center", "sm:px-8",
-        "flex", "w-full", "max-w-7xl", "lg:px-8", "relative", "flex-col",
-        
+        "fixed",
+        "inset-0",
+        "flex",
+        "justify-center",
+        "sm:px-8",
+        "flex",
+        "w-full",
+        "max-w-7xl",
+        "lg:px-8",
+        "relative",
+        "flex-col",
         // Header classes
-        "sticky", "top-0", "z-50", "w-full", "backdrop-blur-md",
-        "border-b", "border-zinc-200", "bg-white/80",
-        "dark:border-zinc-800", "dark:bg-zinc-900/80",
-        "mx-auto", "max-w-7xl", "px-4", "sm:px-6", "lg:px-8",
-        "flex", "h-16", "items-center", "justify-between",
-        "text-xl", "font-semibold", "text-zinc-900", "dark:text-zinc-100",
-        "text-zinc-600", "hover:text-zinc-900", "dark:text-zinc-400", "dark:hover:text-zinc-100",
-        
+        "sticky",
+        "top-0",
+        "z-50",
+        "w-full",
+        "backdrop-blur-md",
+        "border-b",
+        "border-zinc-200",
+        "bg-white/80",
+        "dark:border-zinc-800",
+        "dark:bg-zinc-900/80",
+        "mx-auto",
+        "max-w-7xl",
+        "px-4",
+        "sm:px-6",
+        "lg:px-8",
+        "flex",
+        "h-16",
+        "items-center",
+        "justify-between",
+        "text-xl",
+        "font-semibold",
+        "text-zinc-900",
+        "dark:text-zinc-100",
+        "text-zinc-600",
+        "hover:text-zinc-900",
+        "dark:text-zinc-400",
+        "dark:hover:text-zinc-100",
         // Footer classes
-        "border-t", "border-zinc-200", "bg-zinc-50",
-        "dark:border-zinc-800", "dark:bg-zinc-900",
-        "mx-auto", "max-w-7xl", "px-4", "sm:px-6", "lg:px-8", "py-8",
-        "text-center", "text-zinc-600", "dark:text-zinc-400",
-        
+        "border-t",
+        "border-zinc-200",
+        "bg-zinc-50",
+        "dark:border-zinc-800",
+        "dark:bg-zinc-900",
+        "mx-auto",
+        "max-w-7xl",
+        "px-4",
+        "sm:px-6",
+        "lg:px-8",
+        "py-8",
+        "text-center",
+        "text-zinc-600",
+        "dark:text-zinc-400",
         // Content classes
-        "prose", "prose-zinc", "max-w-none", "dark:prose-invert",
-        "prose-headings:text-zinc-900", "dark:prose-headings:text-zinc-100",
-        "text-4xl", "font-bold", "text-zinc-900", "dark:text-zinc-100", "mb-8",
-        "text-lg", "text-zinc-600", "dark:text-zinc-400", "mb-6",
-        "bg-blue-50", "dark:bg-blue-900/20", "p-6", "rounded-lg", "border", "border-blue-200", "dark:border-blue-800",
-        "text-2xl", "font-semibold", "text-blue-900", "dark:text-blue-100", "mb-4",
-        "list-disc", "list-inside", "space-y-2", "text-blue-800", "dark:text-blue-200",
-        
+        "prose",
+        "prose-zinc",
+        "max-w-none",
+        "dark:prose-invert",
+        "prose-headings:text-zinc-900",
+        "dark:prose-headings:text-zinc-100",
+        "text-4xl",
+        "font-bold",
+        "text-zinc-900",
+        "dark:text-zinc-100",
+        "mb-8",
+        "text-lg",
+        "text-zinc-600",
+        "dark:text-zinc-400",
+        "mb-6",
+        "bg-blue-50",
+        "dark:bg-blue-900/20",
+        "p-6",
+        "rounded-lg",
+        "border",
+        "border-blue-200",
+        "dark:border-blue-800",
+        "text-2xl",
+        "font-semibold",
+        "text-blue-900",
+        "dark:text-blue-100",
+        "mb-4",
+        "list-disc",
+        "list-inside",
+        "space-y-2",
+        "text-blue-800",
+        "dark:text-blue-200",
         // Button classes
-        "bg-blue-500", "hover:bg-blue-600", "text-white", "font-medium", "py-2", "px-4", "rounded-md",
-        "transition", "duration-200", "ease-in-out",
-        
+        "bg-blue-500",
+        "hover:bg-blue-600",
+        "text-white",
+        "font-medium",
+        "py-2",
+        "px-4",
+        "rounded-md",
+        "transition",
+        "duration-200",
+        "ease-in-out",
         // Card classes
-        "bg-white", "dark:bg-zinc-800", "border", "border-zinc-200", "dark:border-zinc-700",
-        "rounded-lg", "shadow-sm", "p-6", "hover:shadow-md", "transition-shadow",
-        
+        "bg-white",
+        "dark:bg-zinc-800",
+        "border",
+        "border-zinc-200",
+        "dark:border-zinc-700",
+        "rounded-lg",
+        "shadow-sm",
+        "p-6",
+        "hover:shadow-md",
+        "transition-shadow",
         // Form classes
-        "w-full", "px-3", "py-2", "border", "border-zinc-300", "dark:border-zinc-600",
-        "rounded-md", "focus:outline-none", "focus:ring-2", "focus:ring-blue-500",
-        "bg-white", "dark:bg-zinc-700", "text-zinc-900", "dark:text-zinc-100",
+        "w-full",
+        "px-3",
+        "py-2",
+        "border",
+        "border-zinc-300",
+        "dark:border-zinc-600",
+        "rounded-md",
+        "focus:outline-none",
+        "focus:ring-2",
+        "focus:ring-blue-500",
+        "bg-white",
+        "dark:bg-zinc-700",
+        "text-zinc-900",
+        "dark:text-zinc-100",
     ];
-    
+
     for class in app_classes {
         let _ = generator.add_class(class);
     }
-    
+
     generator.generate_css()
 }
 
@@ -64,7 +149,7 @@ fn generate_app_css() -> String {
 #[component]
 pub fn SSRLayout(children: Children) -> impl IntoView {
     let css = generate_app_css();
-    
+
     view! {
         <>
             <style>{css}</style>
@@ -136,22 +221,22 @@ pub fn SSRMainContent() -> impl IntoView {
             <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-6">
                 "This is a complete server-side rendered application using Tailwind-RS v0.12.1 and Leptos."
             </p>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <SSRCard 
+                <SSRCard
                     title="Server-Side Rendering"
                     description="CSS is generated on the server and embedded directly in the HTML for optimal performance."
                 />
-                <SSRCard 
+                <SSRCard
                     title="Responsive Design"
                     description="Full responsive support with sm:, md:, lg: breakpoints working correctly."
                 />
-                <SSRCard 
+                <SSRCard
                     title="Dark Mode"
                     description="Complete dark mode support with dark: variants working seamlessly."
                 />
             </div>
-            
+
             <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
                 <h2 class="text-2xl font-semibold text-blue-900 dark:text-blue-100 mb-4">
                     "SSR Features"
@@ -169,7 +254,7 @@ pub fn SSRMainContent() -> impl IntoView {
                     <li>"✅ Card components"</li>
                 </ul>
             </div>
-            
+
             <SSRForm />
         </div>
     }
@@ -203,8 +288,8 @@ pub fn SSRForm() -> impl IntoView {
                     <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
                         "Name"
                     </label>
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100"
                         placeholder="Enter your name"
                     />
@@ -213,8 +298,8 @@ pub fn SSRForm() -> impl IntoView {
                     <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
                         "Email"
                     </label>
-                    <input 
-                        type="email" 
+                    <input
+                        type="email"
                         class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100"
                         placeholder="Enter your email"
                     />
@@ -223,14 +308,14 @@ pub fn SSRForm() -> impl IntoView {
                     <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
                         "Message"
                     </label>
-                    <textarea 
+                    <textarea
                         class="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100"
                         rows="4"
                         placeholder="Enter your message"
                     ></textarea>
                 </div>
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition duration-200 ease-in-out"
                 >
                     "Send Message"
@@ -253,17 +338,17 @@ pub fn SSRApp() -> impl IntoView {
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("🧪 Tailwind-RS SSR App Example");
     println!("{}", "=".repeat(50));
-    
+
     // Generate comprehensive CSS for the entire app
     let css = generate_app_css();
     match std::fs::write("ssr-app.css", css) {
         Ok(_) => {
             println!("✅ SSR App CSS generated successfully");
             analyze_css_file("ssr-app.css");
-        },
+        }
         Err(e) => println!("❌ Failed to generate CSS: {}", e),
     }
-    
+
     println!("\n✅ SSR App example completed!");
     println!("\n📊 Summary:");
     println!("  - Complete SSR app structure: ✅ Working");
@@ -274,13 +359,13 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("  - Form styling: ✅ Working");
     println!("  - Card components: ✅ Working");
     println!("  - Grid layouts: ✅ Working");
-    
+
     println!("\n🚀 To use this in a real SSR app:");
     println!("  1. Enable the 'ssr' feature in your Cargo.toml");
     println!("  2. Use the generated CSS in your HTML template");
     println!("  3. Render your Leptos components to HTML strings");
     println!("  4. Serve the HTML with embedded CSS");
-    
+
     Ok(())
 }
 
@@ -289,31 +374,31 @@ fn analyze_css_file(filename: &str) {
     if let Ok(content) = std::fs::read_to_string(filename) {
         let lines = content.lines().count();
         println!("  📊 Generated {} lines of CSS", lines);
-        
+
         if content.contains(":hover") {
             println!("  ✅ Contains hover states");
         }
-        
+
         if content.contains(".dark") {
             println!("  ✅ Contains dark mode");
         }
-        
+
         if content.contains("@media") {
             println!("  ✅ Contains responsive design");
         }
-        
+
         if content.contains("backdrop-filter") {
             println!("  ✅ Contains backdrop effects");
         }
-        
+
         if content.contains("ring-") {
             println!("  ✅ Contains ring utilities");
         }
-        
+
         if content.contains("grid") {
             println!("  ✅ Contains grid utilities");
         }
-        
+
         if content.contains("form") || content.contains("input") {
             println!("  ✅ Contains form styling");
         }

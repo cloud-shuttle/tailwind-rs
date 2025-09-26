@@ -9,53 +9,124 @@ fn main() {
     // Test classes for ALL typography utilities
     let test_classes = vec![
         // Font Family
-        "font-sans", "font-serif", "font-mono", "font-(--my-font)", "font-[Open_Sans]",
-        
+        "font-sans",
+        "font-serif",
+        "font-mono",
+        "font-(--my-font)",
+        "font-[Open_Sans]",
         // Font Size
-        "text-xs", "text-sm", "text-base", "text-lg", "text-xl", "text-2xl", "text-3xl", "text-4xl", "text-5xl", "text-6xl", "text-7xl", "text-8xl", "text-9xl",
-        "text-sm/6", "text-lg/7", "text-base/tight", "text-(--my-size)", "text-[14px]",
-        
+        "text-xs",
+        "text-sm",
+        "text-base",
+        "text-lg",
+        "text-xl",
+        "text-2xl",
+        "text-3xl",
+        "text-4xl",
+        "text-5xl",
+        "text-6xl",
+        "text-7xl",
+        "text-8xl",
+        "text-9xl",
+        "text-sm/6",
+        "text-lg/7",
+        "text-base/tight",
+        "text-(--my-size)",
+        "text-[14px]",
         // Font Smoothing
-        "antialiased", "subpixel-antialiased",
-        
+        "antialiased",
+        "subpixel-antialiased",
         // Font Style
-        "italic", "not-italic",
-        
+        "italic",
+        "not-italic",
         // Font Weight
-        "font-thin", "font-extralight", "font-light", "font-normal", "font-medium", "font-semibold", "font-bold", "font-extrabold", "font-black",
-        "font-(--my-weight)", "font-[1000]",
-        
+        "font-thin",
+        "font-extralight",
+        "font-light",
+        "font-normal",
+        "font-medium",
+        "font-semibold",
+        "font-bold",
+        "font-extrabold",
+        "font-black",
+        "font-(--my-weight)",
+        "font-[1000]",
         // Font Stretch
-        "font-stretch-ultra-condensed", "font-stretch-extra-condensed", "font-stretch-condensed", "font-stretch-semi-condensed", "font-stretch-normal",
-        "font-stretch-semi-expanded", "font-stretch-expanded", "font-stretch-extra-expanded", "font-stretch-ultra-expanded",
-        "font-stretch-50%", "font-stretch-150%", "font-stretch-(--my-width)", "font-stretch-[66.66%]",
-        
+        "font-stretch-ultra-condensed",
+        "font-stretch-extra-condensed",
+        "font-stretch-condensed",
+        "font-stretch-semi-condensed",
+        "font-stretch-normal",
+        "font-stretch-semi-expanded",
+        "font-stretch-expanded",
+        "font-stretch-extra-expanded",
+        "font-stretch-ultra-expanded",
+        "font-stretch-50%",
+        "font-stretch-150%",
+        "font-stretch-(--my-width)",
+        "font-stretch-[66.66%]",
         // Font Variant Numeric
-        "normal-nums", "ordinal", "slashed-zero", "lining-nums", "oldstyle-nums", "proportional-nums", "tabular-nums", "diagonal-fractions", "stacked-fractions",
-        
+        "normal-nums",
+        "ordinal",
+        "slashed-zero",
+        "lining-nums",
+        "oldstyle-nums",
+        "proportional-nums",
+        "tabular-nums",
+        "diagonal-fractions",
+        "stacked-fractions",
         // Letter Spacing (Tracking)
-        "tracking-tighter", "tracking-tight", "tracking-normal", "tracking-wide", "tracking-wider", "tracking-widest",
-        "tracking-(--my-tracking)", "tracking-[.25em]", "-tracking-2",
-        
+        "tracking-tighter",
+        "tracking-tight",
+        "tracking-normal",
+        "tracking-wide",
+        "tracking-wider",
+        "tracking-widest",
+        "tracking-(--my-tracking)",
+        "tracking-[.25em]",
+        "-tracking-2",
         // Line Clamp
-        "line-clamp-none", "line-clamp-1", "line-clamp-2", "line-clamp-3", "line-clamp-4", "line-clamp-5", "line-clamp-6",
-        "line-clamp-(--my-line-count)", "line-clamp-[calc(var(--characters)/100)]",
-        
+        "line-clamp-none",
+        "line-clamp-1",
+        "line-clamp-2",
+        "line-clamp-3",
+        "line-clamp-4",
+        "line-clamp-5",
+        "line-clamp-6",
+        "line-clamp-(--my-line-count)",
+        "line-clamp-[calc(var(--characters)/100)]",
         // Line Height (Leading)
-        "leading-none", "leading-3", "leading-4", "leading-5", "leading-6", "leading-7", "leading-8", "leading-9", "leading-10",
-        "leading-(--my-line-height)", "leading-[1.5]",
-        
+        "leading-none",
+        "leading-3",
+        "leading-4",
+        "leading-5",
+        "leading-6",
+        "leading-7",
+        "leading-8",
+        "leading-9",
+        "leading-10",
+        "leading-(--my-line-height)",
+        "leading-[1.5]",
         // List Style Image
-        "list-image-none", "list-image-[url(/img/checkmark.png)]", "list-image-(--my-list-image)",
-        
+        "list-image-none",
+        "list-image-[url(/img/checkmark.png)]",
+        "list-image-(--my-list-image)",
         // List Style Position
-        "list-inside", "list-outside",
-        
+        "list-inside",
+        "list-outside",
         // List Style Type
-        "list-disc", "list-decimal", "list-none", "list-(--my-marker)", "list-[upper-roman]",
-        
+        "list-disc",
+        "list-decimal",
+        "list-none",
+        "list-(--my-marker)",
+        "list-[upper-roman]",
         // Text Align
-        "text-left", "text-center", "text-right", "text-justify", "text-start", "text-end",
+        "text-left",
+        "text-center",
+        "text-right",
+        "text-justify",
+        "text-start",
+        "text-end",
     ];
 
     let mut working_count = 0;
@@ -81,12 +152,12 @@ fn main() {
     }
 
     let coverage_percentage = (working_count as f64 / total_count as f64) * 100.0;
-    
+
     println!("📊 Comprehensive Typography Coverage Results:");
     println!("=============================================");
     println!("✅ Working: {}/{} classes", working_count, total_count);
     println!("📈 Coverage: {:.1}%", coverage_percentage);
-    
+
     if coverage_percentage >= 100.0 {
         println!("🎉 Perfect! ALL typography utilities are working!");
         println!("🚀 Complete typography support achieved!");
@@ -97,7 +168,7 @@ fn main() {
     } else {
         println!("⚠️  Some typography utilities need attention.");
     }
-    
+
     println!("\n🎯 Typography Categories Covered:");
     println!("• Font Family: ✅ Complete");
     println!("• Font Size: ✅ Complete");

@@ -196,15 +196,15 @@ impl GridPlacementUtilities for ClassBuilder {
     fn grid_column_start(self, start: GridColumnStart) -> Self {
         self.class(start.to_string())
     }
-    
+
     fn grid_column_end(self, end: GridColumnEnd) -> Self {
         self.class(end.to_string())
     }
-    
+
     fn grid_row_start(self, start: GridRowStart) -> Self {
         self.class(start.to_string())
     }
-    
+
     fn grid_row_end(self, end: GridRowEnd) -> Self {
         self.class(end.to_string())
     }
@@ -230,7 +230,7 @@ mod tests {
             .grid_row_start(GridRowStart::Start1)
             .grid_row_end(GridRowEnd::End2)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("col-start-1"));
         assert!(css_classes.contains("col-end-3"));

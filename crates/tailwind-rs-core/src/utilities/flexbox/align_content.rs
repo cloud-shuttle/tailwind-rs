@@ -57,7 +57,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .align_content(AlignContent::Center)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("content-center"));
     }
 }

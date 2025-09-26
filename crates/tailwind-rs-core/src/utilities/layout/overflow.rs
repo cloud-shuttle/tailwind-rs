@@ -48,10 +48,8 @@ mod tests {
 
     #[test]
     fn test_overflow_utilities() {
-        let classes = ClassBuilder::new()
-            .overflow(Overflow::Hidden)
-            .build();
-        
+        let classes = ClassBuilder::new().overflow(Overflow::Hidden).build();
+
         assert!(classes.to_css_classes().contains("overflow-hidden"));
     }
 }

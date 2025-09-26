@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::modern_css_features::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod cascade_layers_unit_tests {
@@ -81,7 +81,7 @@ mod cascade_layers_unit_tests {
         let layer1 = CascadeLayer::Base;
         let layer2 = CascadeLayer::Base;
         let layer3 = CascadeLayer::Components;
-        
+
         assert_eq!(layer1, layer2);
         assert_ne!(layer1, layer3);
     }
@@ -91,7 +91,7 @@ mod cascade_layers_unit_tests {
         let layer1 = CascadeLayer::Custom("theme".to_string());
         let layer2 = CascadeLayer::Custom("theme".to_string());
         let layer3 = CascadeLayer::Custom("other".to_string());
-        
+
         assert_eq!(layer1, layer2);
         assert_ne!(layer1, layer3);
     }
@@ -101,22 +101,22 @@ mod cascade_layers_unit_tests {
         let layer1 = CascadeLayer::Base;
         let layer2 = CascadeLayer::Base;
         let layer3 = CascadeLayer::Components;
-        
+
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         layer1.hash(&mut hasher1);
         let hash1 = hasher1.finish();
-        
+
         let mut hasher2 = DefaultHasher::new();
         layer2.hash(&mut hasher2);
         let hash2 = hasher2.finish();
-        
+
         let mut hasher3 = DefaultHasher::new();
         layer3.hash(&mut hasher3);
         let hash3 = hasher3.finish();
-        
+
         assert_eq!(hash1, hash2);
         assert_ne!(hash1, hash3);
     }
@@ -143,45 +143,41 @@ mod cascade_layers_integration_tests {
 
     #[test]
     fn test_cascade_layers_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .layer_base();
-        
+        let builder = ClassBuilder::new().layer_base();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-base"));
     }
 
     #[test]
     fn test_cascade_layers_components_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .layer_components();
-        
+        let builder = ClassBuilder::new().layer_components();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-components"));
     }
 
     #[test]
     fn test_cascade_layers_utilities_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .layer_utilities();
-        
+        let builder = ClassBuilder::new().layer_utilities();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-utilities"));
     }
 
     #[test]
     fn test_cascade_layers_custom_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .layer_custom("theme");
-        
+        let builder = ClassBuilder::new().layer_custom("theme");
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-theme"));
     }
 
     #[test]
     fn test_cascade_layers_custom_value_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .layer_custom_value(CascadeLayer::Custom("theme".to_string()));
-        
+        let builder =
+            ClassBuilder::new().layer_custom_value(CascadeLayer::Custom("theme".to_string()));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-theme"));
     }
@@ -192,7 +188,7 @@ mod cascade_layers_integration_tests {
             .layer_base()
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-base"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -204,11 +200,15 @@ mod cascade_layers_integration_tests {
         let builder = ClassBuilder::new()
             .layer_base()
             .responsive(Breakpoint::Md, "layer-components");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-base"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("layer-components"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("layer-components"));
     }
 
     #[test]
@@ -216,11 +216,15 @@ mod cascade_layers_integration_tests {
         let builder = ClassBuilder::new()
             .layer_base()
             .conditional("hover", "layer-utilities");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-base"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("layer-utilities"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("layer-utilities"));
     }
 
     #[test]
@@ -228,11 +232,15 @@ mod cascade_layers_integration_tests {
         let builder = ClassBuilder::new()
             .layer_base()
             .custom_variant("dark", "layer-components");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-base"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("layer-components"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("layer-components"));
     }
 
     #[test]
@@ -241,7 +249,7 @@ mod cascade_layers_integration_tests {
             .layer_base()
             .layer_components()
             .layer_utilities();
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("layer-base"));
         assert!(class_set.classes.contains("layer-components"));
@@ -254,18 +262,15 @@ mod cascade_layers_integration_tests {
             .layer_base()
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("layer-base"));
         assert!(classes.contains("text-blue-500"));
     }
 
     #[test]
     fn test_cascade_layers_css_classes() {
-        let class_set = ClassBuilder::new()
-            .layer_base()
-            .class("font-bold")
-            .build();
-        
+        let class_set = ClassBuilder::new().layer_base().class("font-bold").build();
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("layer-base"));
         assert!(css_classes.contains("font-bold"));
@@ -279,7 +284,7 @@ mod cascade_layers_integration_tests {
             .layer_utilities()
             .layer_custom("theme")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("layer-base"));
         assert!(css_classes.contains("layer-components"));
@@ -298,9 +303,9 @@ mod cascade_layers_integration_tests {
             .layer_custom("components")
             .layer_custom("base")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all cascade layer utilities are present
         assert!(css_classes.contains("layer-base"));
         assert!(css_classes.contains("layer-components"));

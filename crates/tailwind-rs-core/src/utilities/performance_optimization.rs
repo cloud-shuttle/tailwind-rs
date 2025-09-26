@@ -245,11 +245,11 @@ impl CssPurger {
             } else if trimmed == "}" && in_rule {
                 // End of a CSS rule
                 current_rule.push_str(&format!("{}\n", line));
-                
+
                 if self.should_keep_rule(&rule_selectors) {
                     result.push_str(&current_rule);
                 }
-                
+
                 in_rule = false;
                 current_rule.clear();
                 rule_selectors.clear();
@@ -287,7 +287,8 @@ impl CssPurger {
     /// Check if a selector should be kept
     fn should_keep_selector(&self, selector: &str) -> bool {
         // Keep critical selectors
-        if selector.starts_with('*') || selector.starts_with("html") || selector.starts_with("body") {
+        if selector.starts_with('*') || selector.starts_with("html") || selector.starts_with("body")
+        {
             return true;
         }
 
@@ -310,7 +311,11 @@ impl CssPurger {
     }
 
     /// Calculate optimization result
-    pub fn calculate_optimization(&self, original_css: &str, optimized_css: &str) -> OptimizationResult {
+    pub fn calculate_optimization(
+        &self,
+        original_css: &str,
+        optimized_css: &str,
+    ) -> OptimizationResult {
         let original_size = original_css.len();
         let optimized_size = optimized_css.len();
         let reduction_percentage = if original_size > 0 {
@@ -324,7 +329,9 @@ impl CssPurger {
 
         let mut warnings = Vec::new();
         if reduction_percentage > 50.0 {
-            warnings.push("Large size reduction detected. Verify all functionality still works.".to_string());
+            warnings.push(
+                "Large size reduction detected. Verify all functionality still works.".to_string(),
+            );
         }
         if classes_removed > 100 {
             warnings.push("Many classes removed. Check for missing styles.".to_string());
@@ -368,20 +375,21 @@ impl BundleAnalyzer {
     /// Analyze class usage in CSS
     fn analyze_classes(&mut self, css: &str) {
         let lines: Vec<&str> = css.lines().collect();
-        
+
         for line in lines {
             if line.contains('.') && line.contains('{') {
                 let selectors = self.extract_selectors(line);
                 for selector in selectors {
                     if let Some(class_name) = self.extract_class_name(&selector) {
-                        let stats = self.class_stats.entry(class_name.clone()).or_insert_with(|| {
-                            ClassUsageStats {
-                                usage_count: 0,
-                                used_in_files: HashSet::new(),
-                                is_critical: false,
-                                dependencies: HashSet::new(),
-                            }
-                        });
+                        let stats =
+                            self.class_stats
+                                .entry(class_name.clone())
+                                .or_insert_with(|| ClassUsageStats {
+                                    usage_count: 0,
+                                    used_in_files: HashSet::new(),
+                                    is_critical: false,
+                                    dependencies: HashSet::new(),
+                                });
                         stats.usage_count += 1;
                     }
                 }
@@ -397,24 +405,27 @@ impl BundleAnalyzer {
 
         for line in lines {
             let trimmed = line.trim();
-            
+
             if trimmed.ends_with('{') {
                 in_rule = true;
                 current_rule = line.to_string();
             } else if trimmed == "}" && in_rule {
                 current_rule.push_str(&format!("{}\n", line));
-                
+
                 let rule_id = format!("rule_{}", self.rule_stats.len());
                 let selectors = self.extract_selectors(&current_rule);
                 let properties = self.extract_properties(&current_rule);
-                
-                self.rule_stats.insert(rule_id, RuleUsageStats {
-                    usage_count: 1,
-                    selectors: selectors.into_iter().collect(),
-                    properties: properties.into_iter().collect(),
-                    size_bytes: current_rule.len(),
-                });
-                
+
+                self.rule_stats.insert(
+                    rule_id,
+                    RuleUsageStats {
+                        usage_count: 1,
+                        selectors: selectors.into_iter().collect(),
+                        properties: properties.into_iter().collect(),
+                        size_bytes: current_rule.len(),
+                    },
+                );
+
                 in_rule = false;
                 current_rule.clear();
             } else if in_rule {
@@ -428,24 +439,26 @@ impl BundleAnalyzer {
         self.metrics.total_size = css.len();
         self.metrics.class_count = self.class_stats.len();
         self.metrics.rule_count = self.rule_stats.len();
-        
+
         if self.metrics.class_count > 0 {
-            let total_class_size: usize = self.class_stats.values()
+            let total_class_size: usize = self
+                .class_stats
+                .values()
                 .map(|stats| stats.usage_count as usize * 10) // Estimate class size
                 .sum();
             self.metrics.avg_class_size = total_class_size as f32 / self.metrics.class_count as f32;
         }
-        
+
         if self.metrics.rule_count > 0 {
-            let total_rule_size: usize = self.rule_stats.values()
-                .map(|stats| stats.size_bytes)
-                .sum();
+            let total_rule_size: usize =
+                self.rule_stats.values().map(|stats| stats.size_bytes).sum();
             self.metrics.avg_rule_size = total_rule_size as f32 / self.metrics.rule_count as f32;
         }
-        
+
         // Estimate compression ratio (simplified)
         self.metrics.compression_ratio = if self.metrics.total_size > 0 {
-            (self.metrics.total_size as f32 - self.metrics.avg_rule_size) / self.metrics.total_size as f32
+            (self.metrics.total_size as f32 - self.metrics.avg_rule_size)
+                / self.metrics.total_size as f32
         } else {
             0.0
         };
@@ -464,7 +477,9 @@ impl BundleAnalyzer {
     fn extract_class_name(&self, selector: &str) -> Option<String> {
         if let Some(start) = selector.find('.') {
             let class_part = &selector[start + 1..];
-            if let Some(end) = class_part.find(|c: char| !c.is_alphanumeric() && c != '-' && c != '_') {
+            if let Some(end) =
+                class_part.find(|c: char| !c.is_alphanumeric() && c != '-' && c != '_')
+            {
                 Some(class_part[..end].to_string())
             } else {
                 Some(class_part.to_string())
@@ -478,7 +493,7 @@ impl BundleAnalyzer {
     fn extract_properties(&self, rule: &str) -> Vec<String> {
         let mut properties = Vec::new();
         let lines: Vec<&str> = rule.lines().collect();
-        
+
         for line in lines {
             let trimmed = line.trim();
             if trimmed.contains(':') && !trimmed.ends_with('{') && !trimmed.ends_with('}') {
@@ -488,7 +503,7 @@ impl BundleAnalyzer {
                 }
             }
         }
-        
+
         properties
     }
 
@@ -501,18 +516,21 @@ impl BundleAnalyzer {
         }
 
         if self.metrics.class_count > 1000 {
-            recommendations.push("Many classes detected. Consider purging unused classes.".to_string());
+            recommendations
+                .push("Many classes detected. Consider purging unused classes.".to_string());
         }
 
         if self.metrics.avg_rule_size > 200.0 {
-            recommendations.push("Large CSS rules detected. Consider breaking them down.".to_string());
+            recommendations
+                .push("Large CSS rules detected. Consider breaking them down.".to_string());
         }
 
         if self.metrics.compression_ratio < 0.3 {
             recommendations.push("Low compression ratio. Consider optimization.".to_string());
         }
 
-        let unused_classes: Vec<_> = self.class_stats
+        let unused_classes: Vec<_> = self
+            .class_stats
             .iter()
             .filter(|(_, stats)| stats.usage_count == 1)
             .map(|(name, _)| name)
@@ -534,9 +552,7 @@ impl fmt::Display for OptimizationResult {
         write!(
             f,
             "Optimization Result: {} bytes -> {} bytes ({}% reduction)",
-            self.original_size,
-            self.optimized_size,
-            self.reduction_percentage
+            self.original_size, self.optimized_size, self.reduction_percentage
         )
     }
 }
@@ -571,7 +587,7 @@ mod tests {
     fn test_class_analyzer_add_used_class() {
         let mut analyzer = ClassAnalyzer::new();
         analyzer.add_used_class("bg-red-500".to_string());
-        
+
         assert!(analyzer.used_classes.contains("bg-red-500"));
         assert_eq!(analyzer.used_classes.len(), 1);
     }
@@ -580,7 +596,7 @@ mod tests {
     fn test_class_analyzer_add_multiple_classes() {
         let mut analyzer = ClassAnalyzer::new();
         analyzer.add_used_classes(vec!["bg-red-500".to_string(), "text-white".to_string()]);
-        
+
         assert!(analyzer.used_classes.contains("bg-red-500"));
         assert!(analyzer.used_classes.contains("text-white"));
         assert_eq!(analyzer.used_classes.len(), 2);
@@ -590,7 +606,7 @@ mod tests {
     fn test_class_analyzer_add_dependency() {
         let mut analyzer = ClassAnalyzer::new();
         analyzer.add_dependency("btn".to_string(), "bg-blue-500".to_string());
-        
+
         assert!(analyzer.dependencies.contains_key("btn"));
         assert!(analyzer.dependencies["btn"].contains("bg-blue-500"));
     }
@@ -599,7 +615,7 @@ mod tests {
     fn test_class_analyzer_mark_critical() {
         let mut analyzer = ClassAnalyzer::new();
         analyzer.mark_critical("container".to_string());
-        
+
         assert!(analyzer.critical_classes.contains("container"));
     }
 
@@ -608,16 +624,18 @@ mod tests {
         let mut analyzer = ClassAnalyzer::new();
         analyzer.add_used_class("bg-red-500".to_string());
         analyzer.mark_critical("container".to_string());
-        
+
         let all_classes: HashSet<String> = vec![
             "bg-red-500".to_string(),
             "bg-blue-500".to_string(),
             "container".to_string(),
             "unused-class".to_string(),
-        ].into_iter().collect();
-        
+        ]
+        .into_iter()
+        .collect();
+
         analyzer.analyze_usage(all_classes);
-        
+
         assert!(analyzer.used_classes.contains("bg-red-500"));
         assert!(analyzer.unused_classes.contains("bg-blue-500"));
         assert!(analyzer.unused_classes.contains("unused-class"));
@@ -636,9 +654,11 @@ mod tests {
     #[test]
     fn test_css_purger_keep_classes() {
         let mut purger = CssPurger::new();
-        let classes: HashSet<String> = vec!["bg-red-500".to_string(), "text-white".to_string()].into_iter().collect();
+        let classes: HashSet<String> = vec!["bg-red-500".to_string(), "text-white".to_string()]
+            .into_iter()
+            .collect();
         purger.keep_classes(classes);
-        
+
         assert!(purger.keep_classes.contains("bg-red-500"));
         assert!(purger.keep_classes.contains("text-white"));
     }
@@ -648,7 +668,7 @@ mod tests {
         let mut purger = CssPurger::new();
         let classes: HashSet<String> = vec!["unused-class".to_string()].into_iter().collect();
         purger.remove_classes(classes);
-        
+
         assert!(purger.remove_classes.contains("unused-class"));
     }
 
@@ -657,15 +677,15 @@ mod tests {
         let mut purger = CssPurger::new();
         purger.keep_classes(vec!["bg-red-500".to_string()].into_iter().collect());
         purger.remove_classes(vec!["unused-class".to_string()].into_iter().collect());
-        
+
         let css = r#"
 .bg-red-500 { background-color: #ef4444; }
 .unused-class { display: none; }
 .text-white { color: white; }
 "#;
-        
+
         let result = purger.purge_css(css);
-        
+
         // The purger should at least process the CSS and return something
         assert!(!result.is_empty());
         // The result should contain the CSS we want to keep
@@ -679,12 +699,12 @@ mod tests {
     fn test_css_purger_calculate_optimization() {
         let mut purger = CssPurger::new();
         purger.remove_classes(vec!["unused-class".to_string()].into_iter().collect());
-        
+
         let original_css = ".bg-red-500 { color: red; } .unused-class { display: none; }";
         let optimized_css = ".bg-red-500 { color: red; }";
-        
+
         let result = purger.calculate_optimization(original_css, optimized_css);
-        
+
         assert!(result.original_size > result.optimized_size);
         assert!(result.reduction_percentage > 0.0);
         assert_eq!(result.classes_removed, 1);
@@ -705,9 +725,9 @@ mod tests {
 .bg-red-500 { background-color: #ef4444; }
 .text-white { color: white; }
 "#;
-        
+
         analyzer.analyze_bundle(css);
-        
+
         // The analyzer should find the classes
         assert!(analyzer.class_stats.contains_key("bg-red-500"));
         assert!(analyzer.class_stats.contains_key("text-white"));
@@ -727,7 +747,7 @@ mod tests {
             rules_removed: 5,
             warnings: vec!["Test warning".to_string()],
         };
-        
+
         let display = format!("{}", result);
         assert!(display.contains("1000 bytes -> 500 bytes"));
         assert!(display.contains("50% reduction"));
@@ -743,7 +763,7 @@ mod tests {
             avg_rule_size: 20.0,
             compression_ratio: 0.3,
         };
-        
+
         let display = format!("{}", metrics);
         assert!(display.contains("10000 bytes"));
         assert!(display.contains("100 classes"));
@@ -756,7 +776,7 @@ mod tests {
         let mut analyzer = ClassAnalyzer::new();
         analyzer.add_used_class("bg-red-500".to_string());
         analyzer.mark_critical("container".to_string());
-        
+
         let serialized = serde_json::to_string(&analyzer).unwrap();
         let deserialized: ClassAnalyzer = serde_json::from_str(&serialized).unwrap();
         assert_eq!(analyzer, deserialized);
@@ -767,7 +787,7 @@ mod tests {
         let mut purger = CssPurger::new();
         purger.keep_classes(vec!["bg-red-500".to_string()].into_iter().collect());
         purger.remove_classes(vec!["unused-class".to_string()].into_iter().collect());
-        
+
         let serialized = serde_json::to_string(&purger).unwrap();
         let deserialized: CssPurger = serde_json::from_str(&serialized).unwrap();
         assert_eq!(purger, deserialized);
@@ -777,7 +797,7 @@ mod tests {
     fn test_bundle_analyzer_serialization() {
         let mut analyzer = BundleAnalyzer::new();
         analyzer.analyze_bundle(".test { color: red; }");
-        
+
         let serialized = serde_json::to_string(&analyzer).unwrap();
         let deserialized: BundleAnalyzer = serde_json::from_str(&serialized).unwrap();
         assert_eq!(analyzer, deserialized);

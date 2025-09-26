@@ -175,7 +175,7 @@ impl Scale {
             Scale::HundredFifty => "150".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Scale::Zero => "0".to_string(),
@@ -206,7 +206,7 @@ impl Rotate {
             Rotate::HundredEighty => "180".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Rotate::Zero => "0deg".to_string(),
@@ -257,7 +257,7 @@ impl Translate {
             Translate::NinetySix => "96".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Translate::Zero => "0px".to_string(),
@@ -305,7 +305,7 @@ impl Skew {
             Skew::Twelve => "12".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Skew::Zero => "0deg".to_string(),
@@ -332,7 +332,7 @@ impl TransformOrigin {
             TransformOrigin::TopLeft => "top-left".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TransformOrigin::Center => "center".to_string(),
@@ -389,11 +389,11 @@ impl ScaleUtilities for ClassBuilder {
     fn scale(self, scale: Scale) -> Self {
         self.class(format!("scale-{}", scale.to_class_name()))
     }
-    
+
     fn scale_x(self, scale: Scale) -> Self {
         self.class(format!("scale-x-{}", scale.to_class_name()))
     }
-    
+
     fn scale_y(self, scale: Scale) -> Self {
         self.class(format!("scale-y-{}", scale.to_class_name()))
     }
@@ -420,7 +420,7 @@ impl TranslateUtilities for ClassBuilder {
     fn translate_x(self, translate: Translate) -> Self {
         self.class(format!("translate-x-{}", translate.to_class_name()))
     }
-    
+
     fn translate_y(self, translate: Translate) -> Self {
         self.class(format!("translate-y-{}", translate.to_class_name()))
     }
@@ -436,7 +436,7 @@ impl SkewUtilities for ClassBuilder {
     fn skew_x(self, skew: Skew) -> Self {
         self.class(format!("skew-x-{}", skew.to_class_name()))
     }
-    
+
     fn skew_y(self, skew: Skew) -> Self {
         self.class(format!("skew-y-{}", skew.to_class_name()))
     }
@@ -456,7 +456,7 @@ impl TransformOriginUtilities for ClassBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_scale_utilities() {
         let classes = ClassBuilder::new()
@@ -473,7 +473,7 @@ mod tests {
             .scale_x(Scale::Hundred)
             .scale_y(Scale::Hundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("scale-0"));
         assert!(css_classes.contains("scale-50"));
@@ -488,7 +488,7 @@ mod tests {
         assert!(css_classes.contains("scale-x-100"));
         assert!(css_classes.contains("scale-y-100"));
     }
-    
+
     #[test]
     fn test_rotate_utilities() {
         let classes = ClassBuilder::new()
@@ -502,7 +502,7 @@ mod tests {
             .rotate(Rotate::Ninety)
             .rotate(Rotate::HundredEighty)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("rotate-0"));
         assert!(css_classes.contains("rotate-1"));
@@ -514,7 +514,7 @@ mod tests {
         assert!(css_classes.contains("rotate-90"));
         assert!(css_classes.contains("rotate-180"));
     }
-    
+
     #[test]
     fn test_translate_utilities() {
         let classes = ClassBuilder::new()
@@ -541,7 +541,7 @@ mod tests {
             .translate_y(Translate::Nine)
             .translate_y(Translate::Ten)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("translate-x-0"));
         assert!(css_classes.contains("translate-x-1"));
@@ -566,7 +566,7 @@ mod tests {
         assert!(css_classes.contains("translate-y-9"));
         assert!(css_classes.contains("translate-y-10"));
     }
-    
+
     #[test]
     fn test_skew_utilities() {
         let classes = ClassBuilder::new()
@@ -583,7 +583,7 @@ mod tests {
             .skew_y(Skew::Six)
             .skew_y(Skew::Twelve)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("skew-x-0"));
         assert!(css_classes.contains("skew-x-1"));
@@ -598,7 +598,7 @@ mod tests {
         assert!(css_classes.contains("skew-y-6"));
         assert!(css_classes.contains("skew-y-12"));
     }
-    
+
     #[test]
     fn test_transform_origin_utilities() {
         let classes = ClassBuilder::new()
@@ -612,7 +612,7 @@ mod tests {
             .transform_origin(TransformOrigin::Left)
             .transform_origin(TransformOrigin::TopLeft)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("origin-center"));
         assert!(css_classes.contains("origin-top"));
@@ -624,7 +624,7 @@ mod tests {
         assert!(css_classes.contains("origin-left"));
         assert!(css_classes.contains("origin-top-left"));
     }
-    
+
     #[test]
     fn test_complex_transforms_combination() {
         let classes = ClassBuilder::new()
@@ -638,7 +638,7 @@ mod tests {
             .skew_y(Skew::Two)
             .transform_origin(TransformOrigin::Center)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("scale-110"));
         assert!(css_classes.contains("scale-x-105"));
@@ -650,7 +650,7 @@ mod tests {
         assert!(css_classes.contains("skew-y-2"));
         assert!(css_classes.contains("origin-center"));
     }
-    
+
     /// Test that all Week 11 transform utilities are implemented
     #[test]
     fn test_week11_transform_utilities() {
@@ -685,9 +685,9 @@ mod tests {
             .translate_y(Translate::Two)
             .translate_y(Translate::Eight)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
-        
+
         // Scale
         assert!(css_classes.contains("scale-0"));
         assert!(css_classes.contains("scale-50"));
@@ -701,7 +701,7 @@ mod tests {
         assert!(css_classes.contains("scale-150"));
         assert!(css_classes.contains("scale-x-100"));
         assert!(css_classes.contains("scale-y-100"));
-        
+
         // Rotate
         assert!(css_classes.contains("rotate-0"));
         assert!(css_classes.contains("rotate-1"));
@@ -712,7 +712,7 @@ mod tests {
         assert!(css_classes.contains("rotate-45"));
         assert!(css_classes.contains("rotate-90"));
         assert!(css_classes.contains("rotate-180"));
-        
+
         // Translate
         assert!(css_classes.contains("translate-x-0"));
         assert!(css_classes.contains("translate-x-4"));

@@ -49,12 +49,16 @@ impl From<super::TailwindConfig> for TailwindConfigToml {
             },
             theme: config.theme.into(),
             responsive: ResponsiveConfigToml {
-                breakpoints: super::TailwindConfig::convert_breakpoints_to_toml(&config.responsive.breakpoints),
+                breakpoints: super::TailwindConfig::convert_breakpoints_to_toml(
+                    &config.responsive.breakpoints,
+                ),
                 container_centering: false, // Default value since this field doesn't exist in ResponsiveConfig
                 container_padding: 0, // Default value since this field doesn't exist in ResponsiveConfig
             },
             plugins: Some(config.plugins),
-            custom: Some(super::TailwindConfig::convert_json_to_toml_values(&config.custom)),
+            custom: Some(super::TailwindConfig::convert_json_to_toml_values(
+                &config.custom,
+            )),
         }
     }
 }
@@ -64,15 +68,18 @@ impl From<ResponsiveConfigToml> for crate::responsive::ResponsiveConfig {
         let mut breakpoints = HashMap::new();
         for (key, width) in toml_config.breakpoints {
             if let Ok(breakpoint) = key.parse::<crate::responsive::Breakpoint>() {
-                breakpoints.insert(breakpoint, crate::responsive::responsive_config::BreakpointConfig { 
-                    min_width: width,
-                    max_width: None,
-                    enabled: true,
-                    media_query: None,
-                });
+                breakpoints.insert(
+                    breakpoint,
+                    crate::responsive::responsive_config::BreakpointConfig {
+                        min_width: width,
+                        max_width: None,
+                        enabled: true,
+                        media_query: None,
+                    },
+                );
             }
         }
-        
+
         Self {
             breakpoints,
             defaults: crate::responsive::responsive_config::ResponsiveDefaults {
@@ -92,7 +99,7 @@ mod tests {
     fn test_toml_config_conversion() {
         let config = crate::config::TailwindConfig::new();
         let toml_config: TailwindConfigToml = config.clone().into();
-        
+
         assert_eq!(toml_config.build.output, Some(config.build.output));
         assert_eq!(toml_config.build.minify, Some(config.build.minify));
     }
@@ -102,13 +109,13 @@ mod tests {
         let mut breakpoints = HashMap::new();
         breakpoints.insert("sm".to_string(), 640);
         breakpoints.insert("md".to_string(), 768);
-        
+
         let toml_config = ResponsiveConfigToml {
             breakpoints,
             container_centering: true,
             container_padding: 16,
         };
-        
+
         let responsive_config: crate::responsive::ResponsiveConfig = toml_config.into();
         assert!(!responsive_config.breakpoints.is_empty());
     }

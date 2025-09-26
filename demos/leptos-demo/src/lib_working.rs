@@ -15,7 +15,7 @@ fn App() -> impl IntoView {
                 <h1 class="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-white">
                     "Tailwind-RS Leptos Demo (WASM Working)"
                 </h1>
-                
+
                 <div class="max-w-2xl mx-auto space-y-6">
                     // Success Status
                     <div class="bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-600 rounded-lg p-6">

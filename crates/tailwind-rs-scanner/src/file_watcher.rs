@@ -3,7 +3,7 @@
 //! This module provides file watching capabilities for
 //! real-time content scanning and updates.
 
-use crate::error::{ScannerError, Result};
+use crate::error::{Result, ScannerError};
 use std::path::PathBuf;
 use std::time::Duration;
 

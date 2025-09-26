@@ -45,7 +45,7 @@ impl ResponsiveConfig {
     pub fn new() -> Self {
         Self::default()
     }
-    
+
     /// Create a responsive configuration with custom breakpoints
     pub fn with_breakpoints(breakpoints: HashMap<Breakpoint, BreakpointConfig>) -> Self {
         Self {
@@ -53,17 +53,17 @@ impl ResponsiveConfig {
             defaults: ResponsiveDefaults::default(),
         }
     }
-    
+
     /// Get configuration for a specific breakpoint
     pub fn get_breakpoint_config(&self, breakpoint: Breakpoint) -> Option<&BreakpointConfig> {
         self.breakpoints.get(&breakpoint)
     }
-    
+
     /// Set configuration for a specific breakpoint
     pub fn set_breakpoint_config(&mut self, breakpoint: Breakpoint, config: BreakpointConfig) {
         self.breakpoints.insert(breakpoint, config);
     }
-    
+
     /// Check if a breakpoint is enabled
     pub fn is_breakpoint_enabled(&self, breakpoint: Breakpoint) -> bool {
         self.breakpoints
@@ -71,7 +71,7 @@ impl ResponsiveConfig {
             .map(|config| config.enabled)
             .unwrap_or(true)
     }
-    
+
     /// Get the minimum width for a breakpoint
     pub fn get_breakpoint_min_width(&self, breakpoint: Breakpoint) -> u32 {
         self.breakpoints
@@ -79,14 +79,14 @@ impl ResponsiveConfig {
             .map(|config| config.min_width)
             .unwrap_or_else(|| breakpoint.min_width())
     }
-    
+
     /// Get the maximum width for a breakpoint
     pub fn get_breakpoint_max_width(&self, breakpoint: Breakpoint) -> Option<u32> {
         self.breakpoints
             .get(&breakpoint)
             .and_then(|config| config.max_width)
     }
-    
+
     /// Get the media query for a breakpoint
     pub fn get_breakpoint_media_query(&self, breakpoint: Breakpoint) -> String {
         if let Some(config) = self.breakpoints.get(&breakpoint) {
@@ -94,7 +94,7 @@ impl ResponsiveConfig {
                 return media_query.clone();
             }
         }
-        
+
         // Generate default media query
         let min_width = self.get_breakpoint_min_width(breakpoint);
         if min_width == 0 {
@@ -103,7 +103,7 @@ impl ResponsiveConfig {
             format!("(min-width: {}px)", min_width)
         }
     }
-    
+
     /// Get all enabled breakpoints
     pub fn get_enabled_breakpoints(&self) -> Vec<Breakpoint> {
         self.breakpoints
@@ -112,7 +112,7 @@ impl ResponsiveConfig {
             .map(|(breakpoint, _)| *breakpoint)
             .collect()
     }
-    
+
     /// Get the appropriate breakpoint for a given screen width
     pub fn get_breakpoint_for_width(&self, screen_width: u32) -> Breakpoint {
         if screen_width >= Breakpoint::Xl2.min_width() {
@@ -129,7 +129,7 @@ impl ResponsiveConfig {
             Breakpoint::Base
         }
     }
-    
+
     /// Validate the configuration
     pub fn validate(&self) -> Result<()> {
         // Check that base breakpoint exists
@@ -138,15 +138,15 @@ impl ResponsiveConfig {
                 "Base breakpoint is required".to_string(),
             ));
         }
-        
+
         // Check that breakpoints are in order
         let mut breakpoints: Vec<Breakpoint> = self.breakpoints.keys().cloned().collect();
         breakpoints.sort_by_key(|bp| bp.min_width());
-        
+
         for i in 1..breakpoints.len() {
             let prev_min = self.get_breakpoint_min_width(breakpoints[i - 1]);
             let curr_min = self.get_breakpoint_min_width(breakpoints[i]);
-            
+
             if prev_min >= curr_min {
                 return Err(TailwindError::config(format!(
                     "Breakpoint {} ({}px) must be greater than {} ({}px)",
@@ -157,7 +157,7 @@ impl ResponsiveConfig {
                 )));
             }
         }
-        
+
         Ok(())
     }
 }
@@ -165,7 +165,7 @@ impl ResponsiveConfig {
 impl Default for ResponsiveConfig {
     fn default() -> Self {
         let mut breakpoints = HashMap::new();
-        
+
         // Add default breakpoint configurations
         breakpoints.insert(
             Breakpoint::Base,
@@ -176,7 +176,7 @@ impl Default for ResponsiveConfig {
                 media_query: None,
             },
         );
-        
+
         breakpoints.insert(
             Breakpoint::Sm,
             BreakpointConfig {
@@ -186,7 +186,7 @@ impl Default for ResponsiveConfig {
                 media_query: None,
             },
         );
-        
+
         breakpoints.insert(
             Breakpoint::Md,
             BreakpointConfig {
@@ -196,7 +196,7 @@ impl Default for ResponsiveConfig {
                 media_query: None,
             },
         );
-        
+
         breakpoints.insert(
             Breakpoint::Lg,
             BreakpointConfig {
@@ -206,7 +206,7 @@ impl Default for ResponsiveConfig {
                 media_query: None,
             },
         );
-        
+
         breakpoints.insert(
             Breakpoint::Xl,
             BreakpointConfig {
@@ -216,7 +216,7 @@ impl Default for ResponsiveConfig {
                 media_query: None,
             },
         );
-        
+
         breakpoints.insert(
             Breakpoint::Xl2,
             BreakpointConfig {
@@ -226,7 +226,7 @@ impl Default for ResponsiveConfig {
                 media_query: None,
             },
         );
-        
+
         Self {
             breakpoints,
             defaults: ResponsiveDefaults::default(),
@@ -258,7 +258,7 @@ impl Responsive {
     pub fn new() -> Self {
         Self::default()
     }
-    
+
     /// Create a responsive instance with custom configuration
     pub fn with_config(config: ResponsiveConfig) -> Self {
         Self {
@@ -266,56 +266,56 @@ impl Responsive {
             config,
         }
     }
-    
+
     /// Get the current breakpoint
     pub fn get_current_breakpoint(&self) -> Breakpoint {
         self.current_breakpoint
     }
-    
+
     /// Set the current breakpoint
     pub fn set_current_breakpoint(&mut self, breakpoint: Breakpoint) {
         self.current_breakpoint = breakpoint;
     }
-    
+
     /// Get the configuration
     pub fn get_config(&self) -> &ResponsiveConfig {
         &self.config
     }
-    
+
     /// Update the configuration
     pub fn update_config(&mut self, config: ResponsiveConfig) {
         self.config = config;
     }
-    
+
     /// Check if a breakpoint is active for the current screen width
     pub fn is_breakpoint_active(&self, breakpoint: Breakpoint, screen_width: u32) -> bool {
         if !self.config.is_breakpoint_enabled(breakpoint) {
             return false;
         }
-        
+
         let min_width = self.config.get_breakpoint_min_width(breakpoint);
         let max_width = self.config.get_breakpoint_max_width(breakpoint);
-        
+
         let min_active = screen_width >= min_width;
         let max_active = max_width.map_or(true, |max| screen_width < max);
-        
+
         min_active && max_active
     }
-    
+
     /// Get the appropriate breakpoint for a given screen width
     pub fn get_breakpoint_for_width(&self, screen_width: u32) -> Breakpoint {
         let enabled_breakpoints = self.config.get_enabled_breakpoints();
-        
+
         // Find the highest breakpoint that is active for this screen width
         let active_breakpoints: Vec<Breakpoint> = enabled_breakpoints
             .into_iter()
             .filter(|&bp| self.is_breakpoint_active(bp, screen_width))
             .collect();
-        
+
         if active_breakpoints.is_empty() {
             return self.config.defaults.default_breakpoint;
         }
-        
+
         // Find the breakpoint with the highest min_width among active ones
         active_breakpoints
             .into_iter()
@@ -355,7 +355,7 @@ mod tests {
         let base_config = config.get_breakpoint_config(Breakpoint::Base);
         assert!(base_config.is_some());
         assert_eq!(base_config.unwrap().min_width, 0);
-        
+
         let sm_config = config.get_breakpoint_config(Breakpoint::Sm);
         assert!(sm_config.is_some());
         assert_eq!(sm_config.unwrap().min_width, 640);
@@ -370,7 +370,7 @@ mod tests {
             enabled: true,
             media_query: Some("(min-width: 800px) and (max-width: 1200px)".to_string()),
         };
-        
+
         config.set_breakpoint_config(Breakpoint::Md, custom_config.clone());
         let retrieved_config = config.get_breakpoint_config(Breakpoint::Md);
         assert_eq!(retrieved_config, Some(&custom_config));
@@ -396,8 +396,14 @@ mod tests {
     fn test_responsive_config_get_breakpoint_media_query() {
         let config = ResponsiveConfig::new();
         assert_eq!(config.get_breakpoint_media_query(Breakpoint::Base), "");
-        assert_eq!(config.get_breakpoint_media_query(Breakpoint::Sm), "(min-width: 640px)");
-        assert_eq!(config.get_breakpoint_media_query(Breakpoint::Md), "(min-width: 768px)");
+        assert_eq!(
+            config.get_breakpoint_media_query(Breakpoint::Sm),
+            "(min-width: 640px)"
+        );
+        assert_eq!(
+            config.get_breakpoint_media_query(Breakpoint::Md),
+            "(min-width: 768px)"
+        );
     }
 
     #[test]

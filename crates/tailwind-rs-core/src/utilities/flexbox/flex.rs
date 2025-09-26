@@ -45,10 +45,8 @@ mod tests {
 
     #[test]
     fn test_flex_utilities() {
-        let classes = ClassBuilder::new()
-            .flex(Flex::Flex1)
-            .build();
-        
+        let classes = ClassBuilder::new().flex(Flex::Flex1).build();
+
         assert!(classes.to_css_classes().contains("flex-1"));
     }
 }

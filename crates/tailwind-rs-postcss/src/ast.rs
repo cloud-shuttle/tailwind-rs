@@ -144,31 +144,39 @@ impl CSSRule {
     /// Calculate CSS specificity
     pub fn calculate_specificity(&self) -> u32 {
         let mut specificity = 0u32;
-        
+
         // Count ID selectors (100 points each)
         let id_count = self.selector.matches('#').count();
         specificity += (id_count as u32) * 100;
-        
+
         // Count class selectors, attribute selectors, and pseudo-classes (10 points each)
         let class_count = self.selector.matches('.').count();
         let attribute_count = self.selector.matches('[').count();
-        let pseudo_class_count = self.selector.matches(':').count() - self.selector.matches("::").count();
+        let pseudo_class_count =
+            self.selector.matches(':').count() - self.selector.matches("::").count();
         specificity += ((class_count + attribute_count + pseudo_class_count) as u32) * 10;
-        
+
         // Count element selectors (1 point each)
-        let element_count = self.selector.split_whitespace()
-            .filter(|s| !s.starts_with('.') && !s.starts_with('#') && !s.starts_with('[') && !s.starts_with(':'))
+        let element_count = self
+            .selector
+            .split_whitespace()
+            .filter(|s| {
+                !s.starts_with('.')
+                    && !s.starts_with('#')
+                    && !s.starts_with('[')
+                    && !s.starts_with(':')
+            })
             .count();
         specificity += element_count as u32;
-        
+
         specificity
     }
-    
+
     /// Check if rule matches a selector
     pub fn matches_selector(&self, target_selector: &str) -> bool {
         self.selector == target_selector
     }
-    
+
     /// Add a declaration to the rule
     pub fn add_declaration(&mut self, property: String, value: String, important: bool) {
         let declaration = CSSDeclaration {
@@ -179,20 +187,24 @@ impl CSSRule {
         };
         self.declarations.push(declaration);
     }
-    
+
     /// Remove a declaration by property name
     pub fn remove_declaration(&mut self, property: &str) {
         self.declarations.retain(|decl| decl.property != property);
     }
-    
+
     /// Get a declaration by property name
     pub fn get_declaration(&self, property: &str) -> Option<&CSSDeclaration> {
-        self.declarations.iter().find(|decl| decl.property == property)
+        self.declarations
+            .iter()
+            .find(|decl| decl.property == property)
     }
-    
+
     /// Check if rule has a specific property
     pub fn has_property(&self, property: &str) -> bool {
-        self.declarations.iter().any(|decl| decl.property == property)
+        self.declarations
+            .iter()
+            .any(|decl| decl.property == property)
     }
 }
 
@@ -206,7 +218,7 @@ impl CSSDeclaration {
             position: None,
         }
     }
-    
+
     /// Create a new important declaration
     pub fn new_important(property: String, value: String) -> Self {
         Self {
@@ -216,12 +228,12 @@ impl CSSDeclaration {
             position: None,
         }
     }
-    
+
     /// Set the declaration as important
     pub fn set_important(&mut self) {
         self.important = true;
     }
-    
+
     /// Check if declaration is important
     pub fn is_important(&self) -> bool {
         self.important
@@ -238,12 +250,12 @@ impl CSSAtRule {
             position: None,
         }
     }
-    
+
     /// Add a nested rule to the at-rule
     pub fn add_rule(&mut self, rule: CSSRule) {
         self.body.push(CSSNode::Rule(rule));
     }
-    
+
     /// Add a declaration to the at-rule
     pub fn add_declaration(&mut self, declaration: CSSDeclaration) {
         self.body.push(CSSNode::Declaration(declaration));
@@ -260,7 +272,7 @@ impl CSSNode {
             _ => Vec::new(),
         }
     }
-    
+
     /// Get all declarations from a node
     pub fn get_declarations(&self) -> Vec<&CSSDeclaration> {
         match self {
@@ -269,7 +281,7 @@ impl CSSNode {
             _ => Vec::new(),
         }
     }
-    
+
     /// Find rules by selector
     pub fn find_rules_by_selector(&self, selector: &str) -> Vec<&CSSRule> {
         self.get_rules()
@@ -277,7 +289,7 @@ impl CSSNode {
             .filter(|rule| rule.matches_selector(selector))
             .collect()
     }
-    
+
     /// Find rules by property
     pub fn find_rules_by_property(&self, property: &str) -> Vec<&CSSRule> {
         self.get_rules()
@@ -304,7 +316,7 @@ mod tests {
             specificity: 0,
             position: None,
         };
-        
+
         assert_eq!(rule.selector, ".test");
         assert_eq!(rule.declarations.len(), 2);
         assert!(rule.has_property("color"));
@@ -321,7 +333,7 @@ mod tests {
             specificity: 0,
             position: None,
         };
-        
+
         let specificity = rule.calculate_specificity();
         // 1 ID (#id) = 100, 1 class (.class) = 10, 1 element (div) = 1
         assert_eq!(specificity, 111);
@@ -340,13 +352,16 @@ mod tests {
         let mut at_rule = CSSAtRule::new("media".to_string(), "(max-width: 768px)".to_string());
         at_rule.add_rule(CSSRule {
             selector: ".mobile".to_string(),
-            declarations: vec![CSSDeclaration::new("display".to_string(), "block".to_string())],
+            declarations: vec![CSSDeclaration::new(
+                "display".to_string(),
+                "block".to_string(),
+            )],
             nested_rules: Vec::new(),
             media_query: None,
             specificity: 0,
             position: None,
         });
-        
+
         assert_eq!(at_rule.name, "media");
         assert_eq!(at_rule.params, "(max-width: 768px)");
         assert_eq!(at_rule.body.len(), 1);

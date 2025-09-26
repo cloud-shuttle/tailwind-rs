@@ -47,7 +47,7 @@ impl PointerVariant {
             PointerVariant::AnyFine => "any-pointer-fine".to_string(),
         }
     }
-    
+
     pub fn to_media_query(&self) -> String {
         match self {
             PointerVariant::Coarse => "@media (pointer: coarse)".to_string(),
@@ -65,11 +65,13 @@ impl MotionVariant {
             MotionVariant::NoPreference => "motion-safe".to_string(),
         }
     }
-    
+
     pub fn to_media_query(&self) -> String {
         match self {
             MotionVariant::Reduced => "@media (prefers-reduced-motion: reduce)".to_string(),
-            MotionVariant::NoPreference => "@media (prefers-reduced-motion: no-preference)".to_string(),
+            MotionVariant::NoPreference => {
+                "@media (prefers-reduced-motion: no-preference)".to_string()
+            }
         }
     }
 }
@@ -81,7 +83,7 @@ impl ColorSchemeVariant {
             ColorSchemeVariant::Dark => "dark".to_string(),
         }
     }
-    
+
     pub fn to_media_query(&self) -> String {
         match self {
             ColorSchemeVariant::Light => "@media (prefers-color-scheme: light)".to_string(),
@@ -124,15 +126,15 @@ impl PointerVariantUtilities for ClassBuilder {
     fn pointer_coarse(self) -> Self {
         self.class("pointer-coarse")
     }
-    
+
     fn pointer_fine(self) -> Self {
         self.class("pointer-fine")
     }
-    
+
     fn any_pointer_coarse(self) -> Self {
         self.class("any-pointer-coarse")
     }
-    
+
     fn any_pointer_fine(self) -> Self {
         self.class("any-pointer-fine")
     }
@@ -150,7 +152,7 @@ impl MotionVariantUtilities for ClassBuilder {
     fn motion_reduce(self) -> Self {
         self.class("motion-reduce")
     }
-    
+
     fn motion_safe(self) -> Self {
         self.class("motion-safe")
     }
@@ -168,7 +170,7 @@ impl ColorSchemeVariantUtilities for ClassBuilder {
     fn light(self) -> Self {
         self.class("light")
     }
-    
+
     fn dark(self) -> Self {
         self.class("dark")
     }
@@ -182,16 +184,31 @@ mod tests {
     fn test_pointer_variant_class_names() {
         assert_eq!(PointerVariant::Coarse.to_class_name(), "pointer-coarse");
         assert_eq!(PointerVariant::Fine.to_class_name(), "pointer-fine");
-        assert_eq!(PointerVariant::AnyCoarse.to_class_name(), "any-pointer-coarse");
+        assert_eq!(
+            PointerVariant::AnyCoarse.to_class_name(),
+            "any-pointer-coarse"
+        );
         assert_eq!(PointerVariant::AnyFine.to_class_name(), "any-pointer-fine");
     }
 
     #[test]
     fn test_pointer_variant_media_queries() {
-        assert_eq!(PointerVariant::Coarse.to_media_query(), "@media (pointer: coarse)");
-        assert_eq!(PointerVariant::Fine.to_media_query(), "@media (pointer: fine)");
-        assert_eq!(PointerVariant::AnyCoarse.to_media_query(), "@media (any-pointer: coarse)");
-        assert_eq!(PointerVariant::AnyFine.to_media_query(), "@media (any-pointer: fine)");
+        assert_eq!(
+            PointerVariant::Coarse.to_media_query(),
+            "@media (pointer: coarse)"
+        );
+        assert_eq!(
+            PointerVariant::Fine.to_media_query(),
+            "@media (pointer: fine)"
+        );
+        assert_eq!(
+            PointerVariant::AnyCoarse.to_media_query(),
+            "@media (any-pointer: coarse)"
+        );
+        assert_eq!(
+            PointerVariant::AnyFine.to_media_query(),
+            "@media (any-pointer: fine)"
+        );
     }
 
     #[test]
@@ -202,8 +219,14 @@ mod tests {
 
     #[test]
     fn test_motion_variant_media_queries() {
-        assert_eq!(MotionVariant::Reduced.to_media_query(), "@media (prefers-reduced-motion: reduce)");
-        assert_eq!(MotionVariant::NoPreference.to_media_query(), "@media (prefers-reduced-motion: no-preference)");
+        assert_eq!(
+            MotionVariant::Reduced.to_media_query(),
+            "@media (prefers-reduced-motion: reduce)"
+        );
+        assert_eq!(
+            MotionVariant::NoPreference.to_media_query(),
+            "@media (prefers-reduced-motion: no-preference)"
+        );
     }
 
     #[test]
@@ -214,8 +237,14 @@ mod tests {
 
     #[test]
     fn test_color_scheme_variant_media_queries() {
-        assert_eq!(ColorSchemeVariant::Light.to_media_query(), "@media (prefers-color-scheme: light)");
-        assert_eq!(ColorSchemeVariant::Dark.to_media_query(), "@media (prefers-color-scheme: dark)");
+        assert_eq!(
+            ColorSchemeVariant::Light.to_media_query(),
+            "@media (prefers-color-scheme: light)"
+        );
+        assert_eq!(
+            ColorSchemeVariant::Dark.to_media_query(),
+            "@media (prefers-color-scheme: dark)"
+        );
     }
 
     #[test]
@@ -226,7 +255,7 @@ mod tests {
             .any_pointer_coarse()
             .any_pointer_fine()
             .build();
-        
+
         assert!(classes.classes.contains("pointer-coarse"));
         assert!(classes.classes.contains("pointer-fine"));
         assert!(classes.classes.contains("any-pointer-coarse"));
@@ -235,22 +264,16 @@ mod tests {
 
     #[test]
     fn test_motion_variant_utilities() {
-        let classes = ClassBuilder::new()
-            .motion_reduce()
-            .motion_safe()
-            .build();
-        
+        let classes = ClassBuilder::new().motion_reduce().motion_safe().build();
+
         assert!(classes.classes.contains("motion-reduce"));
         assert!(classes.classes.contains("motion-safe"));
     }
 
     #[test]
     fn test_color_scheme_variant_utilities() {
-        let classes = ClassBuilder::new()
-            .light()
-            .dark()
-            .build();
-        
+        let classes = ClassBuilder::new().light().dark().build();
+
         println!("Generated classes: {:?}", classes.classes);
         assert!(classes.classes.contains("light"));
         assert!(classes.classes.contains("dark"));
@@ -266,7 +289,7 @@ mod tests {
             .light()
             .dark()
             .build();
-        
+
         assert!(classes.classes.contains("pointer-coarse"));
         assert!(classes.classes.contains("pointer-fine"));
         assert!(classes.classes.contains("motion-reduce"));

@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::mask::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod mask_utilities_unit_tests {
@@ -236,7 +236,7 @@ mod mask_utilities_unit_tests {
         let mask1 = MaskType::Alpha;
         let mask2 = MaskType::Alpha;
         let mask3 = MaskType::Luminance;
-        
+
         assert_eq!(mask1, mask2);
         assert_ne!(mask1, mask3);
     }
@@ -248,9 +248,8 @@ mod mask_utilities_integration_tests {
 
     #[test]
     fn test_mask_utilities_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .mask_alpha();
-        
+        let builder = ClassBuilder::new().mask_alpha();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mask-alpha"));
     }
@@ -261,7 +260,7 @@ mod mask_utilities_integration_tests {
             .mask_alpha()
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mask-alpha"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -273,11 +272,15 @@ mod mask_utilities_integration_tests {
         let builder = ClassBuilder::new()
             .mask_alpha()
             .responsive(Breakpoint::Md, "mask-luminance");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mask-alpha"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("mask-luminance"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("mask-luminance"));
     }
 
     #[test]
@@ -285,11 +288,15 @@ mod mask_utilities_integration_tests {
         let builder = ClassBuilder::new()
             .mask_alpha()
             .conditional("hover", "mask-luminance");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mask-alpha"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("mask-luminance"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("mask-luminance"));
     }
 
     #[test]
@@ -297,19 +304,21 @@ mod mask_utilities_integration_tests {
         let builder = ClassBuilder::new()
             .mask_alpha()
             .custom_variant("dark", "mask-luminance");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mask-alpha"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("mask-luminance"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("mask-luminance"));
     }
 
     #[test]
     fn test_mask_utilities_multiple_masks() {
-        let builder = ClassBuilder::new()
-            .mask_alpha()
-            .mask_luminance();
-        
+        let builder = ClassBuilder::new().mask_alpha().mask_luminance();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mask-alpha"));
         assert!(class_set.classes.contains("mask-luminance"));
@@ -321,7 +330,7 @@ mod mask_utilities_integration_tests {
             .mask_alpha()
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("mask-alpha"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -332,7 +341,7 @@ mod mask_utilities_integration_tests {
             .mask_luminance()
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("mask-luminance"));
         assert!(css_classes.contains("font-bold"));
@@ -348,7 +357,7 @@ mod mask_utilities_integration_tests {
             .mask_clip_border()
             .mask_origin_padding()
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("mask-alpha"));
         assert!(css_classes.contains("mask-repeat-round"));
@@ -390,9 +399,9 @@ mod mask_utilities_integration_tests {
             .mask_origin_padding()
             .mask_origin_content()
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all mask utilities are present
         assert!(css_classes.contains("mask-none"));
         assert!(css_classes.contains("mask-alpha"));

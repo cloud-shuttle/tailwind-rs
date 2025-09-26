@@ -2,8 +2,8 @@
 //!
 //! This module provides pre-built Leptos components that use Tailwind-RS for styling.
 
-use leptos::prelude::*;
 use crate::dynamic_class_builder::DynamicClassBuilder;
+use leptos::prelude::*;
 
 /// Button variant options
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -95,8 +95,8 @@ pub fn Card(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let classes = move || {
-        let builder = DynamicClassBuilder::new()
-            .base("bg-white rounded-lg shadow-md border border-gray-200");
+        let builder =
+            DynamicClassBuilder::new().base("bg-white rounded-lg shadow-md border border-gray-200");
 
         if let Some(custom_class) = &class {
             builder.custom(custom_class).classes()
@@ -119,8 +119,7 @@ pub fn CardHeader(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let classes = move || {
-        let builder = DynamicClassBuilder::new()
-            .base("px-6 py-4 border-b border-gray-200");
+        let builder = DynamicClassBuilder::new().base("px-6 py-4 border-b border-gray-200");
 
         if let Some(custom_class) = &class {
             builder.custom(custom_class).classes()
@@ -143,8 +142,7 @@ pub fn CardBody(
     #[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
     let classes = move || {
-        let builder = DynamicClassBuilder::new()
-            .base("px-6 py-4");
+        let builder = DynamicClassBuilder::new().base("px-6 py-4");
 
         if let Some(custom_class) = &class {
             builder.custom(custom_class).classes()

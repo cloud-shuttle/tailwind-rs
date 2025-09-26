@@ -20,10 +20,8 @@ mod tests {
 
     #[test]
     fn test_height_utilities() {
-        let classes = ClassBuilder::new()
-            .height(SizingValue::Full)
-            .build();
-        
+        let classes = ClassBuilder::new().height(SizingValue::Full).build();
+
         assert!(classes.to_css_classes().contains("h-full"));
     }
 }

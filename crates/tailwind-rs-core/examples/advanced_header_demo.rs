@@ -1,6 +1,6 @@
-use tailwind_rs_core::*;
-use leptos::*;
 use leptos::prelude::*;
+use leptos::*;
+use tailwind_rs_core::*;
 
 /// Advanced Header Component Demo using Tailwind-RS v0.12.1
 /// This demonstrates how to replicate complex React components with Tailwind-RS
@@ -8,94 +8,217 @@ use leptos::prelude::*;
 /// Generate CSS for the advanced header component
 fn generate_header_css() -> String {
     let mut generator = CssGenerator::new();
-    
+
     // Add all classes used in the advanced header
     let header_classes = vec![
         // Basic layout and positioning
-        "pointer-events-none", "relative", "z-50", "flex", "flex-none", "flex-col",
-        "top-0", "z-10", "h-16", "pt-6",
-        
+        "pointer-events-none",
+        "relative",
+        "z-50",
+        "flex",
+        "flex-none",
+        "flex-col",
+        "top-0",
+        "z-10",
+        "h-16",
+        "pt-6",
         // Container and spacing
-        "w-full", "relative", "flex", "gap-4",
-        "flex-1", "justify-end", "md:justify-center",
-        "justify-end", "md:flex-1",
-        
+        "w-full",
+        "relative",
+        "flex",
+        "gap-4",
+        "flex-1",
+        "justify-end",
+        "md:justify-center",
+        "justify-end",
+        "md:flex-1",
         // Navigation styles
-        "flex", "rounded-full", "bg-white/90", "px-3", "text-sm", "font-medium", "text-zinc-800",
-        "shadow-lg", "ring-1", "shadow-zinc-800/5", "ring-zinc-900/5", "backdrop-blur-sm",
-        "dark:bg-zinc-800/90", "dark:text-zinc-200", "dark:ring-white/10",
-        
+        "flex",
+        "rounded-full",
+        "bg-white/90",
+        "px-3",
+        "text-sm",
+        "font-medium",
+        "text-zinc-800",
+        "shadow-lg",
+        "ring-1",
+        "shadow-zinc-800/5",
+        "ring-zinc-900/5",
+        "backdrop-blur-sm",
+        "dark:bg-zinc-800/90",
+        "dark:text-zinc-200",
+        "dark:ring-white/10",
         // Navigation items
-        "relative", "block", "px-3", "py-2", "transition",
-        "text-teal-500", "dark:text-teal-400",
-        "hover:text-teal-500", "dark:hover:text-teal-400",
-        
+        "relative",
+        "block",
+        "px-3",
+        "py-2",
+        "transition",
+        "text-teal-500",
+        "dark:text-teal-400",
+        "hover:text-teal-500",
+        "dark:hover:text-teal-400",
         // Active state indicators
-        "absolute", "inset-x-1", "-bottom-px", "h-px",
-        "bg-linear-to-r", "from-teal-500/0", "via-teal-500/40", "to-teal-500/0",
-        "dark:from-teal-400/0", "dark:via-teal-400/40", "dark:to-teal-400/0",
-        
+        "absolute",
+        "inset-x-1",
+        "-bottom-px",
+        "h-px",
+        "bg-linear-to-r",
+        "from-teal-500/0",
+        "via-teal-500/40",
+        "to-teal-500/0",
+        "dark:from-teal-400/0",
+        "dark:via-teal-400/40",
+        "dark:to-teal-400/0",
         // Theme toggle button
-        "group", "rounded-full", "bg-white/90", "px-3", "py-2", "shadow-lg", "ring-1",
-        "shadow-zinc-800/5", "ring-zinc-900/5", "backdrop-blur-sm", "transition",
-        "dark:bg-zinc-800/90", "dark:ring-white/10", "dark:hover:ring-white/20",
-        
+        "group",
+        "rounded-full",
+        "bg-white/90",
+        "px-3",
+        "py-2",
+        "shadow-lg",
+        "ring-1",
+        "shadow-zinc-800/5",
+        "ring-zinc-900/5",
+        "backdrop-blur-sm",
+        "transition",
+        "dark:bg-zinc-800/90",
+        "dark:ring-white/10",
+        "dark:hover:ring-white/20",
         // Avatar container
-        "h-10", "w-10", "rounded-full", "bg-white/90", "p-0.5", "shadow-lg", "ring-1",
-        "shadow-zinc-800/5", "ring-zinc-900/5", "backdrop-blur-sm",
-        "dark:bg-zinc-800/90", "dark:ring-white/10",
-        
+        "h-10",
+        "w-10",
+        "rounded-full",
+        "bg-white/90",
+        "p-0.5",
+        "shadow-lg",
+        "ring-1",
+        "shadow-zinc-800/5",
+        "ring-zinc-900/5",
+        "backdrop-blur-sm",
+        "dark:bg-zinc-800/90",
+        "dark:ring-white/10",
         // Avatar image
-        "pointer-events-auto", "rounded-full", "bg-zinc-100", "object-cover",
-        "dark:bg-zinc-800", "h-9", "w-9", "h-16", "w-16",
-        
+        "pointer-events-auto",
+        "rounded-full",
+        "bg-zinc-100",
+        "object-cover",
+        "dark:bg-zinc-800",
+        "h-9",
+        "w-9",
+        "h-16",
+        "w-16",
         // Mobile navigation
-        "group", "flex", "items-center", "rounded-full", "bg-white/90", "px-4", "py-2",
-        "text-sm", "font-medium", "text-zinc-800", "shadow-lg", "ring-1",
-        "shadow-zinc-800/5", "ring-zinc-900/5", "backdrop-blur-sm",
-        "dark:bg-zinc-800/90", "dark:text-zinc-200", "dark:ring-white/10",
+        "group",
+        "flex",
+        "items-center",
+        "rounded-full",
+        "bg-white/90",
+        "px-4",
+        "py-2",
+        "text-sm",
+        "font-medium",
+        "text-zinc-800",
+        "shadow-lg",
+        "ring-1",
+        "shadow-zinc-800/5",
+        "ring-zinc-900/5",
+        "backdrop-blur-sm",
+        "dark:bg-zinc-800/90",
+        "dark:text-zinc-200",
+        "dark:ring-white/10",
         "dark:hover:ring-white/20",
-        
         // Mobile menu
-        "fixed", "inset-x-4", "top-8", "z-50", "origin-top", "rounded-3xl", "bg-white",
-        "p-8", "ring-1", "ring-zinc-900/5", "dark:bg-zinc-900", "dark:ring-zinc-800",
-        
+        "fixed",
+        "inset-x-4",
+        "top-8",
+        "z-50",
+        "origin-top",
+        "rounded-3xl",
+        "bg-white",
+        "p-8",
+        "ring-1",
+        "ring-zinc-900/5",
+        "dark:bg-zinc-900",
+        "dark:ring-zinc-800",
         // Mobile menu items
-        "flex", "flex-row-reverse", "items-center", "justify-between",
-        "-m-1", "p-1", "h-6", "w-6", "text-zinc-500", "dark:text-zinc-400",
-        "text-sm", "font-medium", "text-zinc-600", "dark:text-zinc-400",
-        "mt-6", "-my-2", "divide-y", "divide-zinc-100", "text-base", "text-zinc-800",
-        "dark:divide-zinc-100/5", "dark:text-zinc-300",
-        
+        "flex",
+        "flex-row-reverse",
+        "items-center",
+        "justify-between",
+        "-m-1",
+        "p-1",
+        "h-6",
+        "w-6",
+        "text-zinc-500",
+        "dark:text-zinc-400",
+        "text-sm",
+        "font-medium",
+        "text-zinc-600",
+        "dark:text-zinc-400",
+        "mt-6",
+        "-my-2",
+        "divide-y",
+        "divide-zinc-100",
+        "text-base",
+        "text-zinc-800",
+        "dark:divide-zinc-100/5",
+        "dark:text-zinc-300",
         // Icons
-        "ml-3", "h-auto", "w-2", "stroke-zinc-500", "group-hover:stroke-zinc-700",
-        "dark:group-hover:stroke-zinc-400", "h-6", "w-6", "fill-zinc-100", "stroke-zinc-500",
-        "transition", "group-hover:fill-zinc-200", "group-hover:stroke-zinc-700",
-        "dark:hidden", "fill-zinc-700", "hidden", "dark:block",
-        
+        "ml-3",
+        "h-auto",
+        "w-2",
+        "stroke-zinc-500",
+        "group-hover:stroke-zinc-700",
+        "dark:group-hover:stroke-zinc-400",
+        "h-6",
+        "w-6",
+        "fill-zinc-100",
+        "stroke-zinc-500",
+        "transition",
+        "group-hover:fill-zinc-200",
+        "group-hover:stroke-zinc-700",
+        "dark:hidden",
+        "fill-zinc-700",
+        "hidden",
+        "dark:block",
         // Responsive utilities
-        "md:hidden", "hidden", "md:block",
-        
+        "md:hidden",
+        "hidden",
+        "md:block",
         // Hover states
-        "hover:text-teal-500", "dark:hover:text-teal-400",
-        "group-hover:stroke-zinc-700", "dark:group-hover:stroke-zinc-400",
-        "group-hover:fill-zinc-200", "group-hover:stroke-zinc-700",
+        "hover:text-teal-500",
+        "dark:hover:text-teal-400",
+        "group-hover:stroke-zinc-700",
+        "dark:group-hover:stroke-zinc-400",
+        "group-hover:fill-zinc-200",
+        "group-hover:stroke-zinc-700",
         "dark:hover:ring-white/20",
-        
         // Dark mode variants
-        "dark:bg-zinc-800/90", "dark:text-zinc-200", "dark:ring-white/10",
-        "dark:text-teal-400", "dark:hover:text-teal-400",
-        "dark:from-teal-400/0", "dark:via-teal-400/40", "dark:to-teal-400/0",
-        "dark:bg-zinc-800/90", "dark:ring-white/10",
-        "dark:bg-zinc-800", "dark:ring-zinc-800",
-        "dark:text-zinc-400", "dark:divide-zinc-100/5", "dark:text-zinc-300",
-        "dark:group-hover:stroke-zinc-400", "dark:hidden", "dark:block",
+        "dark:bg-zinc-800/90",
+        "dark:text-zinc-200",
+        "dark:ring-white/10",
+        "dark:text-teal-400",
+        "dark:hover:text-teal-400",
+        "dark:from-teal-400/0",
+        "dark:via-teal-400/40",
+        "dark:to-teal-400/0",
+        "dark:bg-zinc-800/90",
+        "dark:ring-white/10",
+        "dark:bg-zinc-800",
+        "dark:ring-zinc-800",
+        "dark:text-zinc-400",
+        "dark:divide-zinc-100/5",
+        "dark:text-zinc-300",
+        "dark:group-hover:stroke-zinc-400",
+        "dark:hidden",
+        "dark:block",
     ];
-    
+
     for class in header_classes {
         let _ = generator.add_class(class);
     }
-    
+
     generator.generate_css()
 }
 
@@ -103,7 +226,7 @@ fn generate_header_css() -> String {
 #[component]
 pub fn AdvancedHeader() -> impl IntoView {
     let css = generate_header_css();
-    
+
     view! {
         <>
             <style>{css}</style>
@@ -113,9 +236,9 @@ pub fn AdvancedHeader() -> impl IntoView {
                         <div class="relative flex gap-4">
                             <div class="flex flex-1">
                                 <div class="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:ring-white/10">
-                                    <img 
-                                        src="/avatar.jpg" 
-                                        alt="Avatar" 
+                                    <img
+                                        src="/avatar.jpg"
+                                        alt="Avatar"
                                         class="pointer-events-auto rounded-full bg-zinc-100 object-cover dark:bg-zinc-800 h-9 w-9"
                                     />
                                 </div>
@@ -171,7 +294,7 @@ pub fn DesktopNavigation() -> impl IntoView {
 pub fn NavItem(href: &'static str, active: bool, children: Children) -> impl IntoView {
     view! {
         <li>
-            <a 
+            <a
                 href={href}
                 class=if active {
                     "relative block px-3 py-2 transition text-teal-500 dark:text-teal-400"
@@ -198,8 +321,8 @@ pub fn NavItem(href: &'static str, active: bool, children: Children) -> impl Int
 #[component]
 pub fn ThemeToggle() -> impl IntoView {
     view! {
-        <button 
-            type="button" 
+        <button
+            type="button"
             aria-label="Toggle theme"
             class="group rounded-full bg-white/90 px-3 py-2 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
         >
@@ -228,7 +351,7 @@ pub fn AdvancedHeaderApp() -> impl IntoView {
                     <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-6">
                         "This demonstrates how to replicate complex React components with Tailwind-RS v0.12.1."
                     </p>
-                    
+
                     <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
                         <h2 class="text-2xl font-semibold text-blue-900 dark:text-blue-100 mb-4">
                             "Working Features"
@@ -244,7 +367,7 @@ pub fn AdvancedHeaderApp() -> impl IntoView {
                             <li>"✅ Backdrop blur effects"</li>
                         </ul>
                     </div>
-                    
+
                     <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-800 mt-6">
                         <h2 class="text-2xl font-semibold text-yellow-900 dark:text-yellow-100 mb-4">
                             "Limitations"
@@ -267,17 +390,17 @@ pub fn AdvancedHeaderApp() -> impl IntoView {
 fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("🧪 Tailwind-RS Advanced Header Demo");
     println!("{}", "=".repeat(50));
-    
+
     // Generate CSS for the advanced header
     let css = generate_header_css();
     match std::fs::write("advanced-header.css", css) {
         Ok(_) => {
             println!("✅ Advanced Header CSS generated successfully");
             analyze_css_file("advanced-header.css");
-        },
+        }
         Err(e) => println!("❌ Failed to generate CSS: {}", e),
     }
-    
+
     println!("\n✅ Advanced Header demo completed!");
     println!("\n📊 Summary:");
     println!("  - Basic header structure: ✅ Working");
@@ -287,20 +410,20 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("  - Dark mode: ✅ Working");
     println!("  - Hover states: ✅ Working");
     println!("  - Backdrop blur: ✅ Working");
-    
+
     println!("\n⚠️  Limitations:");
     println!("  - Complex CSS custom properties: ❌ Not supported");
     println!("  - Advanced backdrop blur variants: ❌ Not supported");
     println!("  - Complex gradient backgrounds: ❌ Not supported");
     println!("  - Advanced responsive utilities: ❌ Limited support");
     println!("  - Complex hover state combinations: ❌ Limited support");
-    
+
     println!("\n💡 Recommendations:");
     println!("  - Use custom CSS for complex features not supported by Tailwind-RS");
     println!("  - Focus on basic Tailwind utilities that work well");
     println!("  - Consider hybrid approach: Tailwind-RS + custom CSS");
     println!("  - Wait for future Tailwind-RS versions with more advanced features");
-    
+
     Ok(())
 }
 
@@ -309,31 +432,31 @@ fn analyze_css_file(filename: &str) {
     if let Ok(content) = std::fs::read_to_string(filename) {
         let lines = content.lines().count();
         println!("  📊 Generated {} lines of CSS", lines);
-        
+
         if content.contains(":hover") {
             println!("  ✅ Contains hover states");
         }
-        
+
         if content.contains(".dark") {
             println!("  ✅ Contains dark mode");
         }
-        
+
         if content.contains("@media") {
             println!("  ✅ Contains responsive design");
         }
-        
+
         if content.contains("backdrop-filter") {
             println!("  ✅ Contains backdrop effects");
         }
-        
+
         if content.contains("ring-") {
             println!("  ✅ Contains ring utilities");
         }
-        
+
         if content.contains("pointer-events") {
             println!("  ✅ Contains pointer events");
         }
-        
+
         if content.contains("z-") {
             println!("  ✅ Contains z-index utilities");
         }

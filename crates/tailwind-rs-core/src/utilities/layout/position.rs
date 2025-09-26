@@ -48,10 +48,8 @@ mod tests {
 
     #[test]
     fn test_position_utilities() {
-        let classes = ClassBuilder::new()
-            .position(Position::Relative)
-            .build();
-        
+        let classes = ClassBuilder::new().position(Position::Relative).build();
+
         assert!(classes.to_css_classes().contains("relative"));
     }
 }

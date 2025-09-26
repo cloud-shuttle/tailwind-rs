@@ -116,7 +116,14 @@ impl Animation {
 
     /// Check if animation is an infinite animation
     pub fn is_infinite(&self) -> bool {
-        matches!(self, Animation::Spin | Animation::Ping | Animation::Pulse | Animation::Bounce | Animation::Heartbeat)
+        matches!(
+            self,
+            Animation::Spin
+                | Animation::Ping
+                | Animation::Pulse
+                | Animation::Bounce
+                | Animation::Heartbeat
+        )
     }
 
     /// Get animation duration in milliseconds
@@ -128,8 +135,10 @@ impl Animation {
             Animation::Pulse => 2000,
             Animation::Bounce => 1000,
             Animation::FadeIn | Animation::FadeOut => 500,
-            Animation::SlideInLeft | Animation::SlideInRight |
-            Animation::SlideInTop | Animation::SlideInBottom => 500,
+            Animation::SlideInLeft
+            | Animation::SlideInRight
+            | Animation::SlideInTop
+            | Animation::SlideInBottom => 500,
             Animation::ZoomIn | Animation::ZoomOut => 500,
             Animation::Shake => 500,
             Animation::Wobble | Animation::Flip => 1000,
@@ -294,7 +303,7 @@ impl AnimationUtilities for ClassBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_animation_utilities() {
         let classes = ClassBuilder::new()
@@ -304,7 +313,7 @@ mod tests {
             .animation(Animation::Pulse)
             .animation(Animation::Bounce)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("animate-none"));
         assert!(css_classes.contains("animate-spin"));
@@ -312,7 +321,7 @@ mod tests {
         assert!(css_classes.contains("animate-pulse"));
         assert!(css_classes.contains("animate-bounce"));
     }
-    
+
     /// Test that all Week 12 animation utilities are implemented
     #[test]
     fn test_week12_animation_utilities() {
@@ -483,9 +492,15 @@ mod tests {
     fn test_animation_css_values() {
         assert_eq!(Animation::None.to_css_value(), "none");
         assert_eq!(Animation::FadeIn.to_css_value(), "fadeIn 0.5s ease-in");
-        assert_eq!(Animation::SlideInLeft.to_css_value(), "slideInLeft 0.5s ease-out");
+        assert_eq!(
+            Animation::SlideInLeft.to_css_value(),
+            "slideInLeft 0.5s ease-out"
+        );
         assert_eq!(Animation::Wobble.to_css_value(), "wobble 1s ease-in-out");
-        assert_eq!(Animation::Heartbeat.to_css_value(), "heartbeat 1.5s ease-in-out infinite");
+        assert_eq!(
+            Animation::Heartbeat.to_css_value(),
+            "heartbeat 1.5s ease-in-out infinite"
+        );
     }
 
     /// Test animation class names

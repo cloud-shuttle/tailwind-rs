@@ -24,7 +24,7 @@ impl JSBridge {
             runtime: JSRuntime::new()?,
         })
     }
-    
+
     /// Execute a JavaScript plugin
     pub async fn execute_plugin(&self, plugin: &str, ast: CSSNode) -> Result<CSSNode> {
         // For now, implement a basic plugin execution
@@ -39,21 +39,21 @@ impl JSBridge {
             }
         }
     }
-    
+
     /// Execute autoprefixer plugin
     async fn execute_autoprefixer(&self, ast: CSSNode) -> Result<CSSNode> {
         // Basic autoprefixer implementation
         // In a real implementation, this would add vendor prefixes
         Ok(ast)
     }
-    
+
     /// Execute cssnano plugin
     async fn execute_cssnano(&self, ast: CSSNode) -> Result<CSSNode> {
         // Basic cssnano implementation
         // In a real implementation, this would minify CSS
         Ok(ast)
     }
-    
+
     /// Execute postcss-preset-env plugin
     async fn execute_preset_env(&self, ast: CSSNode) -> Result<CSSNode> {
         // Basic preset-env implementation

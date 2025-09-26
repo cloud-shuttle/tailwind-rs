@@ -111,22 +111,22 @@ pub struct RuleFilterResult {
 pub enum PurgeError {
     #[error("Content scanning failed: {error}")]
     ContentScanningFailed { error: String },
-    
+
     #[error("Class extraction failed: {error}")]
     ClassExtractionFailed { error: String },
-    
+
     #[error("Rule filtering failed: {error}")]
     RuleFilteringFailed { error: String },
-    
+
     #[error("File reading failed: {path} - {error}")]
     FileReadingFailed { path: String, error: String },
-    
+
     #[error("Invalid configuration: {error}")]
     InvalidConfiguration { error: String },
-    
+
     #[error("Memory limit exceeded")]
     MemoryLimitExceeded,
-    
+
     #[error("Processing timeout")]
     ProcessingTimeout,
 }

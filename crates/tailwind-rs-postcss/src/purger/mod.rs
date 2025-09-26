@@ -1,10 +1,10 @@
 //! CSS Purging System
-//! 
+//!
 //! This module provides comprehensive CSS purging functionality for removing
 //! unused CSS classes, essential for Tailwind CSS production builds.
 
-pub mod content_scanner;
 pub mod class_extractor;
+pub mod content_scanner;
 pub mod rule_filter;
 pub mod types;
 
@@ -23,7 +23,7 @@ impl CSSPurger {
     pub fn new() -> Self {
         Self::with_config(PurgeConfig::default())
     }
-    
+
     /// Create a new CSS purger with custom configuration
     pub fn with_config(config: PurgeConfig) -> Self {
         Self {
@@ -33,20 +33,26 @@ impl CSSPurger {
             config,
         }
     }
-    
+
     /// Purge unused CSS from content
-    pub fn purge(&mut self, css: &str, content_paths: &[String]) -> Result<PurgeResult, PurgeError> {
+    pub fn purge(
+        &mut self,
+        css: &str,
+        content_paths: &[String],
+    ) -> Result<PurgeResult, PurgeError> {
         let start_time = std::time::Instant::now();
-        
+
         // Step 1: Scan content for used classes
         let used_classes = self.content_scanner.scan_content(content_paths)?;
-        
+
         // Step 2: Extract CSS classes from CSS
         let css_classes = self.class_extractor.extract_classes(css)?;
-        
+
         // Step 3: Filter CSS rules based on used classes
-        let filtered_css = self.rule_filter.filter_rules(css, &used_classes, &self.config)?;
-        
+        let filtered_css = self
+            .rule_filter
+            .filter_rules(css, &used_classes, &self.config)?;
+
         let processing_time = start_time.elapsed();
         let original_size = css.len();
         let purged_size = filtered_css.len();
@@ -55,7 +61,7 @@ impl CSSPurger {
         } else {
             0.0
         };
-        
+
         Ok(PurgeResult {
             purged_css: filtered_css,
             used_classes: used_classes.len(),
@@ -66,20 +72,29 @@ impl CSSPurger {
             processing_time,
         })
     }
-    
+
     /// Purge with advanced options
-    pub fn purge_advanced(&mut self, css: &str, content_paths: &[String], options: &PurgeOptions) -> Result<PurgeResult, PurgeError> {
+    pub fn purge_advanced(
+        &mut self,
+        css: &str,
+        content_paths: &[String],
+        options: &PurgeOptions,
+    ) -> Result<PurgeResult, PurgeError> {
         let start_time = std::time::Instant::now();
-        
+
         // Step 1: Scan content for used classes with advanced options
-        let used_classes = self.content_scanner.scan_content_advanced(content_paths, options)?;
-        
+        let used_classes = self
+            .content_scanner
+            .scan_content_advanced(content_paths, options)?;
+
         // Step 2: Extract CSS classes from CSS
         let css_classes = self.class_extractor.extract_classes(css)?;
-        
+
         // Step 3: Filter CSS rules based on used classes with advanced options
-        let filtered_css = self.rule_filter.filter_rules_advanced(css, &used_classes, &self.config, options)?;
-        
+        let filtered_css =
+            self.rule_filter
+                .filter_rules_advanced(css, &used_classes, &self.config, options)?;
+
         let processing_time = start_time.elapsed();
         let original_size = css.len();
         let purged_size = filtered_css.len();
@@ -88,7 +103,7 @@ impl CSSPurger {
         } else {
             0.0
         };
-        
+
         Ok(PurgeResult {
             purged_css: filtered_css,
             used_classes: used_classes.len(),
@@ -99,7 +114,7 @@ impl CSSPurger {
             processing_time,
         })
     }
-    
+
     /// Get purge statistics
     pub fn get_statistics(&self) -> PurgeStatistics {
         PurgeStatistics {

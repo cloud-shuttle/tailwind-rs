@@ -3,7 +3,7 @@
 //! This module provides CSS parsing functionality with support for
 //! modern CSS features and PostCSS compatibility.
 
-use crate::ast::{CSSNode, CSSRule, CSSDeclaration, CSSAtRule, SourcePosition};
+use crate::ast::{CSSAtRule, CSSDeclaration, CSSNode, CSSRule, SourcePosition};
 use crate::error::{PostCSSError, Result};
 use serde::{Deserialize, Serialize};
 // use std::collections::HashMap;
@@ -55,24 +55,24 @@ impl CSSParser {
     pub fn new(options: ParseOptions) -> Self {
         Self { options }
     }
-    
+
     /// Parse CSS input into AST
     pub fn parse(&self, input: &str) -> Result<CSSNode> {
         let mut parser_state = ParserState::new(input, &self.options);
         self.parse_stylesheet(&mut parser_state)
     }
-    
+
     /// Parse a stylesheet (root level)
     fn parse_stylesheet(&self, state: &mut ParserState) -> Result<CSSNode> {
         let mut rules = Vec::new();
-        
+
         while !state.is_eof() {
             state.skip_whitespace();
-            
+
             if state.is_eof() {
                 break;
             }
-            
+
             // Handle at-rules
             if state.peek() == Some('@') {
                 if let Ok(at_rule) = self.parse_at_rule(state) {
@@ -99,18 +99,18 @@ impl CSSParser {
                 }
             }
         }
-        
+
         Ok(CSSNode::Stylesheet(rules))
     }
-    
+
     /// Parse a CSS rule
     fn parse_rule(&self, state: &mut ParserState) -> Result<CSSRule> {
         let start_pos = state.position();
-        
+
         // Parse selector
         let selector = self.parse_selector(state)?;
         state.skip_whitespace();
-        
+
         // Expect opening brace
         if state.peek() != Some('{') {
             return Err(PostCSSError::ParseError {
@@ -120,18 +120,18 @@ impl CSSParser {
             });
         }
         state.advance(); // consume '{'
-        
+
         // Parse declarations
         let mut declarations = Vec::new();
         state.skip_whitespace();
-        
+
         while !state.is_eof() && state.peek() != Some('}') {
             if let Ok(declaration) = self.parse_declaration(state) {
                 declarations.push(declaration);
             }
             state.skip_whitespace();
         }
-        
+
         // Expect closing brace
         if state.peek() != Some('}') {
             return Err(PostCSSError::ParseError {
@@ -141,7 +141,7 @@ impl CSSParser {
             });
         }
         state.advance(); // consume '}'
-        
+
         Ok(CSSRule {
             selector,
             declarations,
@@ -159,11 +159,11 @@ impl CSSParser {
             },
         })
     }
-    
+
     /// Parse a CSS selector
     fn parse_selector(&self, state: &mut ParserState) -> Result<String> {
         let mut selector = String::new();
-        
+
         while !state.is_eof() && state.peek() != Some('{') {
             let ch = state.peek().unwrap();
             if ch == ';' || ch == '}' {
@@ -172,18 +172,18 @@ impl CSSParser {
             selector.push(ch);
             state.advance();
         }
-        
+
         Ok(selector.trim().to_string())
     }
-    
+
     /// Parse a CSS declaration
     fn parse_declaration(&self, state: &mut ParserState) -> Result<CSSDeclaration> {
         let start_pos = state.position();
-        
+
         // Parse property name
         let property = self.parse_property_name(state)?;
         state.skip_whitespace();
-        
+
         // Expect colon
         if state.peek() != Some(':') {
             return Err(PostCSSError::ParseError {
@@ -194,11 +194,11 @@ impl CSSParser {
         }
         state.advance(); // consume ':'
         state.skip_whitespace();
-        
+
         // Parse value
         let value = self.parse_property_value(state)?;
         state.skip_whitespace();
-        
+
         // Check for !important
         let mut important = false;
         if state.peek() == Some('!') {
@@ -210,12 +210,12 @@ impl CSSParser {
                 }
             }
         }
-        
+
         // Expect semicolon or end of rule
         if state.peek() == Some(';') {
             state.advance(); // consume ';'
         }
-        
+
         Ok(CSSDeclaration {
             property,
             value,
@@ -231,7 +231,7 @@ impl CSSParser {
             },
         })
     }
-    
+
     /// Parse property name
     fn parse_property_name(&self, state: &mut ParserState) -> Result<String> {
         let name = state.read_while(|ch| ch.is_alphanumeric() || ch == '-');
@@ -244,15 +244,15 @@ impl CSSParser {
         }
         Ok(name)
     }
-    
+
     /// Parse property value
     fn parse_property_value(&self, state: &mut ParserState) -> Result<String> {
         let mut value = String::new();
         let mut depth = 0;
-        
+
         while !state.is_eof() {
             let ch = state.peek().unwrap();
-            
+
             match ch {
                 '(' | '[' | '{' => {
                     depth += 1;
@@ -281,17 +281,17 @@ impl CSSParser {
                 }
             }
         }
-        
+
         Ok(value.trim().to_string())
     }
-    
+
     /// Parse an at-rule
     fn parse_at_rule(&self, state: &mut ParserState) -> Result<CSSAtRule> {
         let start_pos = state.position();
-        
+
         // Consume '@'
         state.advance();
-        
+
         // Parse at-rule name
         let name = state.read_while(|ch| ch.is_alphanumeric() || ch == '-');
         if name.is_empty() {
@@ -301,34 +301,34 @@ impl CSSParser {
                 column: state.column(),
             });
         }
-        
+
         state.skip_whitespace();
-        
+
         // Parse parameters
         let params = if state.peek() == Some('{') {
             String::new()
         } else {
             self.parse_at_rule_params(state)?
         };
-        
+
         // Parse body if present
         let mut body = Vec::new();
         if state.peek() == Some('{') {
             state.advance(); // consume '{'
             state.skip_whitespace();
-            
+
             while !state.is_eof() && state.peek() != Some('}') {
                 if let Ok(rule) = self.parse_rule(state) {
                     body.push(CSSNode::Rule(rule));
                 }
                 state.skip_whitespace();
             }
-            
+
             if state.peek() == Some('}') {
                 state.advance(); // consume '}'
             }
         }
-        
+
         Ok(CSSAtRule {
             name,
             params,
@@ -344,15 +344,15 @@ impl CSSParser {
             },
         })
     }
-    
+
     /// Parse at-rule parameters
     fn parse_at_rule_params(&self, state: &mut ParserState) -> Result<String> {
         let mut params = String::new();
         let mut depth = 0;
-        
+
         while !state.is_eof() {
             let ch = state.peek().unwrap();
-            
+
             match ch {
                 '(' | '[' | '{' => {
                     depth += 1;
@@ -374,7 +374,7 @@ impl CSSParser {
                 }
             }
         }
-        
+
         Ok(params.trim().to_string())
     }
 }
@@ -399,15 +399,15 @@ impl<'a> ParserState<'a> {
             options,
         }
     }
-    
+
     fn is_eof(&self) -> bool {
         self.position >= self.input.len()
     }
-    
+
     fn peek(&self) -> Option<char> {
         self.input.chars().nth(self.position)
     }
-    
+
     fn advance(&mut self) {
         if let Some(ch) = self.peek() {
             if ch == '\n' {
@@ -419,7 +419,7 @@ impl<'a> ParserState<'a> {
             self.position += 1;
         }
     }
-    
+
     fn skip_whitespace(&mut self) {
         while !self.is_eof() {
             match self.peek() {
@@ -443,11 +443,11 @@ impl<'a> ParserState<'a> {
             }
         }
     }
-    
+
     fn peek_ahead(&self, offset: usize) -> Option<char> {
         self.input.chars().nth(self.position + offset)
     }
-    
+
     fn read_while<F>(&mut self, predicate: F) -> String
     where
         F: Fn(char) -> bool,
@@ -467,7 +467,7 @@ impl<'a> ParserState<'a> {
         }
         result
     }
-    
+
     fn position(&self) -> SourcePosition {
         SourcePosition {
             line: self.line,
@@ -475,11 +475,11 @@ impl<'a> ParserState<'a> {
             source: None,
         }
     }
-    
+
     fn line(&self) -> usize {
         self.line
     }
-    
+
     fn column(&self) -> usize {
         self.column
     }
@@ -494,9 +494,9 @@ mod tests {
         let parser = CSSParser::new(ParseOptions::default());
         let input = ".test { color: red; font-size: 16px; }";
         let result = parser.parse(input);
-        
+
         assert!(result.is_ok());
-        
+
         if let Ok(CSSNode::Stylesheet(rules)) = result {
             assert_eq!(rules.len(), 1);
             assert_eq!(rules[0].selector, ".test");
@@ -511,7 +511,7 @@ mod tests {
         let parser = CSSParser::new(ParseOptions::default());
         let input = "@media (max-width: 768px) { .mobile { display: block; } }";
         let result = parser.parse(input);
-        
+
         assert!(result.is_ok());
     }
 
@@ -520,9 +520,9 @@ mod tests {
         let parser = CSSParser::new(ParseOptions::default());
         let input = ".test { color: red !important; }";
         let result = parser.parse(input);
-        
+
         assert!(result.is_ok());
-        
+
         if let Ok(CSSNode::Stylesheet(rules)) = result {
             assert!(rules[0].declarations[0].important);
         }
@@ -532,10 +532,10 @@ mod tests {
     fn test_parser_state() {
         let options = ParseOptions::default();
         let mut state = ParserState::new("test input", &options);
-        
+
         assert!(!state.is_eof());
         assert_eq!(state.peek(), Some('t'));
-        
+
         state.advance();
         assert_eq!(state.peek(), Some('e'));
         assert_eq!(state.line(), 1);

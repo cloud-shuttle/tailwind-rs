@@ -3,11 +3,11 @@
 //! This module provides file discovery and scanning capabilities for
 //! detecting Tailwind classes in source files.
 
-use crate::content_config::{ScanConfig, ContentConfig, FilePattern};
-use crate::class_extractor::{ClassExtractor, ExtractedClass, ClassContext};
+use crate::cache::{CacheEntry, CacheStats, ScanCache};
+use crate::class_extractor::{ClassContext, ClassExtractor, ExtractedClass};
+use crate::content_config::{ContentConfig, FilePattern, ScanConfig};
+use crate::error::{Result, ScannerError};
 use crate::parallel_processor::{ParallelProcessor, ProcessingStats};
-use crate::cache::{ScanCache, CacheEntry, CacheStats};
-use crate::error::{ScannerError, Result};
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
@@ -86,10 +86,9 @@ impl ClassSet {
 
     /// Add classes from a file
     pub fn add_file_classes(&mut self, file_path: PathBuf, classes: Vec<ExtractedClass>) {
-        let unique_classes: HashSet<String> = classes.iter()
-            .map(|c| c.class_name.clone())
-            .collect();
-        
+        let unique_classes: HashSet<String> =
+            classes.iter().map(|c| c.class_name.clone()).collect();
+
         self.classes.extend(unique_classes);
         self.file_classes.insert(file_path, classes);
         self.total_files += 1;
@@ -150,16 +149,15 @@ impl ContentScanner {
     /// Scan for classes in specified paths
     pub async fn scan_paths(&self, paths: &[String]) -> Result<ClassSet> {
         let start_time = std::time::Instant::now();
-        
+
         // Discover files
         let files = self.file_scanner.discover_files(paths).await?;
-        
+
         // Process files in parallel
-        let results = self.parallel_processor.process_files(
-            &files,
-            &self.class_extractor,
-            &self.config,
-        ).await?;
+        let results = self
+            .parallel_processor
+            .process_files(&files, &self.class_extractor, &self.config)
+            .await?;
 
         // Build class set
         let mut class_set = ClassSet::new();
@@ -217,7 +215,7 @@ impl FileScanner {
     /// Create a new file scanner
     pub fn new(config: ContentConfig) -> Result<Self> {
         let mut file_types = HashMap::new();
-        
+
         // Initialize file type mappings
         file_types.insert("rs".to_string(), FileType::Rust);
         file_types.insert("js".to_string(), FileType::JavaScript);
@@ -239,16 +237,13 @@ impl FileScanner {
         file_types.insert("md".to_string(), FileType::Markdown);
         file_types.insert("markdown".to_string(), FileType::Markdown);
 
-        Ok(Self {
-            config,
-            file_types,
-        })
+        Ok(Self { config, file_types })
     }
 
     /// Discover files matching the configuration patterns
     pub async fn discover_files(&self, paths: &[String]) -> Result<Vec<FileInfo>> {
         let mut files = Vec::new();
-        
+
         for path in paths {
             let path = Path::new(path);
             if path.is_file() {
@@ -269,7 +264,7 @@ impl FileScanner {
     /// Scan a directory for files
     async fn scan_directory(&self, dir_path: &Path) -> Result<Vec<FileInfo>> {
         let mut files = Vec::new();
-        
+
         for entry in walkdir::WalkDir::new(dir_path)
             .follow_links(false)
             .into_iter()
@@ -337,10 +332,16 @@ impl FileScanner {
     /// Check if we should read file content
     fn should_read_content(&self, file_type: &FileType) -> bool {
         match file_type {
-            FileType::Rust | FileType::JavaScript | FileType::TypeScript |
-            FileType::Html | FileType::Vue | FileType::Svelte |
-            FileType::Css | FileType::Scss | FileType::Less |
-            FileType::Markdown => true,
+            FileType::Rust
+            | FileType::JavaScript
+            | FileType::TypeScript
+            | FileType::Html
+            | FileType::Vue
+            | FileType::Svelte
+            | FileType::Css
+            | FileType::Scss
+            | FileType::Less
+            | FileType::Markdown => true,
             _ => false,
         }
     }
@@ -375,7 +376,7 @@ mod tests {
     #[test]
     fn test_class_set_operations() {
         let mut class_set = ClassSet::new();
-        
+
         let classes = vec![
             ExtractedClass {
                 class_name: "p-4".to_string(),
@@ -390,9 +391,9 @@ mod tests {
                 column: 1,
             },
         ];
-        
+
         class_set.add_file_classes(PathBuf::from("test.rs"), classes);
-        
+
         assert_eq!(class_set.total_files, 1);
         assert_eq!(class_set.unique_classes(), 2);
         assert!(class_set.has_class("p-4"));
@@ -403,11 +404,11 @@ mod tests {
     #[test]
     fn test_file_type_detection() {
         let scanner = FileScanner::new(ContentConfig::default()).unwrap();
-        
+
         let rust_file = Path::new("test.rs");
         let js_file = Path::new("test.js");
         let html_file = Path::new("test.html");
-        
+
         assert_eq!(scanner.detect_file_type(rust_file), FileType::Rust);
         assert_eq!(scanner.detect_file_type(js_file), FileType::JavaScript);
         assert_eq!(scanner.detect_file_type(html_file), FileType::Html);

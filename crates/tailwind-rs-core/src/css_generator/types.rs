@@ -69,7 +69,11 @@ impl CssRule {
     }
 
     /// Create a responsive CSS rule
-    pub fn new_responsive(selector: String, properties: Vec<CssProperty>, media_query: String) -> Self {
+    pub fn new_responsive(
+        selector: String,
+        properties: Vec<CssProperty>,
+        media_query: String,
+    ) -> Self {
         Self {
             selector,
             properties,

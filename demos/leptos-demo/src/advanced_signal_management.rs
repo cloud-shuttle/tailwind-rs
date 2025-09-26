@@ -6,11 +6,11 @@
 
 use leptos::prelude::*;
 use leptos::attr::global::ClassAttribute;
-use leptos_shadcn_signal_management::{
-    TailwindSignalManager, BatchedSignalUpdater,
-    SignalMemoryManager, MemoryLeakDetector,
-    Theme, Variant, Size, ResponsiveConfig,
-};
+// use leptos_shadcn_signal_management::{
+//     TailwindSignalManager, BatchedSignalUpdater,
+//     SignalMemoryManager, MemoryLeakDetector,
+//     Theme, Variant, Size, ResponsiveConfig,
+// };
 
 /// Advanced signal management demo component
 #[component]

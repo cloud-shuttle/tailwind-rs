@@ -1,7 +1,7 @@
 //! Tailwind CSS integration for Dioxus framework
 //!
 //! This crate provides utilities for integrating Tailwind CSS with Dioxus applications.
-//! 
+//!
 //! # Example
 //!
 //! ```rust
@@ -13,7 +13,7 @@
 //!     .class("p-4")
 //!     .class("rounded-lg")
 //!     .build();
-//! 
+//!
 //! // Use the classes string in your Dioxus component
 //! ```
 

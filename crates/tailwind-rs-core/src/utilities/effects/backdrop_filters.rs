@@ -306,35 +306,35 @@ impl BackdropFilterUtilities for ClassBuilder {
     fn backdrop_blur(self, blur: BackdropBlur) -> Self {
         self.class(blur.to_string())
     }
-    
+
     fn backdrop_brightness(self, brightness: BackdropBrightness) -> Self {
         self.class(brightness.to_string())
     }
-    
+
     fn backdrop_contrast(self, contrast: BackdropContrast) -> Self {
         self.class(contrast.to_string())
     }
-    
+
     fn backdrop_grayscale(self, grayscale: BackdropGrayscale) -> Self {
         self.class(grayscale.to_string())
     }
-    
+
     fn backdrop_hue_rotate(self, hue_rotate: BackdropHueRotate) -> Self {
         self.class(hue_rotate.to_string())
     }
-    
+
     fn backdrop_invert(self, invert: BackdropInvert) -> Self {
         self.class(invert.to_string())
     }
-    
+
     fn backdrop_opacity(self, opacity: BackdropOpacity) -> Self {
         self.class(opacity.to_string())
     }
-    
+
     fn backdrop_saturate(self, saturate: BackdropSaturate) -> Self {
         self.class(saturate.to_string())
     }
-    
+
     fn backdrop_sepia(self, sepia: BackdropSepia) -> Self {
         self.class(sepia.to_string())
     }
@@ -358,17 +358,50 @@ mod tests {
 
     #[test]
     fn test_backdrop_brightness_display() {
-        assert_eq!(BackdropBrightness::Zero.to_string(), "backdrop-brightness-0");
-        assert_eq!(BackdropBrightness::Fifty.to_string(), "backdrop-brightness-50");
-        assert_eq!(BackdropBrightness::SeventyFive.to_string(), "backdrop-brightness-75");
-        assert_eq!(BackdropBrightness::Ninety.to_string(), "backdrop-brightness-90");
-        assert_eq!(BackdropBrightness::NinetyFive.to_string(), "backdrop-brightness-95");
-        assert_eq!(BackdropBrightness::OneHundred.to_string(), "backdrop-brightness-100");
-        assert_eq!(BackdropBrightness::OneOhFive.to_string(), "backdrop-brightness-105");
-        assert_eq!(BackdropBrightness::OneOneZero.to_string(), "backdrop-brightness-110");
-        assert_eq!(BackdropBrightness::OneTwoFive.to_string(), "backdrop-brightness-125");
-        assert_eq!(BackdropBrightness::OneFifty.to_string(), "backdrop-brightness-150");
-        assert_eq!(BackdropBrightness::TwoHundred.to_string(), "backdrop-brightness-200");
+        assert_eq!(
+            BackdropBrightness::Zero.to_string(),
+            "backdrop-brightness-0"
+        );
+        assert_eq!(
+            BackdropBrightness::Fifty.to_string(),
+            "backdrop-brightness-50"
+        );
+        assert_eq!(
+            BackdropBrightness::SeventyFive.to_string(),
+            "backdrop-brightness-75"
+        );
+        assert_eq!(
+            BackdropBrightness::Ninety.to_string(),
+            "backdrop-brightness-90"
+        );
+        assert_eq!(
+            BackdropBrightness::NinetyFive.to_string(),
+            "backdrop-brightness-95"
+        );
+        assert_eq!(
+            BackdropBrightness::OneHundred.to_string(),
+            "backdrop-brightness-100"
+        );
+        assert_eq!(
+            BackdropBrightness::OneOhFive.to_string(),
+            "backdrop-brightness-105"
+        );
+        assert_eq!(
+            BackdropBrightness::OneOneZero.to_string(),
+            "backdrop-brightness-110"
+        );
+        assert_eq!(
+            BackdropBrightness::OneTwoFive.to_string(),
+            "backdrop-brightness-125"
+        );
+        assert_eq!(
+            BackdropBrightness::OneFifty.to_string(),
+            "backdrop-brightness-150"
+        );
+        assert_eq!(
+            BackdropBrightness::TwoHundred.to_string(),
+            "backdrop-brightness-200"
+        );
     }
 
     #[test]
@@ -384,7 +417,7 @@ mod tests {
             .backdrop_saturate(BackdropSaturate::OneHundred)
             .backdrop_sepia(BackdropSepia::Zero)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("backdrop-blur-lg"));
         assert!(css_classes.contains("backdrop-brightness-100"));
@@ -415,14 +448,14 @@ mod tests {
         let backdrop_blur1 = BackdropBlur::Lg;
         let backdrop_blur2 = BackdropBlur::Lg;
         let backdrop_blur3 = BackdropBlur::Md;
-        
+
         assert_eq!(backdrop_blur1, backdrop_blur2);
         assert_ne!(backdrop_blur1, backdrop_blur3);
-        
+
         // Test that equal effects have the same hash
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         let mut hasher2 = DefaultHasher::new();
         backdrop_blur1.hash(&mut hasher1);

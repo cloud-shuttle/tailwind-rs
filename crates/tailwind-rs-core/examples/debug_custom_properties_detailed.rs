@@ -5,14 +5,14 @@ use tailwind_rs_core::css_generator::UtilityParser;
 
 fn main() {
     let parser = SizingParser::new();
-    
+
     // Test custom properties with detailed debugging
     let test_class = "w-(--my-width)";
-    
+
     println!("🔍 Debug Custom Properties Detailed Test");
     println!("===================================");
     println!("Testing class: {}", test_class);
-    
+
     // Test strip_prefix manually
     if let Some(value) = test_class.strip_prefix("w-(") {
         println!("✅ strip_prefix('w-(') worked: '{}'", value);
@@ -25,7 +25,7 @@ fn main() {
     } else {
         println!("❌ strip_prefix('w-(') failed");
     }
-    
+
     // Test the actual parser
     match parser.parse_class(test_class) {
         Some(properties) => {

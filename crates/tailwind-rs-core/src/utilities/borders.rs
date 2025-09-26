@@ -183,7 +183,7 @@ impl BorderWidth {
             BorderWidth::Thick => "thick".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BorderWidth::Zero => "0px".to_string(),
@@ -206,7 +206,7 @@ impl BorderStyle {
             BorderStyle::None => "none".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BorderStyle::Solid => "solid".to_string(),
@@ -233,7 +233,7 @@ impl BorderRadius {
             BorderRadius::Full => "full".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             BorderRadius::None => "0px".to_string(),
@@ -259,7 +259,7 @@ impl OutlineWidth {
             OutlineWidth::Thick => "thick".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             OutlineWidth::Zero => "0px".to_string(),
@@ -282,7 +282,7 @@ impl OutlineStyle {
             OutlineStyle::None => "none".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             OutlineStyle::Solid => "solid".to_string(),
@@ -305,7 +305,7 @@ impl OutlineOffset {
             OutlineOffset::Eight => "8".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             OutlineOffset::Zero => "0px".to_string(),
@@ -327,7 +327,7 @@ impl DivideWidth {
             DivideWidth::Thick => "thick".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             DivideWidth::Zero => "0px".to_string(),
@@ -350,7 +350,7 @@ impl DivideStyle {
             DivideStyle::None => "none".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             DivideStyle::Solid => "solid".to_string(),
@@ -374,7 +374,7 @@ impl RingWidth {
             RingWidth::ExtraThick => "extra-thick".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             RingWidth::Zero => "0px".to_string(),
@@ -397,7 +397,7 @@ impl RingOffsetWidth {
             RingOffsetWidth::Eight => "8".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             RingOffsetWidth::Zero => "0px".to_string(),
@@ -484,27 +484,27 @@ impl BorderWidthUtilities for ClassBuilder {
     fn border_width(self, width: BorderWidth) -> Self {
         self.class(format!("border-{}", width.to_class_name()))
     }
-    
+
     fn border_width_x(self, width: BorderWidth) -> Self {
         self.class(format!("border-x-{}", width.to_class_name()))
     }
-    
+
     fn border_width_y(self, width: BorderWidth) -> Self {
         self.class(format!("border-y-{}", width.to_class_name()))
     }
-    
+
     fn border_width_t(self, width: BorderWidth) -> Self {
         self.class(format!("border-t-{}", width.to_class_name()))
     }
-    
+
     fn border_width_r(self, width: BorderWidth) -> Self {
         self.class(format!("border-r-{}", width.to_class_name()))
     }
-    
+
     fn border_width_b(self, width: BorderWidth) -> Self {
         self.class(format!("border-b-{}", width.to_class_name()))
     }
-    
+
     fn border_width_l(self, width: BorderWidth) -> Self {
         self.class(format!("border-l-{}", width.to_class_name()))
     }
@@ -538,35 +538,35 @@ impl BorderRadiusUtilities for ClassBuilder {
     fn border_radius(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_t(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-t-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_r(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-r-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_b(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-b-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_l(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-l-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_tl(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-tl-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_tr(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-tr-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_br(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-br-{}", radius.to_class_name()))
     }
-    
+
     fn border_radius_bl(self, radius: BorderRadius) -> Self {
         self.class(format!("rounded-bl-{}", radius.to_class_name()))
     }
@@ -583,11 +583,11 @@ impl OutlineUtilities for ClassBuilder {
     fn outline_width(self, width: OutlineWidth) -> Self {
         self.class(format!("outline-{}", width.to_class_name()))
     }
-    
+
     fn outline_style(self, style: OutlineStyle) -> Self {
         self.class(format!("outline-{}", style.to_class_name()))
     }
-    
+
     fn outline_offset(self, offset: OutlineOffset) -> Self {
         self.class(format!("outline-offset-{}", offset.to_class_name()))
     }
@@ -605,15 +605,15 @@ impl DivideUtilities for ClassBuilder {
     fn divide_width(self, width: DivideWidth) -> Self {
         self.class(format!("divide-{}", width.to_class_name()))
     }
-    
+
     fn divide_width_x(self, width: DivideWidth) -> Self {
         self.class(format!("divide-x-{}", width.to_class_name()))
     }
-    
+
     fn divide_width_y(self, width: DivideWidth) -> Self {
         self.class(format!("divide-y-{}", width.to_class_name()))
     }
-    
+
     fn divide_style(self, style: DivideStyle) -> Self {
         self.class(format!("divide-{}", style.to_class_name()))
     }
@@ -629,7 +629,7 @@ impl RingUtilities for ClassBuilder {
     fn ring_width(self, width: RingWidth) -> Self {
         self.class(format!("ring-{}", width.to_class_name()))
     }
-    
+
     fn ring_offset_width(self, width: RingOffsetWidth) -> Self {
         self.class(format!("ring-offset-{}", width.to_class_name()))
     }
@@ -638,7 +638,7 @@ impl RingUtilities for ClassBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_border_width_utilities() {
         let classes = ClassBuilder::new()
@@ -654,7 +654,7 @@ mod tests {
             .border_width_b(BorderWidth::Thin)
             .border_width_l(BorderWidth::Zero)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("border-0"));
         assert!(css_classes.contains("border-thin"));
@@ -668,7 +668,7 @@ mod tests {
         assert!(css_classes.contains("border-b-thin"));
         assert!(css_classes.contains("border-l-0"));
     }
-    
+
     #[test]
     fn test_border_style_utilities() {
         let classes = ClassBuilder::new()
@@ -679,7 +679,7 @@ mod tests {
             .border_style(BorderStyle::Hidden)
             .border_style(BorderStyle::None)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("border-solid"));
         assert!(css_classes.contains("border-dashed"));
@@ -688,7 +688,7 @@ mod tests {
         assert!(css_classes.contains("border-hidden"));
         assert!(css_classes.contains("border-none"));
     }
-    
+
     #[test]
     fn test_border_radius_utilities() {
         let classes = ClassBuilder::new()
@@ -710,7 +710,7 @@ mod tests {
             .border_radius_br(BorderRadius::Xl3)
             .border_radius_bl(BorderRadius::Full)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("rounded-none"));
         assert!(css_classes.contains("rounded-sm"));
@@ -730,7 +730,7 @@ mod tests {
         assert!(css_classes.contains("rounded-br-3xl"));
         assert!(css_classes.contains("rounded-bl-full"));
     }
-    
+
     #[test]
     fn test_outline_utilities() {
         let classes = ClassBuilder::new()
@@ -751,7 +751,7 @@ mod tests {
             .outline_offset(OutlineOffset::Four)
             .outline_offset(OutlineOffset::Eight)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("outline-0"));
         assert!(css_classes.contains("outline-thin"));
@@ -770,7 +770,7 @@ mod tests {
         assert!(css_classes.contains("outline-offset-4"));
         assert!(css_classes.contains("outline-offset-8"));
     }
-    
+
     #[test]
     fn test_divide_utilities() {
         let classes = ClassBuilder::new()
@@ -788,7 +788,7 @@ mod tests {
             .divide_style(DivideStyle::Hidden)
             .divide_style(DivideStyle::None)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("divide-0"));
         assert!(css_classes.contains("divide-thin"));
@@ -804,7 +804,7 @@ mod tests {
         assert!(css_classes.contains("divide-hidden"));
         assert!(css_classes.contains("divide-none"));
     }
-    
+
     #[test]
     fn test_ring_utilities() {
         let classes = ClassBuilder::new()
@@ -820,7 +820,7 @@ mod tests {
             .ring_offset_width(RingOffsetWidth::Four)
             .ring_offset_width(RingOffsetWidth::Eight)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("ring-0"));
         assert!(css_classes.contains("ring-thin"));
@@ -834,7 +834,7 @@ mod tests {
         assert!(css_classes.contains("ring-offset-4"));
         assert!(css_classes.contains("ring-offset-8"));
     }
-    
+
     #[test]
     fn test_complex_border_combination() {
         let classes = ClassBuilder::new()
@@ -849,7 +849,7 @@ mod tests {
             .ring_width(RingWidth::Default)
             .ring_offset_width(RingOffsetWidth::One)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("border-medium"));
         assert!(css_classes.contains("border-solid"));
@@ -862,7 +862,7 @@ mod tests {
         assert!(css_classes.contains("ring-default"));
         assert!(css_classes.contains("ring-offset-1"));
     }
-    
+
     /// Test that all Week 7 border utilities are implemented
     #[test]
     fn test_week7_border_utilities() {
@@ -890,9 +890,9 @@ mod tests {
             .border_style(BorderStyle::Double)
             .border_style(BorderStyle::None)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
-        
+
         // Border Radius
         assert!(css_classes.contains("rounded-none"));
         assert!(css_classes.contains("rounded-sm"));
@@ -903,7 +903,7 @@ mod tests {
         assert!(css_classes.contains("rounded-2xl"));
         assert!(css_classes.contains("rounded-3xl"));
         assert!(css_classes.contains("rounded-full"));
-        
+
         // Border Width & Style
         assert!(css_classes.contains("border-0"));
         assert!(css_classes.contains("border-thin"));

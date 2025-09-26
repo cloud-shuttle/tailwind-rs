@@ -1,7 +1,7 @@
-use tailwind_rs_core::utilities::css_nesting::*;
-use tailwind_rs_core::ClassBuilder;
-use tailwind_rs_core::Breakpoint;
 use std::time::Instant;
+use tailwind_rs_core::utilities::css_nesting::*;
+use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod css_nesting_performance_tests {
@@ -10,71 +10,93 @@ mod css_nesting_performance_tests {
     #[test]
     fn test_css_nesting_generation_performance() {
         let start = Instant::now();
-        
+
         // Generate 1000 CSS nesting utility classes
         for _ in 0..1000 {
             let _ = ClassBuilder::new()
                 .nesting_selector(NestingSelector::DirectChild)
                 .build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 50, "CSS nesting generation too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 50,
+            "CSS nesting generation too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_css_nesting_string_generation_performance() {
         let start = Instant::now();
-        
+
         // Generate 1000 CSS nesting string representations
         for _ in 0..1000 {
             let _ = NestingSelector::DirectChild.to_string();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 10, "String generation too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 10,
+            "String generation too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_css_nesting_class_name_generation_performance() {
         let start = Instant::now();
-        
+
         // Generate 1000 CSS nesting class names
         for _ in 0..1000 {
-            let _ = ClassBuilder::new().nesting_selector(NestingSelector::DirectChild).build();
+            let _ = ClassBuilder::new()
+                .nesting_selector(NestingSelector::DirectChild)
+                .build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 5, "Class name generation too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 5,
+            "Class name generation too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_css_nesting_memory_usage() {
         let initial_memory = get_memory_usage();
-        
+
         // Create many CSS nesting builders
         let _builders: Vec<ClassBuilder> = (0..1000)
             .map(|_| ClassBuilder::new().nesting_selector(NestingSelector::DirectChild))
             .collect();
-        
+
         let final_memory = get_memory_usage();
         let memory_increase = final_memory - initial_memory;
-        
-        assert!(memory_increase < 100_000, "Memory usage too high: {} bytes", memory_increase);
+
+        assert!(
+            memory_increase < 100_000,
+            "Memory usage too high: {} bytes",
+            memory_increase
+        );
     }
 
     #[test]
     fn test_css_nesting_serialization_performance() {
         let selector = NestingSelector::DirectChild;
         let start = Instant::now();
-        
+
         // Serialize 1000 times
         for _ in 0..1000 {
             let _ = serde_json::to_string(&selector).unwrap();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 20, "Serialization too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 20,
+            "Serialization too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
@@ -82,20 +104,24 @@ mod css_nesting_performance_tests {
         let selector = NestingSelector::DirectChild;
         let serialized = serde_json::to_string(&selector).unwrap();
         let start = Instant::now();
-        
+
         // Deserialize 1000 times
         for _ in 0..1000 {
             let _: NestingSelector = serde_json::from_str(&serialized).unwrap();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 30, "Deserialization too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 30,
+            "Deserialization too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_css_nesting_complex_builder_performance() {
         let start = Instant::now();
-        
+
         // Generate complex class builders with CSS nesting
         for _ in 0..100 {
             let _ = ClassBuilder::new()
@@ -122,15 +148,19 @@ mod css_nesting_performance_tests {
                 .conditional("hover", "nest-hover")
                 .build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 100, "Complex builder too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 100,
+            "Complex builder too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_css_nesting_enum_values_performance() {
         let start = Instant::now();
-        
+
         // Generate CSS nesting enum values
         for _i in 0..1000 {
             let _ = NestingSelector::DirectChild.to_string();
@@ -157,15 +187,19 @@ mod css_nesting_performance_tests {
             let _ = NestingMediaQuery::Screen.to_string();
             let _ = NestingMediaQuery::Custom("(max-width: 600px)".to_string()).to_string();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 50, "Enum values too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 50,
+            "Enum values too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_css_nesting_all_variants_performance() {
         let start = Instant::now();
-        
+
         // Generate all CSS nesting variants
         for _i in 0..100 {
             let _ = ClassBuilder::new()
@@ -207,9 +241,13 @@ mod css_nesting_performance_tests {
                 .nested_light("text-gray-900")
                 .build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 200, "All variants too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 200,
+            "All variants too slow: {}ms",
+            duration.as_millis()
+        );
     }
 }
 

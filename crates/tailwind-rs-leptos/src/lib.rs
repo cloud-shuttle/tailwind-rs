@@ -34,11 +34,11 @@
 
 // Core working modules with Leptos 0.8.8 support
 pub mod components;
-pub mod signal_manager;
 pub mod dynamic_class_builder;
-pub mod test_utils;
 pub mod e2e_tests;
 pub mod performance_tests;
+pub mod signal_manager;
+pub mod test_utils;
 pub mod visual_tests;
 
 // Legacy modules (temporarily disabled due to deprecated API usage)
@@ -48,11 +48,11 @@ pub mod visual_tests;
 // pub mod utils;
 
 pub use components::*;
-pub use signal_manager::*;
 pub use dynamic_class_builder::*;
-pub use test_utils::*;
 pub use e2e_tests::*;
 pub use performance_tests::*;
+pub use signal_manager::*;
+pub use test_utils::*;
 pub use visual_tests::*;
 
 // Legacy exports (disabled)
@@ -118,7 +118,7 @@ mod tests {
     #[test]
     fn test_signal_manager_creation() {
         let manager = TailwindSignalManager::new();
-        
+
         // Test signal manager can be created
         assert_eq!(manager.variant().get(), "primary");
         assert_eq!(manager.size().get(), "medium");
@@ -129,11 +129,11 @@ mod tests {
     #[test]
     fn test_dynamic_class_builder() {
         let builder = DynamicClassBuilder::new();
-        
+
         // Initially should be empty
         assert!(builder.is_empty());
         assert_eq!(builder.classes(), "");
-        
+
         // Add base classes
         let builder = builder.base("px-4 py-2");
         let classes = builder.classes();

@@ -1,7 +1,7 @@
-use tailwind_rs_core::utilities::enhanced_validation::*;
-use tailwind_rs_core::ClassBuilder;
-use tailwind_rs_core::Breakpoint;
 use std::collections::HashMap;
+use tailwind_rs_core::utilities::enhanced_validation::*;
+use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod enhanced_validation_unit_tests {
@@ -227,7 +227,7 @@ mod enhanced_validation_unit_tests {
         let rule1 = ValidationRule::Required;
         let rule2 = ValidationRule::Required;
         let rule3 = ValidationRule::Pattern("test".to_string());
-        
+
         assert_eq!(rule1, rule2);
         assert_ne!(rule1, rule3);
     }
@@ -248,7 +248,7 @@ mod enhanced_validation_unit_tests {
             ValidationRule::Range(0.0, 100.0),
             ValidationRule::Custom("custom".to_string()),
         ];
-        
+
         let class_names: Vec<String> = rules.iter().map(|r| r.to_class_name()).collect();
         assert!(class_names.contains(&"validation-required".to_string()));
         assert!(class_names.contains(&"validation-pattern-test".to_string()));
@@ -264,45 +264,40 @@ mod enhanced_validation_integration_tests {
 
     #[test]
     fn test_validation_rule_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .validation_rule(ValidationRule::Required);
-        
+        let builder = ClassBuilder::new().validation_rule(ValidationRule::Required);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-required"));
     }
 
     #[test]
     fn test_validation_severity_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .validation_severity(ValidationSeverity::Error);
-        
+        let builder = ClassBuilder::new().validation_severity(ValidationSeverity::Error);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-error"));
     }
 
     #[test]
     fn test_validation_scope_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .validation_scope(ValidationScope::Global);
-        
+        let builder = ClassBuilder::new().validation_scope(ValidationScope::Global);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-global"));
     }
 
     #[test]
     fn test_validation_mode_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .validation_mode(ValidationMode::Strict);
-        
+        let builder = ClassBuilder::new().validation_mode(ValidationMode::Strict);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-strict"));
     }
 
     #[test]
     fn test_validation_result_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .validation_result(ValidationResult::Valid);
-        
+        let builder = ClassBuilder::new().validation_result(ValidationResult::Valid);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-valid"));
     }
@@ -311,9 +306,8 @@ mod enhanced_validation_integration_tests {
     fn test_validation_custom_with_class_builder() {
         let mut options = HashMap::new();
         options.insert("key1".to_string(), "value1".to_string());
-        let builder = ClassBuilder::new()
-            .validation_custom("custom", options);
-        
+        let builder = ClassBuilder::new().validation_custom("custom", options);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-custom"));
     }
@@ -341,7 +335,7 @@ mod enhanced_validation_integration_tests {
             .validation_invalid("message")
             .validation_warning_result("message")
             .validation_info_result("message");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-required"));
         assert!(class_set.classes.contains("validation-pattern-test"));
@@ -371,7 +365,7 @@ mod enhanced_validation_integration_tests {
             .validation_rule(ValidationRule::Required)
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-required"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -383,11 +377,15 @@ mod enhanced_validation_integration_tests {
         let builder = ClassBuilder::new()
             .validation_rule(ValidationRule::Required)
             .responsive(Breakpoint::Md, "validation-pattern-test");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-required"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("validation-pattern-test"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("validation-pattern-test"));
     }
 
     #[test]
@@ -395,11 +393,15 @@ mod enhanced_validation_integration_tests {
         let builder = ClassBuilder::new()
             .validation_rule(ValidationRule::Required)
             .conditional("hover", "validation-pattern-test");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-required"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("validation-pattern-test"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("validation-pattern-test"));
     }
 
     #[test]
@@ -407,11 +409,15 @@ mod enhanced_validation_integration_tests {
         let builder = ClassBuilder::new()
             .validation_rule(ValidationRule::Required)
             .custom_variant("dark", "validation-pattern-test");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-required"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("validation-pattern-test"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("validation-pattern-test"));
     }
 
     #[test]
@@ -422,7 +428,7 @@ mod enhanced_validation_integration_tests {
             .validation_scope(ValidationScope::Global)
             .validation_mode(ValidationMode::Strict)
             .validation_result(ValidationResult::Valid);
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("validation-required"));
         assert!(class_set.classes.contains("validation-error"));
@@ -437,7 +443,7 @@ mod enhanced_validation_integration_tests {
             .validation_rule(ValidationRule::Required)
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("validation-required"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -448,7 +454,7 @@ mod enhanced_validation_integration_tests {
             .validation_rule(ValidationRule::Required)
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("font-bold"));
@@ -487,7 +493,7 @@ mod enhanced_validation_integration_tests {
             .responsive(Breakpoint::Md, "validation-pattern-test")
             .conditional("hover", "validation-pattern-test")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("validation-error"));
@@ -542,9 +548,9 @@ mod enhanced_validation_integration_tests {
             .validation_result(ValidationResult::Info("message".to_string()))
             .validation_result(ValidationResult::Custom("custom".to_string()))
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all enhanced validation utilities are present
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("validation-pattern-test"));

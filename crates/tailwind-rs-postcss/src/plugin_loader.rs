@@ -60,7 +60,7 @@ impl PluginLoader {
     pub fn new() -> Self {
         Self
     }
-    
+
     /// Load a plugin
     pub async fn load_plugin(&self, config: &PluginConfig) -> Result<PluginResult> {
         if config.requires_js() {
@@ -73,41 +73,46 @@ impl PluginLoader {
             Ok(PluginResult::Native(NativePlugin))
         }
     }
-    
+
     /// Load multiple plugins
     pub async fn load_plugins(&self, configs: &[PluginConfig]) -> Result<Vec<PluginResult>> {
         let mut results = Vec::new();
-        
+
         for config in configs {
             let result = self.load_plugin(config).await?;
             results.push(result);
         }
-        
+
         Ok(results)
     }
-    
+
     /// Validate plugin configuration
     pub fn validate_config(&self, config: &PluginConfig) -> Result<()> {
         if config.name.is_empty() {
-            return Err(crate::error::PostCSSError::config("Plugin name cannot be empty"));
-        }
-        
-        // Check for valid plugin names
-        if !self.is_valid_plugin_name(&config.name) {
             return Err(crate::error::PostCSSError::config(
-                &format!("Invalid plugin name: {}", config.name)
+                "Plugin name cannot be empty",
             ));
         }
-        
+
+        // Check for valid plugin names
+        if !self.is_valid_plugin_name(&config.name) {
+            return Err(crate::error::PostCSSError::config(&format!(
+                "Invalid plugin name: {}",
+                config.name
+            )));
+        }
+
         Ok(())
     }
-    
+
     /// Check if plugin name is valid
     fn is_valid_plugin_name(&self, name: &str) -> bool {
         // Basic validation for plugin names
-        !name.is_empty() && 
-        name.len() <= 100 && 
-        name.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_' || c == '/' || c == '@')
+        !name.is_empty()
+            && name.len() <= 100
+            && name
+                .chars()
+                .all(|c| c.is_alphanumeric() || c == '-' || c == '_' || c == '/' || c == '@')
     }
 }
 

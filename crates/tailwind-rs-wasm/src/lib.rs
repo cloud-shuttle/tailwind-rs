@@ -1,5 +1,5 @@
 //! # Tailwind-RS WASM
-//! 
+//!
 //! A **fully WASM-compatible** implementation of Tailwind CSS for Rust web applications.
 //! This crate provides optimized functionality for WebAssembly and browser environments.
 //!
@@ -47,10 +47,10 @@ use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[cfg(target_arch = "wasm32")]
-use alloc::{string::String, vec::Vec, format, vec, string::ToString};
+use alloc::{format, string::String, string::ToString, vec, vec::Vec};
 
 #[cfg(not(target_arch = "wasm32"))]
-use std::{string::String, vec::Vec, format, vec, string::ToString};
+use std::{format, string::String, string::ToString, vec, vec::Vec};
 
 #[cfg(target_arch = "wasm32")]
 use core::fmt;
@@ -81,12 +81,12 @@ impl WasmClassBuilder {
             classes: Vec::new(),
         }
     }
-    
+
     /// Add a class to the builder
     pub fn class(&mut self, class: &str) {
         self.classes.push(class.to_string());
     }
-    
+
     /// Add multiple classes at once
     pub fn add_classes(&mut self, classes: &str) {
         for class in classes.split_whitespace() {
@@ -95,17 +95,17 @@ impl WasmClassBuilder {
             }
         }
     }
-    
+
     /// Build the final class string
     pub fn build(&self) -> String {
         self.classes.join(" ")
     }
-    
+
     /// Get the number of classes
     pub fn len(&self) -> usize {
         self.classes.len()
     }
-    
+
     /// Check if the builder is empty
     pub fn is_empty(&self) -> bool {
         self.classes.is_empty()
@@ -139,7 +139,7 @@ impl WasmBreakpoint {
             WasmBreakpoint::Xl2 => "(min-width: 1536px)",
         }
     }
-    
+
     /// Get the prefix for this breakpoint
     pub fn prefix(&self) -> &'static str {
         match self {
@@ -201,7 +201,7 @@ impl WasmSpacing {
             WasmSpacing::P64 => "16rem",
         }
     }
-    
+
     /// Get the Tailwind class name for padding
     pub fn padding_class(&self) -> String {
         match self {
@@ -226,7 +226,7 @@ impl WasmSpacing {
             WasmSpacing::P64 => "p-64".to_string(),
         }
     }
-    
+
     /// Get the Tailwind class name for margin
     pub fn margin_class(&self) -> String {
         match self {
@@ -355,7 +355,7 @@ impl WasmColor {
             WasmColor::Transparent => "text-transparent".to_string(),
         }
     }
-    
+
     /// Get the Tailwind class name for background color
     pub fn bg_class(&self) -> String {
         match self {
@@ -409,44 +409,59 @@ impl WasmColor {
 /// WASM-optimized utility functions
 pub mod utils {
     use super::*;
-    
+
     /// Validate a Tailwind class name
     pub fn validate_class(class: &str) -> bool {
         // Basic validation - check for common patterns
         if class.is_empty() {
             return false;
         }
-        
+
         // Check for valid characters
         for ch in class.chars() {
-            if !ch.is_alphanumeric() && ch != '-' && ch != ':' && ch != '/' && ch != '[' && ch != ']' {
+            if !ch.is_alphanumeric()
+                && ch != '-'
+                && ch != ':'
+                && ch != '/'
+                && ch != '['
+                && ch != ']'
+            {
                 return false;
             }
         }
-        
+
         true
     }
-    
+
     /// Parse responsive classes
     pub fn parse_responsive_class(class: &str) -> Option<(Option<WasmBreakpoint>, String)> {
-        for breakpoint in [WasmBreakpoint::Sm, WasmBreakpoint::Md, WasmBreakpoint::Lg, WasmBreakpoint::Xl, WasmBreakpoint::Xl2] {
+        for breakpoint in [
+            WasmBreakpoint::Sm,
+            WasmBreakpoint::Md,
+            WasmBreakpoint::Lg,
+            WasmBreakpoint::Xl,
+            WasmBreakpoint::Xl2,
+        ] {
             if class.starts_with(breakpoint.prefix()) {
                 let base_class = &class[breakpoint.prefix().len()..];
                 return Some((Some(breakpoint), base_class.to_string()));
             }
         }
-        
+
         Some((None, class.to_string()))
     }
-    
+
     /// Generate responsive classes
-    pub fn generate_responsive_classes(base_class: &str, breakpoints: &[WasmBreakpoint]) -> Vec<String> {
+    pub fn generate_responsive_classes(
+        base_class: &str,
+        breakpoints: &[WasmBreakpoint],
+    ) -> Vec<String> {
         let mut classes = vec![base_class.to_string()];
-        
+
         for breakpoint in breakpoints {
             classes.push(format!("{}{}", breakpoint.prefix(), base_class));
         }
-        
+
         classes
     }
 }
@@ -509,7 +524,7 @@ impl WasmTheme {
             ],
         }
     }
-    
+
     /// Get the default theme
     pub fn default() -> Self {
         Self::new("default".to_string())
@@ -525,38 +540,38 @@ impl Default for WasmTheme {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_wasm_class_builder() {
         let mut builder = WasmClassBuilder::new();
         builder.class("bg-blue-500");
         builder.class("text-white");
         builder.class("p-4");
-        
+
         assert_eq!(builder.clone().build(), "bg-blue-500 text-white p-4");
         assert_eq!(builder.len(), 3);
         assert!(!builder.is_empty());
     }
-    
+
     #[test]
     fn test_wasm_spacing() {
         assert_eq!(WasmSpacing::P4.css_value(), "1rem");
         assert_eq!(WasmSpacing::P4.padding_class(), "p-4");
         assert_eq!(WasmSpacing::P4.margin_class(), "m-4");
     }
-    
+
     #[test]
     fn test_wasm_color() {
         assert_eq!(WasmColor::Blue500.text_class(), "text-blue-500");
         assert_eq!(WasmColor::Blue500.bg_class(), "bg-blue-500");
     }
-    
+
     #[test]
     fn test_wasm_breakpoint() {
         assert_eq!(WasmBreakpoint::Md.media_query(), "(min-width: 768px)");
         assert_eq!(WasmBreakpoint::Md.prefix(), "md:");
     }
-    
+
     #[test]
     fn test_utils_validate_class() {
         assert!(utils::validate_class("bg-blue-500"));
@@ -564,18 +579,18 @@ mod tests {
         assert!(!utils::validate_class(""));
         assert!(!utils::validate_class("invalid@class"));
     }
-    
+
     #[test]
     fn test_utils_parse_responsive_class() {
         let (bp, class) = utils::parse_responsive_class("md:bg-blue-500").unwrap();
         assert_eq!(bp, Some(WasmBreakpoint::Md));
         assert_eq!(class, "bg-blue-500");
-        
+
         let (bp, class) = utils::parse_responsive_class("bg-blue-500").unwrap();
         assert_eq!(bp, None);
         assert_eq!(class, "bg-blue-500");
     }
-    
+
     #[test]
     fn test_wasm_theme() {
         let theme = WasmTheme::new("test".to_string());

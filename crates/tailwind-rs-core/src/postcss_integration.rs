@@ -9,10 +9,10 @@ use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 
 // Import PostCSS types
-use tailwind_rs_postcss::{
-    PostCSSEngine, PostCSSConfig
+use tailwind_rs_postcss::engine::{
+    EngineMetrics, PerformanceOptions, ProcessingMetrics, ProcessingWarning, SourceMapOptions,
 };
-use tailwind_rs_postcss::engine::{SourceMapOptions, PerformanceOptions, ProcessingMetrics, ProcessingWarning, EngineMetrics};
+use tailwind_rs_postcss::{PostCSSConfig, PostCSSEngine};
 
 /// Enhanced CSS generator with PostCSS integration
 #[derive(Debug)]
@@ -59,7 +59,7 @@ impl EnhancedCssGenerator {
     pub fn new() -> Result<Self> {
         let core_generator = CssGenerator::new();
         let postcss_config = PostCSSIntegrationConfig::default();
-        
+
         // Initialize PostCSS engine if enabled
         let postcss_engine = if postcss_config.enabled {
             let postcss_config = tailwind_rs_postcss::PostCSSConfig {
@@ -80,7 +80,7 @@ impl EnhancedCssGenerator {
                 performance: PerformanceOptions::default(),
                 plugins: Vec::new(),
             };
-            
+
             Some(tailwind_rs_postcss::PostCSSEngine::new(postcss_config)?)
         } else {
             None
@@ -97,7 +97,7 @@ impl EnhancedCssGenerator {
     /// Create with custom PostCSS configuration
     pub fn with_postcss_config(config: PostCSSIntegrationConfig) -> Result<Self> {
         let core_generator = CssGenerator::new();
-        
+
         // Initialize PostCSS engine if enabled
         let postcss_engine = if config.enabled {
             let postcss_config = tailwind_rs_postcss::PostCSSConfig {
@@ -118,7 +118,7 @@ impl EnhancedCssGenerator {
                 performance: PerformanceOptions::default(),
                 plugins: Vec::new(),
             };
-            
+
             Some(tailwind_rs_postcss::PostCSSEngine::new(postcss_config)?)
         } else {
             None
@@ -151,7 +151,7 @@ impl EnhancedCssGenerator {
     pub async fn generate_css(&self) -> Result<String> {
         // Generate base CSS using core generator
         let base_css = self.core_generator.generate_css();
-        
+
         // Apply PostCSS processing if enabled
         if let Some(engine) = &self.postcss_engine {
             let processed = engine.process_css(&base_css).await?;
@@ -165,11 +165,11 @@ impl EnhancedCssGenerator {
     pub async fn generate_css_with_metadata(&self) -> Result<EnhancedCssResult> {
         // Generate base CSS using core generator
         let base_css = self.core_generator.generate_css();
-        
+
         // Apply PostCSS processing if enabled
         if let Some(engine) = &self.postcss_engine {
             let processed = engine.process_css(&base_css).await?;
-            
+
             let processed_css = processed.css.clone();
             let base_css_len = base_css.len();
             Ok(EnhancedCssResult {
@@ -247,7 +247,7 @@ impl EnhancedCssGenerator {
     /// Update PostCSS configuration
     pub fn update_postcss_config(&mut self, config: PostCSSIntegrationConfig) -> Result<()> {
         self.postcss_config = config;
-        
+
         // Reinitialize PostCSS engine if needed
         if self.postcss_config.enabled && self.postcss_engine.is_none() {
             let postcss_config = tailwind_rs_postcss::PostCSSConfig {
@@ -268,12 +268,12 @@ impl EnhancedCssGenerator {
                 performance: PerformanceOptions::default(),
                 plugins: Vec::new(),
             };
-            
+
             self.postcss_engine = Some(tailwind_rs_postcss::PostCSSEngine::new(postcss_config)?);
         } else if !self.postcss_config.enabled {
             self.postcss_engine = None;
         }
-        
+
         Ok(())
     }
 }
@@ -338,7 +338,7 @@ mod tests {
             optimize: true,
             vendor_prefixes: true,
         };
-        
+
         let generator = EnhancedCssGenerator::with_postcss_config(config);
         assert!(generator.is_ok());
     }
@@ -355,10 +355,10 @@ mod tests {
         let mut generator = EnhancedCssGenerator::new().unwrap();
         generator.add_class("p-4").unwrap();
         generator.add_class("bg-blue-500").unwrap();
-        
+
         let css = generator.generate_css().await;
         assert!(css.is_ok());
-        
+
         let css = css.unwrap();
         assert!(css.contains(".p-4"));
         assert!(css.contains(".bg-blue-500"));
@@ -368,10 +368,10 @@ mod tests {
     async fn test_generate_css_with_metadata() {
         let mut generator = EnhancedCssGenerator::new().unwrap();
         generator.add_class("p-4").unwrap();
-        
+
         let result = generator.generate_css_with_metadata().await;
         assert!(result.is_ok());
-        
+
         let result = result.unwrap();
         assert!(result.css.contains(".p-4"));
         assert!(result.base_css_size > 0);

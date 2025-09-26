@@ -3,9 +3,9 @@
 //! This module provides class extraction capabilities for different
 //! file types and languages.
 
-use crate::file_scanner::{FileInfo, FileType};
 use crate::content_config::ExtractionRule;
-use crate::error::{ScannerError, Result};
+use crate::error::{Result, ScannerError};
+use crate::file_scanner::{FileInfo, FileType};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -81,10 +81,10 @@ impl ClassExtractor {
     /// Create a new class extractor
     pub fn new() -> Self {
         let mut patterns = HashMap::new();
-        
+
         // Initialize patterns for different file types
         Self::initialize_patterns(&mut patterns);
-        
+
         Self {
             patterns,
             custom_rules: Vec::new(),
@@ -135,9 +135,7 @@ impl ClassExtractor {
         patterns.insert(FileType::Svelte, svelte_patterns);
 
         // CSS patterns
-        let css_patterns = vec![
-            Regex::new(r#"@apply\s+([^;]+);"#).unwrap(),
-        ];
+        let css_patterns = vec![Regex::new(r#"@apply\s+([^;]+);"#).unwrap()];
         patterns.insert(FileType::Css, css_patterns.clone());
         patterns.insert(FileType::Scss, css_patterns.clone());
         patterns.insert(FileType::Less, css_patterns);
@@ -145,11 +143,12 @@ impl ClassExtractor {
 
     /// Extract classes from file information
     pub async fn extract_classes(&self, file_info: &FileInfo) -> Result<Vec<ExtractedClass>> {
-        let content = file_info.content.as_ref()
-            .ok_or_else(|| ScannerError::FileContentNotAvailable("File content not available".to_string()))?;
-        
+        let content = file_info.content.as_ref().ok_or_else(|| {
+            ScannerError::FileContentNotAvailable("File content not available".to_string())
+        })?;
+
         let mut classes = Vec::new();
-        
+
         // Extract using file type patterns
         if let Some(patterns) = self.patterns.get(&file_info.file_type) {
             for pattern in patterns {
@@ -157,17 +156,18 @@ impl ClassExtractor {
                 classes.extend(matches);
             }
         }
-        
+
         // Extract using custom rules
         for rule in &self.custom_rules {
             if self.rule_applies_to_file(rule, &file_info.path) {
                 if let Ok(pattern) = Regex::new(&rule.class_pattern) {
-                    let matches = self.extract_with_pattern(content, &pattern, &file_info.file_type);
+                    let matches =
+                        self.extract_with_pattern(content, &pattern, &file_info.file_type);
                     classes.extend(matches);
                 }
             }
         }
-        
+
         Ok(classes)
     }
 
@@ -179,7 +179,7 @@ impl ClassExtractor {
         file_type: &FileType,
     ) -> Vec<ExtractedClass> {
         let mut classes = Vec::new();
-        
+
         for (line_num, line) in content.lines().enumerate() {
             for mat in pattern.find_iter(line) {
                 let class_name = mat.as_str().to_string();
@@ -190,7 +190,7 @@ impl ClassExtractor {
                     in_comment: self.is_in_comment(line, mat.start()),
                     metadata: HashMap::new(),
                 };
-                
+
                 classes.push(ExtractedClass {
                     class_name,
                     context,
@@ -199,7 +199,7 @@ impl ClassExtractor {
                 });
             }
         }
-        
+
         classes
     }
 
@@ -209,7 +209,7 @@ impl ClassExtractor {
         let single_quotes = before.matches('\'').count();
         let double_quotes = before.matches('"').count();
         let backticks = before.matches('`').count();
-        
+
         (single_quotes % 2 == 1) || (double_quotes % 2 == 1) || (backticks % 2 == 1)
     }
 
@@ -278,7 +278,7 @@ mod tests {
             line: 1,
             column: 1,
         };
-        
+
         assert_eq!(class.class_name, "p-4");
         assert_eq!(class.line, 1);
         assert_eq!(class.column, 1);
@@ -288,7 +288,7 @@ mod tests {
     fn test_string_detection() {
         let extractor = ClassExtractor::new();
         let line = r#"let class = "p-4 bg-blue-500";"#;
-        
+
         assert!(extractor.is_in_string(line, 20));
         assert!(!extractor.is_in_string(line, 5));
     }
@@ -297,19 +297,15 @@ mod tests {
     fn test_comment_detection() {
         let extractor = ClassExtractor::new();
         let line = r#"// This is a comment"#;
-        
+
         assert!(extractor.is_in_comment(line, 10));
     }
 
     #[test]
     fn test_custom_rule_addition() {
         let mut extractor = ClassExtractor::new();
-        let rule = ExtractionRule::new(
-            "test_rule",
-            "**/*.test",
-            r#"test\s*=\s*"([^"]+)""#,
-        );
-        
+        let rule = ExtractionRule::new("test_rule", "**/*.test", r#"test\s*=\s*"([^"]+)""#);
+
         let result = extractor.add_custom_rule(rule);
         assert!(result.is_ok());
         assert_eq!(extractor.custom_rules.len(), 1);

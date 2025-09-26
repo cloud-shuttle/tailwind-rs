@@ -94,7 +94,7 @@ impl State {
             State::AutofillAlt => "autofill:",
         }
     }
-    
+
     /// Get the CSS pseudo-class name for this state
     pub fn css_name(&self) -> &'static str {
         match self {
@@ -126,7 +126,7 @@ impl State {
             State::AutofillAlt => ":autofill",
         }
     }
-    
+
     /// Get all states
     pub fn all() -> Vec<State> {
         vec![
@@ -150,12 +150,12 @@ impl State {
             State::Default,
         ]
     }
-    
+
     /// Check if this state is interactive (user can trigger it)
     pub fn is_interactive(&self) -> bool {
         matches!(self, State::Hover | State::Focus | State::Active)
     }
-    
+
     /// Check if this state is form-related
     pub fn is_form_related(&self) -> bool {
         matches!(
@@ -179,7 +179,7 @@ impl State {
 
 impl FromStr for State {
     type Err = String;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
             "hover" => Ok(State::Hover),

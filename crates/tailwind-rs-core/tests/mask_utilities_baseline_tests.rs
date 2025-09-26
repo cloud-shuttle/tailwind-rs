@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::mask::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod mask_utilities_baseline_tests {
@@ -8,13 +8,11 @@ mod mask_utilities_baseline_tests {
 
     #[test]
     fn test_mask_utilities_css_output_baseline() {
-        let builder = ClassBuilder::new()
-            .mask_alpha()
-            .mask_luminance();
-        
+        let builder = ClassBuilder::new().mask_alpha().mask_luminance();
+
         let class_set = builder.build();
         let classes = class_set.to_css_classes();
-        
+
         // Baseline: Should contain both mask classes
         assert!(classes.contains("mask-alpha"));
         assert!(classes.contains("mask-luminance"));
@@ -22,13 +20,11 @@ mod mask_utilities_baseline_tests {
 
     #[test]
     fn test_mask_utilities_class_generation_baseline() {
-        let builder = ClassBuilder::new()
-            .mask_alpha()
-            .mask_repeat_round();
-        
+        let builder = ClassBuilder::new().mask_alpha().mask_repeat_round();
+
         let class_set = builder.build();
         let classes = class_set.to_css_classes();
-        
+
         // Baseline: Should contain both mask classes
         assert!(classes.contains("mask-alpha"));
         assert!(classes.contains("mask-repeat-round"));
@@ -38,7 +34,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_type_alpha_baseline() {
         let mask_type = MaskType::Alpha;
         let string_value = mask_type.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "alpha");
     }
@@ -47,7 +43,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_type_luminance_baseline() {
         let mask_type = MaskType::Luminance;
         let string_value = mask_type.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "luminance");
     }
@@ -56,7 +52,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_type_none_baseline() {
         let mask_type = MaskType::None;
         let string_value = mask_type.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "none");
     }
@@ -65,7 +61,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_mode_alpha_baseline() {
         let mask_mode = MaskMode::Alpha;
         let string_value = mask_mode.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "alpha");
     }
@@ -74,7 +70,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_mode_luminance_baseline() {
         let mask_mode = MaskMode::Luminance;
         let string_value = mask_mode.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "luminance");
     }
@@ -83,7 +79,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_mode_match_source_baseline() {
         let mask_mode = MaskMode::MatchSource;
         let string_value = mask_mode.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "match-source");
     }
@@ -92,7 +88,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_composite_add_baseline() {
         let mask_composite = MaskComposite::Add;
         let string_value = mask_composite.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "add");
     }
@@ -101,7 +97,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_composite_subtract_baseline() {
         let mask_composite = MaskComposite::Subtract;
         let string_value = mask_composite.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "subtract");
     }
@@ -110,7 +106,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_composite_intersect_baseline() {
         let mask_composite = MaskComposite::Intersect;
         let string_value = mask_composite.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "intersect");
     }
@@ -119,7 +115,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_composite_exclude_baseline() {
         let mask_composite = MaskComposite::Exclude;
         let string_value = mask_composite.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "exclude");
     }
@@ -128,7 +124,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_repeat_no_repeat_baseline() {
         let mask_repeat = MaskRepeat::NoRepeat;
         let string_value = mask_repeat.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "no-repeat");
     }
@@ -137,7 +133,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_repeat_repeat_baseline() {
         let mask_repeat = MaskRepeat::Repeat;
         let string_value = mask_repeat.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "repeat");
     }
@@ -146,7 +142,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_repeat_repeat_x_baseline() {
         let mask_repeat = MaskRepeat::RepeatX;
         let string_value = mask_repeat.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "repeat-x");
     }
@@ -155,7 +151,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_repeat_repeat_y_baseline() {
         let mask_repeat = MaskRepeat::RepeatY;
         let string_value = mask_repeat.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "repeat-y");
     }
@@ -164,7 +160,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_repeat_round_baseline() {
         let mask_repeat = MaskRepeat::Round;
         let string_value = mask_repeat.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "round");
     }
@@ -173,7 +169,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_repeat_space_baseline() {
         let mask_repeat = MaskRepeat::Space;
         let string_value = mask_repeat.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "space");
     }
@@ -182,7 +178,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_size_auto_baseline() {
         let mask_size = MaskSize::Auto;
         let string_value = mask_size.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "auto");
     }
@@ -191,7 +187,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_size_cover_baseline() {
         let mask_size = MaskSize::Cover;
         let string_value = mask_size.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "cover");
     }
@@ -200,7 +196,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_size_contain_baseline() {
         let mask_size = MaskSize::Contain;
         let string_value = mask_size.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "contain");
     }
@@ -209,7 +205,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_center_baseline() {
         let mask_position = MaskPosition::Center;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "center");
     }
@@ -218,7 +214,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_top_baseline() {
         let mask_position = MaskPosition::Top;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "top");
     }
@@ -227,7 +223,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_bottom_baseline() {
         let mask_position = MaskPosition::Bottom;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "bottom");
     }
@@ -236,7 +232,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_left_baseline() {
         let mask_position = MaskPosition::Left;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "left");
     }
@@ -245,7 +241,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_right_baseline() {
         let mask_position = MaskPosition::Right;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "right");
     }
@@ -254,7 +250,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_top_left_baseline() {
         let mask_position = MaskPosition::TopLeft;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "top left");
     }
@@ -263,7 +259,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_top_right_baseline() {
         let mask_position = MaskPosition::TopRight;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "top right");
     }
@@ -272,7 +268,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_bottom_left_baseline() {
         let mask_position = MaskPosition::BottomLeft;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "bottom left");
     }
@@ -281,7 +277,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_position_bottom_right_baseline() {
         let mask_position = MaskPosition::BottomRight;
         let string_value = mask_position.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "bottom right");
     }
@@ -290,7 +286,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_clip_border_box_baseline() {
         let mask_clip = MaskClip::BorderBox;
         let string_value = mask_clip.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "border-box");
     }
@@ -299,7 +295,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_clip_padding_box_baseline() {
         let mask_clip = MaskClip::PaddingBox;
         let string_value = mask_clip.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "padding-box");
     }
@@ -308,7 +304,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_clip_content_box_baseline() {
         let mask_clip = MaskClip::ContentBox;
         let string_value = mask_clip.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "content-box");
     }
@@ -317,7 +313,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_clip_text_baseline() {
         let mask_clip = MaskClip::Text;
         let string_value = mask_clip.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "text");
     }
@@ -326,7 +322,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_origin_border_box_baseline() {
         let mask_origin = MaskOrigin::BorderBox;
         let string_value = mask_origin.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "border-box");
     }
@@ -335,7 +331,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_origin_padding_box_baseline() {
         let mask_origin = MaskOrigin::PaddingBox;
         let string_value = mask_origin.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "padding-box");
     }
@@ -344,7 +340,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_origin_content_box_baseline() {
         let mask_origin = MaskOrigin::ContentBox;
         let string_value = mask_origin.to_string();
-        
+
         // Baseline string output
         assert_eq!(string_value, "content-box");
     }
@@ -353,10 +349,10 @@ mod mask_utilities_baseline_tests {
     fn test_mask_utilities_serialization_baseline() {
         let mask_type = MaskType::Alpha;
         let serialized = serde_json::to_string(&mask_type).unwrap();
-        
+
         // Baseline: Should serialize to JSON
         assert!(serialized.contains("Alpha"));
-        
+
         // Should deserialize back to the same value
         let deserialized: MaskType = serde_json::from_str(&serialized).unwrap();
         assert_eq!(mask_type, deserialized);
@@ -367,7 +363,7 @@ mod mask_utilities_baseline_tests {
         let mask1 = MaskType::Alpha;
         let mask2 = MaskType::Alpha;
         let mask3 = MaskType::Luminance;
-        
+
         // Baseline: Same variants should be equal
         assert_eq!(mask1, mask2);
         assert_ne!(mask1, mask3);
@@ -377,7 +373,7 @@ mod mask_utilities_baseline_tests {
     fn test_mask_utilities_clone_baseline() {
         let mask_type = MaskType::Luminance;
         let cloned = mask_type.clone();
-        
+
         // Baseline: Cloned mask should be equal to original
         assert_eq!(mask_type, cloned);
     }
@@ -396,9 +392,9 @@ mod mask_utilities_baseline_tests {
             .responsive(Breakpoint::Md, "mask-luminance")
             .conditional("hover", "mask-none")
             .build();
-        
+
         let classes = class_set.to_css_classes();
-        
+
         // Baseline: Should contain expected classes
         assert!(classes.contains("mask-alpha"));
         assert!(classes.contains("mask-repeat-round"));

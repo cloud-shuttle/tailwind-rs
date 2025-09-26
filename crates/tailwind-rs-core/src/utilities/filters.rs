@@ -146,7 +146,7 @@ impl Blur {
             Blur::Xl3 => "3xl".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Blur::None => "0".to_string(),
@@ -177,7 +177,7 @@ impl Brightness {
             Brightness::TwoHundred => "200".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Brightness::Zero => "0".to_string(),
@@ -207,7 +207,7 @@ impl Contrast {
             Contrast::TwoHundred => "200".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Contrast::Zero => "0".to_string(),
@@ -228,7 +228,7 @@ impl Grayscale {
             Grayscale::Hundred => "100".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Grayscale::Zero => "0".to_string(),
@@ -248,7 +248,7 @@ impl HueRotate {
             HueRotate::HundredEighty => "180".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             HueRotate::Zero => "0deg".to_string(),
@@ -268,7 +268,7 @@ impl Invert {
             Invert::Hundred => "100".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Invert::Zero => "0".to_string(),
@@ -287,7 +287,7 @@ impl Saturate {
             Saturate::TwoHundred => "200".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Saturate::Zero => "0".to_string(),
@@ -306,7 +306,7 @@ impl Sepia {
             Sepia::Hundred => "100".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             Sepia::Zero => "0".to_string(),
@@ -454,7 +454,7 @@ impl SepiaUtilities for ClassBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_blur_utilities() {
         let classes = ClassBuilder::new()
@@ -467,7 +467,7 @@ mod tests {
             .blur(Blur::Xl2)
             .blur(Blur::Xl3)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("blur-none"));
         assert!(css_classes.contains("blur-sm"));
@@ -478,7 +478,7 @@ mod tests {
         assert!(css_classes.contains("blur-2xl"));
         assert!(css_classes.contains("blur-3xl"));
     }
-    
+
     #[test]
     fn test_brightness_utilities() {
         let classes = ClassBuilder::new()
@@ -494,7 +494,7 @@ mod tests {
             .brightness(Brightness::HundredFifty)
             .brightness(Brightness::TwoHundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("brightness-0"));
         assert!(css_classes.contains("brightness-50"));
@@ -508,7 +508,7 @@ mod tests {
         assert!(css_classes.contains("brightness-150"));
         assert!(css_classes.contains("brightness-200"));
     }
-    
+
     #[test]
     fn test_contrast_utilities() {
         let classes = ClassBuilder::new()
@@ -520,7 +520,7 @@ mod tests {
             .contrast(Contrast::HundredFifty)
             .contrast(Contrast::TwoHundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("contrast-0"));
         assert!(css_classes.contains("contrast-50"));
@@ -530,19 +530,19 @@ mod tests {
         assert!(css_classes.contains("contrast-150"));
         assert!(css_classes.contains("contrast-200"));
     }
-    
+
     #[test]
     fn test_grayscale_utilities() {
         let classes = ClassBuilder::new()
             .grayscale(Grayscale::Zero)
             .grayscale(Grayscale::Hundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("grayscale-0"));
         assert!(css_classes.contains("grayscale-100"));
     }
-    
+
     #[test]
     fn test_hue_rotate_utilities() {
         let classes = ClassBuilder::new()
@@ -553,7 +553,7 @@ mod tests {
             .hue_rotate(HueRotate::Ninety)
             .hue_rotate(HueRotate::HundredEighty)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("hue-rotate-0"));
         assert!(css_classes.contains("hue-rotate-15"));
@@ -562,19 +562,19 @@ mod tests {
         assert!(css_classes.contains("hue-rotate-90"));
         assert!(css_classes.contains("hue-rotate-180"));
     }
-    
+
     #[test]
     fn test_invert_utilities() {
         let classes = ClassBuilder::new()
             .invert(Invert::Zero)
             .invert(Invert::Hundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("invert-0"));
         assert!(css_classes.contains("invert-100"));
     }
-    
+
     #[test]
     fn test_saturate_utilities() {
         let classes = ClassBuilder::new()
@@ -584,7 +584,7 @@ mod tests {
             .saturate(Saturate::HundredFifty)
             .saturate(Saturate::TwoHundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("saturate-0"));
         assert!(css_classes.contains("saturate-50"));
@@ -592,19 +592,19 @@ mod tests {
         assert!(css_classes.contains("saturate-150"));
         assert!(css_classes.contains("saturate-200"));
     }
-    
+
     #[test]
     fn test_sepia_utilities() {
         let classes = ClassBuilder::new()
             .sepia(Sepia::Zero)
             .sepia(Sepia::Hundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("sepia-0"));
         assert!(css_classes.contains("sepia-100"));
     }
-    
+
     #[test]
     fn test_complex_filters_combination() {
         let classes = ClassBuilder::new()
@@ -617,7 +617,7 @@ mod tests {
             .saturate(Saturate::HundredFifty)
             .sepia(Sepia::Zero)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("blur-md"));
         assert!(css_classes.contains("brightness-110"));
@@ -628,7 +628,7 @@ mod tests {
         assert!(css_classes.contains("saturate-150"));
         assert!(css_classes.contains("sepia-0"));
     }
-    
+
     /// Test that all Week 10 filter utilities are implemented
     #[test]
     fn test_week10_filter_utilities() {
@@ -664,9 +664,9 @@ mod tests {
             .contrast(Contrast::HundredFifty)
             .contrast(Contrast::TwoHundred)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
-        
+
         // Blur
         assert!(css_classes.contains("blur-none"));
         assert!(css_classes.contains("blur-sm"));
@@ -676,7 +676,7 @@ mod tests {
         assert!(css_classes.contains("blur-xl"));
         assert!(css_classes.contains("blur-2xl"));
         assert!(css_classes.contains("blur-3xl"));
-        
+
         // Brightness
         assert!(css_classes.contains("brightness-0"));
         assert!(css_classes.contains("brightness-50"));
@@ -689,7 +689,7 @@ mod tests {
         assert!(css_classes.contains("brightness-125"));
         assert!(css_classes.contains("brightness-150"));
         assert!(css_classes.contains("brightness-200"));
-        
+
         // Contrast
         assert!(css_classes.contains("contrast-0"));
         assert!(css_classes.contains("contrast-50"));

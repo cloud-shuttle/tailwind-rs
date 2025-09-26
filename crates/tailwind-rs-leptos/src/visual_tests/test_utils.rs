@@ -18,13 +18,18 @@ impl VisualTestUtils {
             metadata: HashMap::new(),
         }
     }
-    
+
     /// Compare two visual snapshots
-    pub fn compare_snapshots(snapshot1: &VisualSnapshot, snapshot2: &VisualSnapshot) -> VisualComparison {
+    pub fn compare_snapshots(
+        snapshot1: &VisualSnapshot,
+        snapshot2: &VisualSnapshot,
+    ) -> VisualComparison {
         let classes_match = snapshot1.classes == snapshot2.classes;
-        let time_diff = snapshot2.timestamp.duration_since(snapshot1.timestamp)
+        let time_diff = snapshot2
+            .timestamp
+            .duration_since(snapshot1.timestamp)
             .unwrap_or_default();
-        
+
         VisualComparison {
             component_name: snapshot1.component_name.clone(),
             classes_match,
@@ -40,19 +45,24 @@ impl VisualTestUtils {
             },
         }
     }
-    
+
     /// Validate that a component's classes are consistent
-    pub fn validate_component_consistency(_component_name: &str, expected_classes: &str, actual_classes: &str) -> bool {
+    pub fn validate_component_consistency(
+        _component_name: &str,
+        expected_classes: &str,
+        actual_classes: &str,
+    ) -> bool {
         expected_classes == actual_classes
     }
-    
+
     /// Extract class differences between two class strings
     pub fn extract_class_differences(expected: &str, actual: &str) -> Vec<VisualDifference> {
-        let expected_classes: std::collections::HashSet<&str> = expected.split_whitespace().collect();
+        let expected_classes: std::collections::HashSet<&str> =
+            expected.split_whitespace().collect();
         let actual_classes: std::collections::HashSet<&str> = actual.split_whitespace().collect();
-        
+
         let mut differences = Vec::new();
-        
+
         // Find missing classes
         for missing_class in expected_classes.difference(&actual_classes) {
             differences.push(VisualDifference {
@@ -61,7 +71,7 @@ impl VisualTestUtils {
                 new_value: String::new(),
             });
         }
-        
+
         // Find extra classes
         for extra_class in actual_classes.difference(&expected_classes) {
             differences.push(VisualDifference {
@@ -70,7 +80,7 @@ impl VisualTestUtils {
                 new_value: extra_class.to_string(),
             });
         }
-        
+
         differences
     }
 }
@@ -108,7 +118,7 @@ mod tests {
     #[test]
     fn test_capture_component_state() {
         let snapshot = VisualTestUtils::capture_component_state("Button", "px-4 py-2 bg-blue-600");
-        
+
         assert_eq!(snapshot.component_name, "Button");
         assert_eq!(snapshot.classes, "px-4 py-2 bg-blue-600");
         assert!(snapshot.metadata.is_empty());
@@ -118,9 +128,9 @@ mod tests {
     fn test_compare_snapshots_identical() {
         let snapshot1 = VisualTestUtils::capture_component_state("Button", "px-4 py-2 bg-blue-600");
         let snapshot2 = VisualTestUtils::capture_component_state("Button", "px-4 py-2 bg-blue-600");
-        
+
         let comparison = VisualTestUtils::compare_snapshots(&snapshot1, &snapshot2);
-        
+
         assert!(comparison.classes_match);
         assert!(comparison.differences.is_empty());
     }
@@ -129,9 +139,9 @@ mod tests {
     fn test_compare_snapshots_different() {
         let snapshot1 = VisualTestUtils::capture_component_state("Button", "px-4 py-2 bg-blue-600");
         let snapshot2 = VisualTestUtils::capture_component_state("Button", "px-4 py-2 bg-red-600");
-        
+
         let comparison = VisualTestUtils::compare_snapshots(&snapshot1, &snapshot2);
-        
+
         assert!(!comparison.classes_match);
         assert_eq!(comparison.differences.len(), 1);
         assert_eq!(comparison.differences[0].field, "classes");
@@ -139,16 +149,28 @@ mod tests {
 
     #[test]
     fn test_validate_component_consistency() {
-        assert!(VisualTestUtils::validate_component_consistency("Button", "px-4 py-2", "px-4 py-2"));
-        assert!(!VisualTestUtils::validate_component_consistency("Button", "px-4 py-2", "px-4 py-3"));
+        assert!(VisualTestUtils::validate_component_consistency(
+            "Button",
+            "px-4 py-2",
+            "px-4 py-2"
+        ));
+        assert!(!VisualTestUtils::validate_component_consistency(
+            "Button",
+            "px-4 py-2",
+            "px-4 py-3"
+        ));
     }
 
     #[test]
     fn test_extract_class_differences() {
         let differences = VisualTestUtils::extract_class_differences("px-4 py-2", "px-4 py-3");
-        
+
         assert_eq!(differences.len(), 2);
-        assert!(differences.iter().any(|d| d.field == "missing_class" && d.old_value == "py-2"));
-        assert!(differences.iter().any(|d| d.field == "extra_class" && d.new_value == "py-3"));
+        assert!(differences
+            .iter()
+            .any(|d| d.field == "missing_class" && d.old_value == "py-2"));
+        assert!(differences
+            .iter()
+            .any(|d| d.field == "extra_class" && d.new_value == "py-3"));
     }
 }

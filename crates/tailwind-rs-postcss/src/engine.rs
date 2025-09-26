@@ -4,12 +4,12 @@
 //! AST manipulation, and source map generation.
 
 use crate::ast::{CSSNode, CSSRule};
-use crate::parser::{CSSParser, ParseOptions};
-use crate::transformer::{CSSTransformer, TransformOptions};
-use crate::js_bridge::JSBridge;
-use crate::plugin_loader::{PluginLoader, PluginConfig, PluginResult};
-use crate::source_map::{SourceMapGenerator, SourceMap};
 use crate::error::{PostCSSError, Result};
+use crate::js_bridge::JSBridge;
+use crate::parser::{CSSParser, ParseOptions};
+use crate::plugin_loader::{PluginConfig, PluginLoader, PluginResult};
+use crate::source_map::{SourceMap, SourceMapGenerator};
+use crate::transformer::{CSSTransformer, TransformOptions};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -154,7 +154,7 @@ impl PostCSSEngine {
         let transformer = CSSTransformer::new(config.transform_options.clone());
         let plugin_loader = PluginLoader::new();
         let source_map_generator = SourceMapGenerator::new();
-        
+
         // Initialize JavaScript bridge if needed
         let js_bridge = if config.plugins.iter().any(|p| p.requires_js()) {
             Some(JSBridge::new()?)
@@ -176,7 +176,7 @@ impl PostCSSEngine {
     /// Process CSS input through PostCSS pipeline
     pub async fn process_css(&self, input: &str) -> Result<ProcessedCSS> {
         let start_time = std::time::Instant::now();
-        
+
         // Check cache first
         if self.config.performance.enable_cache {
             if let Some(cached) = self.get_cached_result(input).await {
@@ -207,11 +207,10 @@ impl PostCSSEngine {
                 source_root: self.config.source_map_options.source_root.clone(),
                 sources_content: self.config.source_map_options.sources_content,
             };
-            Some(self.source_map_generator.generate(
-                input,
-                &css,
-                &source_map_options,
-            )?)
+            Some(
+                self.source_map_generator
+                    .generate(input, &css, &source_map_options)?,
+            )
         } else {
             None
         };
@@ -246,7 +245,7 @@ impl PostCSSEngine {
     async fn apply_transformations(&self, mut ast: CSSNode) -> Result<CSSNode> {
         for plugin_config in &self.config.plugins {
             let plugin_result = self.plugin_loader.load_plugin(plugin_config).await?;
-            
+
             match plugin_result {
                 PluginResult::Native(plugin) => {
                     ast = plugin.transform(ast)?;
@@ -285,11 +284,11 @@ impl PostCSSEngine {
     /// Convert a CSS rule to CSS string
     fn rule_to_css(&self, rule: &CSSRule) -> Result<String> {
         let mut css = String::new();
-        
+
         // Add selector
         css.push_str(&rule.selector);
         css.push_str(" {\n");
-        
+
         // Add declarations
         for declaration in &rule.declarations {
             css.push_str("  ");
@@ -301,7 +300,7 @@ impl PostCSSEngine {
             }
             css.push_str(";\n");
         }
-        
+
         css.push('}');
         Ok(css)
     }
@@ -315,7 +314,7 @@ impl PostCSSEngine {
     /// Cache processing result
     async fn cache_result(&self, input: &str, result: &ProcessedCSS) {
         let mut cache = self.cache.write().await;
-        
+
         // Check cache size limit
         if cache.len() >= self.config.performance.cache_size_limit {
             // Remove oldest entries (simple LRU)
@@ -324,7 +323,7 @@ impl PostCSSEngine {
                 cache.remove(&key);
             }
         }
-        
+
         cache.insert(input.to_string(), result.clone());
     }
 
@@ -387,7 +386,7 @@ mod tests {
         let input = ".test { color: red; }";
         let result = engine.process_css(input).await;
         assert!(result.is_ok());
-        
+
         let css = result.unwrap();
         assert!(css.css.contains(".test"));
         assert!(css.css.contains("color: red"));
@@ -397,16 +396,16 @@ mod tests {
     async fn test_caching() {
         let mut config = PostCSSConfig::default();
         config.performance.enable_cache = true;
-        
+
         let engine = PostCSSEngine::new(config).unwrap();
         let input = ".test { color: red; }";
-        
+
         // First processing
         let result1 = engine.process_css(input).await.unwrap();
-        
+
         // Second processing (should use cache)
         let result2 = engine.process_css(input).await.unwrap();
-        
+
         assert_eq!(result1.css, result2.css);
     }
 }

@@ -1,7 +1,7 @@
-use tailwind_rs_core::utilities::enhanced_backdrop_filters::*;
-use tailwind_rs_core::ClassBuilder;
-use tailwind_rs_core::Breakpoint;
 use std::time::Instant;
+use tailwind_rs_core::utilities::enhanced_backdrop_filters::*;
+use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod enhanced_backdrop_filters_performance_tests {
@@ -10,71 +10,89 @@ mod enhanced_backdrop_filters_performance_tests {
     #[test]
     fn test_enhanced_backdrop_filters_generation_performance() {
         let start = Instant::now();
-        
+
         // Generate 1000 enhanced backdrop filter utility classes
         for _ in 0..1000 {
-            let _ = ClassBuilder::new()
-                .backdrop_blur_sm()
-                .build();
+            let _ = ClassBuilder::new().backdrop_blur_sm().build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 50, "Enhanced backdrop filters generation too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 50,
+            "Enhanced backdrop filters generation too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_string_generation_performance() {
         let start = Instant::now();
-        
+
         // Generate 1000 enhanced backdrop filter string representations
         for _ in 0..1000 {
             let _ = EnhancedBackdropBlur::Sm.to_string();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 10, "String generation too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 10,
+            "String generation too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_class_name_generation_performance() {
         let start = Instant::now();
-        
+
         // Generate 1000 enhanced backdrop filter class names
         for _ in 0..1000 {
             let _ = ClassBuilder::new().backdrop_blur_sm().build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 5, "Class name generation too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 5,
+            "Class name generation too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_memory_usage() {
         let initial_memory = get_memory_usage();
-        
+
         // Create many enhanced backdrop filter builders
         let _builders: Vec<ClassBuilder> = (0..1000)
             .map(|_| ClassBuilder::new().backdrop_blur_sm())
             .collect();
-        
+
         let final_memory = get_memory_usage();
         let memory_increase = final_memory - initial_memory;
-        
-        assert!(memory_increase < 100_000, "Memory usage too high: {} bytes", memory_increase);
+
+        assert!(
+            memory_increase < 100_000,
+            "Memory usage too high: {} bytes",
+            memory_increase
+        );
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_serialization_performance() {
         let blur = EnhancedBackdropBlur::Lg;
         let start = Instant::now();
-        
+
         // Serialize 1000 times
         for _ in 0..1000 {
             let _ = serde_json::to_string(&blur).unwrap();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 20, "Serialization too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 20,
+            "Serialization too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
@@ -82,20 +100,24 @@ mod enhanced_backdrop_filters_performance_tests {
         let blur = EnhancedBackdropBlur::Lg;
         let serialized = serde_json::to_string(&blur).unwrap();
         let start = Instant::now();
-        
+
         // Deserialize 1000 times
         for _ in 0..1000 {
             let _: EnhancedBackdropBlur = serde_json::from_str(&serialized).unwrap();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 30, "Deserialization too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 30,
+            "Deserialization too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_complex_builder_performance() {
         let start = Instant::now();
-        
+
         // Generate complex class builders with enhanced backdrop filters
         for _ in 0..100 {
             let _ = ClassBuilder::new()
@@ -109,15 +131,19 @@ mod enhanced_backdrop_filters_performance_tests {
                 .conditional("hover", "backdrop-blur-none")
                 .build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 100, "Complex builder too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 100,
+            "Complex builder too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_enum_values_performance() {
         let start = Instant::now();
-        
+
         // Generate enhanced backdrop filter enum values
         for _i in 0..1000 {
             let _ = EnhancedBackdropBlur::Sm.to_string();
@@ -132,15 +158,19 @@ mod enhanced_backdrop_filters_performance_tests {
             let _ = EnhancedBackdropSaturate::OneHundredFifty.to_string();
             let _ = EnhancedBackdropSepia::Quarter.to_string();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 50, "Enum values too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 50,
+            "Enum values too slow: {}ms",
+            duration.as_millis()
+        );
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_all_variants_performance() {
         let start = Instant::now();
-        
+
         // Generate all enhanced backdrop filter variants
         for _i in 0..100 {
             let _ = ClassBuilder::new()
@@ -154,9 +184,13 @@ mod enhanced_backdrop_filters_performance_tests {
                 .backdrop_blur_3xl()
                 .build();
         }
-        
+
         let duration = start.elapsed();
-        assert!(duration.as_millis() < 200, "All variants too slow: {}ms", duration.as_millis());
+        assert!(
+            duration.as_millis() < 200,
+            "All variants too slow: {}ms",
+            duration.as_millis()
+        );
     }
 }
 

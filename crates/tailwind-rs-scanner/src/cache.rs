@@ -4,11 +4,11 @@
 //! content scanning and file watching.
 
 use crate::class_extractor::ExtractedClass;
-use crate::error::{ScannerError, Result};
+use crate::error::{Result, ScannerError};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::time::{SystemTime, Duration};
+use std::time::{Duration, SystemTime};
 
 /// Scan cache for storing processed results
 #[derive(Debug)]
@@ -95,7 +95,7 @@ impl ScanCache {
             created: SystemTime::now(),
             ttl: Duration::from_secs(3600), // 1 hour default TTL
         };
-        
+
         self.entries.insert(path, entry);
         self.stats.total_entries = self.entries.len();
     }
@@ -164,15 +164,13 @@ mod tests {
     #[test]
     fn test_cache_entry_creation() {
         let path = PathBuf::from("test.rs");
-        let classes = vec![
-            ExtractedClass {
-                class_name: "p-4".to_string(),
-                context: ClassContext::new(),
-                line: 1,
-                column: 1,
-            },
-        ];
-        
+        let classes = vec![ExtractedClass {
+            class_name: "p-4".to_string(),
+            context: ClassContext::new(),
+            line: 1,
+            column: 1,
+        }];
+
         let entry = CacheEntry {
             path: path.clone(),
             classes,
@@ -180,7 +178,7 @@ mod tests {
             created: SystemTime::now(),
             ttl: Duration::from_secs(3600),
         };
-        
+
         assert_eq!(entry.path, path);
         assert!(entry.is_valid());
     }
@@ -189,23 +187,21 @@ mod tests {
     fn test_cache_operations() {
         let mut cache = ScanCache::new();
         let path = PathBuf::from("test.rs");
-        let classes = vec![
-            ExtractedClass {
-                class_name: "p-4".to_string(),
-                context: ClassContext::new(),
-                line: 1,
-                column: 1,
-            },
-        ];
-        
+        let classes = vec![ExtractedClass {
+            class_name: "p-4".to_string(),
+            context: ClassContext::new(),
+            line: 1,
+            column: 1,
+        }];
+
         // Add to cache
         cache.update_file(path.clone(), classes);
         assert!(cache.is_cached(&path));
-        
+
         // Get from cache
         let cached_classes = cache.get_file_classes(&path);
         assert!(cached_classes.is_some());
-        
+
         // Remove from cache
         cache.remove_file(&path);
         assert!(!cache.is_cached(&path));

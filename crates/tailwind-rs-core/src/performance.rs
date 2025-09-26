@@ -5,11 +5,11 @@
 
 use crate::error::Result;
 use lru::LruCache;
-use std::collections::HashMap;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::time::{Duration, Instant};
 use parking_lot::RwLock;
+use std::collections::HashMap;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::Arc;
+use std::time::{Duration, Instant};
 
 /// Performance metrics for tracking optimization effectiveness
 #[derive(Debug, Clone)]
@@ -52,7 +52,8 @@ impl ClassCache {
     pub fn new(capacity: usize) -> Self {
         Self {
             cache: Arc::new(RwLock::new(LruCache::new(
-                std::num::NonZeroUsize::new(capacity).unwrap_or(std::num::NonZeroUsize::new(100).unwrap()),
+                std::num::NonZeroUsize::new(capacity)
+                    .unwrap_or(std::num::NonZeroUsize::new(100).unwrap()),
             ))),
             hit_rate: AtomicU64::new(0),
             miss_rate: AtomicU64::new(0),
@@ -85,7 +86,11 @@ impl ClassCache {
         let hits = self.hit_rate.load(Ordering::Relaxed) as f64;
         let total = self.total_requests.load(Ordering::Relaxed) as f64;
 
-        if total == 0.0 { 0.0 } else { hits / total }
+        if total == 0.0 {
+            0.0
+        } else {
+            hits / total
+        }
     }
 
     /// Get cache miss rate (0.0 to 1.0)
@@ -93,7 +98,11 @@ impl ClassCache {
         let misses = self.miss_rate.load(Ordering::Relaxed) as f64;
         let total = self.total_requests.load(Ordering::Relaxed) as f64;
 
-        if total == 0.0 { 0.0 } else { misses / total }
+        if total == 0.0 {
+            0.0
+        } else {
+            misses / total
+        }
     }
 
     /// Get total number of requests

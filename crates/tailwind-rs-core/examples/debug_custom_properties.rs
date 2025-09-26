@@ -4,7 +4,7 @@ use tailwind_rs_core::css_generator::CssGenerator;
 
 fn main() {
     let generator = CssGenerator::new();
-    
+
     // Test custom properties
     let test_classes = vec![
         "w-(--my-width)",
@@ -12,10 +12,10 @@ fn main() {
         "w-(--my-var)",
         "h-(--my-var)",
     ];
-    
+
     println!("🔍 Debug Custom Properties Test");
     println!("===================================");
-    
+
     for class in test_classes {
         match generator.class_to_properties(class) {
             Ok(properties) => {

@@ -332,7 +332,10 @@ mod tests {
     fn test_aspect_ratio_class_names() {
         assert_eq!(ContainerAspectRatio::Square.to_class_name(), "square");
         assert_eq!(ContainerAspectRatio::Video.to_class_name(), "video");
-        assert_eq!(ContainerAspectRatio::Widescreen.to_class_name(), "widescreen");
+        assert_eq!(
+            ContainerAspectRatio::Widescreen.to_class_name(),
+            "widescreen"
+        );
         assert_eq!(ContainerAspectRatio::Ultrawide.to_class_name(), "ultrawide");
     }
 

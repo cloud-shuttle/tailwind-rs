@@ -5,9 +5,7 @@
 
 use proptest::prelude::*;
 
-use tailwind_rs_core::{
-    classes::ClassBuilder,
-};
+use tailwind_rs_core::classes::ClassBuilder;
 
 /// Generate valid API versions for testing
 pub fn valid_api_version() -> impl Strategy<Value = String> {
@@ -25,13 +23,16 @@ pub fn valid_migration_scenario() -> impl Strategy<Value = (String, String, Vec<
     (
         valid_api_version(),
         valid_api_version(),
-        prop::collection::vec(prop_oneof![
-            Just("class".to_string()),
-            Just("base".to_string()),
-            Just("variant".to_string()),
-            Just("build".to_string()),
-            Just("build_string".to_string()),
-        ], 1..=5)
+        prop::collection::vec(
+            prop_oneof![
+                Just("class".to_string()),
+                Just("base".to_string()),
+                Just("variant".to_string()),
+                Just("build".to_string()),
+                Just("build_string".to_string()),
+            ],
+            1..=5,
+        ),
     )
 }
 
@@ -69,23 +70,23 @@ mod api_stability_property_tests {
                 old_builder = old_builder.class(class);
             }
             let old_result = old_builder.build().to_css_classes();
-            
+
             // Test that new API works
             let mut new_builder = ClassBuilder::new();
             for class in &new_classes {
                 new_builder = new_builder.class(class);
             }
             let new_result = new_builder.build().to_css_classes();
-            
+
             // Property: Both APIs should produce valid results
-            assert!(!old_result.is_empty() || old_classes.is_empty(), 
+            assert!(!old_result.is_empty() || old_classes.is_empty(),
                 "Old API should produce valid results");
-            assert!(!new_result.is_empty() || new_classes.is_empty(), 
+            assert!(!new_result.is_empty() || new_classes.is_empty(),
                 "New API should produce valid results");
-            
+
             // Property: Same input should produce same output
             if old_classes == new_classes {
-                assert_eq!(old_result, new_result, 
+                assert_eq!(old_result, new_result,
                     "Same input should produce same output across API versions");
             }
         }
@@ -108,17 +109,17 @@ mod api_stability_property_tests {
             for class in &classes {
                 builder = builder.class(class);
             }
-            
+
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
-            
+
             // Property: Basic functionality should not break
-            assert!(!class_string.is_empty() || classes.is_empty(), 
+            assert!(!class_string.is_empty() || classes.is_empty(),
                 "Basic functionality should not break");
-            
+
             // Property: All classes should be present
             for class in &classes {
-                assert!(class_string.contains(class), 
+                assert!(class_string.contains(class),
                     "All classes should be present: {}", class);
             }
         }
@@ -141,18 +142,18 @@ mod api_stability_property_tests {
             for class in &large_class_set {
                 builder = builder.class(class);
             }
-            
+
             let start = std::time::Instant::now();
             let class_set = builder.build();
             let class_string = class_set.to_css_classes();
             let duration = start.elapsed();
-            
+
             // Property: Performance should be reasonable
-            assert!(duration.as_millis() < 100, 
+            assert!(duration.as_millis() < 100,
                 "Performance should be reasonable: {:?}", duration);
-            
+
             // Property: Large input should produce valid output
-            assert!(!class_string.is_empty(), 
+            assert!(!class_string.is_empty(),
                 "Large input should produce valid output");
         }
     }
@@ -177,7 +178,7 @@ mod migration_path_property_tests {
                             let mut builder = ClassBuilder::new();
                             builder = builder.class("px-4");
                             let result = builder.build().to_css_classes();
-                            assert!(result.contains("px-4"), 
+                            assert!(result.contains("px-4"),
                                 "Migration step 'class' should work");
                         },
                         "base" => {
@@ -234,21 +235,21 @@ mod migration_path_property_tests {
             for class in &original_classes {
                 builder = builder.class(class);
             }
-            
+
             let class_set = builder.build();
             let migrated_classes = class_set.to_css_classes();
-            
+
             // Property: Migration should preserve all classes
             for class in &original_classes {
-                assert!(migrated_classes.contains(class), 
+                assert!(migrated_classes.contains(class),
                     "Migration should preserve class: {}", class);
             }
-            
+
             // Property: Migration should not add unexpected classes
             let migrated_class_list: Vec<&str> = migrated_classes.split_whitespace().collect();
             // Note: ClassSet deduplicates classes, so we check that all unique classes are preserved
             let unique_original: std::collections::HashSet<&String> = original_classes.iter().collect();
-            assert!(migrated_class_list.len() >= unique_original.len(), 
+            assert!(migrated_class_list.len() >= unique_original.len(),
                 "Migration should not lose unique classes");
         }
 
@@ -277,23 +278,23 @@ mod migration_path_property_tests {
                 builder = builder.class(class);
             }
             let result = builder.build().to_css_classes();
-            assert!(result.is_empty() || result.trim().is_empty(), 
+            assert!(result.is_empty() || result.trim().is_empty(),
                 "Empty classes migration should work");
-            
+
             // Test single class migration
             let mut builder = ClassBuilder::new();
             builder = builder.class(&single_class);
             let result = builder.build().to_css_classes();
-            assert!(result.contains(&single_class), 
+            assert!(result.contains(&single_class),
                 "Single class migration should work");
-            
+
             // Test duplicate classes migration
             let mut builder = ClassBuilder::new();
             for class in &duplicate_classes {
                 builder = builder.class(class);
             }
             let result = builder.build().to_css_classes();
-            assert!(result.contains("px-4"), 
+            assert!(result.contains("px-4"),
                 "Duplicate classes migration should work");
         }
     }
@@ -323,21 +324,21 @@ mod version_compatibility_property_tests {
             // Test that different versions produce compatible results
             let mut builder1 = ClassBuilder::new();
             let mut builder2 = ClassBuilder::new();
-            
+
             for class in &classes {
                 builder1 = builder1.class(class);
                 builder2 = builder2.class(class);
             }
-            
+
             let result1 = builder1.build().to_css_classes();
             let result2 = builder2.build().to_css_classes();
-            
+
             // Property: Same input should produce same output regardless of version
-            assert_eq!(result1, result2, 
+            assert_eq!(result1, result2,
                 "Same input should produce same output regardless of version");
-            
+
             // Property: Results should be valid
-            assert!(!result1.is_empty() || classes.is_empty(), 
+            assert!(!result1.is_empty() || classes.is_empty(),
                 "Results should be valid");
         }
 

@@ -3,7 +3,7 @@
 //! This module provides a plugin system that allows users to extend Tailwind-RS
 //! with custom utilities, components, and optimizations.
 
-use crate::css_generator::{CssGenerator, CssRule, CssProperty};
+use crate::css_generator::{CssGenerator, CssProperty, CssRule};
 use crate::error::{Result, TailwindError};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -38,22 +38,22 @@ pub struct PluginContext {
 pub trait Plugin: Send + Sync {
     /// Get the plugin name
     fn name(&self) -> &str;
-    
+
     /// Get the plugin version
     fn version(&self) -> &str;
-    
+
     /// Get the plugin description
     fn description(&self) -> &str;
-    
+
     /// Initialize the plugin
     fn initialize(&mut self, context: &mut PluginContext) -> Result<()>;
-    
+
     /// Handle plugin hooks
     fn handle_hook(&mut self, hook: PluginHook, context: &mut PluginContext) -> Result<()>;
-    
+
     /// Get plugin configuration schema
     fn get_config_schema(&self) -> Option<serde_json::Value>;
-    
+
     /// Validate plugin configuration
     fn validate_config(&self, config: &serde_json::Value) -> Result<()>;
 }
@@ -82,38 +82,44 @@ impl PluginRegistry {
     /// Register a plugin
     pub fn register_plugin(&mut self, plugin: Box<dyn Plugin>) -> Result<()> {
         let name = plugin.name().to_string();
-        
+
         if self.plugins.contains_key(&name) {
-            return Err(TailwindError::build(format!("Plugin '{}' is already registered", name)));
+            return Err(TailwindError::build(format!(
+                "Plugin '{}' is already registered",
+                name
+            )));
         }
-        
+
         // Initialize the plugin
         let mut plugin_box = plugin;
         plugin_box.initialize(&mut self.context)?;
-        
+
         // Register the plugin
         self.plugins.insert(name.clone(), plugin_box);
-        
+
         // Register default hooks
         self.register_default_hooks(&name);
-        
+
         Ok(())
     }
 
     /// Unregister a plugin
     pub fn unregister_plugin(&mut self, name: &str) -> Result<()> {
         if !self.plugins.contains_key(name) {
-            return Err(TailwindError::build(format!("Plugin '{}' is not registered", name)));
+            return Err(TailwindError::build(format!(
+                "Plugin '{}' is not registered",
+                name
+            )));
         }
-        
+
         // Remove from plugins
         self.plugins.remove(name);
-        
+
         // Remove from hooks
         for hook_list in self.hooks.values_mut() {
             hook_list.retain(|plugin_name| plugin_name != name);
         }
-        
+
         Ok(())
     }
 
@@ -149,11 +155,15 @@ impl PluginRegistry {
     }
 
     /// Set plugin configuration
-    pub fn set_plugin_config(&mut self, plugin_name: &str, config: serde_json::Value) -> Result<()> {
+    pub fn set_plugin_config(
+        &mut self,
+        plugin_name: &str,
+        config: serde_json::Value,
+    ) -> Result<()> {
         if let Some(plugin) = self.plugins.get(plugin_name) {
             plugin.validate_config(&config)?;
         }
-        
+
         self.context.config.insert(plugin_name.to_string(), config);
         Ok(())
     }
@@ -192,13 +202,15 @@ impl PluginRegistry {
             PluginHook::OnRuleCreate,
             PluginHook::OnOptimize,
         ];
-        
+
         for hook in default_hooks {
-            self.hooks.entry(hook).or_default().push(plugin_name.to_string());
+            self.hooks
+                .entry(hook)
+                .or_default()
+                .push(plugin_name.to_string());
         }
     }
 }
-
 
 /// Example plugin: Custom utilities
 #[derive(Debug)]
@@ -241,19 +253,20 @@ impl Plugin for CustomUtilitiesPlugin {
 
     fn initialize(&mut self, _context: &mut PluginContext) -> Result<()> {
         // Add some default custom utilities
-        self.add_utility("custom-shadow".to_string(), CssRule {
-            selector: ".custom-shadow".to_string(),
-            properties: vec![
-                CssProperty {
+        self.add_utility(
+            "custom-shadow".to_string(),
+            CssRule {
+                selector: ".custom-shadow".to_string(),
+                properties: vec![CssProperty {
                     name: "box-shadow".to_string(),
                     value: "0 4px 6px -1px rgba(0, 0, 0, 0.1)".to_string(),
                     important: false,
-                },
-            ],
-            media_query: None,
-            specificity: 10,
-        });
-        
+                }],
+                media_query: None,
+                specificity: 10,
+            },
+        );
+
         Ok(())
     }
 
@@ -263,7 +276,10 @@ impl Plugin for CustomUtilitiesPlugin {
                 // Add custom utilities to the generator
                 // Note: This is a simplified implementation
                 // In a real implementation, we would need to modify the generator
-                println!("Custom utilities plugin: Adding {} custom utilities", self.custom_utilities.len());
+                println!(
+                    "Custom utilities plugin: Adding {} custom utilities",
+                    self.custom_utilities.len()
+                );
             }
             PluginHook::AfterGenerate => {
                 println!("Custom utilities plugin: CSS generation completed");
@@ -293,7 +309,9 @@ impl Plugin for CustomUtilitiesPlugin {
 
     fn validate_config(&self, config: &serde_json::Value) -> Result<()> {
         if !config.is_object() {
-            return Err(TailwindError::build("Plugin config must be an object".to_string()));
+            return Err(TailwindError::build(
+                "Plugin config must be an object".to_string(),
+            ));
         }
         Ok(())
     }
@@ -361,7 +379,9 @@ impl Plugin for MinifierPlugin {
     fn validate_config(&self, config: &serde_json::Value) -> Result<()> {
         if let Some(enabled) = config.get("enabled") {
             if !enabled.is_boolean() {
-                return Err(TailwindError::build("Minifier enabled must be a boolean".to_string()));
+                return Err(TailwindError::build(
+                    "Minifier enabled must be a boolean".to_string(),
+                ));
             }
         }
         Ok(())
@@ -382,11 +402,13 @@ mod tests {
     fn test_register_plugin() {
         let mut registry = PluginRegistry::new();
         let plugin = Box::new(CustomUtilitiesPlugin::new());
-        
+
         registry.register_plugin(plugin).unwrap();
-        
+
         assert_eq!(registry.list_plugins().len(), 1);
-        assert!(registry.list_plugins().contains(&"custom-utilities".to_string()));
+        assert!(registry
+            .list_plugins()
+            .contains(&"custom-utilities".to_string()));
     }
 
     #[test]
@@ -394,10 +416,10 @@ mod tests {
         let mut registry = PluginRegistry::new();
         let plugin1 = Box::new(CustomUtilitiesPlugin::new());
         let plugin2 = Box::new(CustomUtilitiesPlugin::new());
-        
+
         registry.register_plugin(plugin1).unwrap();
         let result = registry.register_plugin(plugin2);
-        
+
         assert!(result.is_err());
     }
 
@@ -405,10 +427,10 @@ mod tests {
     fn test_unregister_plugin() {
         let mut registry = PluginRegistry::new();
         let plugin = Box::new(CustomUtilitiesPlugin::new());
-        
+
         registry.register_plugin(plugin).unwrap();
         assert_eq!(registry.list_plugins().len(), 1);
-        
+
         registry.unregister_plugin("custom-utilities").unwrap();
         assert!(registry.list_plugins().is_empty());
     }
@@ -417,22 +439,24 @@ mod tests {
     fn test_plugin_config() {
         let mut registry = PluginRegistry::new();
         let plugin = Box::new(MinifierPlugin::new());
-        
+
         registry.register_plugin(plugin).unwrap();
-        
+
         let config = serde_json::json!({"enabled": true});
-        registry.set_plugin_config("minifier", config.clone()).unwrap();
-        
+        registry
+            .set_plugin_config("minifier", config.clone())
+            .unwrap();
+
         assert_eq!(registry.get_plugin_config("minifier"), Some(&config));
     }
 
     #[test]
     fn test_plugin_data() {
         let mut registry = PluginRegistry::new();
-        
+
         let data = serde_json::json!({"key": "value"});
         registry.set_plugin_data("test_key".to_string(), data.clone());
-        
+
         assert_eq!(registry.get_plugin_data("test_key"), Some(&data));
     }
 
@@ -440,9 +464,9 @@ mod tests {
     fn test_execute_hook() {
         let mut registry = PluginRegistry::new();
         let plugin = Box::new(MinifierPlugin::new());
-        
+
         registry.register_plugin(plugin).unwrap();
-        
+
         // This should not panic
         registry.execute_hook(PluginHook::OnOptimize).unwrap();
     }
@@ -455,7 +479,7 @@ mod tests {
             data: HashMap::new(),
             config: HashMap::new(),
         };
-        
+
         plugin.initialize(&mut context).unwrap();
         assert_eq!(plugin.name(), "custom-utilities");
         assert_eq!(plugin.version(), "1.0.0");
@@ -469,7 +493,7 @@ mod tests {
             data: HashMap::new(),
             config: HashMap::new(),
         };
-        
+
         plugin.initialize(&mut context).unwrap();
         assert_eq!(plugin.name(), "minifier");
         assert_eq!(plugin.version(), "1.0.0");

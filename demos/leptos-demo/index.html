@@ -6,10 +6,8 @@
     <title>Peter Hanssens - Data Engineer & Community Leader</title>
     <meta name="description" content="Interactive demo showcasing Tailwind-RS v0.15.0 capabilities with Leptos">
     
-    <!-- Generated Tailwind-RS v0.15.0 CSS files -->
-    <link rel="stylesheet" href="/comprehensive-styles.css">
-    <link rel="stylesheet" href="/custom-styles.css">
-    <link rel="stylesheet" href="/generated-styles.css">
+    <!-- Tailwind CSS from CDN for demo -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Custom styles for the demo -->
     <style>
@@ -110,7 +108,7 @@
     
     <!-- Load the WASM module -->
     <script type="module">
-        import init, { main } from './pkg/tailwind_rs_leptos_demo.js';
+        import init, { main } from './pkg/tailwind_rs_leptos_demo_working.js';
         
         async function run() {
             try {

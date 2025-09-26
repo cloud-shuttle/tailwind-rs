@@ -2,8 +2,8 @@
 //!
 //! This module contains utility functions for working with class sets.
 
-use crate::responsive::Breakpoint;
 use super::ClassSet;
+use crate::responsive::Breakpoint;
 
 /// Create a new class set with base classes
 pub fn new(classes: impl IntoIterator<Item = String>) -> ClassSet {

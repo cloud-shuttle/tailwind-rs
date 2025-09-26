@@ -39,10 +39,8 @@ mod tests {
 
     #[test]
     fn test_flex_shrink_utilities() {
-        let classes = ClassBuilder::new()
-            .flex_shrink(FlexShrink::Shrink)
-            .build();
-        
+        let classes = ClassBuilder::new().flex_shrink(FlexShrink::Shrink).build();
+
         assert!(classes.to_css_classes().contains("shrink"));
     }
 }

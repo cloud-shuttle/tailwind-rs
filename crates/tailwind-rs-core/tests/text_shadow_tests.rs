@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::text_shadow::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod text_shadow_unit_tests {
@@ -71,7 +71,7 @@ mod text_shadow_unit_tests {
         let shadow1 = TextShadow::Sm;
         let shadow2 = TextShadow::Sm;
         let shadow3 = TextShadow::Lg;
-        
+
         assert_eq!(shadow1, shadow2);
         assert_ne!(shadow1, shadow3);
     }
@@ -83,9 +83,8 @@ mod text_shadow_integration_tests {
 
     #[test]
     fn test_text_shadow_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .text_shadow_sm();
-        
+        let builder = ClassBuilder::new().text_shadow_sm();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("text-shadow-sm"));
     }
@@ -96,7 +95,7 @@ mod text_shadow_integration_tests {
             .text_shadow_sm()
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("text-shadow-sm"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -108,11 +107,15 @@ mod text_shadow_integration_tests {
         let builder = ClassBuilder::new()
             .text_shadow_sm()
             .responsive(Breakpoint::Md, "text-shadow-lg");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("text-shadow-sm"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("text-shadow-lg"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("text-shadow-lg"));
     }
 
     #[test]
@@ -120,11 +123,15 @@ mod text_shadow_integration_tests {
         let builder = ClassBuilder::new()
             .text_shadow_sm()
             .conditional("hover", "text-shadow-lg");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("text-shadow-sm"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("text-shadow-lg"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("text-shadow-lg"));
     }
 
     #[test]
@@ -132,19 +139,21 @@ mod text_shadow_integration_tests {
         let builder = ClassBuilder::new()
             .text_shadow_sm()
             .custom_variant("dark", "text-shadow-lg");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("text-shadow-sm"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("text-shadow-lg"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("text-shadow-lg"));
     }
 
     #[test]
     fn test_text_shadow_multiple_shadows() {
-        let builder = ClassBuilder::new()
-            .text_shadow_sm()
-            .text_shadow_lg(); // Should add both classes
-        
+        let builder = ClassBuilder::new().text_shadow_sm().text_shadow_lg(); // Should add both classes
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("text-shadow-lg"));
         assert!(class_set.classes.contains("text-shadow-sm"));
@@ -156,7 +165,7 @@ mod text_shadow_integration_tests {
             .text_shadow_sm()
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("text-shadow-sm"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -167,7 +176,7 @@ mod text_shadow_integration_tests {
             .text_shadow_lg()
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("text-shadow-lg"));
         assert!(css_classes.contains("font-bold"));
@@ -178,7 +187,7 @@ mod text_shadow_integration_tests {
         let class_set = ClassBuilder::new()
             .text_shadow_custom(TextShadow::Xl)
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("text-shadow-xl"));
     }

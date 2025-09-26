@@ -160,7 +160,10 @@ mod tests {
         assert_eq!(MixBlendMode::Overlay.to_string(), "mix-blend-overlay");
         assert_eq!(MixBlendMode::Darken.to_string(), "mix-blend-darken");
         assert_eq!(MixBlendMode::Lighten.to_string(), "mix-blend-lighten");
-        assert_eq!(MixBlendMode::ColorDodge.to_string(), "mix-blend-color-dodge");
+        assert_eq!(
+            MixBlendMode::ColorDodge.to_string(),
+            "mix-blend-color-dodge"
+        );
         assert_eq!(MixBlendMode::ColorBurn.to_string(), "mix-blend-color-burn");
         assert_eq!(MixBlendMode::HardLight.to_string(), "mix-blend-hard-light");
         assert_eq!(MixBlendMode::SoftLight.to_string(), "mix-blend-soft-light");
@@ -175,21 +178,48 @@ mod tests {
     #[test]
     fn test_background_blend_mode_display() {
         assert_eq!(BackgroundBlendMode::Normal.to_string(), "bg-blend-normal");
-        assert_eq!(BackgroundBlendMode::Multiply.to_string(), "bg-blend-multiply");
+        assert_eq!(
+            BackgroundBlendMode::Multiply.to_string(),
+            "bg-blend-multiply"
+        );
         assert_eq!(BackgroundBlendMode::Screen.to_string(), "bg-blend-screen");
         assert_eq!(BackgroundBlendMode::Overlay.to_string(), "bg-blend-overlay");
         assert_eq!(BackgroundBlendMode::Darken.to_string(), "bg-blend-darken");
         assert_eq!(BackgroundBlendMode::Lighten.to_string(), "bg-blend-lighten");
-        assert_eq!(BackgroundBlendMode::ColorDodge.to_string(), "bg-blend-color-dodge");
-        assert_eq!(BackgroundBlendMode::ColorBurn.to_string(), "bg-blend-color-burn");
-        assert_eq!(BackgroundBlendMode::HardLight.to_string(), "bg-blend-hard-light");
-        assert_eq!(BackgroundBlendMode::SoftLight.to_string(), "bg-blend-soft-light");
-        assert_eq!(BackgroundBlendMode::Difference.to_string(), "bg-blend-difference");
-        assert_eq!(BackgroundBlendMode::Exclusion.to_string(), "bg-blend-exclusion");
+        assert_eq!(
+            BackgroundBlendMode::ColorDodge.to_string(),
+            "bg-blend-color-dodge"
+        );
+        assert_eq!(
+            BackgroundBlendMode::ColorBurn.to_string(),
+            "bg-blend-color-burn"
+        );
+        assert_eq!(
+            BackgroundBlendMode::HardLight.to_string(),
+            "bg-blend-hard-light"
+        );
+        assert_eq!(
+            BackgroundBlendMode::SoftLight.to_string(),
+            "bg-blend-soft-light"
+        );
+        assert_eq!(
+            BackgroundBlendMode::Difference.to_string(),
+            "bg-blend-difference"
+        );
+        assert_eq!(
+            BackgroundBlendMode::Exclusion.to_string(),
+            "bg-blend-exclusion"
+        );
         assert_eq!(BackgroundBlendMode::Hue.to_string(), "bg-blend-hue");
-        assert_eq!(BackgroundBlendMode::Saturation.to_string(), "bg-blend-saturation");
+        assert_eq!(
+            BackgroundBlendMode::Saturation.to_string(),
+            "bg-blend-saturation"
+        );
         assert_eq!(BackgroundBlendMode::Color.to_string(), "bg-blend-color");
-        assert_eq!(BackgroundBlendMode::Luminosity.to_string(), "bg-blend-luminosity");
+        assert_eq!(
+            BackgroundBlendMode::Luminosity.to_string(),
+            "bg-blend-luminosity"
+        );
     }
 
     #[test]
@@ -197,7 +227,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .mix_blend_mode(MixBlendMode::Multiply)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("mix-blend-multiply"));
     }
 
@@ -206,7 +236,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .background_blend_mode(BackgroundBlendMode::Screen)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("bg-blend-screen"));
     }
 
@@ -228,27 +258,27 @@ mod tests {
         let mix_blend_mode1 = MixBlendMode::Multiply;
         let mix_blend_mode2 = MixBlendMode::Multiply;
         let mix_blend_mode3 = MixBlendMode::Screen;
-        
+
         assert_eq!(mix_blend_mode1, mix_blend_mode2);
         assert_ne!(mix_blend_mode1, mix_blend_mode3);
-        
+
         let background_blend_mode1 = BackgroundBlendMode::Multiply;
         let background_blend_mode2 = BackgroundBlendMode::Multiply;
         let background_blend_mode3 = BackgroundBlendMode::Screen;
-        
+
         assert_eq!(background_blend_mode1, background_blend_mode2);
         assert_ne!(background_blend_mode1, background_blend_mode3);
-        
+
         // Test that equal effects have the same hash
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         let mut hasher2 = DefaultHasher::new();
         mix_blend_mode1.hash(&mut hasher1);
         mix_blend_mode2.hash(&mut hasher2);
         assert_eq!(hasher1.finish(), hasher2.finish());
-        
+
         let mut hasher1 = DefaultHasher::new();
         let mut hasher2 = DefaultHasher::new();
         background_blend_mode1.hash(&mut hasher1);

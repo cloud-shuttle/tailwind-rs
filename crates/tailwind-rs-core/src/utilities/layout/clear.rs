@@ -45,10 +45,8 @@ mod tests {
 
     #[test]
     fn test_clear_utilities() {
-        let classes = ClassBuilder::new()
-            .clear(Clear::Both)
-            .build();
-        
+        let classes = ClassBuilder::new().clear(Clear::Both).build();
+
         assert!(classes.to_css_classes().contains("clear-both"));
     }
 }

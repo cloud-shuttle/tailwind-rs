@@ -71,10 +71,8 @@ mod tests {
 
     #[test]
     fn test_box_shadow_utilities() {
-        let classes = ClassBuilder::new()
-            .box_shadow(BoxShadow::Lg)
-            .build();
-        
+        let classes = ClassBuilder::new().box_shadow(BoxShadow::Lg).build();
+
         assert!(classes.to_css_classes().contains("shadow-lg"));
     }
 
@@ -91,14 +89,14 @@ mod tests {
         let box_shadow1 = BoxShadow::Lg;
         let box_shadow2 = BoxShadow::Lg;
         let box_shadow3 = BoxShadow::Md;
-        
+
         assert_eq!(box_shadow1, box_shadow2);
         assert_ne!(box_shadow1, box_shadow3);
-        
+
         // Test that equal effects have the same hash
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         let mut hasher2 = DefaultHasher::new();
         box_shadow1.hash(&mut hasher1);

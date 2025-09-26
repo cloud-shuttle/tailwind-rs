@@ -145,10 +145,10 @@ impl EnhancedVariantParser {
             breakpoints: HashMap::new(),
             custom_variants: HashMap::new(),
         };
-        
+
         parser.initialize_default_variants();
         parser.initialize_breakpoints();
-        
+
         parser
     }
 
@@ -375,16 +375,16 @@ impl EnhancedVariantParser {
     /// Parse a class string with enhanced variant support
     pub fn parse_class(&self, class: &str) -> Result<VariantParseResult> {
         let start_time = std::time::Instant::now();
-        
+
         // Parse variants and base class
         let (variants, base_class) = self.parse_variants_advanced(class);
-        
+
         // Generate variant combination
         let variant_count = variants.len();
         let combination = self.generate_variant_combination(variants, base_class)?;
-        
+
         let processing_time = start_time.elapsed();
-        
+
         Ok(VariantParseResult {
             combination,
             metadata: VariantMetadata {
@@ -392,7 +392,7 @@ impl EnhancedVariantParser {
                 variant_count,
                 combination_count: 1,
                 memory_usage: 0, // Placeholder
-                cache_hits: 0, // Placeholder
+                cache_hits: 0,   // Placeholder
                 cache_misses: 1, // Placeholder
             },
         })
@@ -402,7 +402,7 @@ impl EnhancedVariantParser {
     fn parse_variants_advanced(&self, class: &str) -> (Vec<String>, String) {
         let mut variants = Vec::new();
         let mut remaining = class.to_string();
-        
+
         // Parse variants in order of specificity (most specific first)
         let variant_patterns = [
             // Dark mode variants
@@ -437,35 +437,42 @@ impl EnhancedVariantParser {
             ("xl:", "xl"),
             ("2xl:", "2xl"),
         ];
-        
+
         // Parse multiple variants
         loop {
             let mut found = false;
             for (prefix, variant) in &variant_patterns {
                 if remaining.starts_with(prefix) {
                     variants.push(variant.to_string());
-                    remaining = remaining.strip_prefix(prefix).unwrap_or(&remaining).to_string();
+                    remaining = remaining
+                        .strip_prefix(prefix)
+                        .unwrap_or(&remaining)
+                        .to_string();
                     found = true;
                     break;
                 }
             }
-            
+
             if !found {
                 break;
             }
         }
-        
+
         (variants, remaining)
     }
 
     /// Generate variant combination
-    fn generate_variant_combination(&self, variants: Vec<String>, base_class: String) -> Result<VariantCombination> {
+    fn generate_variant_combination(
+        &self,
+        variants: Vec<String>,
+        base_class: String,
+    ) -> Result<VariantCombination> {
         let mut parsed_variants = Vec::new();
         let mut selector_parts = Vec::new();
         let mut media_query = None;
         let mut total_specificity = 10; // Base specificity
         let mut errors = Vec::new();
-        
+
         // Parse each variant
         for (i, variant_name) in variants.iter().enumerate() {
             if let Some(variant_def) = self.variants.get(variant_name) {
@@ -476,11 +483,11 @@ impl EnhancedVariantParser {
                     specificity: variant_def.specificity,
                     position: i,
                 };
-                
+
                 parsed_variants.push(parsed_variant.clone());
                 selector_parts.push(variant_def.selector_pattern.clone());
                 total_specificity += variant_def.specificity;
-                
+
                 // Handle media queries for responsive variants
                 if let Some(mq) = &variant_def.media_query {
                     media_query = Some(mq.clone());
@@ -493,11 +500,11 @@ impl EnhancedVariantParser {
                     specificity: custom_variant.specificity,
                     position: i,
                 };
-                
+
                 parsed_variants.push(parsed_variant.clone());
                 selector_parts.push(custom_variant.selector_pattern.clone());
                 total_specificity += custom_variant.specificity;
-                
+
                 if let Some(mq) = &custom_variant.media_query {
                     media_query = Some(mq.clone());
                 }
@@ -505,13 +512,13 @@ impl EnhancedVariantParser {
                 errors.push(format!("Unknown variant: {}", variant_name));
             }
         }
-        
+
         // Generate final selector
         let selector = self.generate_selector(selector_parts, &base_class);
-        
+
         // Validate combination
         let is_valid = self.validate_combination(&parsed_variants, &errors);
-        
+
         Ok(VariantCombination {
             variants: parsed_variants,
             base_class,
@@ -526,7 +533,7 @@ impl EnhancedVariantParser {
     /// Generate CSS selector from parts
     fn generate_selector(&self, parts: Vec<String>, base_class: &str) -> String {
         let mut selector = String::new();
-        
+
         // Add variant parts
         for part in parts {
             if part.starts_with('.') {
@@ -540,10 +547,10 @@ impl EnhancedVariantParser {
                 selector.push(' ');
             }
         }
-        
+
         // Add base class
         selector.push_str(&format!(".{}", base_class));
-        
+
         selector
     }
 
@@ -552,7 +559,7 @@ impl EnhancedVariantParser {
         if !errors.is_empty() {
             return false;
         }
-        
+
         // Check for conflicting variants
         let mut variant_types = std::collections::HashSet::new();
         for variant in variants {
@@ -576,7 +583,7 @@ impl EnhancedVariantParser {
                 }
             }
         }
-        
+
         true
     }
 
@@ -646,7 +653,7 @@ mod tests {
             combinable: true,
             dependencies: Vec::new(),
         };
-        
+
         assert_eq!(variant.name, "hover");
         assert_eq!(variant.variant_type, VariantType::State);
         assert_eq!(variant.specificity, 10);
@@ -656,7 +663,7 @@ mod tests {
     fn test_parse_simple_class() {
         let parser = EnhancedVariantParser::new();
         let result = parser.parse_class("p-4");
-        
+
         assert!(result.is_ok());
         let result = result.unwrap();
         assert_eq!(result.combination.base_class, "p-4");
@@ -668,7 +675,7 @@ mod tests {
     fn test_parse_single_variant() {
         let parser = EnhancedVariantParser::new();
         let result = parser.parse_class("hover:bg-blue-500");
-        
+
         assert!(result.is_ok());
         let result = result.unwrap();
         assert_eq!(result.combination.base_class, "bg-blue-500");
@@ -681,7 +688,7 @@ mod tests {
     fn test_parse_multiple_variants() {
         let parser = EnhancedVariantParser::new();
         let result = parser.parse_class("dark:hover:bg-blue-500");
-        
+
         assert!(result.is_ok());
         let result = result.unwrap();
         assert_eq!(result.combination.base_class, "bg-blue-500");
@@ -693,7 +700,7 @@ mod tests {
     fn test_parse_responsive_variant() {
         let parser = EnhancedVariantParser::new();
         let result = parser.parse_class("md:p-4");
-        
+
         assert!(result.is_ok());
         let result = result.unwrap();
         assert_eq!(result.combination.base_class, "p-4");
@@ -706,7 +713,7 @@ mod tests {
     fn test_parse_complex_combination() {
         let parser = EnhancedVariantParser::new();
         let result = parser.parse_class("dark:group-hover:focus:bg-blue-500");
-        
+
         assert!(result.is_ok());
         let result = result.unwrap();
         assert_eq!(result.combination.base_class, "bg-blue-500");
@@ -724,7 +731,7 @@ mod tests {
             specificity: 15,
             combinable: true,
         };
-        
+
         parser.add_custom_variant(custom_variant);
         assert!(parser.custom_variants.contains_key("custom"));
     }
@@ -747,9 +754,9 @@ mod tests {
             specificity: 10,
             combinable: true,
         });
-        
+
         assert!(parser.custom_variants.contains_key("test"));
-        
+
         parser.reset_to_defaults();
         assert!(!parser.custom_variants.contains_key("test"));
         assert!(parser.variants.contains_key("hover"));

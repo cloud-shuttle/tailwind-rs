@@ -45,7 +45,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .overscroll_behavior(OverscrollBehavior::Contain)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("overscroll-contain"));
     }
 }

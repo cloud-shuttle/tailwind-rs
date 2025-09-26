@@ -34,7 +34,7 @@ impl TextAlign {
             TextAlign::End => "end".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TextAlign::Left => "left".to_string(),
@@ -66,7 +66,9 @@ pub trait TextAlignUtilities {
 
 impl TextAlignUtilities for ClassBuilder {
     fn text_align(&mut self, align: TextAlign) -> &mut Self {
-        *self = self.clone().class(&format!("text-{}", align.to_class_name()));
+        *self = self
+            .clone()
+            .class(&format!("text-{}", align.to_class_name()));
         self
     }
 

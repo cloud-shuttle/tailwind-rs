@@ -1,7 +1,7 @@
 use tailwind_rs_core::utilities::logical_properties::*;
 use tailwind_rs_core::utilities::spacing::SpacingValue;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod logical_properties_unit_tests {
@@ -51,7 +51,7 @@ mod logical_properties_unit_tests {
         let direction1 = LogicalDirection::InlineStart;
         let direction2 = LogicalDirection::InlineStart;
         let direction3 = LogicalDirection::InlineEnd;
-        
+
         assert_eq!(direction1, direction2);
         assert_ne!(direction1, direction3);
     }
@@ -61,22 +61,22 @@ mod logical_properties_unit_tests {
         let direction1 = LogicalDirection::InlineStart;
         let direction2 = LogicalDirection::InlineStart;
         let direction3 = LogicalDirection::InlineEnd;
-        
+
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         direction1.hash(&mut hasher1);
         let hash1 = hasher1.finish();
-        
+
         let mut hasher2 = DefaultHasher::new();
         direction2.hash(&mut hasher2);
         let hash2 = hasher2.finish();
-        
+
         let mut hasher3 = DefaultHasher::new();
         direction3.hash(&mut hasher3);
         let hash3 = hasher3.finish();
-        
+
         assert_eq!(hash1, hash2);
         assert_ne!(hash1, hash3);
     }
@@ -103,7 +103,7 @@ mod logical_properties_unit_tests {
             LogicalDirection::BlockStart,
             LogicalDirection::BlockEnd,
         ];
-        
+
         let strings: Vec<String> = directions.iter().map(|d| d.to_string()).collect();
         assert!(strings.contains(&"inline-start".to_string()));
         assert!(strings.contains(&"inline-end".to_string()));
@@ -118,144 +118,128 @@ mod logical_properties_integration_tests {
 
     #[test]
     fn test_logical_properties_margin_inline_start() {
-        let builder = ClassBuilder::new()
-            .margin_inline_start(SpacingValue::Integer(4));
-        
+        let builder = ClassBuilder::new().margin_inline_start(SpacingValue::Integer(4));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ms-4"));
     }
 
     #[test]
     fn test_logical_properties_margin_inline_end() {
-        let builder = ClassBuilder::new()
-            .margin_inline_end(SpacingValue::Integer(4));
-        
+        let builder = ClassBuilder::new().margin_inline_end(SpacingValue::Integer(4));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("me-4"));
     }
 
     #[test]
     fn test_logical_properties_margin_block_start() {
-        let builder = ClassBuilder::new()
-            .margin_block_start(SpacingValue::Integer(4));
-        
+        let builder = ClassBuilder::new().margin_block_start(SpacingValue::Integer(4));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mt-4"));
     }
 
     #[test]
     fn test_logical_properties_margin_block_end() {
-        let builder = ClassBuilder::new()
-            .margin_block_end(SpacingValue::Integer(4));
-        
+        let builder = ClassBuilder::new().margin_block_end(SpacingValue::Integer(4));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("mb-4"));
     }
 
     #[test]
     fn test_logical_properties_padding_inline_start() {
-        let builder = ClassBuilder::new()
-            .padding_inline_start(SpacingValue::Integer(2));
-        
+        let builder = ClassBuilder::new().padding_inline_start(SpacingValue::Integer(2));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ps-2"));
     }
 
     #[test]
     fn test_logical_properties_padding_inline_end() {
-        let builder = ClassBuilder::new()
-            .padding_inline_end(SpacingValue::Integer(2));
-        
+        let builder = ClassBuilder::new().padding_inline_end(SpacingValue::Integer(2));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("pe-2"));
     }
 
     #[test]
     fn test_logical_properties_padding_block_start() {
-        let builder = ClassBuilder::new()
-            .padding_block_start(SpacingValue::Integer(2));
-        
+        let builder = ClassBuilder::new().padding_block_start(SpacingValue::Integer(2));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("pt-2"));
     }
 
     #[test]
     fn test_logical_properties_padding_block_end() {
-        let builder = ClassBuilder::new()
-            .padding_block_end(SpacingValue::Integer(2));
-        
+        let builder = ClassBuilder::new().padding_block_end(SpacingValue::Integer(2));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("pb-2"));
     }
 
     #[test]
     fn test_logical_properties_border_inline_start() {
-        let builder = ClassBuilder::new()
-            .border_inline_start(SpacingValue::Integer(1));
-        
+        let builder = ClassBuilder::new().border_inline_start(SpacingValue::Integer(1));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("border-s-1"));
     }
 
     #[test]
     fn test_logical_properties_border_inline_end() {
-        let builder = ClassBuilder::new()
-            .border_inline_end(SpacingValue::Integer(1));
-        
+        let builder = ClassBuilder::new().border_inline_end(SpacingValue::Integer(1));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("border-e-1"));
     }
 
     #[test]
     fn test_logical_properties_border_block_start() {
-        let builder = ClassBuilder::new()
-            .border_block_start(SpacingValue::Integer(1));
-        
+        let builder = ClassBuilder::new().border_block_start(SpacingValue::Integer(1));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("border-t-1"));
     }
 
     #[test]
     fn test_logical_properties_border_block_end() {
-        let builder = ClassBuilder::new()
-            .border_block_end(SpacingValue::Integer(1));
-        
+        let builder = ClassBuilder::new().border_block_end(SpacingValue::Integer(1));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("border-b-1"));
     }
 
     #[test]
     fn test_logical_properties_inset_inline_start() {
-        let builder = ClassBuilder::new()
-            .inset_inline_start(SpacingValue::Integer(4));
-        
+        let builder = ClassBuilder::new().inset_inline_start(SpacingValue::Integer(4));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("start-4"));
     }
 
     #[test]
     fn test_logical_properties_inset_inline_end() {
-        let builder = ClassBuilder::new()
-            .inset_inline_end(SpacingValue::Integer(4));
-        
+        let builder = ClassBuilder::new().inset_inline_end(SpacingValue::Integer(4));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("end-4"));
     }
 
     #[test]
     fn test_logical_properties_inset_block_start() {
-        let builder = ClassBuilder::new()
-            .inset_block_start(SpacingValue::Integer(2));
-        
+        let builder = ClassBuilder::new().inset_block_start(SpacingValue::Integer(2));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("top-2"));
     }
 
     #[test]
     fn test_logical_properties_inset_block_end() {
-        let builder = ClassBuilder::new()
-            .inset_block_end(SpacingValue::Integer(2));
-        
+        let builder = ClassBuilder::new().inset_block_end(SpacingValue::Integer(2));
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("bottom-2"));
     }
@@ -269,7 +253,7 @@ mod logical_properties_integration_tests {
             .padding_inline_end_2()
             .border_inline_start_1()
             .border_inline_end_1();
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ms-4"));
         assert!(class_set.classes.contains("me-4"));
@@ -285,7 +269,7 @@ mod logical_properties_integration_tests {
             .margin_inline_start(SpacingValue::Integer(4))
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ms-4"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -297,11 +281,15 @@ mod logical_properties_integration_tests {
         let builder = ClassBuilder::new()
             .margin_inline_start(SpacingValue::Integer(4))
             .responsive(Breakpoint::Md, "ms-8");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ms-4"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("ms-8"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("ms-8"));
     }
 
     #[test]
@@ -309,7 +297,7 @@ mod logical_properties_integration_tests {
         let builder = ClassBuilder::new()
             .margin_inline_start(SpacingValue::Integer(4))
             .conditional("hover", "ms-8");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ms-4"));
         assert!(class_set.conditional.contains_key("hover"));
@@ -321,7 +309,7 @@ mod logical_properties_integration_tests {
         let builder = ClassBuilder::new()
             .margin_inline_start(SpacingValue::Integer(4))
             .custom_variant("dark", "ms-8");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ms-4"));
         assert!(class_set.conditional.contains_key("dark"));
@@ -335,7 +323,7 @@ mod logical_properties_integration_tests {
             .margin_inline_end(SpacingValue::Integer(4))
             .padding_inline_start(SpacingValue::Integer(2))
             .padding_inline_end(SpacingValue::Integer(2));
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("ms-4"));
         assert!(class_set.classes.contains("me-4"));
@@ -349,7 +337,7 @@ mod logical_properties_integration_tests {
             .margin_inline_start(SpacingValue::Integer(4))
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("ms-4"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -360,7 +348,7 @@ mod logical_properties_integration_tests {
             .margin_inline_start(SpacingValue::Integer(4))
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("ms-4"));
         assert!(css_classes.contains("font-bold"));
@@ -380,7 +368,7 @@ mod logical_properties_integration_tests {
             .inset_block_start(SpacingValue::Integer(2))
             .inset_block_end(SpacingValue::Integer(2))
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("ms-4"));
         assert!(css_classes.contains("me-4"));
@@ -414,9 +402,9 @@ mod logical_properties_integration_tests {
             .inset_block_start(SpacingValue::Integer(2))
             .inset_block_end(SpacingValue::Integer(2))
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all logical property utilities are present
         assert!(css_classes.contains("ms-4"));
         assert!(css_classes.contains("me-4"));

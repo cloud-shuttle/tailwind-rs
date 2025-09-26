@@ -4,8 +4,8 @@
 //! animation composition, and advanced animation features.
 
 use serde::{Deserialize, Serialize};
-use std::fmt;
 use std::collections::HashMap;
+use std::fmt;
 
 /// Custom keyframe animation
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -215,34 +215,34 @@ impl CustomKeyframe {
     /// Convert to CSS @keyframes rule
     pub fn to_css_keyframes(&self) -> String {
         let mut css = format!("@keyframes {} {{\n", self.name);
-        
+
         for (offset, step) in &self.steps {
             let percentage = (offset * 100.0) as u32;
             css.push_str(&format!("  {}% {{\n", percentage));
-            
+
             // Add properties
             for (property, value) in &step.properties {
                 css.push_str(&format!("    {}: {};\n", property, value));
             }
-            
+
             // Add transform
             if let Some(transform) = &step.transform {
                 css.push_str(&format!("    transform: {};\n", transform.to_css_value()));
             }
-            
+
             // Add opacity
             if let Some(opacity) = step.opacity {
                 css.push_str(&format!("    opacity: {};\n", opacity));
             }
-            
+
             // Add color
             if let Some(color) = &step.color {
                 css.push_str(&format!("    color: {};\n", color));
             }
-            
+
             css.push_str("  }\n");
         }
-        
+
         css.push_str("}\n");
         css
     }
@@ -334,7 +334,7 @@ impl TransformStep {
     /// Convert to CSS transform value
     pub fn to_css_value(&self) -> String {
         let mut transforms = Vec::new();
-        
+
         if let Some((x, y, z)) = self.translate {
             if z == 0.0 {
                 transforms.push(format!("translate({}px, {}px)", x, y));
@@ -342,7 +342,7 @@ impl TransformStep {
                 transforms.push(format!("translate3d({}px, {}px, {}px)", x, y, z));
             }
         }
-        
+
         if let Some((x, y, z)) = self.scale {
             if z == 1.0 {
                 transforms.push(format!("scale({}, {})", x, y));
@@ -350,7 +350,7 @@ impl TransformStep {
                 transforms.push(format!("scale3d({}, {}, {})", x, y, z));
             }
         }
-        
+
         if let Some((x, y, z)) = self.rotate {
             if x == 0.0 && y == 0.0 {
                 transforms.push(format!("rotate({}deg)", z));
@@ -358,11 +358,11 @@ impl TransformStep {
                 transforms.push(format!("rotate3d({}, {}, {}, {}deg)", x, y, z, z));
             }
         }
-        
+
         if let Some((x, y)) = self.skew {
             transforms.push(format!("skew({}deg, {}deg)", x, y));
         }
-        
+
         transforms.join(" ")
     }
 }
@@ -457,24 +457,25 @@ impl AnimationComposition {
     /// Convert to CSS
     pub fn to_css(&self) -> String {
         let mut css = String::new();
-        
+
         // Generate keyframes for each animation
         for composed_anim in &self.animations {
             if let AnimationReference::Custom(keyframe) = &composed_anim.animation {
                 css.push_str(&keyframe.to_css_keyframes());
             }
         }
-        
+
         // Generate composition class
         css.push_str(&format!(".{} {{\n", self.name));
-        css.push_str(&format!("  animation: {} {}ms {} {}ms;\n", 
-            self.name, 
-            self.timing.duration, 
+        css.push_str(&format!(
+            "  animation: {} {}ms {} {}ms;\n",
+            self.name,
+            self.timing.duration,
             self.timing.timing_function.to_css_value(),
             self.timing.delay
         ));
         css.push_str("}\n");
-        
+
         css
     }
 
@@ -505,7 +506,7 @@ mod tests {
         let mut keyframe = CustomKeyframe::new("fadeIn".to_string());
         keyframe.duration = 500;
         keyframe.timing_function = TimingFunction::EaseOut;
-        
+
         assert_eq!(keyframe.name, "fadeIn");
         assert_eq!(keyframe.duration, 500);
         assert_eq!(keyframe.timing_function, TimingFunction::EaseOut);
@@ -516,9 +517,12 @@ mod tests {
         let mut step = KeyframeStep::new();
         step.set_opacity(0.0);
         step.add_property("transform".to_string(), "scale(0.8)".to_string());
-        
+
         assert_eq!(step.opacity, Some(0.0));
-        assert_eq!(step.properties.get("transform"), Some(&"scale(0.8)".to_string()));
+        assert_eq!(
+            step.properties.get("transform"),
+            Some(&"scale(0.8)".to_string())
+        );
     }
 
     #[test]
@@ -527,7 +531,7 @@ mod tests {
         transform.set_translate(10.0, 20.0, 0.0);
         transform.set_scale(1.2, 1.2, 1.0);
         transform.set_rotate(0.0, 0.0, 45.0);
-        
+
         assert_eq!(transform.translate, Some((10.0, 20.0, 0.0)));
         assert_eq!(transform.scale, Some((1.2, 1.2, 1.0)));
         assert_eq!(transform.rotate, Some((0.0, 0.0, 45.0)));
@@ -539,7 +543,7 @@ mod tests {
         transform.set_translate(10.0, 20.0, 0.0);
         transform.set_scale(1.2, 1.2, 1.0);
         transform.set_rotate(0.0, 0.0, 45.0);
-        
+
         let css = transform.to_css_value();
         assert!(css.contains("translate(10px, 20px)"));
         assert!(css.contains("scale(1.2, 1.2)"));
@@ -553,13 +557,16 @@ mod tests {
         assert_eq!(TimingFunction::EaseIn.to_css_value(), "ease-in");
         assert_eq!(TimingFunction::EaseOut.to_css_value(), "ease-out");
         assert_eq!(TimingFunction::EaseInOut.to_css_value(), "ease-in-out");
-        
+
         let cubic_bezier = TimingFunction::CubicBezier(0.25, 0.1, 0.25, 1.0);
-        assert_eq!(cubic_bezier.to_css_value(), "cubic-bezier(0.25, 0.1, 0.25, 1)");
-        
+        assert_eq!(
+            cubic_bezier.to_css_value(),
+            "cubic-bezier(0.25, 0.1, 0.25, 1)"
+        );
+
         let steps = TimingFunction::Steps(5);
         assert_eq!(steps.to_css_value(), "steps(5)");
-        
+
         let steps_with_dir = TimingFunction::StepsWithDirection(5, StepDirection::Start);
         assert_eq!(steps_with_dir.to_css_value(), "steps(5, start)");
     }
@@ -576,7 +583,10 @@ mod tests {
         assert_eq!(AnimationDirection::Normal.to_css_value(), "normal");
         assert_eq!(AnimationDirection::Reverse.to_css_value(), "reverse");
         assert_eq!(AnimationDirection::Alternate.to_css_value(), "alternate");
-        assert_eq!(AnimationDirection::AlternateReverse.to_css_value(), "alternate-reverse");
+        assert_eq!(
+            AnimationDirection::AlternateReverse.to_css_value(),
+            "alternate-reverse"
+        );
     }
 
     #[test]
@@ -598,22 +608,22 @@ mod tests {
         let mut keyframe = CustomKeyframe::new("fadeIn".to_string());
         keyframe.duration = 500;
         keyframe.timing_function = TimingFunction::EaseOut;
-        
+
         let mut step0 = KeyframeStep::new();
         step0.set_opacity(0.0);
         keyframe.add_step(0.0, step0);
-        
+
         let mut step1 = KeyframeStep::new();
         step1.set_opacity(1.0);
         keyframe.add_step(1.0, step1);
-        
+
         let css = keyframe.to_css_keyframes();
         assert!(css.contains("@keyframes fadeIn"));
         assert!(css.contains("0%"));
         assert!(css.contains("100%"));
         assert!(css.contains("opacity: 0"));
         assert!(css.contains("opacity: 1"));
-        
+
         let animation_css = keyframe.to_css_animation();
         assert!(animation_css.contains("fadeIn"));
         assert!(animation_css.contains("500ms"));
@@ -625,30 +635,33 @@ mod tests {
         let mut composition = AnimationComposition::new("complexAnimation".to_string());
         composition.timing.duration = 2000;
         composition.timing.timing_function = TimingFunction::EaseInOut;
-        
+
         assert_eq!(composition.name, "complexAnimation");
         assert_eq!(composition.timing.duration, 2000);
-        assert_eq!(composition.timing.timing_function, TimingFunction::EaseInOut);
+        assert_eq!(
+            composition.timing.timing_function,
+            TimingFunction::EaseInOut
+        );
     }
 
     #[test]
     fn test_animation_composition_css_generation() {
         let mut composition = AnimationComposition::new("complexAnimation".to_string());
-        
+
         let mut keyframe = CustomKeyframe::new("fadeIn".to_string());
         let mut step = KeyframeStep::new();
         step.set_opacity(1.0);
         keyframe.add_step(1.0, step);
-        
+
         let composed_anim = ComposedAnimation {
             animation: AnimationReference::Custom(keyframe),
             start_offset: 0.0,
             end_offset: 1.0,
             properties: None,
         };
-        
+
         composition.add_animation(composed_anim);
-        
+
         let css = composition.to_css();
         assert!(css.contains("@keyframes fadeIn"));
         assert!(css.contains(".complexAnimation"));

@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::grid::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod css_grid_subgrid_unit_tests {
@@ -179,7 +179,7 @@ mod css_grid_subgrid_unit_tests {
         let columns1 = GridTemplateColumns::Subgrid;
         let columns2 = GridTemplateColumns::Subgrid;
         let columns3 = GridTemplateColumns::Cols3;
-        
+
         assert_eq!(columns1, columns2);
         assert_ne!(columns1, columns3);
     }
@@ -189,7 +189,7 @@ mod css_grid_subgrid_unit_tests {
         let rows1 = GridTemplateRows::Subgrid;
         let rows2 = GridTemplateRows::Subgrid;
         let rows3 = GridTemplateRows::Three;
-        
+
         assert_eq!(rows1, rows2);
         assert_ne!(rows1, rows3);
     }
@@ -201,18 +201,16 @@ mod css_grid_subgrid_integration_tests {
 
     #[test]
     fn test_css_grid_subgrid_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .grid_template_columns(GridTemplateColumns::Subgrid);
-        
+        let builder = ClassBuilder::new().grid_template_columns(GridTemplateColumns::Subgrid);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("grid-cols-subgrid"));
     }
 
     #[test]
     fn test_css_grid_subgrid_rows_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .grid_template_rows(GridTemplateRows::Subgrid);
-        
+        let builder = ClassBuilder::new().grid_template_rows(GridTemplateRows::Subgrid);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("grid-rows-subgrid"));
     }
@@ -224,7 +222,7 @@ mod css_grid_subgrid_integration_tests {
             .grid_template_rows(GridTemplateRows::Subgrid)
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("grid-cols-subgrid"));
         assert!(class_set.classes.contains("grid-rows-subgrid"));
@@ -237,11 +235,15 @@ mod css_grid_subgrid_integration_tests {
         let builder = ClassBuilder::new()
             .grid_template_columns(GridTemplateColumns::Subgrid)
             .responsive(Breakpoint::Md, "grid-cols-3");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("grid-cols-subgrid"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("grid-cols-3"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("grid-cols-3"));
     }
 
     #[test]
@@ -249,11 +251,15 @@ mod css_grid_subgrid_integration_tests {
         let builder = ClassBuilder::new()
             .grid_template_columns(GridTemplateColumns::Subgrid)
             .conditional("hover", "grid-cols-3");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("grid-cols-subgrid"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("grid-cols-3"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("grid-cols-3"));
     }
 
     #[test]
@@ -261,11 +267,15 @@ mod css_grid_subgrid_integration_tests {
         let builder = ClassBuilder::new()
             .grid_template_columns(GridTemplateColumns::Subgrid)
             .custom_variant("dark", "grid-cols-3");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("grid-cols-subgrid"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("grid-cols-3"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("grid-cols-3"));
     }
 
     #[test]
@@ -273,7 +283,7 @@ mod css_grid_subgrid_integration_tests {
         let builder = ClassBuilder::new()
             .grid_template_columns(GridTemplateColumns::Subgrid)
             .grid_template_rows(GridTemplateRows::Subgrid);
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("grid-cols-subgrid"));
         assert!(class_set.classes.contains("grid-rows-subgrid"));
@@ -285,7 +295,7 @@ mod css_grid_subgrid_integration_tests {
             .grid_template_columns(GridTemplateColumns::Subgrid)
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("grid-cols-subgrid"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -296,7 +306,7 @@ mod css_grid_subgrid_integration_tests {
             .grid_template_columns(GridTemplateColumns::Subgrid)
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("grid-cols-subgrid"));
         assert!(css_classes.contains("font-bold"));
@@ -308,7 +318,7 @@ mod css_grid_subgrid_integration_tests {
             .grid_template_columns(GridTemplateColumns::Subgrid)
             .grid_template_rows(GridTemplateRows::Subgrid)
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("grid-cols-subgrid"));
         assert!(css_classes.contains("grid-rows-subgrid"));
@@ -341,9 +351,9 @@ mod css_grid_subgrid_integration_tests {
             .grid_template_rows(GridTemplateRows::Five)
             .grid_template_rows(GridTemplateRows::Six)
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all grid subgrid utilities are present
         assert!(css_classes.contains("grid-cols-none"));
         assert!(css_classes.contains("grid-cols-subgrid"));

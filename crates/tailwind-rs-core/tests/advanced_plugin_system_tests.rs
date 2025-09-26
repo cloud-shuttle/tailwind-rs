@@ -1,7 +1,7 @@
-use tailwind_rs_core::utilities::advanced_plugin_system::*;
-use tailwind_rs_core::ClassBuilder;
-use tailwind_rs_core::Breakpoint;
 use std::collections::HashMap;
+use tailwind_rs_core::utilities::advanced_plugin_system::*;
+use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod advanced_plugin_system_unit_tests {
@@ -232,7 +232,7 @@ mod advanced_plugin_system_unit_tests {
         let plugin_type1 = PluginType::Utility;
         let plugin_type2 = PluginType::Utility;
         let plugin_type3 = PluginType::Component;
-        
+
         assert_eq!(plugin_type1, plugin_type2);
         assert_ne!(plugin_type1, plugin_type3);
     }
@@ -242,22 +242,22 @@ mod advanced_plugin_system_unit_tests {
         let plugin_type1 = PluginType::Utility;
         let plugin_type2 = PluginType::Utility;
         let plugin_type3 = PluginType::Component;
-        
+
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher1 = DefaultHasher::new();
         plugin_type1.hash(&mut hasher1);
         let hash1 = hasher1.finish();
-        
+
         let mut hasher2 = DefaultHasher::new();
         plugin_type2.hash(&mut hasher2);
         let hash2 = hasher2.finish();
-        
+
         let mut hasher3 = DefaultHasher::new();
         plugin_type3.hash(&mut hasher3);
         let hash3 = hasher3.finish();
-        
+
         assert_eq!(hash1, hash2);
         assert_ne!(hash1, hash3);
     }
@@ -278,7 +278,7 @@ mod advanced_plugin_system_unit_tests {
             PluginType::Variant,
             PluginType::Custom("custom".to_string()),
         ];
-        
+
         let class_names: Vec<String> = plugin_types.iter().map(|p| p.to_class_name()).collect();
         assert!(class_names.contains(&"plugin-utility".to_string()));
         assert!(class_names.contains(&"plugin-component".to_string()));
@@ -294,45 +294,40 @@ mod advanced_plugin_system_integration_tests {
 
     #[test]
     fn test_plugin_type_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .plugin_type(PluginType::Utility);
-        
+        let builder = ClassBuilder::new().plugin_type(PluginType::Utility);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-utility"));
     }
 
     #[test]
     fn test_plugin_priority_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .plugin_priority(PluginPriority::High);
-        
+        let builder = ClassBuilder::new().plugin_priority(PluginPriority::High);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-priority-high"));
     }
 
     #[test]
     fn test_plugin_config_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .plugin_config(PluginConfig::Enable);
-        
+        let builder = ClassBuilder::new().plugin_config(PluginConfig::Enable);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-config-enable"));
     }
 
     #[test]
     fn test_plugin_composition_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .plugin_composition(PluginComposition::Merge);
-        
+        let builder = ClassBuilder::new().plugin_composition(PluginComposition::Merge);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-composition-merge"));
     }
 
     #[test]
     fn test_plugin_lifecycle_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .plugin_lifecycle(PluginLifecycle::Execute);
-        
+        let builder = ClassBuilder::new().plugin_lifecycle(PluginLifecycle::Execute);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-lifecycle-execute"));
     }
@@ -341,9 +336,8 @@ mod advanced_plugin_system_integration_tests {
     fn test_plugin_custom_with_class_builder() {
         let mut options = HashMap::new();
         options.insert("key1".to_string(), "value1".to_string());
-        let builder = ClassBuilder::new()
-            .plugin_custom("custom", options);
-        
+        let builder = ClassBuilder::new().plugin_custom("custom", options);
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-custom"));
     }
@@ -363,7 +357,7 @@ mod advanced_plugin_system_integration_tests {
             .plugin_extend()
             .plugin_initialize()
             .plugin_execute();
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-utility"));
         assert!(class_set.classes.contains("plugin-component"));
@@ -385,7 +379,7 @@ mod advanced_plugin_system_integration_tests {
             .plugin_type(PluginType::Utility)
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-utility"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -397,11 +391,15 @@ mod advanced_plugin_system_integration_tests {
         let builder = ClassBuilder::new()
             .plugin_type(PluginType::Utility)
             .responsive(Breakpoint::Md, "plugin-component");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-utility"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("plugin-component"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("plugin-component"));
     }
 
     #[test]
@@ -409,11 +407,15 @@ mod advanced_plugin_system_integration_tests {
         let builder = ClassBuilder::new()
             .plugin_type(PluginType::Utility)
             .conditional("hover", "plugin-component");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-utility"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("plugin-component"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("plugin-component"));
     }
 
     #[test]
@@ -421,11 +423,15 @@ mod advanced_plugin_system_integration_tests {
         let builder = ClassBuilder::new()
             .plugin_type(PluginType::Utility)
             .custom_variant("dark", "plugin-component");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-utility"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("plugin-component"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("plugin-component"));
     }
 
     #[test]
@@ -436,7 +442,7 @@ mod advanced_plugin_system_integration_tests {
             .plugin_config(PluginConfig::Enable)
             .plugin_composition(PluginComposition::Merge)
             .plugin_lifecycle(PluginLifecycle::Execute);
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("plugin-utility"));
         assert!(class_set.classes.contains("plugin-priority-high"));
@@ -451,7 +457,7 @@ mod advanced_plugin_system_integration_tests {
             .plugin_type(PluginType::Utility)
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("plugin-utility"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -462,7 +468,7 @@ mod advanced_plugin_system_integration_tests {
             .plugin_type(PluginType::Utility)
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("plugin-utility"));
         assert!(css_classes.contains("font-bold"));
@@ -493,7 +499,7 @@ mod advanced_plugin_system_integration_tests {
             .responsive(Breakpoint::Md, "plugin-component")
             .conditional("hover", "plugin-component")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("plugin-utility"));
         assert!(css_classes.contains("plugin-priority-high"));
@@ -541,9 +547,9 @@ mod advanced_plugin_system_integration_tests {
             .plugin_lifecycle(PluginLifecycle::Cleanup)
             .plugin_lifecycle(PluginLifecycle::Custom("custom".to_string()))
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all advanced plugin system utilities are present
         assert!(css_classes.contains("plugin-utility"));
         assert!(css_classes.contains("plugin-component"));

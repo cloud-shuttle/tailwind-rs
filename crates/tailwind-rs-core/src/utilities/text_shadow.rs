@@ -33,10 +33,22 @@ impl fmt::Display for TextShadow {
         match self {
             TextShadow::None => write!(f, "none"),
             TextShadow::Sm => write!(f, "0 1px 2px 0 rgb(0 0 0 / 0.05)"),
-            TextShadow::Md => write!(f, "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)"),
-            TextShadow::Default => write!(f, "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)"),
-            TextShadow::Lg => write!(f, "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"),
-            TextShadow::Xl => write!(f, "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"),
+            TextShadow::Md => write!(
+                f,
+                "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)"
+            ),
+            TextShadow::Default => write!(
+                f,
+                "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)"
+            ),
+            TextShadow::Lg => write!(
+                f,
+                "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"
+            ),
+            TextShadow::Xl => write!(
+                f,
+                "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
+            ),
             TextShadow::Xl2 => write!(f, "0 25px 50px -12px rgb(0 0 0 / 0.25)"),
             TextShadow::Inner => write!(f, "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)"),
         }
@@ -133,11 +145,26 @@ mod tests {
     fn test_text_shadow_enum_values() {
         assert_eq!(TextShadow::None.to_string(), "none");
         assert_eq!(TextShadow::Sm.to_string(), "0 1px 2px 0 rgb(0 0 0 / 0.05)");
-        assert_eq!(TextShadow::Default.to_string(), "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Lg.to_string(), "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl.to_string(), "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl2.to_string(), "0 25px 50px -12px rgb(0 0 0 / 0.25)");
-        assert_eq!(TextShadow::Inner.to_string(), "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)");
+        assert_eq!(
+            TextShadow::Default.to_string(),
+            "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)"
+        );
+        assert_eq!(
+            TextShadow::Lg.to_string(),
+            "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"
+        );
+        assert_eq!(
+            TextShadow::Xl.to_string(),
+            "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
+        );
+        assert_eq!(
+            TextShadow::Xl2.to_string(),
+            "0 25px 50px -12px rgb(0 0 0 / 0.25)"
+        );
+        assert_eq!(
+            TextShadow::Inner.to_string(),
+            "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)"
+        );
     }
 
     #[test]
@@ -175,12 +202,30 @@ mod tests {
     #[test]
     fn test_text_shadow_css_values() {
         assert_eq!(TextShadow::None.to_css_value(), "none");
-        assert_eq!(TextShadow::Sm.to_css_value(), "0 1px 2px 0 rgb(0 0 0 / 0.05)");
-        assert_eq!(TextShadow::Default.to_css_value(), "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Lg.to_css_value(), "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl.to_css_value(), "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)");
-        assert_eq!(TextShadow::Xl2.to_css_value(), "0 25px 50px -12px rgb(0 0 0 / 0.25)");
-        assert_eq!(TextShadow::Inner.to_css_value(), "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)");
+        assert_eq!(
+            TextShadow::Sm.to_css_value(),
+            "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+        );
+        assert_eq!(
+            TextShadow::Default.to_css_value(),
+            "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)"
+        );
+        assert_eq!(
+            TextShadow::Lg.to_css_value(),
+            "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"
+        );
+        assert_eq!(
+            TextShadow::Xl.to_css_value(),
+            "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
+        );
+        assert_eq!(
+            TextShadow::Xl2.to_css_value(),
+            "0 25px 50px -12px rgb(0 0 0 / 0.25)"
+        );
+        assert_eq!(
+            TextShadow::Inner.to_css_value(),
+            "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)"
+        );
     }
 
     #[test]
@@ -193,9 +238,7 @@ mod tests {
 
     #[test]
     fn test_text_shadow_comprehensive_usage() {
-        let classes = ClassBuilder::new()
-            .text_shadow_sm()
-            .text_shadow_lg();
+        let classes = ClassBuilder::new().text_shadow_sm().text_shadow_lg();
 
         let result = classes.build();
         assert!(result.classes.contains("text-shadow-sm"));

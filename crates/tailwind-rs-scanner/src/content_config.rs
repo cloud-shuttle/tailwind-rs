@@ -189,9 +189,7 @@ impl FilePattern {
                     false
                 }
             }
-            PatternType::String => {
-                target.contains(&pattern)
-            }
+            PatternType::String => target.contains(&pattern),
         }
     }
 
@@ -202,7 +200,7 @@ impl FilePattern {
         if pattern == "**/*" {
             return true;
         }
-        
+
         if pattern.starts_with("**/") {
             let suffix = &pattern[3..];
             if suffix.contains('*') {
@@ -216,7 +214,7 @@ impl FilePattern {
             }
             return path.ends_with(suffix);
         }
-        
+
         if pattern.contains('*') {
             let parts: Vec<&str> = pattern.split('*').collect();
             if parts.len() == 2 {
@@ -225,7 +223,7 @@ impl FilePattern {
                 return path.starts_with(prefix) && path.ends_with(suffix);
             }
         }
-        
+
         path == pattern
     }
 }
@@ -290,19 +288,15 @@ mod tests {
         let pattern = FilePattern::new("**/*.rs", PatternType::Glob);
         let rust_file = Path::new("src/main.rs");
         let js_file = Path::new("src/main.js");
-        
+
         assert!(pattern.matches_file(rust_file));
         assert!(!pattern.matches_file(js_file));
     }
 
     #[test]
     fn test_extraction_rule_creation() {
-        let rule = ExtractionRule::new(
-            "rust_classes",
-            "**/*.rs",
-            r#"class\s*=\s*"([^"]+)""#,
-        );
-        
+        let rule = ExtractionRule::new("rust_classes", "**/*.rs", r#"class\s*=\s*"([^"]+)""#);
+
         assert_eq!(rule.name, "rust_classes");
         assert_eq!(rule.file_pattern, "**/*.rs");
         assert_eq!(rule.class_pattern, r#"class\s*=\s*"([^"]+)""#);
@@ -317,7 +311,7 @@ mod tests {
             r#"class\s*=\s*"([^"]+)""#,
             r#"<(\w+)\s+[^>]*class\s*=\s*"[^"]*""#,
         );
-        
+
         assert_eq!(rule.name, "html_classes");
         assert!(rule.context_pattern.is_some());
     }

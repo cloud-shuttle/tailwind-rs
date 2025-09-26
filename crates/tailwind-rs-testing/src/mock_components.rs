@@ -89,7 +89,7 @@ impl MockComponent {
         } else {
             // If no placeholder tokens, wrap the content with classes and styles
             let mut attributes = Vec::new();
-            
+
             if !self.classes.is_empty() {
                 let mut classes_vec: Vec<String> = self.classes.iter().cloned().collect();
                 classes_vec.sort(); // Ensure deterministic ordering

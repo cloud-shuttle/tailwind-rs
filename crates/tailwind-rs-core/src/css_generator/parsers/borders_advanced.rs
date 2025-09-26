@@ -3,29 +3,63 @@
 //! This module provides parsing logic for advanced border-related Tailwind CSS utilities,
 //! including border sides, border radius, and border styles.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct AdvancedBorderParser;
 
 impl AdvancedBorderParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse border side classes
     fn parse_border_side_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "border-t" => Some(vec![CssProperty { name: "border-top-width".to_string(), value: "1px".to_string(), important: false }]),
-            "border-r" => Some(vec![CssProperty { name: "border-right-width".to_string(), value: "1px".to_string(), important: false }]),
-            "border-b" => Some(vec![CssProperty { name: "border-bottom-width".to_string(), value: "1px".to_string(), important: false }]),
-            "border-l" => Some(vec![CssProperty { name: "border-left-width".to_string(), value: "1px".to_string(), important: false }]),
+            "border-t" => Some(vec![CssProperty {
+                name: "border-top-width".to_string(),
+                value: "1px".to_string(),
+                important: false,
+            }]),
+            "border-r" => Some(vec![CssProperty {
+                name: "border-right-width".to_string(),
+                value: "1px".to_string(),
+                important: false,
+            }]),
+            "border-b" => Some(vec![CssProperty {
+                name: "border-bottom-width".to_string(),
+                value: "1px".to_string(),
+                important: false,
+            }]),
+            "border-l" => Some(vec![CssProperty {
+                name: "border-left-width".to_string(),
+                value: "1px".to_string(),
+                important: false,
+            }]),
             "border-x" => Some(vec![
-                CssProperty { name: "border-left-width".to_string(), value: "1px".to_string(), important: false },
-                CssProperty { name: "border-right-width".to_string(), value: "1px".to_string(), important: false },
+                CssProperty {
+                    name: "border-left-width".to_string(),
+                    value: "1px".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "border-right-width".to_string(),
+                    value: "1px".to_string(),
+                    important: false,
+                },
             ]),
             "border-y" => Some(vec![
-                CssProperty { name: "border-top-width".to_string(), value: "1px".to_string(), important: false },
-                CssProperty { name: "border-bottom-width".to_string(), value: "1px".to_string(), important: false },
+                CssProperty {
+                    name: "border-top-width".to_string(),
+                    value: "1px".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "border-bottom-width".to_string(),
+                    value: "1px".to_string(),
+                    important: false,
+                },
             ]),
             _ => None,
         }
@@ -34,15 +68,51 @@ impl AdvancedBorderParser {
     /// Parse border radius classes
     fn parse_border_radius_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "rounded-none" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "0".to_string(), important: false }]),
-            "rounded-sm" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "0.125rem".to_string(), important: false }]),
-            "rounded" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "0.25rem".to_string(), important: false }]),
-            "rounded-md" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "0.375rem".to_string(), important: false }]),
-            "rounded-lg" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "0.5rem".to_string(), important: false }]),
-            "rounded-xl" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "0.75rem".to_string(), important: false }]),
-            "rounded-2xl" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "1rem".to_string(), important: false }]),
-            "rounded-3xl" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "1.5rem".to_string(), important: false }]),
-            "rounded-full" => Some(vec![CssProperty { name: "border-radius".to_string(), value: "9999px".to_string(), important: false }]),
+            "rounded-none" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "0".to_string(),
+                important: false,
+            }]),
+            "rounded-sm" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "0.125rem".to_string(),
+                important: false,
+            }]),
+            "rounded" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "0.25rem".to_string(),
+                important: false,
+            }]),
+            "rounded-md" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "0.375rem".to_string(),
+                important: false,
+            }]),
+            "rounded-lg" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "0.5rem".to_string(),
+                important: false,
+            }]),
+            "rounded-xl" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "0.75rem".to_string(),
+                important: false,
+            }]),
+            "rounded-2xl" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "1rem".to_string(),
+                important: false,
+            }]),
+            "rounded-3xl" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "1.5rem".to_string(),
+                important: false,
+            }]),
+            "rounded-full" => Some(vec![CssProperty {
+                name: "border-radius".to_string(),
+                value: "9999px".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -54,7 +124,7 @@ impl AdvancedBorderParser {
                 let radius_value = self.parse_radius_value(radius)?;
                 let property_name = match side {
                     "t" => "border-top-left-radius",
-                    "r" => "border-top-right-radius", 
+                    "r" => "border-top-right-radius",
                     "b" => "border-bottom-right-radius",
                     "l" => "border-bottom-left-radius",
                     "tl" => "border-top-left-radius",
@@ -63,7 +133,11 @@ impl AdvancedBorderParser {
                     "bl" => "border-bottom-left-radius",
                     _ => return None,
                 };
-                return Some(vec![CssProperty { name: property_name.to_string(), value: radius_value, important: false }]);
+                return Some(vec![CssProperty {
+                    name: property_name.to_string(),
+                    value: radius_value,
+                    important: false,
+                }]);
             }
         }
         None
@@ -72,11 +146,31 @@ impl AdvancedBorderParser {
     /// Parse border style classes
     fn parse_border_style_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "border-solid" => Some(vec![CssProperty { name: "border-style".to_string(), value: "solid".to_string(), important: false }]),
-            "border-dashed" => Some(vec![CssProperty { name: "border-style".to_string(), value: "dashed".to_string(), important: false }]),
-            "border-dotted" => Some(vec![CssProperty { name: "border-style".to_string(), value: "dotted".to_string(), important: false }]),
-            "border-double" => Some(vec![CssProperty { name: "border-style".to_string(), value: "double".to_string(), important: false }]),
-            "border-none" => Some(vec![CssProperty { name: "border-style".to_string(), value: "none".to_string(), important: false }]),
+            "border-solid" => Some(vec![CssProperty {
+                name: "border-style".to_string(),
+                value: "solid".to_string(),
+                important: false,
+            }]),
+            "border-dashed" => Some(vec![CssProperty {
+                name: "border-style".to_string(),
+                value: "dashed".to_string(),
+                important: false,
+            }]),
+            "border-dotted" => Some(vec![CssProperty {
+                name: "border-style".to_string(),
+                value: "dotted".to_string(),
+                important: false,
+            }]),
+            "border-double" => Some(vec![CssProperty {
+                name: "border-style".to_string(),
+                value: "double".to_string(),
+                important: false,
+            }]),
+            "border-none" => Some(vec![CssProperty {
+                name: "border-style".to_string(),
+                value: "none".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -117,14 +211,32 @@ impl UtilityParser for AdvancedBorderParser {
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
-        vec!["border-t", "border-r", "border-b", "border-l", "border-x", "border-y", 
-             "rounded-*", "border-solid", "border-dashed", "border-dotted", "border-double", "border-none"]
+        vec![
+            "border-t",
+            "border-r",
+            "border-b",
+            "border-l",
+            "border-x",
+            "border-y",
+            "rounded-*",
+            "border-solid",
+            "border-dashed",
+            "border-dotted",
+            "border-double",
+            "border-none",
+        ]
     }
 
-    fn get_priority(&self) -> u32 { 70 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Borders }
+    fn get_priority(&self) -> u32 {
+        70
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Borders
+    }
 }
 
 impl Default for AdvancedBorderParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

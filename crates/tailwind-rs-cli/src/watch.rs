@@ -2,6 +2,7 @@
 //!
 //! This module handles the watch command for automatically rebuilding CSS when files change.
 
+use crate::utils::{FileUtils, LogUtils};
 use anyhow::Result;
 use clap::Parser;
 use notify::{Event, EventKind, RecursiveMode, Watcher};
@@ -9,7 +10,6 @@ use std::path::PathBuf;
 use std::sync::mpsc;
 use std::time::Duration;
 use tailwind_rs_core::TailwindBuilder;
-use crate::utils::{FileUtils, LogUtils};
 
 /// Watch for changes and rebuild automatically
 #[derive(Parser)]
@@ -47,7 +47,7 @@ impl WatchCommand {
     /// Execute the watch command
     pub async fn execute(&self) -> Result<()> {
         LogUtils::info("Starting Tailwind CSS watch mode...");
-        
+
         if self.verbose {
             LogUtils::info(&format!("Watching directory: {:?}", self.source));
             LogUtils::info(&format!("Output file: {:?}", self.output));
@@ -56,7 +56,10 @@ impl WatchCommand {
 
         // Validate source directory exists
         if !FileUtils::file_exists(&self.source) {
-            LogUtils::error(&format!("Source directory does not exist: {:?}", self.source));
+            LogUtils::error(&format!(
+                "Source directory does not exist: {:?}",
+                self.source
+            ));
             return Err(anyhow::anyhow!("Source directory not found"));
         }
 
@@ -130,7 +133,7 @@ impl WatchCommand {
     /// Perform the actual build
     fn build(&self) -> Result<()> {
         let start_time = std::time::Instant::now();
-        
+
         let mut builder = TailwindBuilder::new()
             .scan_source(&self.source)
             .output_css(&self.output);
@@ -150,9 +153,9 @@ impl WatchCommand {
         }
 
         builder.build()?;
-        
+
         let duration = start_time.elapsed();
-        
+
         // Get output file size
         let output_size = if FileUtils::file_exists(&self.output) {
             std::fs::metadata(&self.output)?.len()
@@ -179,7 +182,7 @@ mod tests {
     #[test]
     fn test_watch_command_parsing() {
         use crate::Cli;
-        
+
         let args = vec![
             "tailwind-rs",
             "watch",
@@ -195,7 +198,7 @@ mod tests {
         ];
 
         let cli = Cli::try_parse_from(args).unwrap();
-        
+
         match cli.command {
             crate::Commands::Watch(cmd) => {
                 assert_eq!(cmd.source, PathBuf::from("custom-src"));

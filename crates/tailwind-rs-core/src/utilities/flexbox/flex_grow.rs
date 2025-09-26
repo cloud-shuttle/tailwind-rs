@@ -39,10 +39,8 @@ mod tests {
 
     #[test]
     fn test_flex_grow_utilities() {
-        let classes = ClassBuilder::new()
-            .flex_grow(FlexGrow::Grow)
-            .build();
-        
+        let classes = ClassBuilder::new().flex_grow(FlexGrow::Grow).build();
+
         assert!(classes.to_css_classes().contains("grow"));
     }
 }

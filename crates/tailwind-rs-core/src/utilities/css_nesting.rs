@@ -42,7 +42,14 @@ impl NestingSelector {
             NestingSelector::Descendant => "nest-descendant".to_string(),
             NestingSelector::AdjacentSibling => "nest-adjacent".to_string(),
             NestingSelector::GeneralSibling => "nest-sibling".to_string(),
-            NestingSelector::Custom(selector) => format!("nest-{}", selector.replace(" ", "-").replace(">", "child").replace("+", "adjacent").replace("~", "sibling")),
+            NestingSelector::Custom(selector) => format!(
+                "nest-{}",
+                selector
+                    .replace(" ", "-")
+                    .replace(">", "child")
+                    .replace("+", "adjacent")
+                    .replace("~", "sibling")
+            ),
         }
     }
 
@@ -102,7 +109,9 @@ impl NestingPseudoClass {
             NestingPseudoClass::Link => "nest-link".to_string(),
             NestingPseudoClass::FirstChild => "nest-first-child".to_string(),
             NestingPseudoClass::LastChild => "nest-last-child".to_string(),
-            NestingPseudoClass::NthChild(n) => format!("nest-nth-child-{}", n.replace("n", "n").replace(" ", "-")),
+            NestingPseudoClass::NthChild(n) => {
+                format!("nest-nth-child-{}", n.replace("n", "n").replace(" ", "-"))
+            }
             NestingPseudoClass::Custom(pseudo) => format!("nest-{}", pseudo),
         }
     }
@@ -164,7 +173,15 @@ impl NestingMediaQuery {
             NestingMediaQuery::Light => "nest-light".to_string(),
             NestingMediaQuery::Print => "nest-print".to_string(),
             NestingMediaQuery::Screen => "nest-screen".to_string(),
-            NestingMediaQuery::Custom(query) => format!("nest-{}", query.replace("(", "").replace(")", "").replace(" ", "-").replace(":", "-").replace("--", "-")),
+            NestingMediaQuery::Custom(query) => format!(
+                "nest-{}",
+                query
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace(" ", "-")
+                    .replace(":", "-")
+                    .replace("--", "-")
+            ),
         }
     }
 
@@ -296,16 +313,31 @@ mod tests {
         assert_eq!(NestingSelector::Descendant.to_string(), " ");
         assert_eq!(NestingSelector::AdjacentSibling.to_string(), "+");
         assert_eq!(NestingSelector::GeneralSibling.to_string(), "~");
-        assert_eq!(NestingSelector::Custom("div".to_string()).to_string(), "div");
+        assert_eq!(
+            NestingSelector::Custom("div".to_string()).to_string(),
+            "div"
+        );
     }
 
     #[test]
     fn test_nesting_selector_class_names() {
         assert_eq!(NestingSelector::DirectChild.to_class_name(), "nest-child");
-        assert_eq!(NestingSelector::Descendant.to_class_name(), "nest-descendant");
-        assert_eq!(NestingSelector::AdjacentSibling.to_class_name(), "nest-adjacent");
-        assert_eq!(NestingSelector::GeneralSibling.to_class_name(), "nest-sibling");
-        assert_eq!(NestingSelector::Custom("div".to_string()).to_class_name(), "nest-div");
+        assert_eq!(
+            NestingSelector::Descendant.to_class_name(),
+            "nest-descendant"
+        );
+        assert_eq!(
+            NestingSelector::AdjacentSibling.to_class_name(),
+            "nest-adjacent"
+        );
+        assert_eq!(
+            NestingSelector::GeneralSibling.to_class_name(),
+            "nest-sibling"
+        );
+        assert_eq!(
+            NestingSelector::Custom("div".to_string()).to_class_name(),
+            "nest-div"
+        );
     }
 
     #[test]
@@ -314,8 +346,14 @@ mod tests {
         assert_eq!(NestingPseudoClass::Focus.to_string(), ":focus");
         assert_eq!(NestingPseudoClass::Active.to_string(), ":active");
         assert_eq!(NestingPseudoClass::FirstChild.to_string(), ":first-child");
-        assert_eq!(NestingPseudoClass::NthChild("2n".to_string()).to_string(), ":nth-child(2n)");
-        assert_eq!(NestingPseudoClass::Custom("custom".to_string()).to_string(), ":custom");
+        assert_eq!(
+            NestingPseudoClass::NthChild("2n".to_string()).to_string(),
+            ":nth-child(2n)"
+        );
+        assert_eq!(
+            NestingPseudoClass::Custom("custom".to_string()).to_string(),
+            ":custom"
+        );
     }
 
     #[test]
@@ -323,9 +361,18 @@ mod tests {
         assert_eq!(NestingPseudoClass::Hover.to_class_name(), "nest-hover");
         assert_eq!(NestingPseudoClass::Focus.to_class_name(), "nest-focus");
         assert_eq!(NestingPseudoClass::Active.to_class_name(), "nest-active");
-        assert_eq!(NestingPseudoClass::FirstChild.to_class_name(), "nest-first-child");
-        assert_eq!(NestingPseudoClass::NthChild("2n".to_string()).to_class_name(), "nest-nth-child-2n");
-        assert_eq!(NestingPseudoClass::Custom("custom".to_string()).to_class_name(), "nest-custom");
+        assert_eq!(
+            NestingPseudoClass::FirstChild.to_class_name(),
+            "nest-first-child"
+        );
+        assert_eq!(
+            NestingPseudoClass::NthChild("2n".to_string()).to_class_name(),
+            "nest-nth-child-2n"
+        );
+        assert_eq!(
+            NestingPseudoClass::Custom("custom".to_string()).to_class_name(),
+            "nest-custom"
+        );
     }
 
     #[test]
@@ -333,9 +380,15 @@ mod tests {
         assert_eq!(NestingMediaQuery::Small.to_string(), "(min-width: 640px)");
         assert_eq!(NestingMediaQuery::Medium.to_string(), "(min-width: 768px)");
         assert_eq!(NestingMediaQuery::Large.to_string(), "(min-width: 1024px)");
-        assert_eq!(NestingMediaQuery::Dark.to_string(), "(prefers-color-scheme: dark)");
+        assert_eq!(
+            NestingMediaQuery::Dark.to_string(),
+            "(prefers-color-scheme: dark)"
+        );
         assert_eq!(NestingMediaQuery::Print.to_string(), "print");
-        assert_eq!(NestingMediaQuery::Custom("(max-width: 600px)".to_string()).to_string(), "(max-width: 600px)");
+        assert_eq!(
+            NestingMediaQuery::Custom("(max-width: 600px)".to_string()).to_string(),
+            "(max-width: 600px)"
+        );
     }
 
     #[test]
@@ -345,7 +398,10 @@ mod tests {
         assert_eq!(NestingMediaQuery::Large.to_class_name(), "nest-lg");
         assert_eq!(NestingMediaQuery::Dark.to_class_name(), "nest-dark");
         assert_eq!(NestingMediaQuery::Print.to_class_name(), "nest-print");
-        assert_eq!(NestingMediaQuery::Custom("(max-width: 600px)".to_string()).to_class_name(), "nest-max-width-600px");
+        assert_eq!(
+            NestingMediaQuery::Custom("(max-width: 600px)".to_string()).to_class_name(),
+            "nest-max-width-600px"
+        );
     }
 
     #[test]

@@ -3,7 +3,7 @@
 //! This module provides parsing logic for Tailwind CSS align-content utilities,
 //! such as `content-normal`, `content-center`, `content-start`, `content-end`, etc.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 use std::collections::HashMap;
 
@@ -24,13 +24,17 @@ impl AlignContentParser {
         content_map.insert("content-evenly".to_string(), "space-evenly".to_string());
         content_map.insert("content-baseline".to_string(), "baseline".to_string());
         content_map.insert("content-stretch".to_string(), "stretch".to_string());
-        
+
         Self { content_map }
     }
 
     fn parse_content_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(content_value) = self.content_map.get(class) {
-            return Some(vec![CssProperty { name: "align-content".to_string(), value: content_value.clone(), important: false }]);
+            return Some(vec![CssProperty {
+                name: "align-content".to_string(),
+                value: content_value.clone(),
+                important: false,
+            }]);
         }
         None
     }
@@ -43,15 +47,28 @@ impl UtilityParser for AlignContentParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "content-normal", "content-center", "content-start", "content-end",
-            "content-between", "content-around", "content-evenly", "content-baseline", "content-stretch"
+            "content-normal",
+            "content-center",
+            "content-start",
+            "content-end",
+            "content-between",
+            "content-around",
+            "content-evenly",
+            "content-baseline",
+            "content-stretch",
         ]
     }
 
-    fn get_priority(&self) -> u32 { 70 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Flexbox }
+    fn get_priority(&self) -> u32 {
+        70
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Flexbox
+    }
 }
 
 impl Default for AlignContentParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

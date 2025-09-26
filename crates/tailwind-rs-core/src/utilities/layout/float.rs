@@ -42,10 +42,8 @@ mod tests {
 
     #[test]
     fn test_float_utilities() {
-        let classes = ClassBuilder::new()
-            .float(Float::Left)
-            .build();
-        
+        let classes = ClassBuilder::new().float(Float::Left).build();
+
         assert!(classes.to_css_classes().contains("float-left"));
     }
 }

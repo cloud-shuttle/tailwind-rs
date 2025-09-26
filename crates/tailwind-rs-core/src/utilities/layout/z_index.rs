@@ -54,10 +54,8 @@ mod tests {
 
     #[test]
     fn test_z_index_utilities() {
-        let classes = ClassBuilder::new()
-            .z_index(ZIndex::Z10)
-            .build();
-        
+        let classes = ClassBuilder::new().z_index(ZIndex::Z10).build();
+
         assert!(classes.to_css_classes().contains("z-10"));
     }
 }

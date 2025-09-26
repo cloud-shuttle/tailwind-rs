@@ -3,7 +3,7 @@
 //! This module provides glob pattern matching capabilities for
 //! file discovery and filtering.
 
-use crate::error::{ScannerError, Result};
+use crate::error::{Result, ScannerError};
 
 /// Glob pattern matcher
 #[derive(Debug)]
@@ -57,7 +57,7 @@ impl GlobPattern {
         if self.pattern == "**/*" {
             return true;
         }
-        
+
         if self.pattern.starts_with("**/") {
             let suffix = &self.pattern[3..];
             if suffix.contains('*') {
@@ -71,7 +71,7 @@ impl GlobPattern {
             }
             return path.ends_with(suffix);
         }
-        
+
         path == self.pattern
     }
 }
@@ -92,7 +92,7 @@ mod tests {
             pattern: "**/*.rs".to_string(),
             case_sensitive: false,
         };
-        
+
         assert!(pattern.matches("src/main.rs"));
         assert!(!pattern.matches("src/main.js"));
     }

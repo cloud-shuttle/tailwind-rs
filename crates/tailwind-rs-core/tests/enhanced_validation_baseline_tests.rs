@@ -1,7 +1,7 @@
-use tailwind_rs_core::utilities::enhanced_validation::*;
-use tailwind_rs_core::ClassBuilder;
-use tailwind_rs_core::Breakpoint;
 use std::collections::HashMap;
+use tailwind_rs_core::utilities::enhanced_validation::*;
+use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod enhanced_validation_baseline_tests {
@@ -9,151 +9,201 @@ mod enhanced_validation_baseline_tests {
 
     #[test]
     fn test_validation_rule_required_baseline() {
-        let classes = ClassBuilder::new().validation_rule(ValidationRule::Required).build();
+        let classes = ClassBuilder::new()
+            .validation_rule(ValidationRule::Required)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-required");
     }
 
     #[test]
     fn test_validation_rule_pattern_baseline() {
-        let classes = ClassBuilder::new().validation_rule(ValidationRule::Pattern("test".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_rule(ValidationRule::Pattern("test".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-pattern-test");
     }
 
     #[test]
     fn test_validation_rule_length_baseline() {
-        let classes = ClassBuilder::new().validation_rule(ValidationRule::Length(1, 10)).build();
+        let classes = ClassBuilder::new()
+            .validation_rule(ValidationRule::Length(1, 10))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-length-1-10");
     }
 
     #[test]
     fn test_validation_rule_range_baseline() {
-        let classes = ClassBuilder::new().validation_rule(ValidationRule::Range(0.0, 100.0)).build();
+        let classes = ClassBuilder::new()
+            .validation_rule(ValidationRule::Range(0.0, 100.0))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-range-0-100");
     }
 
     #[test]
     fn test_validation_rule_custom_baseline() {
-        let classes = ClassBuilder::new().validation_rule(ValidationRule::Custom("custom".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_rule(ValidationRule::Custom("custom".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-custom");
     }
 
     #[test]
     fn test_validation_severity_error_baseline() {
-        let classes = ClassBuilder::new().validation_severity(ValidationSeverity::Error).build();
+        let classes = ClassBuilder::new()
+            .validation_severity(ValidationSeverity::Error)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-error");
     }
 
     #[test]
     fn test_validation_severity_warning_baseline() {
-        let classes = ClassBuilder::new().validation_severity(ValidationSeverity::Warning).build();
+        let classes = ClassBuilder::new()
+            .validation_severity(ValidationSeverity::Warning)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-warning");
     }
 
     #[test]
     fn test_validation_severity_info_baseline() {
-        let classes = ClassBuilder::new().validation_severity(ValidationSeverity::Info).build();
+        let classes = ClassBuilder::new()
+            .validation_severity(ValidationSeverity::Info)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-info");
     }
 
     #[test]
     fn test_validation_severity_success_baseline() {
-        let classes = ClassBuilder::new().validation_severity(ValidationSeverity::Success).build();
+        let classes = ClassBuilder::new()
+            .validation_severity(ValidationSeverity::Success)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-success");
     }
 
     #[test]
     fn test_validation_severity_custom_baseline() {
-        let classes = ClassBuilder::new().validation_severity(ValidationSeverity::Custom("custom".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_severity(ValidationSeverity::Custom("custom".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-custom");
     }
 
     #[test]
     fn test_validation_scope_global_baseline() {
-        let classes = ClassBuilder::new().validation_scope(ValidationScope::Global).build();
+        let classes = ClassBuilder::new()
+            .validation_scope(ValidationScope::Global)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-global");
     }
 
     #[test]
     fn test_validation_scope_local_baseline() {
-        let classes = ClassBuilder::new().validation_scope(ValidationScope::Local).build();
+        let classes = ClassBuilder::new()
+            .validation_scope(ValidationScope::Local)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-local");
     }
 
     #[test]
     fn test_validation_scope_component_baseline() {
-        let classes = ClassBuilder::new().validation_scope(ValidationScope::Component).build();
+        let classes = ClassBuilder::new()
+            .validation_scope(ValidationScope::Component)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-component");
     }
 
     #[test]
     fn test_validation_scope_page_baseline() {
-        let classes = ClassBuilder::new().validation_scope(ValidationScope::Page).build();
+        let classes = ClassBuilder::new()
+            .validation_scope(ValidationScope::Page)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-page");
     }
 
     #[test]
     fn test_validation_scope_custom_baseline() {
-        let classes = ClassBuilder::new().validation_scope(ValidationScope::Custom("custom".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_scope(ValidationScope::Custom("custom".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-custom");
     }
 
     #[test]
     fn test_validation_mode_strict_baseline() {
-        let classes = ClassBuilder::new().validation_mode(ValidationMode::Strict).build();
+        let classes = ClassBuilder::new()
+            .validation_mode(ValidationMode::Strict)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-strict");
     }
 
     #[test]
     fn test_validation_mode_loose_baseline() {
-        let classes = ClassBuilder::new().validation_mode(ValidationMode::Loose).build();
+        let classes = ClassBuilder::new()
+            .validation_mode(ValidationMode::Loose)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-loose");
     }
 
     #[test]
     fn test_validation_mode_custom_baseline() {
-        let classes = ClassBuilder::new().validation_mode(ValidationMode::Custom).build();
+        let classes = ClassBuilder::new()
+            .validation_mode(ValidationMode::Custom)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-custom");
     }
 
     #[test]
     fn test_validation_mode_disabled_baseline() {
-        let classes = ClassBuilder::new().validation_mode(ValidationMode::Disabled).build();
+        let classes = ClassBuilder::new()
+            .validation_mode(ValidationMode::Disabled)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-disabled");
     }
 
     #[test]
     fn test_validation_mode_custom_mode_baseline() {
-        let classes = ClassBuilder::new().validation_mode(ValidationMode::CustomMode("custom".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_mode(ValidationMode::CustomMode("custom".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-custom");
     }
 
     #[test]
     fn test_validation_result_valid_baseline() {
-        let classes = ClassBuilder::new().validation_result(ValidationResult::Valid).build();
+        let classes = ClassBuilder::new()
+            .validation_result(ValidationResult::Valid)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-valid");
     }
 
     #[test]
     fn test_validation_result_invalid_baseline() {
-        let classes = ClassBuilder::new().validation_result(ValidationResult::Invalid("message".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_result(ValidationResult::Invalid("message".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-invalid");
     }
 
     #[test]
     fn test_validation_result_warning_baseline() {
-        let classes = ClassBuilder::new().validation_result(ValidationResult::Warning("message".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_result(ValidationResult::Warning("message".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-warning");
     }
 
     #[test]
     fn test_validation_result_info_baseline() {
-        let classes = ClassBuilder::new().validation_result(ValidationResult::Info("message".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_result(ValidationResult::Info("message".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-info");
     }
 
     #[test]
     fn test_validation_result_custom_baseline() {
-        let classes = ClassBuilder::new().validation_result(ValidationResult::Custom("custom".to_string())).build();
+        let classes = ClassBuilder::new()
+            .validation_result(ValidationResult::Custom("custom".to_string()))
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-custom");
     }
 
@@ -267,13 +317,17 @@ mod enhanced_validation_baseline_tests {
 
     #[test]
     fn test_validation_warning_result_baseline() {
-        let classes = ClassBuilder::new().validation_warning_result("message").build();
+        let classes = ClassBuilder::new()
+            .validation_warning_result("message")
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-warning");
     }
 
     #[test]
     fn test_validation_info_result_baseline() {
-        let classes = ClassBuilder::new().validation_info_result("message").build();
+        let classes = ClassBuilder::new()
+            .validation_info_result("message")
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-info");
     }
 
@@ -281,7 +335,9 @@ mod enhanced_validation_baseline_tests {
     fn test_validation_custom_baseline() {
         let mut options = HashMap::new();
         options.insert("key1".to_string(), "value1".to_string());
-        let classes = ClassBuilder::new().validation_custom("custom", options).build();
+        let classes = ClassBuilder::new()
+            .validation_custom("custom", options)
+            .build();
         assert_eq!(classes.to_css_classes(), "validation-custom");
     }
 
@@ -314,7 +370,7 @@ mod enhanced_validation_baseline_tests {
             .validation_warning_result("message")
             .validation_info_result("message")
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("validation-error"));
@@ -343,7 +399,7 @@ mod enhanced_validation_baseline_tests {
             .class("text-blue-500")
             .class("font-bold")
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("text-blue-500"));
@@ -356,7 +412,7 @@ mod enhanced_validation_baseline_tests {
             .validation_rule(ValidationRule::Required)
             .responsive(Breakpoint::Md, "validation-pattern-test")
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("md:validation-pattern-test"));
@@ -368,7 +424,7 @@ mod enhanced_validation_baseline_tests {
             .validation_rule(ValidationRule::Required)
             .conditional("hover", "validation-pattern-test")
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("hover:validation-pattern-test"));
@@ -380,7 +436,7 @@ mod enhanced_validation_baseline_tests {
             .validation_rule(ValidationRule::Required)
             .custom_variant("dark", "validation-pattern-test")
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("dark:validation-pattern-test"));
@@ -395,7 +451,7 @@ mod enhanced_validation_baseline_tests {
             .validation_mode(ValidationMode::Strict)
             .validation_result(ValidationResult::Valid)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("validation-error"));
@@ -410,7 +466,7 @@ mod enhanced_validation_baseline_tests {
             .validation_rule(ValidationRule::Required)
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("validation-required"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -421,7 +477,7 @@ mod enhanced_validation_baseline_tests {
             .validation_rule(ValidationRule::Required)
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("font-bold"));
@@ -456,9 +512,9 @@ mod enhanced_validation_baseline_tests {
             .validation_result(ValidationResult::Info("message".to_string()))
             .validation_result(ValidationResult::Custom("custom".to_string()))
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all enhanced validation utilities are present
         assert!(css_classes.contains("validation-required"));
         assert!(css_classes.contains("validation-pattern-test"));

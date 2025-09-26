@@ -2,10 +2,10 @@
 //!
 //! This module handles the stats command for showing build statistics and project information.
 
+use crate::utils::{FileUtils, LogUtils, StringUtils};
 use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
-use crate::utils::{FileUtils, LogUtils, StringUtils};
 
 /// Show build statistics and project information
 #[derive(Parser)]
@@ -39,7 +39,7 @@ impl StatsCommand {
 
         // Analyze source files
         let source_stats = self.analyze_source()?;
-        
+
         // Analyze output file
         let output_stats = self.analyze_output()?;
 
@@ -104,7 +104,7 @@ impl StatsCommand {
     /// Extract Tailwind classes from Rust code
     fn extract_classes(&self, content: &str) -> Vec<String> {
         let mut classes = Vec::new();
-        
+
         // Simple regex-like extraction for common patterns
         for line in content.lines() {
             // Look for class strings in common patterns
@@ -112,13 +112,14 @@ impl StatsCommand {
                 // Extract quoted strings that look like Tailwind classes
                 let words: Vec<&str> = line.split_whitespace().collect();
                 for word in words {
-                    if word.contains('-') && StringUtils::is_valid_css_class(word.trim_matches('"')) {
+                    if word.contains('-') && StringUtils::is_valid_css_class(word.trim_matches('"'))
+                    {
                         classes.push(word.trim_matches('"').to_string());
                     }
                 }
             }
         }
-        
+
         classes
     }
 
@@ -142,7 +143,7 @@ impl StatsCommand {
             println!("  Most used classes:");
             let mut sorted_classes: Vec<_> = source.class_usage.iter().collect();
             sorted_classes.sort_by(|a, b| b.1.cmp(a.1));
-            
+
             for (class, count) in sorted_classes.iter().take(10) {
                 println!("    {}: {} times", class, count);
             }
@@ -168,7 +169,10 @@ impl StatsCommand {
             let avg_lines = source.total_lines / source.rust_files;
             println!("📊 Summary:");
             println!("  Average lines per file: {}", avg_lines);
-            println!("  Classes per file: {:.1}", source.total_classes as f64 / source.rust_files as f64);
+            println!(
+                "  Classes per file: {:.1}",
+                source.total_classes as f64 / source.rust_files as f64
+            );
         }
 
         Ok(())
@@ -201,7 +205,7 @@ mod tests {
     #[test]
     fn test_stats_command_parsing() {
         use crate::Cli;
-        
+
         let args = vec![
             "tailwind-rs",
             "stats",
@@ -214,7 +218,7 @@ mod tests {
         ];
 
         let cli = Cli::try_parse_from(args).unwrap();
-        
+
         match cli.command {
             crate::Commands::Stats(cmd) => {
                 assert_eq!(cmd.source, PathBuf::from("custom-src"));
@@ -284,7 +288,8 @@ mod tests {
                 println!("{}", classes);
             }
         "#,
-        ).unwrap();
+        )
+        .unwrap();
 
         // Create output CSS file
         fs::write(
@@ -295,7 +300,8 @@ mod tests {
             .bg-blue-600 { background-color: #2563eb; }
             .text-white { color: #ffffff; }
         "#,
-        ).unwrap();
+        )
+        .unwrap();
 
         let cmd = StatsCommand {
             source: source_dir,

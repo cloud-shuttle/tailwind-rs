@@ -55,7 +55,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .grid_auto_columns(GridAutoColumns::Auto)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("auto-cols-auto"));
     }
 }

@@ -94,7 +94,7 @@ impl TransitionDuration {
             TransitionDuration::Duration1000 => "1000".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TransitionDuration::Duration75 => "75ms".to_string(),
@@ -118,7 +118,7 @@ impl TransitionTimingFunction {
             TransitionTimingFunction::InOut => "in-out".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TransitionTimingFunction::Linear => "linear".to_string(),
@@ -142,7 +142,7 @@ impl TransitionDelay {
             TransitionDelay::Delay1000 => "1000".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TransitionDelay::Delay75 => "75ms".to_string(),
@@ -169,7 +169,7 @@ impl TransitionProperty {
             TransitionProperty::Transform => "transform".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TransitionProperty::All => "all".to_string(),
@@ -254,7 +254,7 @@ impl TransitionPropertyUtilities for ClassBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_transition_duration_utilities() {
         let classes = ClassBuilder::new()
@@ -267,7 +267,7 @@ mod tests {
             .transition_duration(TransitionDuration::Duration700)
             .transition_duration(TransitionDuration::Duration1000)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("duration-75"));
         assert!(css_classes.contains("duration-100"));
@@ -278,7 +278,7 @@ mod tests {
         assert!(css_classes.contains("duration-700"));
         assert!(css_classes.contains("duration-1000"));
     }
-    
+
     #[test]
     fn test_transition_timing_function_utilities() {
         let classes = ClassBuilder::new()
@@ -287,14 +287,14 @@ mod tests {
             .transition_timing_function(TransitionTimingFunction::Out)
             .transition_timing_function(TransitionTimingFunction::InOut)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("ease-linear"));
         assert!(css_classes.contains("ease-in"));
         assert!(css_classes.contains("ease-out"));
         assert!(css_classes.contains("ease-in-out"));
     }
-    
+
     #[test]
     fn test_transition_delay_utilities() {
         let classes = ClassBuilder::new()
@@ -307,7 +307,7 @@ mod tests {
             .transition_delay(TransitionDelay::Delay700)
             .transition_delay(TransitionDelay::Delay1000)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("delay-75"));
         assert!(css_classes.contains("delay-100"));
@@ -318,7 +318,7 @@ mod tests {
         assert!(css_classes.contains("delay-700"));
         assert!(css_classes.contains("delay-1000"));
     }
-    
+
     #[test]
     fn test_transition_property_utilities() {
         let classes = ClassBuilder::new()
@@ -330,7 +330,7 @@ mod tests {
             .transition_property(TransitionProperty::Shadow)
             .transition_property(TransitionProperty::Transform)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("transition-all"));
         assert!(css_classes.contains("transition-none"));
@@ -340,7 +340,7 @@ mod tests {
         assert!(css_classes.contains("transition-shadow"));
         assert!(css_classes.contains("transition-transform"));
     }
-    
+
     #[test]
     fn test_complex_transitions_combination() {
         let classes = ClassBuilder::new()
@@ -349,14 +349,14 @@ mod tests {
             .transition_delay(TransitionDelay::Delay100)
             .transition_property(TransitionProperty::Colors)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("duration-300"));
         assert!(css_classes.contains("ease-in-out"));
         assert!(css_classes.contains("delay-100"));
         assert!(css_classes.contains("transition-colors"));
     }
-    
+
     /// Test that all Week 12 transition utilities are implemented
     #[test]
     fn test_week12_transition_utilities() {
@@ -394,9 +394,9 @@ mod tests {
             .transition_delay(TransitionDelay::Delay700)
             .transition_delay(TransitionDelay::Delay1000)
             .build();
-        
+
         let css_classes = classes.to_css_classes();
-        
+
         // Transition Properties
         assert!(css_classes.contains("transition-none"));
         assert!(css_classes.contains("transition-all"));
@@ -405,7 +405,7 @@ mod tests {
         assert!(css_classes.contains("transition-opacity"));
         assert!(css_classes.contains("transition-shadow"));
         assert!(css_classes.contains("transition-transform"));
-        
+
         // Duration
         assert!(css_classes.contains("duration-75"));
         assert!(css_classes.contains("duration-100"));
@@ -415,13 +415,13 @@ mod tests {
         assert!(css_classes.contains("duration-500"));
         assert!(css_classes.contains("duration-700"));
         assert!(css_classes.contains("duration-1000"));
-        
+
         // Ease
         assert!(css_classes.contains("ease-linear"));
         assert!(css_classes.contains("ease-in"));
         assert!(css_classes.contains("ease-out"));
         assert!(css_classes.contains("ease-in-out"));
-        
+
         // Delay
         assert!(css_classes.contains("delay-75"));
         assert!(css_classes.contains("delay-100"));

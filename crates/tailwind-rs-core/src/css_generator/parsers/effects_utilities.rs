@@ -1,5 +1,5 @@
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
-use super::{UtilityParser, ParserCategory};
 
 /// Parser for effects utilities
 #[derive(Debug, Clone)]
@@ -14,15 +14,51 @@ impl EffectsUtilitiesParser {
     /// Parse box-shadow classes
     fn parse_box_shadow_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "shadow-2xs" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-2xs)".to_string(), important: false }]),
-            "shadow-xs" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-xs)".to_string(), important: false }]),
-            "shadow-sm" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-sm)".to_string(), important: false }]),
-            "shadow" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-md)".to_string(), important: false }]),
-            "shadow-md" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-md)".to_string(), important: false }]),
-            "shadow-lg" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-lg)".to_string(), important: false }]),
-            "shadow-xl" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-xl)".to_string(), important: false }]),
-            "shadow-2xl" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "var(--shadow-2xl)".to_string(), important: false }]),
-            "shadow-none" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "0 0 #0000".to_string(), important: false }]),
+            "shadow-2xs" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-2xs)".to_string(),
+                important: false,
+            }]),
+            "shadow-xs" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-xs)".to_string(),
+                important: false,
+            }]),
+            "shadow-sm" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-sm)".to_string(),
+                important: false,
+            }]),
+            "shadow" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-md)".to_string(),
+                important: false,
+            }]),
+            "shadow-md" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-md)".to_string(),
+                important: false,
+            }]),
+            "shadow-lg" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-lg)".to_string(),
+                important: false,
+            }]),
+            "shadow-xl" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-xl)".to_string(),
+                important: false,
+            }]),
+            "shadow-2xl" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "var(--shadow-2xl)".to_string(),
+                important: false,
+            }]),
+            "shadow-none" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 #0000".to_string(),
+                important: false,
+            }]),
             _ => {
                 // Custom properties for box shadow
                 if let Some(value) = class.strip_prefix("shadow-(") {
@@ -34,7 +70,7 @@ impl EffectsUtilitiesParser {
                         }]);
                     }
                 }
-                
+
                 // Arbitrary values for box shadow
                 if let Some(value) = class.strip_prefix("shadow-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -45,7 +81,7 @@ impl EffectsUtilitiesParser {
                         }]);
                     }
                 }
-                
+
                 // Shadow with opacity modifier (e.g., shadow-xl/20)
                 if class.contains("/") {
                     let parts: Vec<&str> = class.split("/").collect();
@@ -61,7 +97,7 @@ impl EffectsUtilitiesParser {
                         }
                     }
                 }
-                
+
                 // Shadow with color (e.g., shadow-indigo-500)
                 if let Some(color_value) = self.get_color_value(class) {
                     return Some(vec![CssProperty {
@@ -70,7 +106,7 @@ impl EffectsUtilitiesParser {
                         important: false,
                     }]);
                 }
-                
+
                 // Inset shadows
                 if class.starts_with("inset-shadow-") {
                     if let Some(shadow_type) = class.strip_prefix("inset-shadow-") {
@@ -83,7 +119,7 @@ impl EffectsUtilitiesParser {
                         }
                     }
                 }
-                
+
                 None
             }
         }
@@ -92,12 +128,36 @@ impl EffectsUtilitiesParser {
     /// Parse text-shadow classes
     fn parse_text_shadow_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "text-shadow-2xs" => Some(vec![CssProperty { name: "text-shadow".to_string(), value: "var(--text-shadow-2xs)".to_string(), important: false }]),
-            "text-shadow-xs" => Some(vec![CssProperty { name: "text-shadow".to_string(), value: "var(--text-shadow-xs)".to_string(), important: false }]),
-            "text-shadow-sm" => Some(vec![CssProperty { name: "text-shadow".to_string(), value: "var(--text-shadow-sm)".to_string(), important: false }]),
-            "text-shadow-md" => Some(vec![CssProperty { name: "text-shadow".to_string(), value: "var(--text-shadow-md)".to_string(), important: false }]),
-            "text-shadow-lg" => Some(vec![CssProperty { name: "text-shadow".to_string(), value: "var(--text-shadow-lg)".to_string(), important: false }]),
-            "text-shadow-none" => Some(vec![CssProperty { name: "text-shadow".to_string(), value: "none".to_string(), important: false }]),
+            "text-shadow-2xs" => Some(vec![CssProperty {
+                name: "text-shadow".to_string(),
+                value: "var(--text-shadow-2xs)".to_string(),
+                important: false,
+            }]),
+            "text-shadow-xs" => Some(vec![CssProperty {
+                name: "text-shadow".to_string(),
+                value: "var(--text-shadow-xs)".to_string(),
+                important: false,
+            }]),
+            "text-shadow-sm" => Some(vec![CssProperty {
+                name: "text-shadow".to_string(),
+                value: "var(--text-shadow-sm)".to_string(),
+                important: false,
+            }]),
+            "text-shadow-md" => Some(vec![CssProperty {
+                name: "text-shadow".to_string(),
+                value: "var(--text-shadow-md)".to_string(),
+                important: false,
+            }]),
+            "text-shadow-lg" => Some(vec![CssProperty {
+                name: "text-shadow".to_string(),
+                value: "var(--text-shadow-lg)".to_string(),
+                important: false,
+            }]),
+            "text-shadow-none" => Some(vec![CssProperty {
+                name: "text-shadow".to_string(),
+                value: "none".to_string(),
+                important: false,
+            }]),
             _ => {
                 // Custom properties for text shadow
                 if let Some(value) = class.strip_prefix("text-shadow-(") {
@@ -109,7 +169,7 @@ impl EffectsUtilitiesParser {
                         }]);
                     }
                 }
-                
+
                 // Arbitrary values for text shadow
                 if let Some(value) = class.strip_prefix("text-shadow-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -120,7 +180,7 @@ impl EffectsUtilitiesParser {
                         }]);
                     }
                 }
-                
+
                 // Text shadow with opacity modifier (e.g., text-shadow-lg/20)
                 if class.contains("/") {
                     let parts: Vec<&str> = class.split("/").collect();
@@ -136,7 +196,7 @@ impl EffectsUtilitiesParser {
                         }
                     }
                 }
-                
+
                 // Text shadow with color (e.g., text-shadow-indigo-500)
                 if let Some(color_value) = self.get_color_value(class) {
                     return Some(vec![CssProperty {
@@ -145,7 +205,7 @@ impl EffectsUtilitiesParser {
                         important: false,
                     }]);
                 }
-                
+
                 None
             }
         }
@@ -163,7 +223,7 @@ impl EffectsUtilitiesParser {
                 }]);
             }
         }
-        
+
         // Custom properties for opacity
         if let Some(value) = class.strip_prefix("opacity-(") {
             if let Some(value) = value.strip_suffix(")") {
@@ -174,7 +234,7 @@ impl EffectsUtilitiesParser {
                 }]);
             }
         }
-        
+
         // Arbitrary values for opacity
         if let Some(value) = class.strip_prefix("opacity-[") {
             if let Some(value) = value.strip_suffix("]") {
@@ -185,29 +245,93 @@ impl EffectsUtilitiesParser {
                 }]);
             }
         }
-        
+
         None
     }
 
     /// Parse mix-blend-mode classes
     fn parse_mix_blend_mode_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "mix-blend-normal" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "normal".to_string(), important: false }]),
-            "mix-blend-multiply" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "multiply".to_string(), important: false }]),
-            "mix-blend-screen" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "screen".to_string(), important: false }]),
-            "mix-blend-overlay" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "overlay".to_string(), important: false }]),
-            "mix-blend-darken" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "darken".to_string(), important: false }]),
-            "mix-blend-lighten" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "lighten".to_string(), important: false }]),
-            "mix-blend-color-dodge" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "color-dodge".to_string(), important: false }]),
-            "mix-blend-color-burn" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "color-burn".to_string(), important: false }]),
-            "mix-blend-hard-light" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "hard-light".to_string(), important: false }]),
-            "mix-blend-soft-light" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "soft-light".to_string(), important: false }]),
-            "mix-blend-difference" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "difference".to_string(), important: false }]),
-            "mix-blend-exclusion" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "exclusion".to_string(), important: false }]),
-            "mix-blend-hue" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "hue".to_string(), important: false }]),
-            "mix-blend-saturation" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "saturation".to_string(), important: false }]),
-            "mix-blend-color" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "color".to_string(), important: false }]),
-            "mix-blend-luminosity" => Some(vec![CssProperty { name: "mix-blend-mode".to_string(), value: "luminosity".to_string(), important: false }]),
+            "mix-blend-normal" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "normal".to_string(),
+                important: false,
+            }]),
+            "mix-blend-multiply" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "multiply".to_string(),
+                important: false,
+            }]),
+            "mix-blend-screen" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "screen".to_string(),
+                important: false,
+            }]),
+            "mix-blend-overlay" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "overlay".to_string(),
+                important: false,
+            }]),
+            "mix-blend-darken" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "darken".to_string(),
+                important: false,
+            }]),
+            "mix-blend-lighten" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "lighten".to_string(),
+                important: false,
+            }]),
+            "mix-blend-color-dodge" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "color-dodge".to_string(),
+                important: false,
+            }]),
+            "mix-blend-color-burn" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "color-burn".to_string(),
+                important: false,
+            }]),
+            "mix-blend-hard-light" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "hard-light".to_string(),
+                important: false,
+            }]),
+            "mix-blend-soft-light" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "soft-light".to_string(),
+                important: false,
+            }]),
+            "mix-blend-difference" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "difference".to_string(),
+                important: false,
+            }]),
+            "mix-blend-exclusion" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "exclusion".to_string(),
+                important: false,
+            }]),
+            "mix-blend-hue" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "hue".to_string(),
+                important: false,
+            }]),
+            "mix-blend-saturation" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "saturation".to_string(),
+                important: false,
+            }]),
+            "mix-blend-color" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "color".to_string(),
+                important: false,
+            }]),
+            "mix-blend-luminosity" => Some(vec![CssProperty {
+                name: "mix-blend-mode".to_string(),
+                value: "luminosity".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -215,22 +339,86 @@ impl EffectsUtilitiesParser {
     /// Parse background-blend-mode classes
     fn parse_background_blend_mode_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "bg-blend-normal" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "normal".to_string(), important: false }]),
-            "bg-blend-multiply" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "multiply".to_string(), important: false }]),
-            "bg-blend-screen" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "screen".to_string(), important: false }]),
-            "bg-blend-overlay" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "overlay".to_string(), important: false }]),
-            "bg-blend-darken" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "darken".to_string(), important: false }]),
-            "bg-blend-lighten" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "lighten".to_string(), important: false }]),
-            "bg-blend-color-dodge" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "color-dodge".to_string(), important: false }]),
-            "bg-blend-color-burn" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "color-burn".to_string(), important: false }]),
-            "bg-blend-hard-light" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "hard-light".to_string(), important: false }]),
-            "bg-blend-soft-light" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "soft-light".to_string(), important: false }]),
-            "bg-blend-difference" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "difference".to_string(), important: false }]),
-            "bg-blend-exclusion" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "exclusion".to_string(), important: false }]),
-            "bg-blend-hue" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "hue".to_string(), important: false }]),
-            "bg-blend-saturation" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "saturation".to_string(), important: false }]),
-            "bg-blend-color" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "color".to_string(), important: false }]),
-            "bg-blend-luminosity" => Some(vec![CssProperty { name: "background-blend-mode".to_string(), value: "luminosity".to_string(), important: false }]),
+            "bg-blend-normal" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "normal".to_string(),
+                important: false,
+            }]),
+            "bg-blend-multiply" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "multiply".to_string(),
+                important: false,
+            }]),
+            "bg-blend-screen" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "screen".to_string(),
+                important: false,
+            }]),
+            "bg-blend-overlay" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "overlay".to_string(),
+                important: false,
+            }]),
+            "bg-blend-darken" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "darken".to_string(),
+                important: false,
+            }]),
+            "bg-blend-lighten" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "lighten".to_string(),
+                important: false,
+            }]),
+            "bg-blend-color-dodge" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "color-dodge".to_string(),
+                important: false,
+            }]),
+            "bg-blend-color-burn" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "color-burn".to_string(),
+                important: false,
+            }]),
+            "bg-blend-hard-light" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "hard-light".to_string(),
+                important: false,
+            }]),
+            "bg-blend-soft-light" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "soft-light".to_string(),
+                important: false,
+            }]),
+            "bg-blend-difference" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "difference".to_string(),
+                important: false,
+            }]),
+            "bg-blend-exclusion" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "exclusion".to_string(),
+                important: false,
+            }]),
+            "bg-blend-hue" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "hue".to_string(),
+                important: false,
+            }]),
+            "bg-blend-saturation" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "saturation".to_string(),
+                important: false,
+            }]),
+            "bg-blend-color" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "color".to_string(),
+                important: false,
+            }]),
+            "bg-blend-luminosity" => Some(vec![CssProperty {
+                name: "background-blend-mode".to_string(),
+                value: "luminosity".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -238,13 +426,41 @@ impl EffectsUtilitiesParser {
     /// Parse mask-clip classes
     fn parse_mask_clip_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "mask-clip-border" => Some(vec![CssProperty { name: "mask-clip".to_string(), value: "border-box".to_string(), important: false }]),
-            "mask-clip-padding" => Some(vec![CssProperty { name: "mask-clip".to_string(), value: "padding-box".to_string(), important: false }]),
-            "mask-clip-content" => Some(vec![CssProperty { name: "mask-clip".to_string(), value: "content-box".to_string(), important: false }]),
-            "mask-clip-fill" => Some(vec![CssProperty { name: "mask-clip".to_string(), value: "fill-box".to_string(), important: false }]),
-            "mask-clip-stroke" => Some(vec![CssProperty { name: "mask-clip".to_string(), value: "stroke-box".to_string(), important: false }]),
-            "mask-clip-view" => Some(vec![CssProperty { name: "mask-clip".to_string(), value: "view-box".to_string(), important: false }]),
-            "mask-no-clip" => Some(vec![CssProperty { name: "mask-clip".to_string(), value: "no-clip".to_string(), important: false }]),
+            "mask-clip-border" => Some(vec![CssProperty {
+                name: "mask-clip".to_string(),
+                value: "border-box".to_string(),
+                important: false,
+            }]),
+            "mask-clip-padding" => Some(vec![CssProperty {
+                name: "mask-clip".to_string(),
+                value: "padding-box".to_string(),
+                important: false,
+            }]),
+            "mask-clip-content" => Some(vec![CssProperty {
+                name: "mask-clip".to_string(),
+                value: "content-box".to_string(),
+                important: false,
+            }]),
+            "mask-clip-fill" => Some(vec![CssProperty {
+                name: "mask-clip".to_string(),
+                value: "fill-box".to_string(),
+                important: false,
+            }]),
+            "mask-clip-stroke" => Some(vec![CssProperty {
+                name: "mask-clip".to_string(),
+                value: "stroke-box".to_string(),
+                important: false,
+            }]),
+            "mask-clip-view" => Some(vec![CssProperty {
+                name: "mask-clip".to_string(),
+                value: "view-box".to_string(),
+                important: false,
+            }]),
+            "mask-no-clip" => Some(vec![CssProperty {
+                name: "mask-clip".to_string(),
+                value: "no-clip".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -252,10 +468,26 @@ impl EffectsUtilitiesParser {
     /// Parse mask-composite classes
     fn parse_mask_composite_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "mask-add" => Some(vec![CssProperty { name: "mask-composite".to_string(), value: "add".to_string(), important: false }]),
-            "mask-subtract" => Some(vec![CssProperty { name: "mask-composite".to_string(), value: "subtract".to_string(), important: false }]),
-            "mask-intersect" => Some(vec![CssProperty { name: "mask-composite".to_string(), value: "intersect".to_string(), important: false }]),
-            "mask-exclude" => Some(vec![CssProperty { name: "mask-composite".to_string(), value: "exclude".to_string(), important: false }]),
+            "mask-add" => Some(vec![CssProperty {
+                name: "mask-composite".to_string(),
+                value: "add".to_string(),
+                important: false,
+            }]),
+            "mask-subtract" => Some(vec![CssProperty {
+                name: "mask-composite".to_string(),
+                value: "subtract".to_string(),
+                important: false,
+            }]),
+            "mask-intersect" => Some(vec![CssProperty {
+                name: "mask-composite".to_string(),
+                value: "intersect".to_string(),
+                important: false,
+            }]),
+            "mask-exclude" => Some(vec![CssProperty {
+                name: "mask-composite".to_string(),
+                value: "exclude".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -379,52 +611,64 @@ impl EffectsUtilitiesParser {
 impl UtilityParser for EffectsUtilitiesParser {
     fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         // Try each parser in order of specificity
-        
+
         // Mask composite (most specific)
         if let Some(properties) = self.parse_mask_composite_class(class) {
             return Some(properties);
         }
-        
+
         // Mask clip
         if let Some(properties) = self.parse_mask_clip_class(class) {
             return Some(properties);
         }
-        
+
         // Background blend mode
         if let Some(properties) = self.parse_background_blend_mode_class(class) {
             return Some(properties);
         }
-        
+
         // Mix blend mode
         if let Some(properties) = self.parse_mix_blend_mode_class(class) {
             return Some(properties);
         }
-        
+
         // Opacity
         if let Some(properties) = self.parse_opacity_class(class) {
             return Some(properties);
         }
-        
+
         // Text shadow
         if let Some(properties) = self.parse_text_shadow_class(class) {
             return Some(properties);
         }
-        
+
         // Box shadow (least specific)
         if let Some(properties) = self.parse_box_shadow_class(class) {
             return Some(properties);
         }
-        
+
         None
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "shadow-*", "text-shadow-*", "opacity-*", "mix-blend-*", "bg-blend-*",
-            "mask-clip-*", "mask-*", "inset-shadow-*", "ring-*", "inset-ring-*"
+            "shadow-*",
+            "text-shadow-*",
+            "opacity-*",
+            "mix-blend-*",
+            "bg-blend-*",
+            "mask-clip-*",
+            "mask-*",
+            "inset-shadow-*",
+            "ring-*",
+            "inset-ring-*",
         ]
     }
 
-    fn get_priority(&self) -> u32 { 90 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Effects }
+    fn get_priority(&self) -> u32 {
+        90
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Effects
+    }
 }

@@ -61,7 +61,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .aspect_ratio(AspectRatio::Square)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("aspect-square"));
     }
 }

@@ -145,7 +145,7 @@ impl DarkModeVariant {
     /// Convert to Tailwind CSS class name
     pub fn to_class_name(&self) -> String {
         let mut prefix = "dark:".to_string();
-        
+
         if self.is_group_hover {
             prefix.push_str("group-hover:");
         } else if self.is_group_focus {
@@ -161,7 +161,7 @@ impl DarkModeVariant {
         } else if self.is_checked {
             prefix.push_str("checked:");
         }
-        
+
         format!("{}{}", prefix, self.class)
     }
 
@@ -198,7 +198,7 @@ impl DarkModeVariant {
 pub enum DarkModeVariantError {
     #[error("Empty class name")]
     EmptyClass,
-    
+
     #[error("Conflicting states: only one state modifier can be used at a time")]
     ConflictingStates,
 }
@@ -213,46 +213,46 @@ impl fmt::Display for DarkModeVariant {
 pub trait DarkModeVariantUtilities {
     /// Add a dark mode variant
     fn dark_mode(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode hover variant
     fn dark_hover(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode focus variant
     fn dark_focus(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode active variant
     fn dark_active(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode disabled variant
     fn dark_disabled(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode checked variant
     fn dark_checked(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode group hover variant
     fn dark_group_hover(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode group focus variant
     fn dark_group_focus(self, class: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode background color
     fn dark_bg(self, color: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode text color
     fn dark_text(self, color: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode border color
     fn dark_border(self, color: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode hover background color
     fn dark_hover_bg(self, color: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode hover text color
     fn dark_hover_text(self, color: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode focus background color
     fn dark_focus_bg(self, color: impl Into<String>) -> Self;
-    
+
     /// Add a dark mode focus text color
     fn dark_focus_text(self, color: impl Into<String>) -> Self;
 }
@@ -262,66 +262,66 @@ impl DarkModeVariantUtilities for ClassBuilder {
         let variant = DarkModeVariant::new(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_hover(self, class: impl Into<String>) -> Self {
         let variant = DarkModeVariant::hover(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_focus(self, class: impl Into<String>) -> Self {
         let variant = DarkModeVariant::focus(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_active(self, class: impl Into<String>) -> Self {
         let variant = DarkModeVariant::active(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_disabled(self, class: impl Into<String>) -> Self {
         let variant = DarkModeVariant::disabled(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_checked(self, class: impl Into<String>) -> Self {
         let variant = DarkModeVariant::checked(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_group_hover(self, class: impl Into<String>) -> Self {
         let variant = DarkModeVariant::group_hover(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_group_focus(self, class: impl Into<String>) -> Self {
         let variant = DarkModeVariant::group_focus(class);
         self.class(variant.to_class_name())
     }
-    
+
     fn dark_bg(self, color: impl Into<String>) -> Self {
         self.dark_mode(format!("bg-{}", color.into()))
     }
-    
+
     fn dark_text(self, color: impl Into<String>) -> Self {
         self.dark_mode(format!("text-{}", color.into()))
     }
-    
+
     fn dark_border(self, color: impl Into<String>) -> Self {
         self.dark_mode(format!("border-{}", color.into()))
     }
-    
+
     fn dark_hover_bg(self, color: impl Into<String>) -> Self {
         self.dark_hover(format!("bg-{}", color.into()))
     }
-    
+
     fn dark_hover_text(self, color: impl Into<String>) -> Self {
         self.dark_hover(format!("text-{}", color.into()))
     }
-    
+
     fn dark_focus_bg(self, color: impl Into<String>) -> Self {
         self.dark_focus(format!("bg-{}", color.into()))
     }
-    
+
     fn dark_focus_text(self, color: impl Into<String>) -> Self {
         self.dark_focus(format!("text-{}", color.into()))
     }
@@ -330,72 +330,72 @@ impl DarkModeVariantUtilities for ClassBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_dark_mode_variant_creation() {
         let variant = DarkModeVariant::new("bg-gray-800");
         assert_eq!(variant.to_class_name(), "dark:bg-gray-800");
     }
-    
+
     #[test]
     fn test_dark_mode_hover_variant() {
         let variant = DarkModeVariant::hover("bg-gray-700");
         assert_eq!(variant.to_class_name(), "dark:hover:bg-gray-700");
     }
-    
+
     #[test]
     fn test_dark_mode_focus_variant() {
         let variant = DarkModeVariant::focus("bg-gray-700");
         assert_eq!(variant.to_class_name(), "dark:focus:bg-gray-700");
     }
-    
+
     #[test]
     fn test_dark_mode_active_variant() {
         let variant = DarkModeVariant::active("bg-gray-700");
         assert_eq!(variant.to_class_name(), "dark:active:bg-gray-700");
     }
-    
+
     #[test]
     fn test_dark_mode_disabled_variant() {
         let variant = DarkModeVariant::disabled("bg-gray-700");
         assert_eq!(variant.to_class_name(), "dark:disabled:bg-gray-700");
     }
-    
+
     #[test]
     fn test_dark_mode_checked_variant() {
         let variant = DarkModeVariant::checked("bg-gray-700");
         assert_eq!(variant.to_class_name(), "dark:checked:bg-gray-700");
     }
-    
+
     #[test]
     fn test_dark_mode_group_hover_variant() {
         let variant = DarkModeVariant::group_hover("bg-gray-700");
         assert_eq!(variant.to_class_name(), "dark:group-hover:bg-gray-700");
     }
-    
+
     #[test]
     fn test_dark_mode_group_focus_variant() {
         let variant = DarkModeVariant::group_focus("bg-gray-700");
         assert_eq!(variant.to_class_name(), "dark:group-focus:bg-gray-700");
     }
-    
+
     #[test]
     fn test_dark_mode_variant_validation() {
         // Valid variants
         assert!(DarkModeVariant::new("bg-gray-800").validate().is_ok());
         assert!(DarkModeVariant::hover("bg-gray-700").validate().is_ok());
         assert!(DarkModeVariant::focus("bg-gray-700").validate().is_ok());
-        
+
         // Invalid variants
         assert!(DarkModeVariant::new("").validate().is_err());
     }
-    
+
     #[test]
     fn test_dark_mode_variant_display() {
         let variant = DarkModeVariant::new("bg-gray-800");
         assert_eq!(format!("{}", variant), "dark:bg-gray-800");
     }
-    
+
     #[test]
     fn test_dark_mode_variant_utilities() {
         let classes = ClassBuilder::new()
@@ -407,7 +407,7 @@ mod tests {
             .dark_focus_bg("gray-600")
             .dark_focus_text("gray-50")
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("dark:bg-gray-800"));
         assert!(css_classes.contains("dark:text-white"));
@@ -417,7 +417,7 @@ mod tests {
         assert!(css_classes.contains("dark:focus:bg-gray-600"));
         assert!(css_classes.contains("dark:focus:text-gray-50"));
     }
-    
+
     #[test]
     fn test_dark_mode_variant_utilities_advanced() {
         let classes = ClassBuilder::new()
@@ -430,7 +430,7 @@ mod tests {
             .dark_group_hover("bg-gray-200")
             .dark_group_focus("bg-gray-100")
             .build();
-        
+
         let css_classes = classes.to_css_classes();
         assert!(css_classes.contains("dark:bg-gray-800"));
         assert!(css_classes.contains("dark:hover:bg-gray-700"));

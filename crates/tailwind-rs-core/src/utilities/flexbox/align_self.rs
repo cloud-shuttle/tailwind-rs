@@ -51,10 +51,8 @@ mod tests {
 
     #[test]
     fn test_align_self_utilities() {
-        let classes = ClassBuilder::new()
-            .align_self(AlignSelf::Center)
-            .build();
-        
+        let classes = ClassBuilder::new().align_self(AlignSelf::Center).build();
+
         assert!(classes.to_css_classes().contains("self-center"));
     }
 }

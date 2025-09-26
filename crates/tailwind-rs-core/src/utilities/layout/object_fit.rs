@@ -48,10 +48,8 @@ mod tests {
 
     #[test]
     fn test_object_fit_utilities() {
-        let classes = ClassBuilder::new()
-            .object_fit(ObjectFit::Cover)
-            .build();
-        
+        let classes = ClassBuilder::new().object_fit(ObjectFit::Cover).build();
+
         assert!(classes.to_css_classes().contains("object-cover"));
     }
 }

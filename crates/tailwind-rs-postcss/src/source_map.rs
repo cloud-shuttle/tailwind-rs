@@ -35,7 +35,7 @@ impl SourceMapGenerator {
     pub fn new() -> Self {
         Self
     }
-    
+
     /// Generate source map
     pub fn generate(
         &self,
@@ -49,16 +49,16 @@ impl SourceMapGenerator {
         } else {
             vec![]
         };
-        
+
         let sources_content = if options.sources_content {
             Some(vec![input.to_string()])
         } else {
             None
         };
-        
+
         // Generate basic mappings (1:1 mapping for now)
         let mappings = self.generate_mappings(input, output);
-        
+
         Ok(SourceMap {
             version: 3,
             sources,
@@ -69,14 +69,14 @@ impl SourceMapGenerator {
             sources_content,
         })
     }
-    
+
     /// Generate basic source map mappings
     fn generate_mappings(&self, input: &str, output: &str) -> String {
         // For now, generate a simple 1:1 mapping
         // In a real implementation, this would track the actual transformations
         let input_lines = input.lines().count();
         let output_lines = output.lines().count();
-        
+
         if input_lines == output_lines {
             // Simple 1:1 mapping
             format!("AAAA;{}", input_lines)
@@ -100,7 +100,7 @@ mod tests {
             source_root: None,
             sources_content: true,
         };
-        
+
         let result = generator.generate("input", "output", &options);
         assert!(result.is_ok());
     }

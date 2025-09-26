@@ -132,9 +132,15 @@ impl ResponsiveFlex {
     pub fn new() -> Self {
         Self::default()
     }
-    
+
     /// Create a responsive flex container with base values
-    pub fn with_base(direction: FlexDirection, wrap: FlexWrap, justify: JustifyContent, align: AlignItems, gap: u32) -> Self {
+    pub fn with_base(
+        direction: FlexDirection,
+        wrap: FlexWrap,
+        justify: JustifyContent,
+        align: AlignItems,
+        gap: u32,
+    ) -> Self {
         Self {
             direction: ResponsiveValue::with_base(direction),
             wrap: ResponsiveValue::with_base(wrap),
@@ -143,85 +149,85 @@ impl ResponsiveFlex {
             gap: ResponsiveValue::with_base(gap),
         }
     }
-    
+
     /// Set flex direction for a specific breakpoint
     pub fn set_direction(&mut self, breakpoint: Breakpoint, direction: FlexDirection) {
         self.direction.set_breakpoint(breakpoint, direction);
     }
-    
+
     /// Set flex wrap for a specific breakpoint
     pub fn set_wrap(&mut self, breakpoint: Breakpoint, wrap: FlexWrap) {
         self.wrap.set_breakpoint(breakpoint, wrap);
     }
-    
+
     /// Set justify content for a specific breakpoint
     pub fn set_justify(&mut self, breakpoint: Breakpoint, justify: JustifyContent) {
         self.justify.set_breakpoint(breakpoint, justify);
     }
-    
+
     /// Set align items for a specific breakpoint
     pub fn set_align(&mut self, breakpoint: Breakpoint, align: AlignItems) {
         self.align.set_breakpoint(breakpoint, align);
     }
-    
+
     /// Set gap for a specific breakpoint
     pub fn set_gap(&mut self, breakpoint: Breakpoint, gap: u32) {
         self.gap.set_breakpoint(breakpoint, gap);
     }
-    
+
     /// Get flex direction for a specific breakpoint
     pub fn get_direction(&self, breakpoint: Breakpoint) -> Option<FlexDirection> {
         self.direction.get_breakpoint(breakpoint).copied()
     }
-    
+
     /// Get flex wrap for a specific breakpoint
     pub fn get_wrap(&self, breakpoint: Breakpoint) -> Option<FlexWrap> {
         self.wrap.get_breakpoint(breakpoint).copied()
     }
-    
+
     /// Get justify content for a specific breakpoint
     pub fn get_justify(&self, breakpoint: Breakpoint) -> Option<JustifyContent> {
         self.justify.get_breakpoint(breakpoint).copied()
     }
-    
+
     /// Get align items for a specific breakpoint
     pub fn get_align(&self, breakpoint: Breakpoint) -> Option<AlignItems> {
         self.align.get_breakpoint(breakpoint).copied()
     }
-    
+
     /// Get gap for a specific breakpoint
     pub fn get_gap(&self, breakpoint: Breakpoint) -> Option<u32> {
         self.gap.get_breakpoint(breakpoint).copied()
     }
-    
+
     /// Generate CSS classes for all breakpoints
     pub fn to_css_classes(&self) -> String {
         let mut classes = Vec::new();
-        
+
         // Add flex direction classes
         let direction_classes = self.direction.to_css_classes(|d| d.to_class().to_string());
         if !direction_classes.is_empty() {
             classes.push(direction_classes);
         }
-        
+
         // Add flex wrap classes
         let wrap_classes = self.wrap.to_css_classes(|w| w.to_class().to_string());
         if !wrap_classes.is_empty() {
             classes.push(wrap_classes);
         }
-        
+
         // Add justify content classes
         let justify_classes = self.justify.to_css_classes(|j| j.to_class().to_string());
         if !justify_classes.is_empty() {
             classes.push(justify_classes);
         }
-        
+
         // Add align items classes
         let align_classes = self.align.to_css_classes(|a| a.to_class().to_string());
         if !align_classes.is_empty() {
             classes.push(align_classes);
         }
-        
+
         // Add gap classes
         let gap_classes = self.gap.to_css_classes(|g| {
             if *g == 0 {
@@ -233,34 +239,34 @@ impl ResponsiveFlex {
         if !gap_classes.is_empty() {
             classes.push(gap_classes);
         }
-        
+
         classes.join(" ")
     }
-    
+
     /// Generate CSS classes for a specific screen width
     pub fn to_css_classes_for_width(&self, screen_width: u32) -> String {
         let mut classes = Vec::new();
-        
+
         // Add flex direction classes
         if let Some(direction) = self.direction.get_for_width(screen_width) {
             classes.push(direction.to_class().to_string());
         }
-        
+
         // Add flex wrap classes
         if let Some(wrap) = self.wrap.get_for_width(screen_width) {
             classes.push(wrap.to_class().to_string());
         }
-        
+
         // Add justify content classes
         if let Some(justify) = self.justify.get_for_width(screen_width) {
             classes.push(justify.to_class().to_string());
         }
-        
+
         // Add align items classes
         if let Some(align) = self.align.get_for_width(screen_width) {
             classes.push(align.to_class().to_string());
         }
-        
+
         // Add gap classes
         if let Some(gap) = self.gap.get_for_width(screen_width) {
             if *gap == 0 {
@@ -269,7 +275,7 @@ impl ResponsiveFlex {
                 classes.push(format!("gap-{}", gap));
             }
         }
-        
+
         classes.join(" ")
     }
 }
@@ -327,9 +333,15 @@ mod tests {
     #[test]
     fn test_responsive_flex_new() {
         let flex = ResponsiveFlex::new();
-        assert_eq!(flex.get_direction(Breakpoint::Base), Some(FlexDirection::Row));
+        assert_eq!(
+            flex.get_direction(Breakpoint::Base),
+            Some(FlexDirection::Row)
+        );
         assert_eq!(flex.get_wrap(Breakpoint::Base), Some(FlexWrap::NoWrap));
-        assert_eq!(flex.get_justify(Breakpoint::Base), Some(JustifyContent::Start));
+        assert_eq!(
+            flex.get_justify(Breakpoint::Base),
+            Some(JustifyContent::Start)
+        );
         assert_eq!(flex.get_align(Breakpoint::Base), Some(AlignItems::Stretch));
         assert_eq!(flex.get_gap(Breakpoint::Base), Some(0));
     }
@@ -343,10 +355,16 @@ mod tests {
             AlignItems::Center,
             4,
         );
-        
-        assert_eq!(flex.get_direction(Breakpoint::Base), Some(FlexDirection::Column));
+
+        assert_eq!(
+            flex.get_direction(Breakpoint::Base),
+            Some(FlexDirection::Column)
+        );
         assert_eq!(flex.get_wrap(Breakpoint::Base), Some(FlexWrap::Wrap));
-        assert_eq!(flex.get_justify(Breakpoint::Base), Some(JustifyContent::Center));
+        assert_eq!(
+            flex.get_justify(Breakpoint::Base),
+            Some(JustifyContent::Center)
+        );
         assert_eq!(flex.get_align(Breakpoint::Base), Some(AlignItems::Center));
         assert_eq!(flex.get_gap(Breakpoint::Base), Some(4));
     }
@@ -354,16 +372,22 @@ mod tests {
     #[test]
     fn test_responsive_flex_set_get() {
         let mut flex = ResponsiveFlex::new();
-        
+
         flex.set_direction(Breakpoint::Sm, FlexDirection::Column);
         flex.set_wrap(Breakpoint::Md, FlexWrap::Wrap);
         flex.set_justify(Breakpoint::Lg, JustifyContent::Between);
         flex.set_align(Breakpoint::Xl, AlignItems::Center);
         flex.set_gap(Breakpoint::Xl2, 8);
-        
-        assert_eq!(flex.get_direction(Breakpoint::Sm), Some(FlexDirection::Column));
+
+        assert_eq!(
+            flex.get_direction(Breakpoint::Sm),
+            Some(FlexDirection::Column)
+        );
         assert_eq!(flex.get_wrap(Breakpoint::Md), Some(FlexWrap::Wrap));
-        assert_eq!(flex.get_justify(Breakpoint::Lg), Some(JustifyContent::Between));
+        assert_eq!(
+            flex.get_justify(Breakpoint::Lg),
+            Some(JustifyContent::Between)
+        );
         assert_eq!(flex.get_align(Breakpoint::Xl), Some(AlignItems::Center));
         assert_eq!(flex.get_gap(Breakpoint::Xl2), Some(8));
     }
@@ -374,7 +398,7 @@ mod tests {
         flex.set_direction(Breakpoint::Sm, FlexDirection::Column);
         flex.set_justify(Breakpoint::Md, JustifyContent::Center);
         flex.set_gap(Breakpoint::Lg, 4);
-        
+
         let classes = flex.to_css_classes();
         assert!(classes.contains("flex-row"));
         assert!(classes.contains("sm:flex-col"));
@@ -388,26 +412,26 @@ mod tests {
         flex.set_direction(Breakpoint::Sm, FlexDirection::Column);
         flex.set_justify(Breakpoint::Md, JustifyContent::Center);
         flex.set_gap(Breakpoint::Lg, 4);
-        
+
         // Test width 0 (base only)
         let classes_0 = flex.to_css_classes_for_width(0);
         assert!(classes_0.contains("flex-row"));
         assert!(!classes_0.contains("flex-col"));
         assert!(!classes_0.contains("justify-center"));
         assert!(!classes_0.contains("gap-4"));
-        
+
         // Test width 640 (sm active)
         let classes_640 = flex.to_css_classes_for_width(640);
         assert!(classes_640.contains("flex-col"));
         assert!(!classes_640.contains("justify-center"));
         assert!(!classes_640.contains("gap-4"));
-        
+
         // Test width 768 (md active)
         let classes_768 = flex.to_css_classes_for_width(768);
         assert!(classes_768.contains("flex-col"));
         assert!(classes_768.contains("justify-center"));
         assert!(!classes_768.contains("gap-4"));
-        
+
         // Test width 1024 (lg active)
         let classes_1024 = flex.to_css_classes_for_width(1024);
         assert!(classes_1024.contains("flex-col"));

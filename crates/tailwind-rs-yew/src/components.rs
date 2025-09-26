@@ -40,8 +40,8 @@ pub fn Button(props: &ButtonProps) -> Html {
                         .class("bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500");
                 }
                 ButtonVariant::Danger => {
-                    builder = builder
-                        .class("bg-red-600 text-white hover:bg-red-700 focus:ring-red-500");
+                    builder =
+                        builder.class("bg-red-600 text-white hover:bg-red-700 focus:ring-red-500");
                 }
                 ButtonVariant::Outline => {
                     builder = builder.class("border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-500");
@@ -120,19 +120,16 @@ pub struct CardProps {
 
 #[function_component]
 pub fn Card(props: &CardProps) -> Html {
-    let classes = use_memo(
-        props.class.clone(),
-        |class| {
-            let mut builder =
-                ClassBuilder::new().class("bg-white rounded-lg shadow-md border border-gray-200");
+    let classes = use_memo(props.class.clone(), |class| {
+        let mut builder =
+            ClassBuilder::new().class("bg-white rounded-lg shadow-md border border-gray-200");
 
-            if let Some(custom_class) = class {
-                builder = builder.class(custom_class);
-            }
+        if let Some(custom_class) = class {
+            builder = builder.class(custom_class);
+        }
 
-            Classes::from(builder.build().to_css_classes())
-        },
-    );
+        Classes::from(builder.build().to_css_classes())
+    });
 
     html! {
         <div class={(*classes).clone()}>
@@ -151,18 +148,15 @@ pub struct CardHeaderProps {
 
 #[function_component]
 pub fn CardHeader(props: &CardHeaderProps) -> Html {
-    let classes = use_memo(
-        props.class.clone(),
-        |class| {
-            let mut builder = ClassBuilder::new().class("px-6 py-4 border-b border-gray-200");
+    let classes = use_memo(props.class.clone(), |class| {
+        let mut builder = ClassBuilder::new().class("px-6 py-4 border-b border-gray-200");
 
-            if let Some(custom_class) = class {
-                builder = builder.class(custom_class);
-            }
+        if let Some(custom_class) = class {
+            builder = builder.class(custom_class);
+        }
 
-            Classes::from(builder.build().to_css_classes())
-        },
-    );
+        Classes::from(builder.build().to_css_classes())
+    });
 
     html! {
         <div class={(*classes).clone()}>
@@ -181,18 +175,15 @@ pub struct CardBodyProps {
 
 #[function_component]
 pub fn CardBody(props: &CardBodyProps) -> Html {
-    let classes = use_memo(
-        props.class.clone(),
-        |class| {
-            let mut builder = ClassBuilder::new().class("px-6 py-4");
+    let classes = use_memo(props.class.clone(), |class| {
+        let mut builder = ClassBuilder::new().class("px-6 py-4");
 
-            if let Some(custom_class) = class {
-                builder = builder.class(custom_class);
-            }
+        if let Some(custom_class) = class {
+            builder = builder.class(custom_class);
+        }
 
-            Classes::from(builder.build().to_css_classes())
-        },
-    );
+        Classes::from(builder.build().to_css_classes())
+    });
 
     html! {
         <div class={(*classes).clone()}>
@@ -220,19 +211,16 @@ pub struct InputProps {
 
 #[function_component]
 pub fn Input(props: &InputProps) -> Html {
-    let classes = use_memo(
-        props.class.clone(),
-        |class| {
-            let mut builder = ClassBuilder::new()
+    let classes = use_memo(props.class.clone(), |class| {
+        let mut builder = ClassBuilder::new()
                 .class("block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500");
 
-            if let Some(custom_class) = class {
-                builder = builder.class(custom_class);
-            }
+        if let Some(custom_class) = class {
+            builder = builder.class(custom_class);
+        }
 
-            Classes::from(builder.build().to_css_classes())
-        },
-    );
+        Classes::from(builder.build().to_css_classes())
+    });
 
     html! {
         <input

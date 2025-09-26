@@ -11,21 +11,21 @@
 //! - `grid` - Grid-specific responsive utilities
 
 pub mod breakpoints;
-pub mod states;
-pub mod responsive_values;
-pub mod responsive_config;
-pub mod responsive_builder;
 pub mod flexbox;
 pub mod grid;
+pub mod responsive_builder;
+pub mod responsive_config;
+pub mod responsive_values;
+pub mod states;
 
 // Re-export main types for backward compatibility
 pub use breakpoints::Breakpoint;
-pub use states::State;
-pub use responsive_values::ResponsiveValue;
-pub use responsive_config::{ResponsiveConfig, Responsive};
-pub use responsive_builder::ResponsiveBuilder;
-pub use flexbox::{FlexDirection, FlexWrap, JustifyContent, AlignItems, ResponsiveFlex};
+pub use flexbox::{AlignItems, FlexDirection, FlexWrap, JustifyContent, ResponsiveFlex};
 pub use grid::ResponsiveGrid;
+pub use responsive_builder::ResponsiveBuilder;
+pub use responsive_config::{Responsive, ResponsiveConfig};
+pub use responsive_values::ResponsiveValue;
+pub use states::State;
 
 /// Create a new responsive configuration with default settings
 pub fn create_responsive_config() -> ResponsiveConfig {
@@ -50,12 +50,12 @@ pub fn create_responsive_grid() -> ResponsiveGrid {
 /// Utility functions for responsive design
 pub mod utils {
     use super::*;
-    
+
     /// Check if a breakpoint is active based on screen width
     pub fn is_breakpoint_active(breakpoint: Breakpoint, screen_width: u32) -> bool {
         screen_width >= breakpoint.min_width()
     }
-    
+
     /// Get the appropriate breakpoint for a given screen width
     pub fn get_breakpoint_for_width(screen_width: u32) -> Breakpoint {
         if screen_width >= Breakpoint::Xl2.min_width() {
@@ -72,7 +72,7 @@ pub mod utils {
             Breakpoint::Base
         }
     }
-    
+
     /// Generate responsive classes for a given breakpoint
     pub fn generate_responsive_classes<T: ToString>(
         base: T,
@@ -83,9 +83,9 @@ pub mod utils {
         xl2: Option<T>,
     ) -> String {
         let mut classes = Vec::new();
-        
+
         classes.push(base.to_string());
-        
+
         if let Some(sm_val) = sm {
             classes.push(format!("sm:{}", sm_val.to_string()));
         }
@@ -101,7 +101,7 @@ pub mod utils {
         if let Some(xl2_val) = xl2 {
             classes.push(format!("2xl:{}", xl2_val.to_string()));
         }
-        
+
         classes.join(" ")
     }
 }
@@ -125,7 +125,10 @@ mod tests {
     #[test]
     fn test_create_responsive_flex() {
         let flex = create_responsive_flex();
-        assert_eq!(flex.direction.get_breakpoint(Breakpoint::Base), Some(&FlexDirection::Row));
+        assert_eq!(
+            flex.direction.get_breakpoint(Breakpoint::Base),
+            Some(&FlexDirection::Row)
+        );
     }
 
     #[test]
@@ -162,7 +165,7 @@ mod tests {
             None,
             None,
         );
-        
+
         assert!(classes.contains("text-sm"));
         assert!(classes.contains("sm:text-base"));
         assert!(classes.contains("md:text-lg"));

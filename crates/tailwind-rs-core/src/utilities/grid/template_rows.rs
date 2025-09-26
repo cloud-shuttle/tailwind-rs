@@ -70,7 +70,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .grid_template_rows(GridTemplateRows::Three)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("grid-rows-3"));
     }
 }

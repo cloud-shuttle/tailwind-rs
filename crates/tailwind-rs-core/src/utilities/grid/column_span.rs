@@ -82,7 +82,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .grid_column_span(GridColumnSpan::Span3)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("col-span-3"));
     }
 }

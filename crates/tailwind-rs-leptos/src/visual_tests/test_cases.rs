@@ -17,7 +17,7 @@ impl ComponentTestCase {
             expected_classes: expected_classes.to_string(),
         }
     }
-    
+
     /// Validate that the component classes match expectations
     pub fn validate(&self, actual_classes: &str) -> bool {
         self.expected_classes == actual_classes
@@ -37,7 +37,7 @@ impl ResponsiveTestCase {
             responsive_classes: responsive_classes.to_string(),
         }
     }
-    
+
     /// Validate responsive classes
     pub fn validate(&self, actual_classes: &str) -> bool {
         self.responsive_classes == actual_classes
@@ -57,7 +57,7 @@ impl ThemeTestCase {
             theme_classes: theme_classes.to_string(),
         }
     }
-    
+
     /// Validate theme classes
     pub fn validate(&self, actual_classes: &str) -> bool {
         self.theme_classes == actual_classes
@@ -77,7 +77,7 @@ impl StateTestCase {
             state_classes: state_classes.to_string(),
         }
     }
-    
+
     /// Validate state classes
     pub fn validate(&self, actual_classes: &str) -> bool {
         self.state_classes == actual_classes
@@ -91,7 +91,7 @@ mod tests {
     #[test]
     fn test_component_test_case_creation() {
         let test_case = ComponentTestCase::new("Button", "px-4 py-2 bg-blue-600");
-        
+
         assert_eq!(test_case.component_name, "Button");
         assert_eq!(test_case.expected_classes, "px-4 py-2 bg-blue-600");
     }
@@ -99,7 +99,7 @@ mod tests {
     #[test]
     fn test_component_test_case_validation() {
         let test_case = ComponentTestCase::new("Button", "px-4 py-2 bg-blue-600");
-        
+
         assert!(test_case.validate("px-4 py-2 bg-blue-600"));
         assert!(!test_case.validate("px-4 py-2 bg-red-600"));
     }
@@ -107,14 +107,14 @@ mod tests {
     #[test]
     fn test_responsive_test_case_creation() {
         let test_case = ResponsiveTestCase::new("sm:px-2 md:px-4 lg:px-6");
-        
+
         assert_eq!(test_case.responsive_classes, "sm:px-2 md:px-4 lg:px-6");
     }
 
     #[test]
     fn test_responsive_test_case_validation() {
         let test_case = ResponsiveTestCase::new("sm:px-2 md:px-4 lg:px-6");
-        
+
         assert!(test_case.validate("sm:px-2 md:px-4 lg:px-6"));
         assert!(!test_case.validate("sm:px-2 md:px-4 lg:px-8"));
     }
@@ -122,14 +122,14 @@ mod tests {
     #[test]
     fn test_theme_test_case_creation() {
         let test_case = ThemeTestCase::new("dark:bg-gray-800 dark:text-white");
-        
+
         assert_eq!(test_case.theme_classes, "dark:bg-gray-800 dark:text-white");
     }
 
     #[test]
     fn test_theme_test_case_validation() {
         let test_case = ThemeTestCase::new("dark:bg-gray-800 dark:text-white");
-        
+
         assert!(test_case.validate("dark:bg-gray-800 dark:text-white"));
         assert!(!test_case.validate("dark:bg-gray-900 dark:text-white"));
     }
@@ -137,14 +137,14 @@ mod tests {
     #[test]
     fn test_state_test_case_creation() {
         let test_case = StateTestCase::new("hover:bg-blue-700 focus:ring-2");
-        
+
         assert_eq!(test_case.state_classes, "hover:bg-blue-700 focus:ring-2");
     }
 
     #[test]
     fn test_state_test_case_validation() {
         let test_case = StateTestCase::new("hover:bg-blue-700 focus:ring-2");
-        
+
         assert!(test_case.validate("hover:bg-blue-700 focus:ring-2"));
         assert!(!test_case.validate("hover:bg-blue-800 focus:ring-2"));
     }

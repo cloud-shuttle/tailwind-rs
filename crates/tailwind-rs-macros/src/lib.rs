@@ -5,7 +5,7 @@
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{LitStr, Token, parse::ParseStream, parse_macro_input};
+use syn::{parse::ParseStream, parse_macro_input, LitStr, Token};
 
 /// The main `classes!` macro for generating Tailwind CSS classes
 ///

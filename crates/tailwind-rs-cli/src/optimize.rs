@@ -2,11 +2,11 @@
 //!
 //! This module handles the optimize command for optimizing CSS output.
 
+use crate::utils::{FileUtils, LogUtils};
 use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
 use tailwind_rs_core::css_optimizer::CssOptimizer;
-use crate::utils::{FileUtils, LogUtils};
 
 /// Optimize CSS output
 #[derive(Parser)]
@@ -44,7 +44,7 @@ impl OptimizeCommand {
     /// Execute the optimize command
     pub async fn execute(&self) -> Result<()> {
         LogUtils::info("Starting CSS optimization...");
-        
+
         if self.verbose {
             LogUtils::info(&format!("Input file: {:?}", self.input));
             LogUtils::info(&format!("Output file: {:?}", self.output));
@@ -72,11 +72,11 @@ impl OptimizeCommand {
 
         // Read input CSS
         let css_content = std::fs::read_to_string(&self.input)?;
-        
+
         // Perform optimization
         let start_time = std::time::Instant::now();
         let optimized_css = optimizer.optimize_css(&css_content)?;
-        
+
         // Write output
         std::fs::write(&self.output, optimized_css)?;
         let duration = start_time.elapsed();
@@ -118,7 +118,7 @@ mod tests {
     #[test]
     fn test_optimize_command_parsing() {
         use crate::Cli;
-        
+
         let args = vec![
             "tailwind-rs",
             "optimize",
@@ -135,7 +135,7 @@ mod tests {
         ];
 
         let cli = Cli::try_parse_from(args).unwrap();
-        
+
         match cli.command {
             crate::Commands::Optimize(cmd) => {
                 assert_eq!(cmd.input, PathBuf::from("input.css"));
@@ -153,11 +153,11 @@ mod tests {
     #[test]
     fn test_optimize_command_defaults() {
         use crate::Cli;
-        
+
         let args = vec!["tailwind-rs", "optimize"];
 
         let cli = Cli::try_parse_from(args).unwrap();
-        
+
         match cli.command {
             crate::Commands::Optimize(cmd) => {
                 assert_eq!(cmd.input, PathBuf::from("dist/styles.css"));

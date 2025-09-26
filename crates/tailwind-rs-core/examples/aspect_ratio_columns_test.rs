@@ -4,13 +4,13 @@ use tailwind_rs_core::*;
 fn main() {
     println!("🔍 Aspect Ratio & Columns Utilities Test");
     println!("========================================");
-    
+
     let generator = CssGenerator::new();
-    
+
     // Test aspect ratio classes
     let aspect_ratio_classes = vec![
         "aspect-auto",
-        "aspect-square", 
+        "aspect-square",
         "aspect-video",
         "aspect-3/2",
         "aspect-4/3",
@@ -19,11 +19,11 @@ fn main() {
         "aspect-[calc(4*3+1)/3]",
         "aspect-(--my-aspect-ratio)",
     ];
-    
+
     // Test columns classes
     let columns_classes = vec![
         "columns-1",
-        "columns-2", 
+        "columns-2",
         "columns-3",
         "columns-4",
         "columns-5",
@@ -44,11 +44,14 @@ fn main() {
         "columns-[30vw]",
         "columns-(--my-columns)",
     ];
-    
-    println!("\n📋 Testing Aspect Ratio Classes ({} classes):", aspect_ratio_classes.len());
+
+    println!(
+        "\n📋 Testing Aspect Ratio Classes ({} classes):",
+        aspect_ratio_classes.len()
+    );
     let mut aspect_working = 0;
     let mut aspect_broken = 0;
-    
+
     for class in &aspect_ratio_classes {
         match generator.class_to_properties(class) {
             Ok(_) => {
@@ -61,14 +64,22 @@ fn main() {
             }
         }
     }
-    
+
     let aspect_coverage = (aspect_working as f32 / aspect_ratio_classes.len() as f32) * 100.0;
-    println!("  📊 Aspect Ratio: {}/{} ({:.1}%)", aspect_working, aspect_ratio_classes.len(), aspect_coverage);
-    
-    println!("\n📋 Testing Columns Classes ({} classes):", columns_classes.len());
+    println!(
+        "  📊 Aspect Ratio: {}/{} ({:.1}%)",
+        aspect_working,
+        aspect_ratio_classes.len(),
+        aspect_coverage
+    );
+
+    println!(
+        "\n📋 Testing Columns Classes ({} classes):",
+        columns_classes.len()
+    );
     let mut columns_working = 0;
     let mut columns_broken = 0;
-    
+
     for class in &columns_classes {
         match generator.class_to_properties(class) {
             Ok(_) => {
@@ -81,21 +92,26 @@ fn main() {
             }
         }
     }
-    
+
     let columns_coverage = (columns_working as f32 / columns_classes.len() as f32) * 100.0;
-    println!("  📊 Columns: {}/{} ({:.1}%)", columns_working, columns_classes.len(), columns_coverage);
-    
+    println!(
+        "  📊 Columns: {}/{} ({:.1}%)",
+        columns_working,
+        columns_classes.len(),
+        columns_coverage
+    );
+
     let total_working = aspect_working + columns_working;
     let total_broken = aspect_broken + columns_broken;
     let total_classes = total_working + total_broken;
     let overall_coverage = (total_working as f32 / total_classes as f32) * 100.0;
-    
+
     println!("\n📊 Overall Results:");
     println!("==================");
     println!("  ✅ Working: {}/{}", total_working, total_classes);
     println!("  ❌ Broken: {}/{}", total_broken, total_classes);
     println!("  📈 Overall Coverage: {:.1}%", overall_coverage);
-    
+
     if overall_coverage >= 95.0 {
         println!("\n🎉 Excellent coverage! Ready for production!");
     } else if overall_coverage >= 90.0 {

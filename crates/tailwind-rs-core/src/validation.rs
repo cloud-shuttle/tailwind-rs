@@ -3,9 +3,9 @@
 //! This module provides class validation functionality to ensure that
 //! generated Tailwind CSS classes are valid and don't conflict.
 
+use crate::custom_variant::CustomVariantManager;
 use std::collections::{HashMap, HashSet};
 use thiserror::Error;
-use crate::custom_variant::CustomVariantManager;
 
 /// Represents validation errors
 #[derive(Debug, Error)]
@@ -206,10 +206,7 @@ impl ValidationRules {
 
     /// Add a class conflict
     pub fn add_class_conflict(&mut self, group: String, class: String) {
-        self.class_conflicts
-            .entry(group)
-            .or_default()
-            .insert(class);
+        self.class_conflicts.entry(group).or_default().insert(class);
     }
 
     /// Add a required class
@@ -370,20 +367,28 @@ impl ClassValidator {
     }
 
     /// Validate a custom variant (Tailwind v4.1.13 @custom-variant support)
-    pub fn validate_custom_variant(&self, variant: &str) -> std::result::Result<(), ValidationError> {
+    pub fn validate_custom_variant(
+        &self,
+        variant: &str,
+    ) -> std::result::Result<(), ValidationError> {
         // Use the custom variant manager to validate
-        self.custom_variant_manager.validate_variant(variant)
+        self.custom_variant_manager
+            .validate_variant(variant)
             .map_err(|e| ValidationError::CustomVariantValidation(e.to_string()))
     }
 
     /// Validate a class with custom variant
-    pub fn validate_variant_class(&self, variant: &str, class: &str) -> std::result::Result<(), ValidationError> {
+    pub fn validate_variant_class(
+        &self,
+        variant: &str,
+        class: &str,
+    ) -> std::result::Result<(), ValidationError> {
         // Validate the variant first
         self.validate_custom_variant(variant)?;
-        
+
         // Validate the class
         self.validate_class(class)?;
-        
+
         Ok(())
     }
 
@@ -393,8 +398,12 @@ impl ClassValidator {
     }
 
     /// Register a custom variant
-    pub fn register_custom_variant(&mut self, variant: crate::custom_variant::CustomVariant) -> std::result::Result<(), ValidationError> {
-        self.custom_variant_manager.register(variant)
+    pub fn register_custom_variant(
+        &mut self,
+        variant: crate::custom_variant::CustomVariant,
+    ) -> std::result::Result<(), ValidationError> {
+        self.custom_variant_manager
+            .register(variant)
             .map_err(|e| ValidationError::CustomVariantValidation(e.to_string()))
     }
 
@@ -508,7 +517,7 @@ mod tests {
         assert!(validator.validate_class("px-4").is_ok());
         assert!(validator.validate_class("py-2").is_ok());
     }
-    
+
     #[test]
     fn test_validate_arbitrary_values() {
         let validator = ClassValidator::new();
@@ -519,7 +528,9 @@ mod tests {
         assert!(validator.validate_class("p-[1.5rem]").is_ok());
         assert!(validator.validate_class("m-[2rem]").is_ok());
         assert!(validator.validate_class("rounded-[8px]").is_ok());
-        assert!(validator.validate_class("shadow-[0_4px_6px_rgba(0,0,0,0.1)]").is_ok());
+        assert!(validator
+            .validate_class("shadow-[0_4px_6px_rgba(0,0,0,0.1)]")
+            .is_ok());
         assert!(validator.validate_class("opacity-[0.5]").is_ok());
         assert!(validator.validate_class("z-[999]").is_ok());
         assert!(validator.validate_class("top-[10px]").is_ok());
@@ -527,7 +538,7 @@ mod tests {
         assert!(validator.validate_class("bottom-[30px]").is_ok());
         assert!(validator.validate_class("left-[40px]").is_ok());
     }
-    
+
     #[test]
     fn test_validate_dark_mode_variants() {
         let validator = ClassValidator::new();
@@ -538,12 +549,18 @@ mod tests {
         assert!(validator.validate_class("dark:hover:bg-gray-700").is_ok());
         assert!(validator.validate_class("dark:focus:bg-gray-600").is_ok());
         assert!(validator.validate_class("dark:active:bg-gray-500").is_ok());
-        assert!(validator.validate_class("dark:disabled:bg-gray-400").is_ok());
+        assert!(validator
+            .validate_class("dark:disabled:bg-gray-400")
+            .is_ok());
         assert!(validator.validate_class("dark:checked:bg-gray-300").is_ok());
-        assert!(validator.validate_class("dark:group-hover:bg-gray-200").is_ok());
-        assert!(validator.validate_class("dark:group-focus:bg-gray-100").is_ok());
+        assert!(validator
+            .validate_class("dark:group-hover:bg-gray-200")
+            .is_ok());
+        assert!(validator
+            .validate_class("dark:group-focus:bg-gray-100")
+            .is_ok());
     }
-    
+
     #[test]
     fn test_validate_gradient_variants() {
         let validator = ClassValidator::new();
@@ -560,7 +577,7 @@ mod tests {
         assert!(validator.validate_class("via-purple-500").is_ok());
         assert!(validator.validate_class("to-pink-500").is_ok());
     }
-    
+
     #[test]
     fn test_validate_fractional_spacing() {
         let validator = ClassValidator::new();
@@ -586,7 +603,7 @@ mod tests {
         assert!(validator.validate_class("mb-2.5").is_ok());
         assert!(validator.validate_class("ml-3.5").is_ok());
     }
-    
+
     #[test]
     fn test_validate_animation_system() {
         let validator = ClassValidator::new();
@@ -596,7 +613,7 @@ mod tests {
         assert!(validator.validate_class("animate-ping").is_ok());
         assert!(validator.validate_class("animate-pulse").is_ok());
         assert!(validator.validate_class("animate-bounce").is_ok());
-        
+
         // Test transition classes
         assert!(validator.validate_class("transition-none").is_ok());
         assert!(validator.validate_class("transition-all").is_ok());
@@ -604,7 +621,7 @@ mod tests {
         assert!(validator.validate_class("transition-opacity").is_ok());
         assert!(validator.validate_class("transition-shadow").is_ok());
         assert!(validator.validate_class("transition-transform").is_ok());
-        
+
         // Test transition duration classes
         assert!(validator.validate_class("duration-75").is_ok());
         assert!(validator.validate_class("duration-100").is_ok());
@@ -614,7 +631,7 @@ mod tests {
         assert!(validator.validate_class("duration-500").is_ok());
         assert!(validator.validate_class("duration-700").is_ok());
         assert!(validator.validate_class("duration-1000").is_ok());
-        
+
         // Test transition delay classes
         assert!(validator.validate_class("delay-75").is_ok());
         assert!(validator.validate_class("delay-100").is_ok());
@@ -624,7 +641,7 @@ mod tests {
         assert!(validator.validate_class("delay-500").is_ok());
         assert!(validator.validate_class("delay-700").is_ok());
         assert!(validator.validate_class("delay-1000").is_ok());
-        
+
         // Test transition timing function classes
         assert!(validator.validate_class("ease-linear").is_ok());
         assert!(validator.validate_class("ease-in").is_ok());
@@ -737,20 +754,32 @@ mod tests {
         assert!(validator.validate_class("animate-heartbeat").is_ok());
 
         // Valid animation controls
-        assert!(validator.validate_class("animation-iteration-count-1").is_ok());
-        assert!(validator.validate_class("animation-iteration-count-3").is_ok());
-        assert!(validator.validate_class("animation-play-state-paused").is_ok());
-        assert!(validator.validate_class("animation-play-state-running").is_ok());
+        assert!(validator
+            .validate_class("animation-iteration-count-1")
+            .is_ok());
+        assert!(validator
+            .validate_class("animation-iteration-count-3")
+            .is_ok());
+        assert!(validator
+            .validate_class("animation-play-state-paused")
+            .is_ok());
+        assert!(validator
+            .validate_class("animation-play-state-running")
+            .is_ok());
 
         // Valid state-based animations
         assert!(validator.validate_class("hover:animate-bounce").is_ok());
         assert!(validator.validate_class("focus:animate-pulse").is_ok());
         assert!(validator.validate_class("hover:animate-fade-in").is_ok());
-        assert!(validator.validate_class("focus:animate-slide-in-left").is_ok());
+        assert!(validator
+            .validate_class("focus:animate-slide-in-left")
+            .is_ok());
 
         // Invalid animation classes
         assert!(validator.validate_class("animate-invalid").is_err());
-        assert!(validator.validate_class("animate-unknown-animation").is_err());
+        assert!(validator
+            .validate_class("animate-unknown-animation")
+            .is_err());
         assert!(validator.validate_class("hover:animate-invalid").is_err());
     }
 
@@ -809,7 +838,6 @@ mod tests {
             "focus:animate-shake",
             "animation-iteration-count-2",
             "animation-play-state-paused",
-
             // Enhanced spacing
             "p-1.5",
             "m-2.5",
@@ -820,19 +848,16 @@ mod tests {
             "divide-y-3.5",
             "space-x-reverse",
             "divide-y-reverse",
-
             // Dark mode variants
             "dark:bg-gray-800",
             "dark:text-white",
             "dark:hover:bg-gray-700",
             "dark:focus:text-gray-100",
-
             // Gradients
             "bg-gradient-to-r",
             "from-blue-500",
             "via-purple-500",
             "to-pink-500",
-
             // Arbitrary values
             "w-[123px]",
             "bg-[#ff0000]",

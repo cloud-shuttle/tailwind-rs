@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::container_queries::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod container_queries_unit_tests {
@@ -214,7 +214,7 @@ mod container_queries_unit_tests {
         let query1 = ContainerQuery::inline_size(ContainerSize::Md);
         let query2 = ContainerQuery::inline_size(ContainerSize::Md);
         let query3 = ContainerQuery::inline_size(ContainerSize::Lg);
-        
+
         assert_eq!(query1, query2);
         assert_ne!(query1, query3);
     }
@@ -231,7 +231,7 @@ mod container_queries_unit_tests {
         let size1 = ContainerSize::Md;
         let size2 = ContainerSize::Md;
         let size3 = ContainerSize::Lg;
-        
+
         assert_eq!(size1, size2);
         assert_ne!(size1, size3);
     }
@@ -248,7 +248,7 @@ mod container_queries_unit_tests {
         let ratio1 = ContainerAspectRatio::Widescreen;
         let ratio2 = ContainerAspectRatio::Widescreen;
         let ratio3 = ContainerAspectRatio::Square;
-        
+
         assert_eq!(ratio1, ratio2);
         assert_ne!(ratio1, ratio3);
     }
@@ -265,7 +265,7 @@ mod container_queries_unit_tests {
         let orientation1 = ContainerOrientation::Landscape;
         let orientation2 = ContainerOrientation::Landscape;
         let orientation3 = ContainerOrientation::Portrait;
-        
+
         assert_eq!(orientation1, orientation2);
         assert_ne!(orientation1, orientation3);
     }
@@ -277,11 +277,12 @@ mod container_queries_integration_tests {
 
     #[test]
     fn test_container_queries_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .class("@container/inline-size:md:text-lg");
-        
+        let builder = ClassBuilder::new().class("@container/inline-size:md:text-lg");
+
         let class_set = builder.build();
-        assert!(class_set.classes.contains("@container/inline-size:md:text-lg"));
+        assert!(class_set
+            .classes
+            .contains("@container/inline-size:md:text-lg"));
     }
 
     #[test]
@@ -290,9 +291,11 @@ mod container_queries_integration_tests {
             .class("@container/inline-size:md:text-lg")
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
-        assert!(class_set.classes.contains("@container/inline-size:md:text-lg"));
+        assert!(class_set
+            .classes
+            .contains("@container/inline-size:md:text-lg"));
         assert!(class_set.classes.contains("text-blue-500"));
         assert!(class_set.classes.contains("font-bold"));
     }
@@ -302,11 +305,17 @@ mod container_queries_integration_tests {
         let builder = ClassBuilder::new()
             .class("@container/inline-size:md:text-lg")
             .responsive(Breakpoint::Md, "@container/block-size:lg:text-xl");
-        
+
         let class_set = builder.build();
-        assert!(class_set.classes.contains("@container/inline-size:md:text-lg"));
+        assert!(class_set
+            .classes
+            .contains("@container/inline-size:md:text-lg"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("@container/block-size:lg:text-xl"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("@container/block-size:lg:text-xl"));
     }
 
     #[test]
@@ -314,11 +323,17 @@ mod container_queries_integration_tests {
         let builder = ClassBuilder::new()
             .class("@container/inline-size:md:text-lg")
             .conditional("hover", "@container/block-size:lg:text-xl");
-        
+
         let class_set = builder.build();
-        assert!(class_set.classes.contains("@container/inline-size:md:text-lg"));
+        assert!(class_set
+            .classes
+            .contains("@container/inline-size:md:text-lg"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("@container/block-size:lg:text-xl"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("@container/block-size:lg:text-xl"));
     }
 
     #[test]
@@ -326,11 +341,17 @@ mod container_queries_integration_tests {
         let builder = ClassBuilder::new()
             .class("@container/inline-size:md:text-lg")
             .custom_variant("dark", "@container/block-size:lg:text-xl");
-        
+
         let class_set = builder.build();
-        assert!(class_set.classes.contains("@container/inline-size:md:text-lg"));
+        assert!(class_set
+            .classes
+            .contains("@container/inline-size:md:text-lg"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("@container/block-size:lg:text-xl"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("@container/block-size:lg:text-xl"));
     }
 
     #[test]
@@ -338,10 +359,14 @@ mod container_queries_integration_tests {
         let builder = ClassBuilder::new()
             .class("@container/inline-size:md:text-lg")
             .class("@container/block-size:lg:text-xl");
-        
+
         let class_set = builder.build();
-        assert!(class_set.classes.contains("@container/inline-size:md:text-lg"));
-        assert!(class_set.classes.contains("@container/block-size:lg:text-xl"));
+        assert!(class_set
+            .classes
+            .contains("@container/inline-size:md:text-lg"));
+        assert!(class_set
+            .classes
+            .contains("@container/block-size:lg:text-xl"));
     }
 
     #[test]
@@ -350,7 +375,7 @@ mod container_queries_integration_tests {
             .class("@container/inline-size:md:text-lg")
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("@container/inline-size:md:text-lg"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -361,7 +386,7 @@ mod container_queries_integration_tests {
             .class("@container/inline-size:md:text-lg")
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("@container/inline-size:md:text-lg"));
         assert!(css_classes.contains("font-bold"));
@@ -375,7 +400,7 @@ mod container_queries_integration_tests {
             .class("@container/aspect-ratio:widescreen:grid-cols-2")
             .class("@container/orientation:landscape:flex-row")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("@container/inline-size:md:text-lg"));
         assert!(css_classes.contains("@container/block-size:lg:text-xl"));
@@ -417,9 +442,9 @@ mod container_queries_integration_tests {
             .class("@container/orientation:landscape:flex-row")
             .class("@container/orientation:portrait:flex-col")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all container query utilities are present
         assert!(css_classes.contains("@container/inline-size:xs:text-sm"));
         assert!(css_classes.contains("@container/inline-size:sm:text-base"));

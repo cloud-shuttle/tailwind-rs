@@ -79,7 +79,7 @@ impl TextTransform {
             TextTransform::Capitalize => "capitalize".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TextTransform::None => "none".to_string(),
@@ -97,7 +97,7 @@ impl TextOverflow {
             TextOverflow::Clip => "text-clip".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             TextOverflow::Ellipsis => "ellipsis".to_string(),
@@ -117,7 +117,7 @@ impl WhiteSpace {
             WhiteSpace::BreakSpaces => "whitespace-break-spaces".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             WhiteSpace::Normal => "normal".to_string(),
@@ -139,7 +139,7 @@ impl WordBreak {
             WordBreak::BreakWord => "break-words".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             WordBreak::Normal => "normal".to_string(),
@@ -158,7 +158,7 @@ impl OverflowWrap {
             OverflowWrap::Anywhere => "overflow-wrap-anywhere".to_string(),
         }
     }
-    
+
     pub fn to_css_value(&self) -> String {
         match self {
             OverflowWrap::Normal => "normal".to_string(),
@@ -205,11 +205,11 @@ pub trait TextTransformUtilities {
     fn lowercase(&mut self) -> &mut Self;
     fn capitalize(&mut self) -> &mut Self;
     fn normal_case(&mut self) -> &mut Self;
-    
+
     fn text_overflow(&mut self, overflow: TextOverflow) -> &mut Self;
     fn truncate(&mut self) -> &mut Self;
     fn text_clip(&mut self) -> &mut Self;
-    
+
     fn white_space(&mut self, whitespace: WhiteSpace) -> &mut Self;
     fn whitespace_normal(&mut self) -> &mut Self;
     fn whitespace_nowrap(&mut self) -> &mut Self;
@@ -217,13 +217,13 @@ pub trait TextTransformUtilities {
     fn whitespace_pre_line(&mut self) -> &mut Self;
     fn whitespace_pre_wrap(&mut self) -> &mut Self;
     fn whitespace_break_spaces(&mut self) -> &mut Self;
-    
+
     fn word_break(&mut self, word_break: WordBreak) -> &mut Self;
     fn break_normal(&mut self) -> &mut Self;
     fn break_all(&mut self) -> &mut Self;
     fn break_keep(&mut self) -> &mut Self;
     fn break_words(&mut self) -> &mut Self;
-    
+
     fn overflow_wrap(&mut self, wrap: OverflowWrap) -> &mut Self;
     fn overflow_wrap_normal(&mut self) -> &mut Self;
     fn overflow_wrap_break_word(&mut self) -> &mut Self;

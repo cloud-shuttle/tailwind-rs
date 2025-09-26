@@ -18,8 +18,8 @@ path = "src/main.rs"
 
 [dependencies]
 # Core dependencies
-tailwind-rs-core = "0.15.0"
-tailwind-rs-macros = "0.15.0"
+tailwind-rs-core = "0.16.0"
+tailwind-rs-macros = "0.16.0"
 
 # CLI dependencies
 clap = { workspace = true }
@@ -44,8 +44,6 @@ assert_cmd = "2.0"
 predicates = "3.0"
 
 # Development tools
-cargo-watch = { workspace = true }
-cargo-tarpaulin = { workspace = true }
 
 [features]
 default = ["build", "watch", "optimize"]

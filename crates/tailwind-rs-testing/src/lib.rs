@@ -20,12 +20,12 @@ mod api_stability_tests;
 
 // Re-export commonly used testing utilities
 pub use class_testing::{
-    ClassTestResult, assert_classes_contain, assert_classes_not_contain, test_classes,
+    assert_classes_contain, assert_classes_not_contain, test_classes, ClassTestResult,
 };
-pub use component_testing::{TestApp, create_test_app, extract_classes, render_to_string};
-pub use mock_components::{MockComponent, create_mock_component};
-pub use responsive_testing::{ResponsiveTestResult, assert_responsive_value};
-pub use theme_testing::{ThemeTestResult, assert_theme_value};
+pub use component_testing::{create_test_app, extract_classes, render_to_string, TestApp};
+pub use mock_components::{create_mock_component, MockComponent};
+pub use responsive_testing::{assert_responsive_value, ResponsiveTestResult};
+pub use theme_testing::{assert_theme_value, ThemeTestResult};
 
 /// Initialize the testing environment
 pub fn init_test_env() {

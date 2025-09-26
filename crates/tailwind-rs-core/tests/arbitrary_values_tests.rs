@@ -1,5 +1,5 @@
 //! TDD Tests for Arbitrary Values System
-//! 
+//!
 //! This module tests the arbitrary values functionality that allows users
 //! to specify custom values for Tailwind CSS properties using square brackets.
 
@@ -13,7 +13,7 @@ fn test_arbitrary_width_values() {
         .class("w-[50%]")
         .class("w-[calc(100%-2rem)]")
         .class("w-[theme(spacing.32)]");
-    
+
     let result = builder.build();
     assert!(result.has_class("w-[100px]"));
     assert!(result.has_class("w-[50%]"));
@@ -29,7 +29,7 @@ fn test_arbitrary_color_values() {
         .class("text-[rgb(255,0,0)]")
         .class("border-[hsl(120,100%,50%)]")
         .class("bg-[var(--my-color)]");
-    
+
     let result = builder.build();
     assert!(result.has_class("bg-[#1da1f2]"));
     assert!(result.has_class("text-[rgb(255,0,0)]"));
@@ -45,7 +45,7 @@ fn test_arbitrary_spacing_values() {
         .class("m-[0.5rem]")
         .class("gap-[2.5]")
         .class("space-x-[1.5rem]");
-    
+
     let result = builder.build();
     assert!(result.has_class("p-[13px]"));
     assert!(result.has_class("m-[0.5rem]"));
@@ -61,7 +61,7 @@ fn test_arbitrary_font_size_values() {
         .class("text-[0.875rem]")
         .class("text-[1.2em]")
         .class("text-[clamp(1rem,2.5vw,2rem)]");
-    
+
     let result = builder.build();
     assert!(result.has_class("text-[13px]"));
     assert!(result.has_class("text-[0.875rem]"));
@@ -76,7 +76,7 @@ fn test_arbitrary_shadow_values() {
         .class("shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]")
         .class("shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.06)]")
         .class("shadow-[0_0_0_1px_rgba(59,130,246,0.5)]");
-    
+
     let result = builder.build();
     assert!(result.has_class("shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]"));
     assert!(result.has_class("shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.06)]"));
@@ -91,7 +91,7 @@ fn test_arbitrary_transform_values() {
         .class("scale-[1.7]")
         .class("translate-x-[117px]")
         .class("skew-x-[12deg]");
-    
+
     let result = builder.build();
     assert!(result.has_class("rotate-[17deg]"));
     assert!(result.has_class("scale-[1.7]"));
@@ -106,7 +106,7 @@ fn test_arbitrary_animation_values() {
         .class("animate-[spin_1s_linear_infinite]")
         .class("animate-[bounce_1s_infinite]")
         .class("animate-[ping_1s_cubic-bezier(0,0,0.2,1)_infinite]");
-    
+
     let result = builder.build();
     assert!(result.has_class("animate-[spin_1s_linear_infinite]"));
     assert!(result.has_class("animate-[bounce_1s_infinite]"));
@@ -117,7 +117,7 @@ fn test_arbitrary_animation_values() {
 fn test_arbitrary_values_validation() {
     // Test that arbitrary values are properly validated
     let builder = ClassBuilder::new();
-    
+
     // Valid arbitrary values should be accepted
     let valid_values = vec![
         "w-[100px]",
@@ -126,10 +126,14 @@ fn test_arbitrary_values_validation() {
         "p-[calc(100%-2rem)]",
         "shadow-[0_4px_6px_rgba(0,0,0,0.1)]",
     ];
-    
+
     for value in valid_values {
         let result = builder.clone().class(value).build();
-        assert!(result.has_class(value), "Failed to include valid arbitrary value: {}", value);
+        assert!(
+            result.has_class(value),
+            "Failed to include valid arbitrary value: {}",
+            value
+        );
     }
 }
 
@@ -141,7 +145,7 @@ fn test_arbitrary_values_with_breakpoints() {
         .class("md:w-[200px]")
         .class("lg:w-[300px]")
         .class("xl:w-[400px]");
-    
+
     let result = builder.build();
     assert!(result.has_class("w-[100px]"));
     assert!(result.has_class("md:w-[200px]"));
@@ -157,7 +161,7 @@ fn test_arbitrary_values_with_pseudo_classes() {
         .class("hover:w-[200px]")
         .class("focus:w-[300px]")
         .class("active:w-[400px]");
-    
+
     let result = builder.build();
     assert!(result.has_class("w-[100px]"));
     assert!(result.has_class("hover:w-[200px]"));
@@ -169,19 +173,23 @@ fn test_arbitrary_values_with_pseudo_classes() {
 fn test_arbitrary_values_performance() {
     // Test performance with many arbitrary values
     let mut builder = ClassBuilder::new();
-    
+
     // Add 100 arbitrary values
     for i in 0..100 {
         builder = builder.class(&format!("w-[{}px]", i));
     }
-    
+
     let start = std::time::Instant::now();
     let result = builder.build();
     let duration = start.elapsed();
-    
+
     // Should complete in reasonable time (< 10ms)
-    assert!(duration.as_millis() < 10, "Arbitrary values processing took too long: {:?}", duration);
-    
+    assert!(
+        duration.as_millis() < 10,
+        "Arbitrary values processing took too long: {:?}",
+        duration
+    );
+
     // Should contain all values
     for i in 0..100 {
         assert!(result.has_class(&format!("w-[{}px]", i)));

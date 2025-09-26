@@ -78,10 +78,8 @@ mod tests {
 
     #[test]
     fn test_order_utilities() {
-        let classes = ClassBuilder::new()
-            .order(Order::Order1)
-            .build();
-        
+        let classes = ClassBuilder::new().order(Order::Order1).build();
+
         assert!(classes.to_css_classes().contains("order-1"));
     }
 }

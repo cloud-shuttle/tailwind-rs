@@ -3,23 +3,45 @@
 //! This module provides parsing logic for positioning-related Tailwind CSS utilities,
 //! including position, top, right, bottom, left, and z-index.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct PositioningParser;
 
 impl PositioningParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse position classes
     fn parse_position_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "static" => Some(vec![CssProperty { name: "position".to_string(), value: "static".to_string(), important: false }]),
-            "fixed" => Some(vec![CssProperty { name: "position".to_string(), value: "fixed".to_string(), important: false }]),
-            "absolute" => Some(vec![CssProperty { name: "position".to_string(), value: "absolute".to_string(), important: false }]),
-            "relative" => Some(vec![CssProperty { name: "position".to_string(), value: "relative".to_string(), important: false }]),
-            "sticky" => Some(vec![CssProperty { name: "position".to_string(), value: "sticky".to_string(), important: false }]),
+            "static" => Some(vec![CssProperty {
+                name: "position".to_string(),
+                value: "static".to_string(),
+                important: false,
+            }]),
+            "fixed" => Some(vec![CssProperty {
+                name: "position".to_string(),
+                value: "fixed".to_string(),
+                important: false,
+            }]),
+            "absolute" => Some(vec![CssProperty {
+                name: "position".to_string(),
+                value: "absolute".to_string(),
+                important: false,
+            }]),
+            "relative" => Some(vec![CssProperty {
+                name: "position".to_string(),
+                value: "relative".to_string(),
+                important: false,
+            }]),
+            "sticky" => Some(vec![CssProperty {
+                name: "position".to_string(),
+                value: "sticky".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -28,16 +50,48 @@ impl PositioningParser {
     fn parse_inset_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
             "inset-0" => Some(vec![
-                CssProperty { name: "top".to_string(), value: "0".to_string(), important: false },
-                CssProperty { name: "right".to_string(), value: "0".to_string(), important: false },
-                CssProperty { name: "bottom".to_string(), value: "0".to_string(), important: false },
-                CssProperty { name: "left".to_string(), value: "0".to_string(), important: false },
+                CssProperty {
+                    name: "top".to_string(),
+                    value: "0".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "right".to_string(),
+                    value: "0".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "bottom".to_string(),
+                    value: "0".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "left".to_string(),
+                    value: "0".to_string(),
+                    important: false,
+                },
             ]),
             "inset-auto" => Some(vec![
-                CssProperty { name: "top".to_string(), value: "auto".to_string(), important: false },
-                CssProperty { name: "right".to_string(), value: "auto".to_string(), important: false },
-                CssProperty { name: "bottom".to_string(), value: "auto".to_string(), important: false },
-                CssProperty { name: "left".to_string(), value: "auto".to_string(), important: false },
+                CssProperty {
+                    name: "top".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "right".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "bottom".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "left".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                },
             ]),
             _ => None,
         }
@@ -48,29 +102,61 @@ impl PositioningParser {
         if let Some(value) = class.strip_prefix("inset-x-") {
             let spacing_value = self.parse_spacing_value(value)?;
             return Some(vec![
-                CssProperty { name: "left".to_string(), value: spacing_value.clone(), important: false },
-                CssProperty { name: "right".to_string(), value: spacing_value, important: false },
+                CssProperty {
+                    name: "left".to_string(),
+                    value: spacing_value.clone(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "right".to_string(),
+                    value: spacing_value,
+                    important: false,
+                },
             ]);
         }
         if let Some(value) = class.strip_prefix("inset-y-") {
             let spacing_value = self.parse_spacing_value(value)?;
             return Some(vec![
-                CssProperty { name: "top".to_string(), value: spacing_value.clone(), important: false },
-                CssProperty { name: "bottom".to_string(), value: spacing_value, important: false },
+                CssProperty {
+                    name: "top".to_string(),
+                    value: spacing_value.clone(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "bottom".to_string(),
+                    value: spacing_value,
+                    important: false,
+                },
             ]);
         }
         if let Some(value) = class.strip_prefix("-inset-x-") {
             let spacing_value = self.parse_spacing_value(value)?;
             return Some(vec![
-                CssProperty { name: "left".to_string(), value: format!("-{}", spacing_value.clone()), important: false },
-                CssProperty { name: "right".to_string(), value: format!("-{}", spacing_value), important: false },
+                CssProperty {
+                    name: "left".to_string(),
+                    value: format!("-{}", spacing_value.clone()),
+                    important: false,
+                },
+                CssProperty {
+                    name: "right".to_string(),
+                    value: format!("-{}", spacing_value),
+                    important: false,
+                },
             ]);
         }
         if let Some(value) = class.strip_prefix("-inset-y-") {
             let spacing_value = self.parse_spacing_value(value)?;
             return Some(vec![
-                CssProperty { name: "top".to_string(), value: format!("-{}", spacing_value.clone()), important: false },
-                CssProperty { name: "bottom".to_string(), value: format!("-{}", spacing_value), important: false },
+                CssProperty {
+                    name: "top".to_string(),
+                    value: format!("-{}", spacing_value.clone()),
+                    important: false,
+                },
+                CssProperty {
+                    name: "bottom".to_string(),
+                    value: format!("-{}", spacing_value),
+                    important: false,
+                },
             ]);
         }
         None
@@ -80,11 +166,19 @@ impl PositioningParser {
     fn parse_top_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("top-") {
             let css_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty { name: "top".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "top".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         if let Some(value) = class.strip_prefix("-top-") {
             let css_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty { name: "top".to_string(), value: format!("-{}", css_value), important: false }]);
+            return Some(vec![CssProperty {
+                name: "top".to_string(),
+                value: format!("-{}", css_value),
+                important: false,
+            }]);
         }
         None
     }
@@ -93,7 +187,11 @@ impl PositioningParser {
     fn parse_right_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("right-") {
             let css_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty { name: "right".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "right".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         None
     }
@@ -102,11 +200,19 @@ impl PositioningParser {
     fn parse_bottom_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("bottom-") {
             let css_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty { name: "bottom".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "bottom".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         if let Some(value) = class.strip_prefix("-bottom-") {
             let css_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty { name: "bottom".to_string(), value: format!("-{}", css_value), important: false }]);
+            return Some(vec![CssProperty {
+                name: "bottom".to_string(),
+                value: format!("-{}", css_value),
+                important: false,
+            }]);
         }
         None
     }
@@ -115,11 +221,19 @@ impl PositioningParser {
     fn parse_left_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("left-") {
             let css_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty { name: "left".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "left".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         if let Some(value) = class.strip_prefix("-left-") {
             let css_value = self.parse_spacing_value(value)?;
-            return Some(vec![CssProperty { name: "left".to_string(), value: format!("-{}", css_value), important: false }]);
+            return Some(vec![CssProperty {
+                name: "left".to_string(),
+                value: format!("-{}", css_value),
+                important: false,
+            }]);
         }
         None
     }
@@ -137,7 +251,11 @@ impl PositioningParser {
                 "50" => "50".to_string(),
                 _ => return None,
             };
-            return Some(vec![CssProperty { name: "z-index".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "z-index".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         None
     }
@@ -189,7 +307,7 @@ impl PositioningParser {
                 } else {
                     None
                 }
-            },
+            }
             _ => None,
         }
     }
@@ -227,15 +345,21 @@ impl UtilityParser for PositioningParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "static", "fixed", "absolute", "relative", "sticky",
-            "inset-*", "top-*", "right-*", "bottom-*", "left-*", "z-*"
+            "static", "fixed", "absolute", "relative", "sticky", "inset-*", "top-*", "right-*",
+            "bottom-*", "left-*", "z-*",
         ]
     }
 
-    fn get_priority(&self) -> u32 { 70 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Layout }
+    fn get_priority(&self) -> u32 {
+        70
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Layout
+    }
 }
 
 impl Default for PositioningParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

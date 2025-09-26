@@ -1,8 +1,8 @@
 //! Types and data structures for advanced PostCSS features
 
+use serde_json::Value;
 use std::collections::HashMap;
 use std::time::{Duration, SystemTime};
-use serde_json::Value;
 use thiserror::Error;
 
 /// CSS linting configuration
@@ -28,38 +28,53 @@ impl Default for LinterConfig {
 }
 
 fn get_default_rules() -> HashMap<String, RuleConfig> {
-        let mut rules = HashMap::new();
-        
-        rules.insert("no-duplicate-selectors".to_string(), RuleConfig {
+    let mut rules = HashMap::new();
+
+    rules.insert(
+        "no-duplicate-selectors".to_string(),
+        RuleConfig {
             enabled: true,
             severity: SeverityLevel::Warning,
             options: HashMap::new(),
-        });
-        
-        rules.insert("no-empty-rules".to_string(), RuleConfig {
+        },
+    );
+
+    rules.insert(
+        "no-empty-rules".to_string(),
+        RuleConfig {
             enabled: true,
             severity: SeverityLevel::Warning,
             options: HashMap::new(),
-        });
-        
-        rules.insert("no-important".to_string(), RuleConfig {
+        },
+    );
+
+    rules.insert(
+        "no-important".to_string(),
+        RuleConfig {
             enabled: true,
             severity: SeverityLevel::Warning,
             options: HashMap::new(),
-        });
-        
-        rules.insert("selector-max-specificity".to_string(), RuleConfig {
+        },
+    );
+
+    rules.insert(
+        "selector-max-specificity".to_string(),
+        RuleConfig {
             enabled: true,
             severity: SeverityLevel::Warning,
             options: {
                 let mut opts = HashMap::new();
-                opts.insert("max".to_string(), Value::Number(serde_json::Number::from(3)));
+                opts.insert(
+                    "max".to_string(),
+                    Value::Number(serde_json::Number::from(3)),
+                );
                 opts
             },
-        });
-        
-        rules
-    }
+        },
+    );
+
+    rules
+}
 
 /// Rule configuration
 #[derive(Debug, Clone)]
@@ -417,19 +432,19 @@ pub enum LineEnding {
 pub enum AdvancedFeatureError {
     #[error("Linting failed: {error}")]
     LintingFailed { error: String },
-    
+
     #[error("Source map generation failed: {error}")]
     SourceMapFailed { error: String },
-    
+
     #[error("Performance monitoring failed: {error}")]
     PerformanceMonitoringFailed { error: String },
-    
+
     #[error("Debugging failed: {error}")]
     DebuggingFailed { error: String },
-    
+
     #[error("Analysis failed: {error}")]
     AnalysisFailed { error: String },
-    
+
     #[error("Formatting failed: {error}")]
     FormattingFailed { error: String },
 }

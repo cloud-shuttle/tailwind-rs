@@ -4,9 +4,9 @@ use tailwind_rs_core::*;
 fn main() {
     println!("🔍 Layout Utilities Test");
     println!("========================");
-    
+
     let generator = CssGenerator::new();
-    
+
     // Test layout utilities classes
     let layout_utilities_classes = vec![
         // float
@@ -39,11 +39,14 @@ fn main() {
         "object-[25%_75%]",
         "object-(--my-object)",
     ];
-    
-    println!("\n📋 Testing Layout Utilities Classes ({} classes):", layout_utilities_classes.len());
+
+    println!(
+        "\n📋 Testing Layout Utilities Classes ({} classes):",
+        layout_utilities_classes.len()
+    );
     let mut working = 0;
     let mut broken = 0;
-    
+
     for class in &layout_utilities_classes {
         match generator.class_to_properties(class) {
             Ok(properties) => {
@@ -56,16 +59,25 @@ fn main() {
             }
         }
     }
-    
+
     let coverage = (working as f32 / layout_utilities_classes.len() as f32) * 100.0;
-    println!("  📊 Layout Utilities: {}/{} ({:.1}%)", working, layout_utilities_classes.len(), coverage);
-    
+    println!(
+        "  📊 Layout Utilities: {}/{} ({:.1}%)",
+        working,
+        layout_utilities_classes.len(),
+        coverage
+    );
+
     println!("\n📊 Results:");
     println!("===========");
-    println!("  ✅ Working: {}/{}", working, layout_utilities_classes.len());
+    println!(
+        "  ✅ Working: {}/{}",
+        working,
+        layout_utilities_classes.len()
+    );
     println!("  ❌ Broken: {}/{}", broken, layout_utilities_classes.len());
     println!("  📈 Coverage: {:.1}%", coverage);
-    
+
     if coverage >= 95.0 {
         println!("\n🎉 Excellent coverage! Ready for production!");
     } else if coverage >= 90.0 {

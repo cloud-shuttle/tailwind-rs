@@ -204,8 +204,16 @@ impl ClassSet {
     /// Get the total number of classes
     pub fn len(&self) -> usize {
         self.classes.len()
-            + self.responsive.values().map(|classes| classes.len()).sum::<usize>()
-            + self.conditional.values().map(|classes| classes.len()).sum::<usize>()
+            + self
+                .responsive
+                .values()
+                .map(|classes| classes.len())
+                .sum::<usize>()
+            + self
+                .conditional
+                .values()
+                .map(|classes| classes.len())
+                .sum::<usize>()
     }
 }
 

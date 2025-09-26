@@ -13,7 +13,7 @@ impl BackgroundColorUtilities for ClassBuilder {
     fn background_color(self, color: Color) -> Self {
         self.class(format!("bg-{}", color.to_class_name()))
     }
-    
+
     fn background_color_palette_shade(self, palette: ColorPalette, shade: ColorShade) -> Self {
         let color = Color::new(palette, shade);
         self.background_color(color)
@@ -27,10 +27,8 @@ mod tests {
     #[test]
     fn test_background_color_utilities() {
         let color = Color::new(ColorPalette::Green, ColorShade::Shade500);
-        let classes = ClassBuilder::new()
-            .background_color(color)
-            .build();
-        
+        let classes = ClassBuilder::new().background_color(color).build();
+
         assert!(classes.to_css_classes().contains("bg-green-500"));
     }
 
@@ -39,7 +37,7 @@ mod tests {
         let classes = ClassBuilder::new()
             .background_color_palette_shade(ColorPalette::Yellow, ColorShade::Shade400)
             .build();
-        
+
         assert!(classes.to_css_classes().contains("bg-yellow-400"));
     }
 }

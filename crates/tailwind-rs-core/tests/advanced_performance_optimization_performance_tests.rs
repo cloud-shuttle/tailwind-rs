@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod advanced_performance_optimization_performance_tests {
-    use tailwind_rs_core::utilities::advanced_performance_optimization::*;
     use std::time::Instant;
+    use tailwind_rs_core::utilities::advanced_performance_optimization::*;
 
     const ITERATIONS: usize = 1000;
     const LARGE_CSS_SIZE: usize = 10000; // 10KB CSS
@@ -10,14 +10,17 @@ mod advanced_performance_optimization_performance_tests {
     fn test_css_minification_performance() {
         let minifier = AdvancedCssMinifier::new();
         let large_css = generate_large_css(LARGE_CSS_SIZE);
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _minified = minifier.minify(&large_css);
         }
         let duration = start.elapsed();
-        
-        println!("CSS minification performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "CSS minification performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 1000); // Should complete in under 1 second
     }
 
@@ -25,42 +28,51 @@ mod advanced_performance_optimization_performance_tests {
     fn test_critical_css_extraction_performance() {
         let extractor = CriticalCssExtractor::new();
         let large_css = generate_large_css(LARGE_CSS_SIZE);
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _critical = extractor.extract_critical_css(&large_css);
         }
         let duration = start.elapsed();
-        
-        println!("Critical CSS extraction performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Critical CSS extraction performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 1000); // Should complete in under 1 second
     }
 
     #[test]
     fn test_lazy_loading_js_generation_performance() {
         let optimizer = LazyLoadingOptimizer::new();
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _js = optimizer.generate_lazy_loading_js();
         }
         let duration = start.elapsed();
-        
-        println!("Lazy loading JS generation performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Lazy loading JS generation performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 100); // Should be very fast
     }
 
     #[test]
     fn test_lazy_loading_css_generation_performance() {
         let optimizer = LazyLoadingOptimizer::new();
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _css = optimizer.generate_lazy_loading_css();
         }
         let duration = start.elapsed();
-        
-        println!("Lazy loading CSS generation performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Lazy loading CSS generation performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 100); // Should be very fast
     }
 
@@ -68,14 +80,17 @@ mod advanced_performance_optimization_performance_tests {
     fn test_bundle_splitting_performance() {
         let splitter = BundleSplitter::new();
         let large_css = generate_large_css(LARGE_CSS_SIZE);
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _chunks = splitter.split_bundle(&large_css);
         }
         let duration = start.elapsed();
-        
-        println!("Bundle splitting performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Bundle splitting performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 5000); // Should complete in under 5 seconds (CI-friendly threshold)
     }
 
@@ -83,29 +98,35 @@ mod advanced_performance_optimization_performance_tests {
     fn test_memory_optimization_performance() {
         let optimizer = MemoryOptimizer::new();
         let large_data = generate_large_data(LARGE_CSS_SIZE);
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _optimized = optimizer.optimize_memory(&large_data);
         }
         let duration = start.elapsed();
-        
-        println!("Memory optimization performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Memory optimization performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 1000); // Should complete in under 1 second
     }
 
     #[test]
     fn test_performance_monitoring_overhead() {
         let monitor = PerformanceMonitor::new();
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _metrics = monitor.get_metrics();
             let _alerts = monitor.check_thresholds();
         }
         let duration = start.elapsed();
-        
-        println!("Performance monitoring overhead: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Performance monitoring overhead: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 100); // Should be very fast
     }
 
@@ -116,22 +137,28 @@ mod advanced_performance_optimization_performance_tests {
             let _result = create_sample_optimization_result();
         }
         let duration = start.elapsed();
-        
-        println!("Advanced optimization result creation performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Advanced optimization result creation performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 100); // Should be very fast
     }
 
     #[test]
     fn test_advanced_optimization_result_display_performance() {
         let result = create_sample_optimization_result();
-        
+
         let start = Instant::now();
         for _ in 0..ITERATIONS {
             let _display = format!("{}", result);
         }
         let duration = start.elapsed();
-        
-        println!("Advanced optimization result display performance: {:?} for {} iterations", duration, ITERATIONS);
+
+        println!(
+            "Advanced optimization result display performance: {:?} for {} iterations",
+            duration, ITERATIONS
+        );
         assert!(duration.as_millis() < 100); // Should be very fast
     }
 
@@ -139,7 +166,7 @@ mod advanced_performance_optimization_performance_tests {
     fn test_minification_strategy_performance() {
         let minifier = AdvancedCssMinifier::new();
         let css = generate_large_css(LARGE_CSS_SIZE);
-        
+
         // Test individual strategies
         let strategies = vec![
             MinificationStrategy::WhitespaceRemoval,
@@ -148,18 +175,22 @@ mod advanced_performance_optimization_performance_tests {
             MinificationStrategy::PropertyOptimization,
             MinificationStrategy::ColorCompression,
         ];
-        
+
         for strategy in strategies {
             let mut test_minifier = minifier.clone();
             test_minifier.strategies = vec![strategy.clone()];
-            
+
             let start = Instant::now();
-            for _ in 0..100 { // Fewer iterations for individual strategies
+            for _ in 0..100 {
+                // Fewer iterations for individual strategies
                 let _minified = test_minifier.minify(&css);
             }
             let duration = start.elapsed();
-            
-            println!("Strategy {:?} performance: {:?} for 100 iterations", strategy, duration);
+
+            println!(
+                "Strategy {:?} performance: {:?} for 100 iterations",
+                strategy, duration
+            );
             assert!(duration.as_millis() < 500); // Each strategy should be fast
         }
     }
@@ -167,7 +198,7 @@ mod advanced_performance_optimization_performance_tests {
     #[test]
     fn test_bundle_split_strategy_performance() {
         let css = generate_large_css(LARGE_CSS_SIZE);
-        
+
         let strategies = vec![
             SplitStrategy::FeatureBased,
             SplitStrategy::UsageBased,
@@ -175,18 +206,22 @@ mod advanced_performance_optimization_performance_tests {
             SplitStrategy::SizeBased,
             SplitStrategy::CriticalPathBased,
         ];
-        
+
         for strategy in strategies {
             let mut splitter = BundleSplitter::new();
             splitter.strategies = vec![strategy.clone()];
-            
+
             let start = Instant::now();
-            for _ in 0..100 { // Fewer iterations for individual strategies
+            for _ in 0..100 {
+                // Fewer iterations for individual strategies
                 let _chunks = splitter.split_bundle(&css);
             }
             let duration = start.elapsed();
-            
-            println!("Split strategy {:?} performance: {:?} for 100 iterations", strategy, duration);
+
+            println!(
+                "Split strategy {:?} performance: {:?} for 100 iterations",
+                strategy, duration
+            );
             assert!(duration.as_millis() < 500); // Each strategy should be fast
         }
     }
@@ -194,7 +229,7 @@ mod advanced_performance_optimization_performance_tests {
     #[test]
     fn test_memory_optimization_strategy_performance() {
         let data = generate_large_data(LARGE_CSS_SIZE);
-        
+
         let strategies = vec![
             MemoryOptimizationStrategy::ObjectPooling,
             MemoryOptimizationStrategy::StringInterning,
@@ -203,18 +238,22 @@ mod advanced_performance_optimization_performance_tests {
             MemoryOptimizationStrategy::MemoryCompression,
             MemoryOptimizationStrategy::GcOptimization,
         ];
-        
+
         for strategy in strategies {
             let mut optimizer = MemoryOptimizer::new();
             optimizer.strategies = vec![strategy.clone()];
-            
+
             let start = Instant::now();
-            for _ in 0..100 { // Fewer iterations for individual strategies
+            for _ in 0..100 {
+                // Fewer iterations for individual strategies
                 let _optimized = optimizer.optimize_memory(&data);
             }
             let duration = start.elapsed();
-            
-            println!("Memory strategy {:?} performance: {:?} for 100 iterations", strategy, duration);
+
+            println!(
+                "Memory strategy {:?} performance: {:?} for 100 iterations",
+                strategy, duration
+            );
             assert!(duration.as_millis() < 500); // Each strategy should be fast
         }
     }
@@ -228,19 +267,22 @@ mod advanced_performance_optimization_performance_tests {
             LazyLoadingStrategy::FocusBased,
             LazyLoadingStrategy::MediaQueryBased,
         ];
-        
+
         for strategy in strategies {
             let mut optimizer = LazyLoadingOptimizer::new();
             optimizer.strategies = vec![strategy.clone()];
-            
+
             let start = Instant::now();
             for _ in 0..ITERATIONS {
                 let _js = optimizer.generate_lazy_loading_js();
                 let _css = optimizer.generate_lazy_loading_css();
             }
             let duration = start.elapsed();
-            
-            println!("Lazy loading strategy {:?} performance: {:?} for {} iterations", strategy, duration, ITERATIONS);
+
+            println!(
+                "Lazy loading strategy {:?} performance: {:?} for {} iterations",
+                strategy, duration, ITERATIONS
+            );
             assert!(duration.as_millis() < 100); // Should be very fast
         }
     }
@@ -253,7 +295,7 @@ mod advanced_performance_optimization_performance_tests {
             GcTrigger::TimeInterval(std::time::Duration::from_secs(30)),
             GcTrigger::IdleTime,
         ];
-        
+
         for trigger in triggers {
             let start = Instant::now();
             for _ in 0..ITERATIONS {
@@ -266,8 +308,11 @@ mod advanced_performance_optimization_performance_tests {
                 }
             }
             let duration = start.elapsed();
-            
-            println!("GC trigger {:?} performance: {:?} for {} iterations", trigger, duration, ITERATIONS);
+
+            println!(
+                "GC trigger {:?} performance: {:?} for {} iterations",
+                trigger, duration, ITERATIONS
+            );
             assert!(duration.as_millis() < 10); // Should be extremely fast
         }
     }
@@ -281,7 +326,7 @@ mod advanced_performance_optimization_performance_tests {
             AlertType::FrameRate,
             AlertType::JsExecutionTime,
         ];
-        
+
         for alert_type in alert_types {
             let start = Instant::now();
             for _ in 0..ITERATIONS {
@@ -295,8 +340,11 @@ mod advanced_performance_optimization_performance_tests {
                 }
             }
             let duration = start.elapsed();
-            
-            println!("Alert type {:?} performance: {:?} for {} iterations", alert_type, duration, ITERATIONS);
+
+            println!(
+                "Alert type {:?} performance: {:?} for {} iterations",
+                alert_type, duration, ITERATIONS
+            );
             assert!(duration.as_millis() < 10); // Should be extremely fast
         }
     }
@@ -305,21 +353,25 @@ mod advanced_performance_optimization_performance_tests {
     fn test_memory_usage_under_load() {
         let minifier = AdvancedCssMinifier::new();
         let large_css = generate_large_css(LARGE_CSS_SIZE * 10); // 100KB CSS
-        
+
         let start = Instant::now();
         let mut results = Vec::new();
-        
-        for _ in 0..100 { // Fewer iterations for memory test
+
+        for _ in 0..100 {
+            // Fewer iterations for memory test
             let minified = minifier.minify(&large_css);
             results.push(minified);
         }
-        
+
         let duration = start.elapsed();
-        println!("Memory usage under load: {:?} for 100 iterations of 100KB CSS", duration);
-        
+        println!(
+            "Memory usage under load: {:?} for 100 iterations of 100KB CSS",
+            duration
+        );
+
         // Clean up
         drop(results);
-        
+
         assert!(duration.as_millis() < 5000); // Should complete in under 5 seconds
     }
 
@@ -328,19 +380,23 @@ mod advanced_performance_optimization_performance_tests {
         let minifier = AdvancedCssMinifier::new();
         let splitter = BundleSplitter::new();
         let optimizer = MemoryOptimizer::new();
-        
+
         let css = generate_large_css(LARGE_CSS_SIZE);
         let data = generate_large_data(LARGE_CSS_SIZE);
-        
+
         let start = Instant::now();
-        for _ in 0..100 { // Fewer iterations for concurrent test
+        for _ in 0..100 {
+            // Fewer iterations for concurrent test
             let _minified = minifier.minify(&css);
             let _chunks = splitter.split_bundle(&css);
             let _optimized = optimizer.optimize_memory(&data);
         }
         let duration = start.elapsed();
-        
-        println!("Concurrent optimization performance: {:?} for 100 iterations", duration);
+
+        println!(
+            "Concurrent optimization performance: {:?} for 100 iterations",
+            duration
+        );
         assert!(duration.as_millis() < 2000); // Should complete in under 2 seconds
     }
 
@@ -348,15 +404,18 @@ mod advanced_performance_optimization_performance_tests {
     fn generate_large_css(size: usize) -> String {
         let mut css = String::new();
         let mut current_size = 0;
-        
+
         while current_size < size {
             let class_name = format!(".class-{}", current_size / 10);
-            let rule = format!("{} {{ color: red; background: blue; margin: {}px; }}\n", 
-                             class_name, current_size % 100);
+            let rule = format!(
+                "{} {{ color: red; background: blue; margin: {}px; }}\n",
+                class_name,
+                current_size % 100
+            );
             css.push_str(&rule);
             current_size += rule.len();
         }
-        
+
         css
     }
 

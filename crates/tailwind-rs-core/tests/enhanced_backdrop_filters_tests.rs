@@ -1,6 +1,6 @@
 use tailwind_rs_core::utilities::enhanced_backdrop_filters::*;
-use tailwind_rs_core::ClassBuilder;
 use tailwind_rs_core::Breakpoint;
+use tailwind_rs_core::ClassBuilder;
 
 #[cfg(test)]
 mod enhanced_backdrop_filters_unit_tests {
@@ -402,7 +402,7 @@ mod enhanced_backdrop_filters_unit_tests {
         let blur1 = EnhancedBackdropBlur::Sm;
         let blur2 = EnhancedBackdropBlur::Sm;
         let blur3 = EnhancedBackdropBlur::Lg;
-        
+
         assert_eq!(blur1, blur2);
         assert_ne!(blur1, blur3);
     }
@@ -414,9 +414,8 @@ mod enhanced_backdrop_filters_integration_tests {
 
     #[test]
     fn test_enhanced_backdrop_filters_with_class_builder() {
-        let builder = ClassBuilder::new()
-            .backdrop_blur_sm();
-        
+        let builder = ClassBuilder::new().backdrop_blur_sm();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("backdrop-blur-sm"));
     }
@@ -427,7 +426,7 @@ mod enhanced_backdrop_filters_integration_tests {
             .backdrop_blur_sm()
             .class("text-blue-500")
             .class("font-bold");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("backdrop-blur-sm"));
         assert!(class_set.classes.contains("text-blue-500"));
@@ -439,11 +438,15 @@ mod enhanced_backdrop_filters_integration_tests {
         let builder = ClassBuilder::new()
             .backdrop_blur_sm()
             .responsive(Breakpoint::Md, "backdrop-blur-lg");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("backdrop-blur-sm"));
         assert!(class_set.responsive.contains_key(&Breakpoint::Md));
-        assert!(class_set.responsive.get(&Breakpoint::Md).unwrap().contains("backdrop-blur-lg"));
+        assert!(class_set
+            .responsive
+            .get(&Breakpoint::Md)
+            .unwrap()
+            .contains("backdrop-blur-lg"));
     }
 
     #[test]
@@ -451,11 +454,15 @@ mod enhanced_backdrop_filters_integration_tests {
         let builder = ClassBuilder::new()
             .backdrop_blur_sm()
             .conditional("hover", "backdrop-blur-lg");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("backdrop-blur-sm"));
         assert!(class_set.conditional.contains_key("hover"));
-        assert!(class_set.conditional.get("hover").unwrap().contains("backdrop-blur-lg"));
+        assert!(class_set
+            .conditional
+            .get("hover")
+            .unwrap()
+            .contains("backdrop-blur-lg"));
     }
 
     #[test]
@@ -463,19 +470,21 @@ mod enhanced_backdrop_filters_integration_tests {
         let builder = ClassBuilder::new()
             .backdrop_blur_sm()
             .custom_variant("dark", "backdrop-blur-lg");
-        
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("backdrop-blur-sm"));
         assert!(class_set.conditional.contains_key("dark"));
-        assert!(class_set.conditional.get("dark").unwrap().contains("backdrop-blur-lg"));
+        assert!(class_set
+            .conditional
+            .get("dark")
+            .unwrap()
+            .contains("backdrop-blur-lg"));
     }
 
     #[test]
     fn test_enhanced_backdrop_filters_multiple_filters() {
-        let builder = ClassBuilder::new()
-            .backdrop_blur_sm()
-            .backdrop_blur_lg();
-        
+        let builder = ClassBuilder::new().backdrop_blur_sm().backdrop_blur_lg();
+
         let class_set = builder.build();
         assert!(class_set.classes.contains("backdrop-blur-sm"));
         assert!(class_set.classes.contains("backdrop-blur-lg"));
@@ -487,7 +496,7 @@ mod enhanced_backdrop_filters_integration_tests {
             .backdrop_blur_sm()
             .class("text-blue-500")
             .build_string();
-        
+
         assert!(classes.contains("backdrop-blur-sm"));
         assert!(classes.contains("text-blue-500"));
     }
@@ -498,7 +507,7 @@ mod enhanced_backdrop_filters_integration_tests {
             .backdrop_blur_lg()
             .class("font-bold")
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("backdrop-blur-lg"));
         assert!(css_classes.contains("font-bold"));
@@ -511,7 +520,7 @@ mod enhanced_backdrop_filters_integration_tests {
             .backdrop_blur_lg()
             .backdrop_blur_3xl()
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("backdrop-blur-sm"));
         assert!(css_classes.contains("backdrop-blur-lg"));
@@ -524,7 +533,7 @@ mod enhanced_backdrop_filters_integration_tests {
             .backdrop_blur_custom(EnhancedBackdropBlur::Xl)
             .backdrop_blur_custom(EnhancedBackdropBlur::Xl3)
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
         assert!(css_classes.contains("backdrop-blur-xl"));
         assert!(css_classes.contains("backdrop-blur-3xl"));
@@ -542,9 +551,9 @@ mod enhanced_backdrop_filters_integration_tests {
             .backdrop_blur_2xl()
             .backdrop_blur_3xl()
             .build();
-        
+
         let css_classes = class_set.to_css_classes();
-        
+
         // Test that all backdrop blur utilities are present
         assert!(css_classes.contains("backdrop-blur-none"));
         assert!(css_classes.contains("backdrop-blur-sm"));

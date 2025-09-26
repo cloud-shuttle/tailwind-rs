@@ -20,10 +20,8 @@ mod tests {
 
     #[test]
     fn test_width_utilities() {
-        let classes = ClassBuilder::new()
-            .width(SizingValue::Full)
-            .build();
-        
+        let classes = ClassBuilder::new().width(SizingValue::Full).build();
+
         assert!(classes.to_css_classes().contains("w-full"));
     }
 }

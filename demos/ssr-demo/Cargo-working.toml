@@ -1,0 +1,16 @@
+[package]
+name = "tailwind-rs-working-ssr-demo"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tailwind-RS Team"]
+license = "MIT"
+description = "Working Server-Side Rendering demo for Tailwind-RS with Rust"
+rust-version = "1.89.0"
+
+[[bin]]
+name = "working-ssr-demo"
+path = "working_ssr_server.rs"
+
+[dependencies]
+# Tailwind-RS
+tailwind-rs-core = { workspace = true }

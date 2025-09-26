@@ -1,0 +1,16 @@
+[package]
+name = "tailwind-rs-simple-rust-ssr"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tailwind-RS Team"]
+license = "MIT"
+description = "Simple Rust Server-Side Rendering demo for Tailwind-RS"
+rust-version = "1.89.0"
+
+[[bin]]
+name = "simple-rust-ssr"
+path = "simple_rust_ssr.rs"
+
+[dependencies]
+# Tailwind-RS
+tailwind-rs-core = { workspace = true }

@@ -1,0 +1,35 @@
+[package]
+name = "tailwind-rs-ssr-demo"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tailwind-RS Team"]
+license = "MIT"
+description = "Server-Side Rendering demo for Tailwind-RS with Leptos"
+rust-version = "1.89.0"
+
+[dependencies]
+# Leptos for SSR
+leptos = { version = "0.8.8", features = ["ssr"] }
+leptos_axum = "0.8.6"
+axum = "0.7"
+
+# Tailwind-RS
+tailwind-rs-core = { workspace = true }
+tailwind-rs-leptos = { workspace = true }
+
+# Web server dependencies
+tokio = { version = "1.0", features = ["full"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["fs", "cors"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = "0.3"
+
+
+[dev-dependencies]
+cargo-watch = "8.0"

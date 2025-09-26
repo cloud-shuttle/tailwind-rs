@@ -146,6 +146,27 @@ impl ArbitraryParser {
                 CssProperty { name: "width".to_string(), value: "fit-content".to_string(), important: false },
                 CssProperty { name: "height".to_string(), value: "fit-content".to_string(), important: false },
             ]),
+            // Size utilities with decimal values
+            "size-px" => Some(vec![
+                CssProperty { name: "width".to_string(), value: "1px".to_string(), important: false },
+                CssProperty { name: "height".to_string(), value: "1px".to_string(), important: false },
+            ]),
+            "size-0.5" => Some(vec![
+                CssProperty { name: "width".to_string(), value: "0.125rem".to_string(), important: false },
+                CssProperty { name: "height".to_string(), value: "0.125rem".to_string(), important: false },
+            ]),
+            "size-1.5" => Some(vec![
+                CssProperty { name: "width".to_string(), value: "0.375rem".to_string(), important: false },
+                CssProperty { name: "height".to_string(), value: "0.375rem".to_string(), important: false },
+            ]),
+            "size-2.5" => Some(vec![
+                CssProperty { name: "width".to_string(), value: "0.625rem".to_string(), important: false },
+                CssProperty { name: "height".to_string(), value: "0.625rem".to_string(), important: false },
+            ]),
+            "size-3.5" => Some(vec![
+                CssProperty { name: "width".to_string(), value: "0.875rem".to_string(), important: false },
+                CssProperty { name: "height".to_string(), value: "0.875rem".to_string(), important: false },
+            ]),
             _ => None,
         }
     }

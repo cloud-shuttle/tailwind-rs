@@ -12,6 +12,16 @@ pub struct TransformParser;
 impl TransformParser {
     pub fn new() -> Self { Self }
 
+    /// Parse basic transform classes
+    fn parse_basic_transform_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        match class {
+            "transform" => Some(vec![CssProperty { name: "transform".to_string(), value: "translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))".to_string(), important: false }]),
+            "transform-gpu" => Some(vec![CssProperty { name: "transform".to_string(), value: "translate3d(var(--tw-translate-x), var(--tw-translate-y), 0) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))".to_string(), important: false }]),
+            "transform-none" => Some(vec![CssProperty { name: "transform".to_string(), value: "none".to_string(), important: false }]),
+            _ => None,
+        }
+    }
+
     /// Parse transform origin classes
     fn parse_origin_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
@@ -72,6 +82,9 @@ impl TransformParser {
 
 impl UtilityParser for TransformParser {
     fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        if let Some(properties) = self.parse_basic_transform_class(class) {
+            return Some(properties);
+        }
         if let Some(properties) = self.parse_origin_class(class) {
             return Some(properties);
         }
@@ -86,6 +99,7 @@ impl UtilityParser for TransformParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
+            "transform", "transform-gpu", "transform-none",
             "origin-*", "scale-*", "rotate-*", "-rotate-*"
         ]
     }

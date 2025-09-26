@@ -98,6 +98,225 @@ impl SpacingParser {
             }
         }
         
+        // Logical properties for padding
+        if let Some(value) = class.strip_prefix("ps-") {
+            if let Some(spacing) = self.get_spacing_value(value) {
+                return Some(vec![CssProperty {
+                    name: "padding-inline-start".to_string(),
+                    value: spacing,
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pe-") {
+            if let Some(spacing) = self.get_spacing_value(value) {
+                return Some(vec![CssProperty {
+                    name: "padding-inline-end".to_string(),
+                    value: spacing,
+                    important: false,
+                }]);
+            }
+        }
+        
+        // Arbitrary values for padding
+        if let Some(value) = class.strip_prefix("p-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("px-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-left".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }, CssProperty {
+                    name: "padding-right".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("py-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-top".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }, CssProperty {
+                    name: "padding-bottom".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pt-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-top".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pr-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-right".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pb-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-bottom".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pl-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-left".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("ps-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-inline-start".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pe-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "padding-inline-end".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        // Custom properties for padding
+        if let Some(value) = class.strip_prefix("p-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("px-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-left".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }, CssProperty {
+                    name: "padding-right".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("py-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-top".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }, CssProperty {
+                    name: "padding-bottom".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pt-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-top".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pr-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-right".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pb-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-bottom".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pl-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-left".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("ps-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-inline-start".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("pe-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "padding-inline-end".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
         None
     }
 
@@ -181,6 +400,225 @@ impl SpacingParser {
             }
         }
         
+        // Logical properties for margin
+        if let Some(value) = class.strip_prefix("ms-") {
+            if let Some(spacing) = self.get_spacing_value(value) {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-start".to_string(),
+                    value: spacing,
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("me-") {
+            if let Some(spacing) = self.get_spacing_value(value) {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-end".to_string(),
+                    value: spacing,
+                    important: false,
+                }]);
+            }
+        }
+        
+        // Arbitrary values for margin
+        if let Some(value) = class.strip_prefix("m-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mx-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-left".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }, CssProperty {
+                    name: "margin-right".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("my-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-top".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }, CssProperty {
+                    name: "margin-bottom".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mt-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-top".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mr-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-right".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mb-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-bottom".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("ml-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-left".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("ms-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-start".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("me-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-end".to_string(),
+                    value: value.to_string(),
+                    important: false,
+                }]);
+            }
+        }
+        
+        // Custom properties for margin
+        if let Some(value) = class.strip_prefix("m-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mx-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-left".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }, CssProperty {
+                    name: "margin-right".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("my-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-top".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }, CssProperty {
+                    name: "margin-bottom".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mt-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-top".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mr-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-right".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("mb-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-bottom".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("ml-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-left".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("ms-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-start".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("me-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-end".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
         None
     }
 
@@ -213,6 +651,94 @@ impl SpacingParser {
                     value: spacing,
                     important: false,
                 }]);
+            }
+        }
+        
+        // Space utilities
+        if let Some(direction_and_value) = class.strip_prefix("space-") {
+            if let Some(value) = direction_and_value.strip_prefix("x-") {
+                if let Some(spacing) = self.get_spacing_value(value) {
+                    return Some(vec![
+                        CssProperty { 
+                            name: "margin-left".to_string(), 
+                            value: format!("calc({} * 0.5)", spacing), 
+                            important: false 
+                        },
+                        CssProperty { 
+                            name: "margin-right".to_string(), 
+                            value: format!("calc({} * 0.5)", spacing), 
+                            important: false 
+                        },
+                    ]);
+                }
+            }
+            if let Some(value) = direction_and_value.strip_prefix("y-") {
+                if let Some(spacing) = self.get_spacing_value(value) {
+                    return Some(vec![
+                        CssProperty { 
+                            name: "margin-top".to_string(), 
+                            value: format!("calc({} * 0.5)", spacing), 
+                            important: false 
+                        },
+                        CssProperty { 
+                            name: "margin-bottom".to_string(), 
+                            value: format!("calc({} * 0.5)", spacing), 
+                            important: false 
+                        },
+                    ]);
+                }
+            }
+        }
+        
+        // Space reverse utilities
+        if class == "space-x-reverse" {
+            return Some(vec![CssProperty {
+                name: "--tw-space-x-reverse".to_string(),
+                value: "1".to_string(),
+                important: false,
+            }]);
+        }
+        
+        if class == "space-y-reverse" {
+            return Some(vec![CssProperty {
+                name: "--tw-space-y-reverse".to_string(),
+                value: "1".to_string(),
+                important: false,
+            }]);
+        }
+        
+        // Arbitrary space utilities
+        if let Some(value) = class.strip_prefix("space-x-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![
+                    CssProperty { 
+                        name: "margin-left".to_string(), 
+                        value: format!("calc({} * 0.5)", value), 
+                        important: false 
+                    },
+                    CssProperty { 
+                        name: "margin-right".to_string(), 
+                        value: format!("calc({} * 0.5)", value), 
+                        important: false 
+                    },
+                ]);
+            }
+        }
+        
+        if let Some(value) = class.strip_prefix("space-y-[") {
+            if let Some(value) = value.strip_suffix("]") {
+                return Some(vec![
+                    CssProperty { 
+                        name: "margin-top".to_string(), 
+                        value: format!("calc({} * 0.5)", value), 
+                        important: false 
+                    },
+                    CssProperty { 
+                        name: "margin-bottom".to_string(), 
+                        value: format!("calc({} * 0.5)", value), 
+                        important: false 
+                    },
+                ]);
             }
         }
         

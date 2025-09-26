@@ -14,19 +14,45 @@ impl SizingParser {
 
     /// Parse width classes
     fn parse_width_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Custom properties for width (check this first)
+        if let Some(value) = class.strip_prefix("w-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "width".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        // Regular width classes
         if let Some(value) = class.strip_prefix("w-") {
             let css_value = self.parse_sizing_value(value)?;
             return Some(vec![CssProperty { name: "width".to_string(), value: css_value, important: false }]);
         }
+        
         None
     }
 
     /// Parse height classes
     fn parse_height_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Custom properties for height (check this first)
+        if let Some(value) = class.strip_prefix("h-(") {
+            if let Some(value) = value.strip_suffix(")") {
+                return Some(vec![CssProperty {
+                    name: "height".to_string(),
+                    value: format!("var({})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        // Regular height classes
         if let Some(value) = class.strip_prefix("h-") {
             let css_value = self.parse_sizing_value(value)?;
             return Some(vec![CssProperty { name: "height".to_string(), value: css_value, important: false }]);
         }
+        
         None
     }
 
@@ -110,7 +136,29 @@ impl SizingParser {
             "min" => Some("min-content".to_string()),
             "max" => Some("max-content".to_string()),
             "fit" => Some("fit-content".to_string()),
-            _ => None,
+            // Size utilities with decimal values
+            "px" => Some("1px".to_string()),
+            "0.5" => Some("0.125rem".to_string()),
+            "1.5" => Some("0.375rem".to_string()),
+            "2.5" => Some("0.625rem".to_string()),
+            "3.5" => Some("0.875rem".to_string()),
+            // Viewport units
+            "dvh" => Some("100dvh".to_string()),
+            "lvh" => Some("100lvh".to_string()),
+            "svh" => Some("100svh".to_string()),
+            "dvw" => Some("100dvw".to_string()),
+            "lvw" => Some("100lvw".to_string()),
+            "svw" => Some("100svw".to_string()),
+            // Container scale utilities
+            "3xs" => Some("var(--container-3xs)".to_string()), // 16rem (256px)
+            "2xs" => Some("var(--container-2xs)".to_string()), // 18rem (288px)
+            "xs" => Some("var(--container-xs)".to_string()), // 20rem (320px)
+            "sm" => Some("var(--container-sm)".to_string()), // 24rem (384px)
+            "md" => Some("var(--container-md)".to_string()), // 28rem (448px)
+            "lg" => Some("var(--container-lg)".to_string()), // 32rem (512px)
+            "xl" => Some("var(--container-xl)".to_string()), // 36rem (576px)
+            "2xl" => Some("var(--container-2xl)".to_string()), // 42rem (672px)
+            _ => self.parse_fractional_value(value),
         }
     }
 
@@ -141,6 +189,22 @@ impl SizingParser {
             "screen-2xl" => Some("1536px".to_string()),
             _ => self.parse_sizing_value(value), // Fall back to regular sizing values
         }
+    }
+
+    /// Parse fractional values like 1/2, 1/3, 2/3, etc.
+    fn parse_fractional_value(&self, value: &str) -> Option<String> {
+        if value.contains('/') {
+            let parts: Vec<&str> = value.split('/').collect();
+            if parts.len() == 2 {
+                if let (Ok(numerator), Ok(denominator)) = (parts[0].parse::<f64>(), parts[1].parse::<f64>()) {
+                    if denominator != 0.0 {
+                        let percentage = (numerator / denominator) * 100.0;
+                        return Some(format!("{}%", percentage));
+                    }
+                }
+            }
+        }
+        None
     }
 }
 

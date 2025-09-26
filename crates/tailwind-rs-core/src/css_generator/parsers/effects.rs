@@ -46,6 +46,20 @@ impl EffectsParser {
         }
     }
     
+    /// Parse drop shadow classes
+    fn parse_drop_shadow_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        match class {
+            "drop-shadow-sm" => Some(vec![CssProperty { name: "filter".to_string(), value: "drop-shadow(0 1px 1px rgb(0 0 0 / 0.05))".to_string(), important: false }]),
+            "drop-shadow" => Some(vec![CssProperty { name: "filter".to_string(), value: "drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06))".to_string(), important: false }]),
+            "drop-shadow-md" => Some(vec![CssProperty { name: "filter".to_string(), value: "drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06))".to_string(), important: false }]),
+            "drop-shadow-lg" => Some(vec![CssProperty { name: "filter".to_string(), value: "drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1))".to_string(), important: false }]),
+            "drop-shadow-xl" => Some(vec![CssProperty { name: "filter".to_string(), value: "drop-shadow(0 20px 13px rgb(0 0 0 / 0.03)) drop-shadow(0 8px 5px rgb(0 0 0 / 0.08))".to_string(), important: false }]),
+            "drop-shadow-2xl" => Some(vec![CssProperty { name: "filter".to_string(), value: "drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))".to_string(), important: false }]),
+            "drop-shadow-none" => Some(vec![CssProperty { name: "filter".to_string(), value: "drop-shadow(0 0 #0000)".to_string(), important: false }]),
+            _ => None,
+        }
+    }
+    
     /// Parse backdrop blur classes
     fn parse_backdrop_blur_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
@@ -112,6 +126,11 @@ impl UtilityParser for EffectsParser {
     fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         // Try shadow classes first
         if let Some(properties) = self.parse_shadow_class(class) {
+            return Some(properties);
+        }
+        
+        // Try drop shadow classes
+        if let Some(properties) = self.parse_drop_shadow_class(class) {
             return Some(properties);
         }
         

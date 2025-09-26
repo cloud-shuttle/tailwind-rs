@@ -5,6 +5,9 @@
 
 pub mod types;
 pub mod generator;
+pub mod generator_builders;
+pub mod generator_operations;
+pub mod generator_parsers;
 pub mod css_output;
 pub mod core;
 pub mod variants;

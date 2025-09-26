@@ -15,7 +15,7 @@ impl GradientParser {
     /// Parse gradient direction classes
     fn parse_gradient_direction_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "bg-linear-to-r" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-r" | "bg-linear-to-r" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(), important: false }]),
             "bg-linear-to-l" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to left, var(--tw-gradient-stops))".to_string(), important: false }]),
             "bg-linear-to-t" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to top, var(--tw-gradient-stops))".to_string(), important: false }]),
             "bg-linear-to-b" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to bottom, var(--tw-gradient-stops))".to_string(), important: false }]),
@@ -83,6 +83,17 @@ impl GradientParser {
             "blue-700" => Some("#1d4ed8".to_string()),
             "blue-800" => Some("#1e40af".to_string()),
             "blue-900" => Some("#1e3a8a".to_string()),
+            // Purple colors
+            "purple-50" => Some("#faf5ff".to_string()),
+            "purple-100" => Some("#f3e8ff".to_string()),
+            "purple-200" => Some("#e9d5ff".to_string()),
+            "purple-300" => Some("#d8b4fe".to_string()),
+            "purple-400" => Some("#c084fc".to_string()),
+            "purple-500" => Some("#a855f7".to_string()),
+            "purple-600" => Some("#9333ea".to_string()),
+            "purple-700" => Some("#7c3aed".to_string()),
+            "purple-800" => Some("#6b21a8".to_string()),
+            "purple-900" => Some("#581c87".to_string()),
             // Basic colors
             "white" => Some("#ffffff".to_string()),
             "black" => Some("#000000".to_string()),

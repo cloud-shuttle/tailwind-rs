@@ -3,7 +3,7 @@
 //! This example demonstrates how to use the EnhancedPluginLoader to load and execute
 //! NPM plugins, native plugins, and manage plugin configurations.
 
-use tailwind_rs_postcss::{EnhancedPluginLoader, PluginConfig, ExecutionMode, SecurityLevel, PluginCapability};
+use tailwind_rs_postcss::enhanced_plugin_loader::{EnhancedPluginLoader, PluginConfig, ExecutionMode, SecurityLevel, PluginCapability};
 use std::collections::HashMap;
 use serde_json::Value;
 
@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = PluginConfig {
         name: "autoprefixer".to_string(),
         version: Some("10.4.0".to_string()),
-        options: HashMap::new(),
+        options: HashMap::<String, Value>::new(),
         dependencies: vec![],
         execution_mode: ExecutionMode::NPM,
         security_level: SecurityLevel::Sandboxed,
@@ -56,7 +56,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let autoprefixer_config = PluginConfig {
         name: "autoprefixer".to_string(),
         version: Some("10.4.0".to_string()),
-        options: HashMap::new(),
+        options: HashMap::<String, Value>::new(),
         dependencies: vec![],
         execution_mode: ExecutionMode::NPM,
         security_level: SecurityLevel::Sandboxed,
@@ -65,7 +65,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cssnano_config = PluginConfig {
         name: "cssnano".to_string(),
         version: Some("5.1.0".to_string()),
-        options: HashMap::new(),
+        options: HashMap::<String, Value>::new(),
         dependencies: vec![],
         execution_mode: ExecutionMode::NPM,
         security_level: SecurityLevel::Sandboxed,
@@ -184,7 +184,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let invalid_config = PluginConfig {
         name: "nonexistent-plugin".to_string(),
         version: Some("999.999.999".to_string()),
-        options: HashMap::new(),
+        options: HashMap::<String, Value>::new(),
         dependencies: vec![],
         execution_mode: ExecutionMode::NPM,
         security_level: SecurityLevel::Sandboxed,
@@ -243,7 +243,7 @@ mod tests {
         let config = PluginConfig {
             name: "test-plugin".to_string(),
             version: Some("1.0.0".to_string()),
-            options: HashMap::new(),
+            options: HashMap::<String, Value>::new(),
             dependencies: vec![],
             execution_mode: ExecutionMode::NPM,
             security_level: SecurityLevel::Sandboxed,

@@ -8,14 +8,104 @@ Get up and running with Tailwind-RS in under 5 minutes! This guide will walk you
 
 ## ⚠️ **Important: Choose Your Approach**
 
-**For Production Applications**: Use `tailwind-rs-postcss` for full Tailwind CSS compatibility and no "Unknown class" errors.
+**For Production Applications**: Use **real Tailwind CSS** for full compatibility and no "Unknown class" errors.
 
 **For Simple Projects**: Use `tailwind-rs-core` for basic functionality (limited class support).
 
-## 📋 **Prerequisites**
+## 🚨 **Critical Reality Check**
 
-- Rust 1.70+ (latest stable recommended)
-- Cargo
+After extensive testing, the `tailwind-rs-*` ecosystem has **fundamental limitations**:
+
+- **Severely limited class support** - Only ~9 CSS rules generated
+- **"Unknown class" errors** - Missing critical classes like `translate-x-16`
+- **Broken PostCSS integration** - Doesn't process `@tailwind` directives
+- **Inconsistent APIs** - Different Result types across crates
+- **Missing CSS variables** - Generated CSS references undefined variables
+
+## 🎯 **Recommended Solution: Real Tailwind CSS**
+
+Instead of the `tailwind-rs-*` ecosystem, use the **official Tailwind CSS tooling**:
+
+### 1. Install Real Tailwind CSS
+```bash
+npm install -D tailwindcss
+npx tailwindcss init
+```
+
+### 2. Configure for Rust Projects
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./src/**/*.{rs,html}",
+    "./public/**/*.html",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+### 3. Build Process Integration
+```bash
+# Generate CSS with all utilities
+npx tailwindcss -i ./src/input.css -o ./public/styles.css --watch
+```
+
+### 4. Benefits of Real Tailwind CSS
+✅ **Complete Class Support**: All Tailwind utilities available  
+✅ **No Unknown Class Errors**: Every class is supported  
+✅ **Proper CSS Variables**: All theme values defined  
+✅ **Production Ready**: Battle-tested by millions of developers  
+✅ **Full Documentation**: Comprehensive guides and examples  
+✅ **Plugin Support**: Extensible with custom plugins  
+✅ **Performance**: Optimized CSS generation  
+✅ **Maintenance**: Active development and support
+
+## 🔧 **If You Must Use tailwind-rs-core**
+
+**Warning**: This approach has severe limitations and is not recommended for production.
+
+### Quick Setup (Limited Support)
+```toml
+[dependencies]
+tailwind-rs-core = "0.15.1"
+```
+
+### Basic Usage
+```rust
+use tailwind_rs_core::*;
+
+fn main() {
+    let mut generator = CssGenerator::new();
+    generator.add_class("bg-blue-500").unwrap();
+    generator.add_class("text-white").unwrap();
+    let css = generator.generate_css();
+    println!("Generated CSS: {}", css);
+}
+```
+
+### Limitations
+- ❌ **Only ~9 CSS rules generated**
+- ❌ **Missing 90%+ of Tailwind classes**
+- ❌ **"Unknown class" errors for common utilities**
+- ❌ **No responsive breakpoints**
+- ❌ **No dark mode support**
+- ❌ **No hover states**
+
+## 🚀 **Next Steps**
+
+1. **For Production**: Use real Tailwind CSS
+2. **For Learning**: Use `tailwind-rs-core` with understanding of limitations
+3. **For Migration**: Follow the migration guide to real Tailwind CSS
+
+## 📚 **Additional Resources**
+
+- [Real Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Tailwind CSS CLI](https://tailwindcss.com/docs/cli)
+- [Tailwind CSS Configuration](https://tailwindcss.com/docs/configuration)
+- [Tailwind CSS Plugins](https://tailwindcss.com/docs/plugins)
 - Your preferred Rust web framework (Leptos, Yew, or Dioxus)
 - **WASM support** (for web applications)
 

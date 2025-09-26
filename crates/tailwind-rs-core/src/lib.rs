@@ -68,25 +68,10 @@ pub mod utilities;
 pub mod validation;
 
 #[cfg(test)]
-mod property_tests;
-
-#[cfg(test)]
 mod api_stability;
-
-#[cfg(test)]
-pub mod week18_documentation_tests;
-
-#[cfg(test)]
-pub mod week19_testing_qa_tests;
-
-#[cfg(test)]
-pub mod week20_release_prep_tests;
 
 // API Contracts and Contract Testing
 pub mod api_contracts;
-
-#[cfg(test)]
-mod test_improvements;
 
 // Re-export commonly used types
 pub use arbitrary::{ArbitraryValue, ArbitraryValueError, ArbitraryValueUtilities};

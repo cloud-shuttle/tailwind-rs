@@ -462,8 +462,8 @@ mod tests {
         
         let test_case = TestCase {
             name: "test_case_1".to_string(),
-            input: Box::new("test_input"),
-            expected_output: Box::new("test_output"),
+            input: "test_input".to_string(),
+            expected_output: "test_output".to_string(),
             should_fail: false,
         };
         

@@ -97,4 +97,33 @@ node_modules/
 *.tmp
 *.temp
 test_*.toml
+
+# Tailwind-RS specific
 dist/
+*.css
+*.html
+coverage_analysis_*.html
+*.profraw
+*.profdata
+test_output/
+generated_*.css
+generated_*.html
+
+# Test artifacts
+test_results/
+benchmark_results/
+performance_*.html
+
+# Documentation build
+docs/_build/
+site/
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Editor files
+*~
+.#*
+\#*#

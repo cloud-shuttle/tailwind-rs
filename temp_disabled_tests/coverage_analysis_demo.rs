@@ -22,14 +22,14 @@ fn analyze_footer_coverage() -> CoverageReport {
     let mut working_classes = Vec::new();
     let mut broken_classes = Vec::new();
     
-    for class in footer_classes {
+    for class in &footer_classes {
         match generator.add_class(class) {
             Ok(_) => {
-                working_classes.push(class);
+                working_classes.push(class.to_string());
                 report.add_working_class(class);
             },
             Err(_) => {
-                broken_classes.push(class);
+                broken_classes.push(class.to_string());
                 report.add_broken_class(class);
             }
         }
@@ -62,14 +62,14 @@ fn analyze_article_layout_coverage() -> CoverageReport {
     let mut working_classes = Vec::new();
     let mut broken_classes = Vec::new();
     
-    for class in article_classes {
+    for class in &article_classes {
         match generator.add_class(class) {
             Ok(_) => {
-                working_classes.push(class);
+                working_classes.push(class.to_string());
                 report.add_working_class(class);
             },
             Err(_) => {
-                broken_classes.push(class);
+                broken_classes.push(class.to_string());
                 report.add_broken_class(class);
             }
         }
@@ -348,7 +348,7 @@ pub fn CoverageCard(
                                 </span>
                             }
                         } else {
-                            view! { }
+                            view! { <span></span> }
                         }}
                     </div>
                 </div>
@@ -371,7 +371,7 @@ pub fn CoverageCard(
                                 </span>
                             }
                         } else {
-                            view! { }
+                            view! { <span></span> }
                         }}
                     </div>
                 </div>

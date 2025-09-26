@@ -123,6 +123,23 @@ impl MaskUtilitiesParser {
                     }
                 }
                 
+                // Axis-specific "to" masks
+                if class.starts_with("mask-x-to-") {
+                    if let Some(value) = class.strip_prefix("mask-x-to-") {
+                        if let Some(properties) = self.parse_axis_mask_to_value("x", value) {
+                            return Some(properties);
+                        }
+                    }
+                }
+                
+                if class.starts_with("mask-y-to-") {
+                    if let Some(value) = class.strip_prefix("mask-y-to-") {
+                        if let Some(properties) = self.parse_axis_mask_to_value("y", value) {
+                            return Some(properties);
+                        }
+                    }
+                }
+                
                 // Radial masks
                 if class.starts_with("mask-radial-from-") {
                     if let Some(value) = class.strip_prefix("mask-radial-from-") {
@@ -132,10 +149,37 @@ impl MaskUtilitiesParser {
                     }
                 }
                 
+                // Radial "to" masks
+                if class.starts_with("mask-radial-to-") {
+                    if let Some(value) = class.strip_prefix("mask-radial-to-") {
+                        if let Some(properties) = self.parse_radial_mask_to_value(value) {
+                            return Some(properties);
+                        }
+                    }
+                }
+                
                 // Conic masks
                 if class.starts_with("mask-conic-from-") {
                     if let Some(value) = class.strip_prefix("mask-conic-from-") {
                         if let Some(properties) = self.parse_conic_mask_value(value) {
+                            return Some(properties);
+                        }
+                    }
+                }
+                
+                // Conic "to" masks
+                if class.starts_with("mask-conic-to-") {
+                    if let Some(value) = class.strip_prefix("mask-conic-to-") {
+                        if let Some(properties) = self.parse_conic_mask_to_value(value) {
+                            return Some(properties);
+                        }
+                    }
+                }
+                
+                // Conic angle masks
+                if class.starts_with("mask-conic-") {
+                    if let Some(angle) = class.strip_prefix("mask-conic-") {
+                        if let Some(properties) = self.parse_conic_angle_value(angle) {
                             return Some(properties);
                         }
                     }
@@ -406,6 +450,91 @@ impl MaskUtilitiesParser {
         
         None
     }
+
+    /// Parse axis mask "to" value
+    fn parse_axis_mask_to_value(&self, axis: &str, value: &str) -> Option<Vec<CssProperty>> {
+        if value.ends_with("%") {
+            let percentage = value.trim_end_matches('%');
+            if let Ok(_) = percentage.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "mask-image".to_string(),
+                    value: format!("linear-gradient(to {}, transparent, black {})", axis, value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Ok(_) = value.parse::<f32>() {
+            return Some(vec![CssProperty {
+                name: "mask-image".to_string(),
+                value: format!("linear-gradient(to {}, transparent, black calc(var(--spacing) * {}))", axis, value),
+                important: false,
+            }]);
+        }
+        
+        None
+    }
+
+    /// Parse radial mask "to" value
+    fn parse_radial_mask_to_value(&self, value: &str) -> Option<Vec<CssProperty>> {
+        if value.ends_with("%") {
+            let percentage = value.trim_end_matches('%');
+            if let Ok(_) = percentage.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "mask-image".to_string(),
+                    value: format!("radial-gradient(circle, transparent, black {})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Ok(_) = value.parse::<f32>() {
+            return Some(vec![CssProperty {
+                name: "mask-image".to_string(),
+                value: format!("radial-gradient(circle, transparent, black calc(var(--spacing) * {}))", value),
+                important: false,
+            }]);
+        }
+        
+        None
+    }
+
+    /// Parse conic mask "to" value
+    fn parse_conic_mask_to_value(&self, value: &str) -> Option<Vec<CssProperty>> {
+        if value.ends_with("%") {
+            let percentage = value.trim_end_matches('%');
+            if let Ok(_) = percentage.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "mask-image".to_string(),
+                    value: format!("conic-gradient(from 0deg, transparent, black {})", value),
+                    important: false,
+                }]);
+            }
+        }
+        
+        if let Ok(_) = value.parse::<f32>() {
+            return Some(vec![CssProperty {
+                name: "mask-image".to_string(),
+                value: format!("conic-gradient(from 0deg, transparent, black calc(var(--spacing) * {}))", value),
+                important: false,
+            }]);
+        }
+        
+        None
+    }
+
+    /// Parse conic angle value
+    fn parse_conic_angle_value(&self, angle: &str) -> Option<Vec<CssProperty>> {
+        if let Ok(angle_deg) = angle.parse::<f32>() {
+            return Some(vec![CssProperty {
+                name: "mask-image".to_string(),
+                value: format!("conic-gradient(from {}deg, black, transparent)", angle_deg),
+                important: false,
+            }]);
+        }
+        
+        None
+    }
 }
 
 impl UtilityParser for MaskUtilitiesParser {
@@ -454,7 +583,8 @@ impl UtilityParser for MaskUtilitiesParser {
         vec![
             "mask-*", "mask-image-*", "mask-mode-*", "mask-origin-*", "mask-position-*",
             "mask-repeat-*", "mask-size-*", "mask-type-*", "mask-linear-*", "mask-radial-*",
-            "mask-conic-*", "mask-t-*", "mask-r-*", "mask-b-*", "mask-l-*", "mask-x-*", "mask-y-*"
+            "mask-conic-*", "mask-t-*", "mask-r-*", "mask-b-*", "mask-l-*", "mask-x-*", "mask-y-*",
+            "mask-x-to-*", "mask-y-to-*", "mask-radial-to-*", "mask-conic-to-*"
         ]
     }
 

@@ -1,7 +1,7 @@
 //! Grid gap utilities for tailwind-rs
 
 use crate::classes::ClassBuilder;
-use crate::utilities::spacing::SpacingValue;
+use crate::utilities::spacing_module::SpacingValue;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 

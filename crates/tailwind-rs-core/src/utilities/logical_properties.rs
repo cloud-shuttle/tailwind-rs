@@ -4,7 +4,7 @@
 //! It includes inline-start and inline-end properties for better internationalization support.
 
 use crate::classes::ClassBuilder;
-use crate::utilities::spacing::SpacingValue;
+use crate::utilities::spacing_module::SpacingValue;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
@@ -220,7 +220,7 @@ impl LogicalPropertiesConvenience for ClassBuilder {
 mod tests {
     use super::*;
     use crate::classes::ClassBuilder;
-    use crate::utilities::spacing::SpacingValue;
+    use crate::utilities::spacing_module::SpacingValue;
 
     #[test]
     fn test_logical_direction_enum_values() {

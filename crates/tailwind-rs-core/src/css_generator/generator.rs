@@ -18,7 +18,7 @@ use super::parsers::{
     ObjectFitParser, OrderParser, OverflowParser, OverscrollParser, PlaceContentParser,
     PlaceItemsParser, PlaceSelfParser, PositionParser, PositioningParser, ProseParser, RingParser,
     ShadowParser, SizingParser, SpacingParser, SvgParser, TableParser, TransformParser,
-    TransitionParser, TransitionPropertiesParser, TypographyParser, VisibilityParser, ZIndexParser,
+    BasicTransformsParser, ScaleParser, TransitionParser, TransitionPropertiesParser, TypographyParser, VisibilityParser, ZIndexParser,
 };
 use super::types::{CssGenerationConfig, CssProperty, CssRule};
 use super::variants::VariantParser;
@@ -87,6 +87,10 @@ pub struct CssGenerator {
     pub object_fit_parser: ObjectFitParser,
     /// Transform parser
     pub transform_parser: TransformParser,
+    /// Basic transforms parser
+    pub basic_transforms_parser: BasicTransformsParser,
+    /// Scale parser
+    pub scale_parser: ScaleParser,
     /// Arbitrary values parser
     pub arbitrary_parser: ArbitraryParser,
     /// Data attributes parser

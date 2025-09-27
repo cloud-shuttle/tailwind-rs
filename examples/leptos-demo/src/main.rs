@@ -1,0 +1,237 @@
+//! Tailwind-RS Leptos Demo Application
+//!
+//! This demo showcases the integration of Tailwind-RS with Leptos,
+//! demonstrating various Tailwind CSS classes and components.
+
+use leptos::*;
+use tailwind_rs_leptos::*;
+
+#[component]
+fn Header() -> impl IntoView {
+    view! {
+        <header class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            "Tailwind-RS Demo"
+                        </h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            "Home"
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            "About"
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            "Contact"
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+    }
+}
+
+#[component]
+fn Hero() -> impl IntoView {
+    view! {
+        <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                <div class="text-center">
+                    <h2 class="text-4xl font-extrabold sm:text-5xl md:text-6xl">
+                        "Welcome to Tailwind-RS"
+                    </h2>
+                    <p class="mt-3 max-w-md mx-auto text-base sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                        "A production-ready Rust implementation of Tailwind CSS with full framework integration."
+                    </p>
+                    <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+                        <div class="rounded-md shadow">
+                            <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                                "Get Started"
+                            </a>
+                        </div>
+                        <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                            <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-400 md:py-4 md:text-lg md:px-10">
+                                "Learn More"
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+#[component]
+fn FeatureCard(title: &'static str, description: &'static str, icon: &'static str) -> impl IntoView {
+    view! {
+        <div class="bg-white overflow-hidden shadow-lg rounded-lg">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                            <span class="text-white font-bold">{icon}</span>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">{title}</h3>
+                    </div>
+                </div>
+                <p class="mt-2 text-gray-600">{description}</p>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn Features() -> impl IntoView {
+    view! {
+        <section class="py-12 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900">
+                        "Key Features"
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600">
+                        "Tailwind-RS provides everything you need for modern web development."
+                    </p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    <FeatureCard
+                        title="Framework Integration"
+                        description="Full support for Leptos, Yew, and Dioxus with zero overhead."
+                        icon="🚀"
+                    />
+                    <FeatureCard
+                        title="Performance Optimized"
+                        description="Built for speed with advanced optimization strategies."
+                        icon="⚡"
+                    />
+                    <FeatureCard
+                        title="Type Safe"
+                        description="Compile-time safety with Rust's type system."
+                        icon="🛡️"
+                    />
+                    <FeatureCard
+                        title="Production Ready"
+                        description="Battle-tested in production environments."
+                        icon="🏭"
+                    />
+                    <FeatureCard
+                        title="Modern CSS"
+                        description="Full Tailwind CSS class support with new parsers."
+                        icon="🎨"
+                    />
+                    <FeatureCard
+                        title="Developer Experience"
+                        description="Excellent tooling and documentation."
+                        icon="👨‍💻"
+                    />
+                </div>
+            </div>
+        </section>
+    }
+}
+
+#[component]
+fn InteractiveDemo() -> impl IntoView {
+    let (count, set_count) = create_signal(0);
+    let (is_hovered, set_hovered) = create_signal(false);
+    
+    view! {
+        <section class="py-12 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900">
+                        "Interactive Demo"
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600">
+                        "Try out the interactive features powered by Tailwind-RS and Leptos."
+                    </p>
+                </div>
+                <div class="mt-12 flex justify-center">
+                    <div class="bg-gray-50 rounded-lg p-8 max-w-md w-full">
+                        <div class="text-center">
+                            <div class="text-6xl font-bold text-blue-600 mb-4">
+                                {move || count.get()}
+                            </div>
+                            <button
+                                class=move || {
+                                    if is_hovered.get() {
+                                        "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 transform scale-105"
+                                    } else {
+                                        "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+                                    }
+                                }
+                                on:click=move |_| set_count.update(|c| *c += 1)
+                                on:mouseenter=move |_| set_hovered.set(true)
+                                on:mouseleave=move |_| set_hovered.set(false)
+                            >
+                                "Click me!"
+                            </button>
+                            <p class="mt-4 text-sm text-gray-600">
+                                "This button uses Tailwind-RS classes for styling and Leptos for reactivity."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+#[component]
+fn Footer() -> impl IntoView {
+    view! {
+        <footer class="bg-gray-800 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">"Tailwind-RS"</h3>
+                        <p class="text-gray-400">
+                            "A production-ready Rust implementation of Tailwind CSS."
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">"Links"</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white">"Documentation"</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">"GitHub"</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">"Examples"</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">"Community"</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white">"Discord"</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">"Twitter"</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">"Reddit"</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                    <p>"© 2025 Tailwind-RS. Built with Rust and Leptos."</p>
+                </div>
+            </div>
+        </footer>
+    }
+}
+
+#[component]
+fn App() -> impl IntoView {
+    view! {
+        <div class="min-h-screen bg-gray-50">
+            <Header />
+            <Hero />
+            <Features />
+            <InteractiveDemo />
+            <Footer />
+        </div>
+    }
+}
+
+fn main() {
+    leptos::mount_to_body(App)
+}

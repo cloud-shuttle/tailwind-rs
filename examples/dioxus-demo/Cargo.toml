@@ -1,0 +1,8 @@
+[package]
+name = "tailwind-rs-dioxus-demo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tailwind-rs-dioxus = "0.15.4"
+dioxus = "0.4"

@@ -1,0 +1,8 @@
+[package]
+name = "tailwind-rs-yew-demo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tailwind-rs-yew = "0.15.4"
+yew = "0.21"

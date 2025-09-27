@@ -38,6 +38,7 @@
 
 pub mod class_generator;
 pub mod components;
+pub mod integration_tests;
 pub mod props;
 pub mod utils;
 

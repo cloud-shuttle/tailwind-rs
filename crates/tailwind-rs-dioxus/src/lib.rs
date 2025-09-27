@@ -19,6 +19,7 @@
 
 pub mod class_builder;
 pub mod utils;
+pub mod integration_tests;
 
 pub use class_builder::*;
 pub use utils::*;

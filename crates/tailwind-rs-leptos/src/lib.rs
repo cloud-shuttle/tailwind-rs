@@ -36,6 +36,7 @@
 pub mod components;
 pub mod dynamic_class_builder;
 pub mod e2e_tests;
+pub mod integration_tests;
 pub mod performance_tests;
 pub mod signal_manager;
 pub mod test_utils;

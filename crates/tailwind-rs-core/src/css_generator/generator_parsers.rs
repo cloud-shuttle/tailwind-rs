@@ -78,6 +78,15 @@ impl CssGeneratorParsers for super::CssGenerator {
             return Ok(properties);
         }
 
+        // Try the new transform parsers
+        if let Some(properties) = self.basic_transforms_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+
+        if let Some(properties) = self.scale_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+
         if let Some(properties) = self.margin_parser.parse_class(&base_class) {
             return Ok(properties);
         }

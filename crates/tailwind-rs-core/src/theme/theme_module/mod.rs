@@ -22,3 +22,19 @@ pub use theme_config::*;
 pub use theme_manager::*;
 pub use theme_builder::*;
 pub use theme_validator::*;
+
+// Core theme types for backward compatibility
+pub type Theme = ThemeConfig;
+pub type ThemeValue = serde_json::Value;
+
+// Re-export utilities types for compatibility
+pub use spacing::{Spacing, SpacingValue};
+pub use color::{BorderRadius, BoxShadow};
+
+// Additional compatibility types
+pub type ThemeToml = ThemeConfig;
+
+/// Create a default theme configuration
+pub fn create_default_theme() -> ThemeConfig {
+    ThemeConfig::default()
+}

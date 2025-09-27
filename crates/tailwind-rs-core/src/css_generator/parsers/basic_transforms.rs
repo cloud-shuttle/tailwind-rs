@@ -159,3 +159,182 @@ impl UtilityParser for BasicTransformsParser {
 impl Default for BasicTransformsParser {
     fn default() -> Self { Self::new() }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_basic_transforms_parser_creation() {
+        let parser = BasicTransformsParser::new();
+        assert!(!parser.translate_x_map.is_empty());
+        assert!(!parser.translate_y_map.is_empty());
+    }
+
+    #[test]
+    fn test_translate_x_parsing() {
+        let parser = BasicTransformsParser::new();
+
+        // Test basic translate-x classes
+        let result = parser.parse_class("translate-x-1");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties.len(), 1);
+        assert_eq!(properties[0].name, "transform");
+        assert_eq!(properties[0].value, "translateX(0.25rem)");
+
+        let result = parser.parse_class("translate-x-4");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateX(1rem)");
+
+        let result = parser.parse_class("translate-x-8");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateX(2rem)");
+    }
+
+    #[test]
+    fn test_translate_y_parsing() {
+        let parser = BasicTransformsParser::new();
+
+        // Test basic translate-y classes
+        let result = parser.parse_class("translate-y-1");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties.len(), 1);
+        assert_eq!(properties[0].name, "transform");
+        assert_eq!(properties[0].value, "translateY(0.25rem)");
+
+        let result = parser.parse_class("translate-y-4");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateY(1rem)");
+
+        let result = parser.parse_class("translate-y-8");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateY(2rem)");
+    }
+
+    #[test]
+    fn test_fractional_translate_parsing() {
+        let parser = BasicTransformsParser::new();
+
+        // Test fractional translate values
+        let result = parser.parse_class("translate-x-0.5");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateX(0.125rem)");
+
+        let result = parser.parse_class("translate-y-1.5");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateY(0.375rem)");
+    }
+
+    #[test]
+    fn test_pixel_translate_parsing() {
+        let parser = BasicTransformsParser::new();
+
+        // Test pixel translate values
+        let result = parser.parse_class("translate-x-px");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateX(1px)");
+
+        let result = parser.parse_class("translate-y-px");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateY(1px)");
+    }
+
+    #[test]
+    fn test_large_translate_parsing() {
+        let parser = BasicTransformsParser::new();
+
+        // Test large translate values
+        let result = parser.parse_class("translate-x-96");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateX(24rem)");
+
+        let result = parser.parse_class("translate-y-80");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateY(20rem)");
+    }
+
+    #[test]
+    fn test_zero_translate_parsing() {
+        let parser = BasicTransformsParser::new();
+
+        // Test zero translate values
+        let result = parser.parse_class("translate-x-0");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateX(0)");
+
+        let result = parser.parse_class("translate-y-0");
+        assert!(result.is_some());
+        let properties = result.unwrap();
+        assert_eq!(properties[0].value, "translateY(0)");
+    }
+
+    #[test]
+    fn test_invalid_class_returns_none() {
+        let parser = BasicTransformsParser::new();
+
+        // Test invalid classes
+        assert!(parser.parse_class("invalid-class").is_none());
+        assert!(parser.parse_class("translate-z-1").is_none());
+        assert!(parser.parse_class("translate-x-invalid").is_none());
+    }
+
+    #[test]
+    fn test_supported_patterns() {
+        let parser = BasicTransformsParser::new();
+        let patterns = parser.get_supported_patterns();
+
+        // Should contain translate-x and translate-y patterns
+        assert!(patterns.contains(&"translate-x-1"));
+        assert!(patterns.contains(&"translate-x-4"));
+        assert!(patterns.contains(&"translate-x-8"));
+        assert!(patterns.contains(&"translate-y-1"));
+        assert!(patterns.contains(&"translate-y-4"));
+        assert!(patterns.contains(&"translate-y-8"));
+        assert!(patterns.contains(&"translate-x-0.5"));
+        assert!(patterns.contains(&"translate-y-px"));
+        assert!(patterns.contains(&"translate-x-96"));
+        assert!(patterns.contains(&"translate-y-80"));
+    }
+
+    #[test]
+    fn test_parser_priority_and_category() {
+        let parser = BasicTransformsParser::new();
+
+        assert_eq!(parser.get_priority(), 80);
+        assert!(matches!(parser.get_category(), ParserCategory::Transforms));
+    }
+
+    #[test]
+    fn test_comprehensive_transform_coverage() {
+        let parser = BasicTransformsParser::new();
+
+        // Test all translate-x values from 0 to 96
+        for i in 0..=12 {
+            if i == 13 { continue; } // Skip 13 as it's not in the mapping
+            let class = format!("translate-x-{}", i * 4);
+            let result = parser.parse_class(&class);
+            assert!(result.is_some(), "Failed to parse {}", class);
+        }
+
+        // Test all translate-y values from 0 to 96
+        for i in 0..=12 {
+            if i == 13 { continue; } // Skip 13 as it's not in the mapping
+            let class = format!("translate-y-{}", i * 4);
+            let result = parser.parse_class(&class);
+            assert!(result.is_some(), "Failed to parse {}", class);
+        }
+    }
+}

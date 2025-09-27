@@ -84,4 +84,51 @@ impl ThemeConfig {
     pub fn custom_variables(&self) -> &HashMap<String, String> {
         &self.custom_variables
     }
+
+    /// Validate the theme configuration
+    pub fn validate(&self) -> crate::error::Result<()> {
+        // Validate theme name
+        if self.name.is_empty() {
+            return Err(crate::error::TailwindError::Theme {
+                message: "Theme name cannot be empty".to_string()
+            });
+        }
+
+        // Validate color palettes
+        for palette in &self.color_palettes {
+            if palette.name.is_empty() {
+                return Err(crate::error::TailwindError::Theme {
+                    message: "Color palette name cannot be empty".to_string()
+                });
+            }
+            if palette.colors.is_empty() {
+                return Err(crate::error::TailwindError::Theme {
+                    message: format!("Color palette '{}' is empty", palette.name)
+                });
+            }
+        }
+
+        // Validate spacing scale
+        if self.spacing.values().is_empty() {
+            return Err(crate::error::TailwindError::Theme {
+                message: "Spacing scale cannot be empty".to_string()
+            });
+        }
+
+        // Validate typography scale
+        if self.typography.font_sizes.is_empty() {
+            return Err(crate::error::TailwindError::Theme {
+                message: "Typography scale cannot be empty".to_string()
+            });
+        }
+
+        // Validate breakpoints
+        if self.breakpoints.breakpoints.is_empty() {
+            return Err(crate::error::TailwindError::Theme {
+                message: "Breakpoint system cannot be empty".to_string()
+            });
+        }
+
+        Ok(())
+    }
 }

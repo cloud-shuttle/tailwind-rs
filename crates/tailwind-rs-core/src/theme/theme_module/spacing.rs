@@ -58,6 +58,9 @@ impl SpacingValue {
     }
 }
 
+/// Spacing definition for backward compatibility
+pub type Spacing = SpacingValue;
+
 /// Spacing scale definition
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SpacingScale {

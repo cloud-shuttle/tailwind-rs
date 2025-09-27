@@ -15,6 +15,7 @@ pub mod grid;
 pub mod grid_advanced;
 pub mod borders;
 pub mod borders_advanced;
+pub mod border_radius_parser;
 pub mod rings;
 pub mod shadows;
 pub mod svg;

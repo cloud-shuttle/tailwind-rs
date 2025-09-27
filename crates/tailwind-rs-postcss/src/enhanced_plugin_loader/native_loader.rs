@@ -3,7 +3,8 @@
 //! This module provides native plugin loading functionality.
 
 use std::collections::HashMap;
-use crate::enhanced_plugin_loader::{PluginConfig, PluginInstance, PluginError};
+use crate::error::PostCSSError;
+use super::core::{PluginConfig, PluginInstance};
 
 /// Native plugin loader
 pub struct NativePluginLoader {
@@ -17,7 +18,7 @@ impl NativePluginLoader {
         }
     }
 
-    pub fn load_plugin(&mut self, name: &str, config: &PluginConfig) -> Result<PluginInstance, PluginError> {
+    pub fn load_plugin(&mut self, name: &str, config: &PluginConfig) -> Result<PluginInstance, PostCSSError> {
         // Check if plugin is already loaded
         if let Some(plugin) = self.plugins.get(name) {
             return Ok(plugin.clone());
@@ -27,7 +28,7 @@ impl NativePluginLoader {
         let plugin = PluginInstance::new(
             name.to_string(),
             config.version.clone().unwrap_or_else(|| "1.0.0".to_string()),
-            crate::enhanced_plugin_loader::PluginType::Native,
+            super::core::PluginType::Native,
             config.clone(),
         );
 

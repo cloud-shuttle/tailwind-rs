@@ -3,7 +3,8 @@
 //! This module provides plugin configuration management functionality.
 
 use std::collections::HashMap;
-use crate::enhanced_plugin_loader::{PluginConfig, PluginError};
+use crate::error::PostCSSError;
+use super::core::PluginConfig;
 
 /// Plugin config manager
 pub struct PluginConfigManager {

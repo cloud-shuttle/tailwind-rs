@@ -11,7 +11,9 @@ pub mod prefix_cache;
 pub mod config;
 pub mod errors;
 
-pub use core::Autoprefixer;
+pub use core::{
+    Autoprefixer, PrefixOptions, PrefixResult, PrefixStatistics
+};
 pub use browser_data::BrowserData;
 pub use caniuse_data::CanIUseData;
 pub use prefix_generator::PrefixGenerator;

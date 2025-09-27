@@ -60,13 +60,15 @@ pub use advanced_features::{
 };
 pub use ast::{CSSAtRule, CSSDeclaration, CSSNode, CSSRule};
 pub use autoprefixer::{
-    Autoprefixer, AutoprefixerConfig, PrefixOptions, PrefixResult, PrefixStatistics,
+    Autoprefixer, AutoprefixerConfig,
 };
+pub use autoprefixer::core::{PrefixOptions, PrefixResult, PrefixStatistics};
 pub use css_optimizer::{
     CSSOptimizer, OptimizationConfig, OptimizationMetrics, OptimizationResult,
 };
 pub use engine::{PostCSSConfig, PostCSSEngine, ProcessedCSS};
-pub use enhanced_plugin_loader::{EnhancedPluginLoader, PluginInstance, PluginMetrics};
+pub use enhanced_plugin_loader::{EnhancedPluginLoader};
+pub use enhanced_plugin_loader::core::{PluginInstance, PluginMetrics};
 pub use error::{PostCSSError, Result};
 pub use import_processor::{
     ImportConfig, ImportOptions, ImportProcessor, ImportResult, ImportStatistics,

@@ -3,7 +3,7 @@
 //! This module provides plugin caching functionality.
 
 use std::collections::HashMap;
-use crate::enhanced_plugin_loader::{PluginInstance, PluginConfig};
+use super::core::{PluginInstance, PluginConfig};
 
 /// Plugin cache
 pub struct PluginCache {

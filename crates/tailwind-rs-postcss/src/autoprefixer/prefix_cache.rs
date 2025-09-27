@@ -26,7 +26,7 @@ impl PrefixCache {
         self.property_cache.insert(property, prefixes);
     }
 
-    pub fn get_cached_css(&self, css: &str) -> Option<&String> {
+    pub fn get_cached_css(&self, css: &str) -> Option<&Vec<String>> {
         self.property_cache.get(css)
     }
 

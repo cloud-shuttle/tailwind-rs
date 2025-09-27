@@ -4,9 +4,10 @@
 
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
+use crate::error::PostCSSError;
 use crate::enhanced_plugin_loader::{
-    NPMPluginLoader, NativePluginLoader, PluginRegistry, PluginConfigManager,
-    PluginPerformanceMonitor, PluginCache, PluginError, PluginInstance, PluginConfig
+    npm_loader::NPMPluginLoader, native_loader::NativePluginLoader, plugin_registry::PluginRegistry,
+    config_manager::PluginConfigManager, plugin_cache::PluginCache
 };
 
 /// Enhanced plugin loader with NPM and native plugin support
@@ -37,7 +38,7 @@ impl EnhancedPluginLoader {
         &mut self,
         plugin_name: &str,
         config: &PluginConfig,
-    ) -> Result<PluginInstance, PluginError> {
+    ) -> Result<PluginInstance, PostCSSError> {
         let start_time = Instant::now();
 
         // Check cache first
@@ -66,7 +67,7 @@ impl EnhancedPluginLoader {
         &mut self,
         plugin_name: &str,
         config: &PluginConfig,
-    ) -> Result<PluginInstance, PluginError> {
+    ) -> Result<PluginInstance, PostCSSError> {
         let start_time = Instant::now();
 
         // Check cache first
@@ -96,7 +97,7 @@ impl EnhancedPluginLoader {
         plugin: &PluginInstance,
         input: &str,
         options: &PluginOptions,
-    ) -> Result<String, PluginError> {
+    ) -> Result<String, PostCSSError> {
         let start_time = Instant::now();
 
         // Execute plugin
@@ -131,6 +132,7 @@ impl EnhancedPluginLoader {
 }
 
 /// Plugin instance
+#[derive(Clone)]
 pub struct PluginInstance {
     name: String,
     version: String,
@@ -160,7 +162,7 @@ impl PluginInstance {
         &self.plugin_type
     }
 
-    pub fn execute(&self, input: &str, options: &PluginOptions) -> Result<String, PluginError> {
+    pub fn execute(&self, input: &str, options: &PluginOptions) -> Result<String, PostCSSError> {
         match self.plugin_type {
             PluginType::NPM => {
                 // Execute NPM plugin
@@ -182,6 +184,7 @@ pub enum PluginType {
 }
 
 /// Plugin configuration
+#[derive(Clone)]
 pub struct PluginConfig {
     pub version: Option<String>,
     pub options: HashMap<String, serde_json::Value>,
@@ -194,6 +197,48 @@ impl PluginConfig {
             version: None,
             options: HashMap::new(),
             dependencies: Vec::new(),
+        }
+    }
+}
+
+/// Plugin performance monitor
+pub struct PluginPerformanceMonitor {
+    pub metrics: HashMap<String, PluginMetrics>,
+}
+
+impl PluginPerformanceMonitor {
+    pub fn new() -> Self {
+        Self {
+            metrics: HashMap::new(),
+        }
+    }
+
+    pub fn record_load_time(&mut self, plugin_name: &str, duration: Duration) {
+        let metrics = self.metrics.entry(plugin_name.to_string()).or_insert(PluginMetrics::new());
+        metrics.load_time = duration;
+    }
+
+    pub fn record_execution_time(&mut self, plugin_name: &str, duration: Duration) {
+        let metrics = self.metrics.entry(plugin_name.to_string()).or_insert(PluginMetrics::new());
+        metrics.execution_time = duration;
+    }
+}
+
+/// Plugin performance metrics
+pub struct PluginMetrics {
+    pub load_time: Duration,
+    pub execution_time: Duration,
+    pub memory_usage: usize,
+    pub error_count: usize,
+}
+
+impl PluginMetrics {
+    pub fn new() -> Self {
+        Self {
+            load_time: Duration::new(0, 0),
+            execution_time: Duration::new(0, 0),
+            memory_usage: 0,
+            error_count: 0,
         }
     }
 }

@@ -3,7 +3,7 @@
 //! This module provides CanIUse compatibility data for autoprefixer functionality.
 
 use std::collections::HashMap;
-use crate::autoprefixer::SupportLevel;
+use crate::autoprefixer::browser_data::SupportLevel;
 
 /// CanIUse data for compatibility checking
 pub struct CanIUseData {

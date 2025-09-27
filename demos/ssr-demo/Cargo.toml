@@ -32,4 +32,4 @@ tracing-subscriber = "0.3"
 
 
 [dev-dependencies]
-cargo-watch = "8.0"
+# cargo-watch is inherited from workspace

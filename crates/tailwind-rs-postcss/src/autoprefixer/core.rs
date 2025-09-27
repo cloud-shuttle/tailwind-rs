@@ -5,8 +5,7 @@
 use regex::Regex;
 use std::collections::HashMap;
 use crate::autoprefixer::{
-    BrowserData, CanIUseData, AutoprefixerConfig, PrefixCache, AutoprefixerError,
-    PrefixOptions, PrefixResult, PrefixStatistics
+    BrowserData, CanIUseData, AutoprefixerConfig, PrefixCache, AutoprefixerError
 };
 
 /// Main autoprefixer for adding vendor prefixes to CSS properties
@@ -369,3 +368,4 @@ pub struct PrefixStatistics {
     pub properties_processed: usize,
     pub processing_time_ms: usize,
 }
+

@@ -2,6 +2,8 @@
 //!
 //! This module provides prefix generation functionality for autoprefixer.
 
+use std::collections::HashMap;
+
 /// Prefix generator for CSS properties
 pub struct PrefixGenerator {
     prefixes: HashMap<String, Vec<String>>,

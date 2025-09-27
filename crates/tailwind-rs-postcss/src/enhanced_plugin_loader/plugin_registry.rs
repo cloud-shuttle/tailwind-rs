@@ -3,7 +3,8 @@
 //! This module provides plugin registry functionality.
 
 use std::collections::HashMap;
-use crate::enhanced_plugin_loader::{PluginConfig, PluginInstance, PluginError};
+use crate::error::PostCSSError;
+use super::core::{PluginConfig, PluginInstance};
 
 /// Plugin registry
 pub struct PluginRegistry {

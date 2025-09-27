@@ -3,7 +3,8 @@
 //! This module provides NPM plugin loading functionality.
 
 use std::collections::HashMap;
-use crate::enhanced_plugin_loader::{PluginConfig, PluginInstance, PluginError};
+use crate::error::PostCSSError;
+use super::core::{PluginConfig, PluginInstance};
 
 /// NPM plugin loader
 pub struct NPMPluginLoader {
@@ -19,7 +20,7 @@ impl NPMPluginLoader {
         }
     }
 
-    pub fn load_plugin(&mut self, name: &str, config: &PluginConfig) -> Result<PluginInstance, PluginError> {
+    pub fn load_plugin(&mut self, name: &str, config: &PluginConfig) -> Result<PluginInstance, PostCSSError> {
         // Check cache first
         if let Some(plugin) = self.cache.get(name) {
             return Ok(plugin.clone());
@@ -29,7 +30,7 @@ impl NPMPluginLoader {
         let plugin = PluginInstance::new(
             name.to_string(),
             config.version.clone().unwrap_or_else(|| "latest".to_string()),
-            crate::enhanced_plugin_loader::PluginType::NPM,
+            super::core::PluginType::NPM,
             config.clone(),
         );
 

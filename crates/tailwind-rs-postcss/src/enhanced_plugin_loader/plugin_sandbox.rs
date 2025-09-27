@@ -2,7 +2,8 @@
 //!
 //! This module provides plugin sandboxing functionality.
 
-use crate::enhanced_plugin_loader::{PluginInstance, PluginError};
+use crate::error::PostCSSError;
+use super::core::PluginInstance;
 
 /// Plugin sandbox
 pub struct PluginSandbox {
@@ -16,7 +17,7 @@ impl PluginSandbox {
         }
     }
 
-    pub fn execute_sandboxed(&self, plugin: &PluginInstance, input: &str) -> Result<String, PluginError> {
+    pub fn execute_sandboxed(&self, plugin: &PluginInstance, input: &str) -> Result<String, PostCSSError> {
         // Execute plugin in sandbox
         Ok(format!("Sandboxed execution: {}", input))
     }

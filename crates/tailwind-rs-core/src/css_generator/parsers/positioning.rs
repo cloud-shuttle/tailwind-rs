@@ -184,11 +184,7 @@ impl PositioningParser {
             // Negative values
             s if s.starts_with('-') => {
                 let positive_value = &s[1..];
-                if let Some(css_value) = self.parse_spacing_value(positive_value) {
-                    Some(format!("-{}", css_value))
-                } else {
-                    None
-                }
+                self.parse_spacing_value(positive_value).map(|css_value| format!("-{}", css_value))
             },
             _ => None,
         }

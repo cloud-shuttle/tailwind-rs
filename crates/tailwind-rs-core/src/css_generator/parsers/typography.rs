@@ -9,6 +9,12 @@ use crate::css_generator::types::CssProperty;
 #[derive(Debug, Clone)]
 pub struct TypographyParser;
 
+impl Default for TypographyParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TypographyParser {
     pub fn new() -> Self { Self }
 
@@ -396,7 +402,7 @@ impl TypographyParser {
             _ => {
                 // Line-clamp with number
                 if let Some(value) = class.strip_prefix("line-clamp-") {
-                    if let Ok(_) = value.parse::<u32>() {
+                    if value.parse::<u32>().is_ok() {
                         return Some(vec![
                             CssProperty { name: "overflow".to_string(), value: "hidden".to_string(), important: false },
                             CssProperty { name: "display".to_string(), value: "-webkit-box".to_string(), important: false },

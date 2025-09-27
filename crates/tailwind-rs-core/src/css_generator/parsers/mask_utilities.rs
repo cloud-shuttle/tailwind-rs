@@ -5,6 +5,12 @@ use super::{UtilityParser, ParserCategory};
 #[derive(Debug, Clone)]
 pub struct MaskUtilitiesParser;
 
+impl Default for MaskUtilitiesParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl MaskUtilitiesParser {
     /// Create a new MaskUtilitiesParser
     pub fn new() -> Self {
@@ -41,7 +47,7 @@ impl MaskUtilitiesParser {
                 // Linear gradient masks
                 if class.starts_with("mask-linear-") {
                     if let Some(angle) = class.strip_prefix("mask-linear-") {
-                        if let Ok(_) = angle.parse::<f32>() {
+                        if angle.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "mask-image".to_string(),
                                 value: format!("linear-gradient({}deg, black var(--tw-mask-linear-from)), transparent var(--tw-mask-linear-to))", angle),
@@ -54,7 +60,7 @@ impl MaskUtilitiesParser {
                 // Negative linear gradient masks
                 if class.starts_with("-mask-linear-") {
                     if let Some(angle) = class.strip_prefix("-mask-linear-") {
-                        if let Ok(_) = angle.parse::<f32>() {
+                        if angle.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "mask-image".to_string(),
                                 value: format!("linear-gradient(calc({}deg * -1), black var(--tw-mask-linear-from)), transparent var(--tw-mask-linear-to))", angle),
@@ -313,7 +319,7 @@ impl MaskUtilitiesParser {
     fn parse_linear_from_value(&self, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("linear-gradient(var(--tw-mask-linear-position), black {}, transparent var(--tw-mask-linear-to))", value),
@@ -322,7 +328,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("linear-gradient(var(--tw-mask-linear-position), black calc(var(--spacing) * {}), transparent var(--tw-mask-linear-to))", value),
@@ -359,7 +365,7 @@ impl MaskUtilitiesParser {
     fn parse_side_mask_value(&self, side: &str, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("linear-gradient(to {}, black {}, transparent)", side, value),
@@ -368,7 +374,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("linear-gradient(to {}, black calc(var(--spacing) * {}), transparent)", side, value),
@@ -383,7 +389,7 @@ impl MaskUtilitiesParser {
     fn parse_axis_mask_value(&self, axis: &str, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("linear-gradient(to {}, black {}, transparent)", axis, value),
@@ -392,7 +398,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("linear-gradient(to {}, black calc(var(--spacing) * {}), transparent)", axis, value),
@@ -407,7 +413,7 @@ impl MaskUtilitiesParser {
     fn parse_radial_mask_value(&self, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("radial-gradient(circle, black {}, transparent)", value),
@@ -416,7 +422,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("radial-gradient(circle, black calc(var(--spacing) * {}), transparent)", value),
@@ -431,7 +437,7 @@ impl MaskUtilitiesParser {
     fn parse_conic_mask_value(&self, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("conic-gradient(from 0deg, black {}, transparent)", value),
@@ -440,7 +446,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("conic-gradient(from 0deg, black calc(var(--spacing) * {}), transparent)", value),
@@ -455,7 +461,7 @@ impl MaskUtilitiesParser {
     fn parse_axis_mask_to_value(&self, axis: &str, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("linear-gradient(to {}, transparent, black {})", axis, value),
@@ -464,7 +470,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("linear-gradient(to {}, transparent, black calc(var(--spacing) * {}))", axis, value),
@@ -479,7 +485,7 @@ impl MaskUtilitiesParser {
     fn parse_radial_mask_to_value(&self, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("radial-gradient(circle, transparent, black {})", value),
@@ -488,7 +494,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("radial-gradient(circle, transparent, black calc(var(--spacing) * {}))", value),
@@ -503,7 +509,7 @@ impl MaskUtilitiesParser {
     fn parse_conic_mask_to_value(&self, value: &str) -> Option<Vec<CssProperty>> {
         if value.ends_with("%") {
             let percentage = value.trim_end_matches('%');
-            if let Ok(_) = percentage.parse::<f32>() {
+            if percentage.parse::<f32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "mask-image".to_string(),
                     value: format!("conic-gradient(from 0deg, transparent, black {})", value),
@@ -512,7 +518,7 @@ impl MaskUtilitiesParser {
             }
         }
         
-        if let Ok(_) = value.parse::<f32>() {
+        if value.parse::<f32>().is_ok() {
             return Some(vec![CssProperty {
                 name: "mask-image".to_string(),
                 value: format!("conic-gradient(from 0deg, transparent, black calc(var(--spacing) * {}))", value),

@@ -132,7 +132,7 @@ impl TextShadowUtilities for ClassBuilder {
     }
 
     fn text_shadow_custom(self, shadow: TextShadow) -> Self {
-        self.class(&shadow.to_class_name())
+        self.class(shadow.to_class_name())
     }
 }
 

@@ -109,11 +109,6 @@ impl ApiContract for ClassBuilderContract {
                 | Breakpoint::Lg
                 | Breakpoint::Xl
                 | Breakpoint::Xl2 => {}
-                _ => {
-                    return Err(ContractError::InvalidInput(
-                        "Invalid breakpoint".to_string(),
-                    ))
-                }
             }
         }
 
@@ -148,7 +143,7 @@ impl ApiContract for ClassBuilderContract {
 
     fn validate_output(&self, output: &Self::Output) -> Result<(), ContractError> {
         // Validate ClassSet structure
-        if output.len() == 0 && !output.is_empty() {
+        if output.is_empty() && !output.is_empty() {
             return Err(ContractError::InvalidOutput(
                 "Invalid ClassSet state".to_string(),
             ));
@@ -313,6 +308,12 @@ pub struct TestCase {
     pub should_fail: bool,
 }
 
+impl Default for ContractTester {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ContractTester {
     pub fn new() -> Self {
         Self {
@@ -340,7 +341,7 @@ impl ContractTester {
         Ok(results)
     }
 
-    fn run_single_test(&self, test_case: &TestCase) -> TestResult {
+    fn run_single_test(&self, _test_case: &TestCase) -> TestResult {
         // This is a simplified implementation
         // In a real implementation, this would run the actual contract tests
         TestResult {
@@ -357,6 +358,12 @@ pub struct TestResults {
     pub total_tests: usize,
     pub passed_tests: usize,
     pub failed_tests: usize,
+}
+
+impl Default for TestResults {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl TestResults {
@@ -394,6 +401,12 @@ pub struct ContractValidator {
     validation_enabled: bool,
 }
 
+impl Default for ContractValidator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ContractValidator {
     pub fn new() -> Self {
         Self {
@@ -407,12 +420,12 @@ impl ContractValidator {
         self.contracts.insert(name, "contract".to_string());
     }
 
-    pub fn validate_call<T>(&self, api_name: &str, input: T) -> Result<(), ContractError> {
+    pub fn validate_call<T>(&self, api_name: &str, _input: T) -> Result<(), ContractError> {
         if !self.validation_enabled {
             return Ok(());
         }
 
-        if let Some(contract) = self.contracts.get(api_name) {
+        if let Some(_contract) = self.contracts.get(api_name) {
             // In a real implementation, this would validate the input
             // For now, we'll just return Ok
             Ok(())

@@ -26,7 +26,7 @@ impl GroupParser {
 
     /// Parse group hover classes
     fn parse_group_hover_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        if let Some(property_part) = class.strip_prefix("group-hover:") {
+        if let Some(_property_part) = class.strip_prefix("group-hover:") {
             // This will be handled by the variant parser, but we can add specific logic here
             // For now, we'll return None and let the variant system handle it
             None

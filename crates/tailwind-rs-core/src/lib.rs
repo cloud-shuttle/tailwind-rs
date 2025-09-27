@@ -178,7 +178,7 @@ pub fn generate_css_file(output_path: &str, classes: Option<&ClassSet>) -> Resul
         }
 
         // Add conditional classes
-        for (_condition, conditional_classes) in &class_set.conditional {
+        for conditional_classes in class_set.conditional.values() {
             for class in conditional_classes {
                 // For now, treat conditional classes as regular classes
                 // In the future, this could be enhanced to support proper conditional CSS

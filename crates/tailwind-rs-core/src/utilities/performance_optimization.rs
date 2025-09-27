@@ -104,6 +104,12 @@ pub struct PerformanceMetrics {
     pub compression_ratio: f32,
 }
 
+impl Default for ClassAnalyzer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ClassAnalyzer {
     /// Create a new class analyzer
     pub fn new() -> Self {
@@ -131,7 +137,7 @@ impl ClassAnalyzer {
     pub fn add_dependency(&mut self, class: String, dependency: String) {
         self.dependencies
             .entry(class)
-            .or_insert_with(HashSet::new)
+            .or_default()
             .insert(dependency);
     }
 
@@ -201,6 +207,12 @@ impl ClassAnalyzer {
         }
 
         suggestions
+    }
+}
+
+impl Default for CssPurger {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -345,6 +357,12 @@ impl CssPurger {
             rules_removed,
             warnings,
         }
+    }
+}
+
+impl Default for BundleAnalyzer {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

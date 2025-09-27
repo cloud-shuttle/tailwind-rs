@@ -280,23 +280,23 @@ pub trait EnhancedValidationUtilities {
 
 impl EnhancedValidationUtilities for ClassBuilder {
     fn validation_rule(self, rule: ValidationRule) -> Self {
-        self.class(&rule.to_class_name())
+        self.class(rule.to_class_name())
     }
 
     fn validation_severity(self, severity: ValidationSeverity) -> Self {
-        self.class(&severity.to_class_name())
+        self.class(severity.to_class_name())
     }
 
     fn validation_scope(self, scope: ValidationScope) -> Self {
-        self.class(&scope.to_class_name())
+        self.class(scope.to_class_name())
     }
 
     fn validation_mode(self, mode: ValidationMode) -> Self {
-        self.class(&mode.to_class_name())
+        self.class(mode.to_class_name())
     }
 
     fn validation_result(self, result: ValidationResult) -> Self {
-        self.class(&result.to_class_name())
+        self.class(result.to_class_name())
     }
 
     fn validation_custom(self, name: &str, _options: HashMap<String, String>) -> Self {

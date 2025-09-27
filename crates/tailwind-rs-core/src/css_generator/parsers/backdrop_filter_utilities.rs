@@ -147,7 +147,7 @@ impl BackdropFilterUtilitiesParser {
                 }
                 
                 // Numeric values for backdrop-brightness
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "backdrop-filter".to_string(),
                         value: format!("brightness({}%)", value),
@@ -186,7 +186,7 @@ impl BackdropFilterUtilitiesParser {
                 }
                 
                 // Numeric values for backdrop-contrast
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "backdrop-filter".to_string(),
                         value: format!("contrast({}%)", value),
@@ -237,7 +237,7 @@ impl BackdropFilterUtilitiesParser {
                         }
                         
                         // Numeric values for backdrop-grayscale
-                        if let Ok(_) = value.parse::<f32>() {
+                        if value.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "backdrop-filter".to_string(),
                                 value: format!("grayscale({}%)", value),
@@ -278,7 +278,7 @@ impl BackdropFilterUtilitiesParser {
                 }
                 
                 // Numeric values for backdrop-hue-rotate
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "backdrop-filter".to_string(),
                         value: format!("hue-rotate({}deg)", value),
@@ -340,7 +340,7 @@ impl BackdropFilterUtilitiesParser {
                         }
                         
                         // Numeric values for backdrop-invert
-                        if let Ok(_) = value.parse::<f32>() {
+                        if value.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "backdrop-filter".to_string(),
                                 value: format!("invert({}%)", value),
@@ -381,7 +381,7 @@ impl BackdropFilterUtilitiesParser {
                 }
                 
                 // Numeric values for backdrop-opacity
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "backdrop-filter".to_string(),
                         value: format!("opacity({}%)", value),
@@ -420,7 +420,7 @@ impl BackdropFilterUtilitiesParser {
                 }
                 
                 // Numeric values for backdrop-saturate
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "backdrop-filter".to_string(),
                         value: format!("saturate({}%)", value),
@@ -471,7 +471,7 @@ impl BackdropFilterUtilitiesParser {
                         }
                         
                         // Numeric values for backdrop-sepia
-                        if let Ok(_) = value.parse::<f32>() {
+                        if value.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "backdrop-filter".to_string(),
                                 value: format!("sepia({}%)", value),

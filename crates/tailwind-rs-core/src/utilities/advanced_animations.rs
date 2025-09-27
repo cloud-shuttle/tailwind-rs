@@ -268,6 +268,12 @@ impl CustomKeyframe {
     }
 }
 
+impl Default for KeyframeStep {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl KeyframeStep {
     /// Create a new keyframe step
     pub fn new() -> Self {
@@ -297,6 +303,12 @@ impl KeyframeStep {
     /// Set color
     pub fn set_color(&mut self, color: String) {
         self.color = Some(color);
+    }
+}
+
+impl Default for TransformStep {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

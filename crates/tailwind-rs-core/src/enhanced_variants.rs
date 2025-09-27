@@ -4,7 +4,7 @@
 //! supporting complex variant combinations, modern CSS features, and
 //! comprehensive selector generation.
 
-use crate::error::{Result, TailwindError};
+use crate::error::Result;
 use crate::responsive::Breakpoint;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

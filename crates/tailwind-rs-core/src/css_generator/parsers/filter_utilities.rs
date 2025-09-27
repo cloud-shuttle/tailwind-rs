@@ -146,7 +146,7 @@ impl FilterUtilitiesParser {
                 }
                 
                 // Numeric values for brightness
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "filter".to_string(),
                         value: format!("brightness({}%)", value),
@@ -185,7 +185,7 @@ impl FilterUtilitiesParser {
                 }
                 
                 // Numeric values for contrast
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "filter".to_string(),
                         value: format!("contrast({}%)", value),
@@ -302,7 +302,7 @@ impl FilterUtilitiesParser {
                         }
                         
                         // Numeric values for grayscale
-                        if let Ok(_) = value.parse::<f32>() {
+                        if value.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "filter".to_string(),
                                 value: format!("grayscale({}%)", value),
@@ -343,7 +343,7 @@ impl FilterUtilitiesParser {
                 }
                 
                 // Numeric values for hue-rotate
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "filter".to_string(),
                         value: format!("hue-rotate({}deg)", value),
@@ -405,7 +405,7 @@ impl FilterUtilitiesParser {
                         }
                         
                         // Numeric values for invert
-                        if let Ok(_) = value.parse::<f32>() {
+                        if value.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "filter".to_string(),
                                 value: format!("invert({}%)", value),
@@ -446,7 +446,7 @@ impl FilterUtilitiesParser {
                 }
                 
                 // Numeric values for saturate
-                if let Ok(_) = value.parse::<f32>() {
+                if value.parse::<f32>().is_ok() {
                     return Some(vec![CssProperty {
                         name: "filter".to_string(),
                         value: format!("saturate({}%)", value),
@@ -497,7 +497,7 @@ impl FilterUtilitiesParser {
                         }
                         
                         // Numeric values for sepia
-                        if let Ok(_) = value.parse::<f32>() {
+                        if value.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "filter".to_string(),
                                 value: format!("sepia({}%)", value),

@@ -258,23 +258,23 @@ pub trait AdvancedPluginSystemUtilities {
 
 impl AdvancedPluginSystemUtilities for ClassBuilder {
     fn plugin_type(self, plugin_type: PluginType) -> Self {
-        self.class(&plugin_type.to_class_name())
+        self.class(plugin_type.to_class_name())
     }
 
     fn plugin_priority(self, priority: PluginPriority) -> Self {
-        self.class(&priority.to_class_name())
+        self.class(priority.to_class_name())
     }
 
     fn plugin_config(self, config: PluginConfig) -> Self {
-        self.class(&config.to_class_name())
+        self.class(config.to_class_name())
     }
 
     fn plugin_composition(self, composition: PluginComposition) -> Self {
-        self.class(&composition.to_class_name())
+        self.class(composition.to_class_name())
     }
 
     fn plugin_lifecycle(self, lifecycle: PluginLifecycle) -> Self {
-        self.class(&lifecycle.to_class_name())
+        self.class(lifecycle.to_class_name())
     }
 
     fn plugin_custom(self, name: &str, _options: HashMap<String, String>) -> Self {

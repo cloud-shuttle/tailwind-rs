@@ -2,13 +2,13 @@
 //!
 //! This module contains the core CssGenerator struct and its main functionality.
 
-use crate::error::{Result, TailwindError};
+use crate::error::Result;
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 use super::types::{CssRule, CssProperty, CssGenerationConfig};
 use super::variants::VariantParser;
 use super::parsers::{
-    SpacingParser, AnimationParser, InteractiveParser, UtilityParser,
+    SpacingParser, AnimationParser, InteractiveParser,
     AdvancedSpacingParser, AdvancedColorParser, PositioningParser, TypographyParser,
     FlexboxParser, LayoutParser, ColorParser, EffectsParser, SizingParser,
     AdvancedBorderParser, RingParser, TransitionParser, ShadowParser, SvgParser,
@@ -186,6 +186,12 @@ pub struct CssGenerator {
     pub variant_parser: VariantParser,
 }
 
+impl Default for CssGenerator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CssGenerator {
     /// Create a new CSS generator
     pub fn new() -> Self {
@@ -244,7 +250,7 @@ impl CssGenerator {
     }
 
     /// Generate comprehensive CSS with all utilities
-    pub fn generate_comprehensive_css(&mut self, config: &CssGenerationConfig) -> Result<String> {
+    pub fn generate_comprehensive_css(&mut self, _config: &CssGenerationConfig) -> Result<String> {
         // Add common utility classes
         let common_classes = vec![
             "p-4", "m-4", "bg-blue-500", "text-white", "rounded-md",

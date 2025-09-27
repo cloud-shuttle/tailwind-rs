@@ -219,7 +219,7 @@ impl ModernCssFeaturesUtilities for ClassBuilder {
     }
 
     fn layer_custom_value(self, layer: CascadeLayer) -> Self {
-        self.class(&layer.to_class_name())
+        self.class(layer.to_class_name())
     }
 
     fn custom_property(self, name: &str, value: &str) -> Self {
@@ -227,7 +227,7 @@ impl ModernCssFeaturesUtilities for ClassBuilder {
     }
 
     fn custom_property_value(self, property: CustomProperty) -> Self {
-        self.class(&property.to_class_name())
+        self.class(property.to_class_name())
     }
 
     fn container_small(self) -> Self {
@@ -252,7 +252,7 @@ impl ModernCssFeaturesUtilities for ClassBuilder {
     }
 
     fn container_custom_value(self, query: ModernContainerQuery) -> Self {
-        self.class(&query.to_class_name())
+        self.class(query.to_class_name())
     }
 }
 

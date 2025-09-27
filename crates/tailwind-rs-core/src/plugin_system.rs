@@ -65,6 +65,12 @@ pub struct PluginRegistry {
     context: PluginContext,
 }
 
+impl Default for PluginRegistry {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PluginRegistry {
     /// Create a new plugin registry
     pub fn new() -> Self {
@@ -221,6 +227,12 @@ pub struct CustomUtilitiesPlugin {
     custom_utilities: HashMap<String, CssRule>,
 }
 
+impl Default for CustomUtilitiesPlugin {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CustomUtilitiesPlugin {
     /// Create a new custom utilities plugin
     pub fn new() -> Self {
@@ -326,6 +338,12 @@ pub struct MinifierPlugin {
     minify: bool,
 }
 
+impl Default for MinifierPlugin {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl MinifierPlugin {
     /// Create a new minifier plugin
     pub fn new() -> Self {
@@ -356,13 +374,8 @@ impl Plugin for MinifierPlugin {
     }
 
     fn handle_hook(&mut self, hook: PluginHook, _context: &mut PluginContext) -> Result<()> {
-        match hook {
-            PluginHook::OnOptimize => {
-                if self.minify {
-                    println!("Minifier plugin: Applying minification");
-                }
-            }
-            _ => {}
+        if hook == PluginHook::OnOptimize && self.minify {
+            println!("Minifier plugin: Applying minification");
         }
         Ok(())
     }

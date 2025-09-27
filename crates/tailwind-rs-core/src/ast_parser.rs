@@ -190,13 +190,10 @@ impl ClassVisitor {
     }
 
     fn visit_impl_item(&mut self, item: &syn::ImplItem) {
-        match item {
-            syn::ImplItem::Fn(method) => {
-                for stmt in &method.block.stmts {
-                    self.visit_stmt(stmt);
-                }
+        if let syn::ImplItem::Fn(method) = item {
+            for stmt in &method.block.stmts {
+                self.visit_stmt(stmt);
             }
-            _ => {}
         }
     }
 

@@ -203,7 +203,7 @@ impl LineHeightUtilities for ClassBuilder {
     fn leading(&mut self, height: LineHeight) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("leading-{}", height.to_class_name()));
+            .class(format!("leading-{}", height.to_class_name()));
         self
     }
 
@@ -268,7 +268,7 @@ impl LetterSpacingUtilities for ClassBuilder {
     fn tracking(&mut self, spacing: LetterSpacing) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("tracking-{}", spacing.to_class_name()));
+            .class(format!("tracking-{}", spacing.to_class_name()));
         self
     }
 

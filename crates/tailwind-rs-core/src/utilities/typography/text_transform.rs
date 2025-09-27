@@ -232,7 +232,7 @@ pub trait TextTransformUtilities {
 
 impl TextTransformUtilities for ClassBuilder {
     fn text_transform(&mut self, transform: TextTransform) -> &mut Self {
-        *self = self.clone().class(&transform.to_class_name());
+        *self = self.clone().class(transform.to_class_name());
         self
     }
 
@@ -253,7 +253,7 @@ impl TextTransformUtilities for ClassBuilder {
     }
 
     fn text_overflow(&mut self, overflow: TextOverflow) -> &mut Self {
-        *self = self.clone().class(&overflow.to_class_name());
+        *self = self.clone().class(overflow.to_class_name());
         self
     }
 
@@ -266,7 +266,7 @@ impl TextTransformUtilities for ClassBuilder {
     }
 
     fn white_space(&mut self, whitespace: WhiteSpace) -> &mut Self {
-        *self = self.clone().class(&whitespace.to_class_name());
+        *self = self.clone().class(whitespace.to_class_name());
         self
     }
 
@@ -295,7 +295,7 @@ impl TextTransformUtilities for ClassBuilder {
     }
 
     fn word_break(&mut self, word_break: WordBreak) -> &mut Self {
-        *self = self.clone().class(&word_break.to_class_name());
+        *self = self.clone().class(word_break.to_class_name());
         self
     }
 
@@ -316,7 +316,7 @@ impl TextTransformUtilities for ClassBuilder {
     }
 
     fn overflow_wrap(&mut self, wrap: OverflowWrap) -> &mut Self {
-        *self = self.clone().class(&wrap.to_class_name());
+        *self = self.clone().class(wrap.to_class_name());
         self
     }
 

@@ -19,7 +19,7 @@ impl ColorParser {
         let value = self.parse_color_value(color)?;
         Some(vec![CssProperty {
             name: property.to_string(),
-            value: value,
+            value,
             important: false,
         }])
     }

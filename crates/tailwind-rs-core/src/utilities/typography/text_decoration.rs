@@ -221,7 +221,7 @@ pub trait TextDecorationUtilities {
 
 impl TextDecorationUtilities for ClassBuilder {
     fn text_decoration(&mut self, decoration: TextDecoration) -> &mut Self {
-        *self = self.clone().class(&decoration.to_class_name());
+        *self = self.clone().class(decoration.to_class_name());
         self
     }
 
@@ -244,7 +244,7 @@ impl TextDecorationUtilities for ClassBuilder {
     fn decoration_style(&mut self, style: TextDecorationStyle) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("decoration-{}", style.to_class_name()));
+            .class(format!("decoration-{}", style.to_class_name()));
         self
     }
 
@@ -271,7 +271,7 @@ impl TextDecorationUtilities for ClassBuilder {
     fn decoration_thickness(&mut self, thickness: TextDecorationThickness) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("decoration-{}", thickness.to_class_name()));
+            .class(format!("decoration-{}", thickness.to_class_name()));
         self
     }
 
@@ -306,7 +306,7 @@ impl TextDecorationUtilities for ClassBuilder {
     fn underline_offset(&mut self, offset: TextUnderlineOffset) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("underline-offset-{}", offset.to_class_name()));
+            .class(format!("underline-offset-{}", offset.to_class_name()));
         self
     }
 

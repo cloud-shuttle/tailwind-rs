@@ -323,6 +323,12 @@ pub struct PerformanceImprovements {
     pub cpu_reduction: f32,
 }
 
+impl Default for AdvancedCssMinifier {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AdvancedCssMinifier {
     /// Create a new advanced CSS minifier
     pub fn new() -> Self {
@@ -434,6 +440,12 @@ impl AdvancedCssMinifier {
     }
 }
 
+impl Default for CriticalCssExtractor {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CriticalCssExtractor {
     /// Create a new critical CSS extractor
     pub fn new() -> Self {
@@ -504,6 +516,12 @@ impl CriticalCssExtractor {
         }
 
         false
+    }
+}
+
+impl Default for LazyLoadingOptimizer {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -582,6 +600,12 @@ html, body { margin: 0; padding: 0; }
 .header { background: #fff; padding: 1rem; }
 "#
         .to_string()
+    }
+}
+
+impl Default for BundleSplitter {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -757,6 +781,12 @@ impl BundleSplitter {
     }
 }
 
+impl Default for MemoryOptimizer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl MemoryOptimizer {
     /// Create a new memory optimizer
     pub fn new() -> Self {
@@ -838,6 +868,12 @@ impl MemoryOptimizer {
     }
 }
 
+impl Default for PerformanceMonitor {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PerformanceMonitor {
     /// Create a new performance monitor
     pub fn new() -> Self {
@@ -908,66 +944,66 @@ impl PerformanceMonitor {
 
 impl fmt::Display for AdvancedOptimizationResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Advanced Optimization Result:\n")?;
-        write!(
+        writeln!(f, "Advanced Optimization Result:")?;
+        writeln!(
             f,
-            "  Original: {} bytes, {} classes, {} rules\n",
+            "  Original: {} bytes, {} classes, {} rules",
             self.original_metrics.bundle_size,
             self.original_metrics.class_count,
             self.original_metrics.rule_count
         )?;
-        write!(
+        writeln!(
             f,
-            "  Optimized: {} bytes, {} classes, {} rules\n",
+            "  Optimized: {} bytes, {} classes, {} rules",
             self.optimized_metrics.bundle_size,
             self.optimized_metrics.class_count,
             self.optimized_metrics.rule_count
         )?;
-        write!(
+        writeln!(
             f,
-            "  Size Reduction: {:.1}%\n",
+            "  Size Reduction: {:.1}%",
             self.improvements.size_reduction
         )?;
-        write!(
+        writeln!(
             f,
-            "  Parse Time Improvement: {:.1}%\n",
+            "  Parse Time Improvement: {:.1}%",
             self.improvements.parse_time_improvement
         )?;
-        write!(
+        writeln!(
             f,
-            "  Render Time Improvement: {:.1}%\n",
+            "  Render Time Improvement: {:.1}%",
             self.improvements.render_time_improvement
         )?;
-        write!(
+        writeln!(
             f,
-            "  Memory Reduction: {:.1}%\n",
+            "  Memory Reduction: {:.1}%",
             self.improvements.memory_reduction
         )?;
-        write!(
+        writeln!(
             f,
-            "  CPU Reduction: {:.1}%\n",
+            "  CPU Reduction: {:.1}%",
             self.improvements.cpu_reduction
         )?;
 
         if !self.strategies_applied.is_empty() {
-            write!(
+            writeln!(
                 f,
-                "  Strategies Applied: {}\n",
+                "  Strategies Applied: {}",
                 self.strategies_applied.join(", ")
             )?;
         }
 
         if !self.recommendations.is_empty() {
-            write!(f, "  Recommendations:\n")?;
+            writeln!(f, "  Recommendations:")?;
             for rec in &self.recommendations {
-                write!(f, "    - {}\n", rec)?;
+                writeln!(f, "    - {}", rec)?;
             }
         }
 
         if !self.warnings.is_empty() {
-            write!(f, "  Warnings:\n")?;
+            writeln!(f, "  Warnings:")?;
             for warning in &self.warnings {
-                write!(f, "    - {}\n", warning)?;
+                writeln!(f, "    - {}", warning)?;
             }
         }
 

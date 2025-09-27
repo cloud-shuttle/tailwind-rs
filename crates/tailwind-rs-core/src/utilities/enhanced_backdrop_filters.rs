@@ -426,7 +426,7 @@ impl EnhancedBackdropFilterUtilities for ClassBuilder {
     }
 
     fn backdrop_blur_custom(self, blur: EnhancedBackdropBlur) -> Self {
-        self.class(&blur.to_class_name())
+        self.class(blur.to_class_name())
     }
 }
 

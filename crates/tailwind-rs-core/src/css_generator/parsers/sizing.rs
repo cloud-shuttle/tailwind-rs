@@ -136,12 +136,6 @@ impl SizingParser {
             "min" => Some("min-content".to_string()),
             "max" => Some("max-content".to_string()),
             "fit" => Some("fit-content".to_string()),
-            // Size utilities with decimal values
-            "px" => Some("1px".to_string()),
-            "0.5" => Some("0.125rem".to_string()),
-            "1.5" => Some("0.375rem".to_string()),
-            "2.5" => Some("0.625rem".to_string()),
-            "3.5" => Some("0.875rem".to_string()),
             // Viewport units
             "dvh" => Some("100dvh".to_string()),
             "lvh" => Some("100lvh".to_string()),

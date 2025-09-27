@@ -2,7 +2,6 @@
 //!
 //! This module contains the fundamental types used throughout the CSS generation system.
 
-use crate::error::{Result, TailwindError};
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 

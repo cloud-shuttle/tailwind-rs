@@ -9,6 +9,7 @@ use std::collections::HashMap;
 
 /// Builder for creating responsive classes
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct ResponsiveBuilder {
     /// Classes for each breakpoint
     classes: HashMap<Breakpoint, Vec<String>>,
@@ -34,7 +35,7 @@ impl ResponsiveBuilder {
     pub fn add_class(&mut self, breakpoint: Breakpoint, class: impl Into<String>) -> &mut Self {
         self.classes
             .entry(breakpoint)
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(class.into());
         self
     }
@@ -43,7 +44,7 @@ impl ResponsiveBuilder {
     pub fn add_classes(&mut self, breakpoint: Breakpoint, classes: Vec<String>) -> &mut Self {
         self.classes
             .entry(breakpoint)
-            .or_insert_with(Vec::new)
+            .or_default()
             .extend(classes);
         self
     }
@@ -201,14 +202,6 @@ impl ResponsiveBuilder {
     }
 }
 
-impl Default for ResponsiveBuilder {
-    fn default() -> Self {
-        Self {
-            classes: HashMap::new(),
-            config: ResponsiveConfig::default(),
-        }
-    }
-}
 
 impl std::fmt::Display for ResponsiveBuilder {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

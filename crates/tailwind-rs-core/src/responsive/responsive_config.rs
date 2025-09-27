@@ -297,7 +297,7 @@ impl Responsive {
         let max_width = self.config.get_breakpoint_max_width(breakpoint);
 
         let min_active = screen_width >= min_width;
-        let max_active = max_width.map_or(true, |max| screen_width < max);
+        let max_active = max_width.is_none_or(|max| screen_width < max);
 
         min_active && max_active
     }

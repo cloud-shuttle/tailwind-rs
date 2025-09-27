@@ -5,6 +5,12 @@ use super::{UtilityParser, ParserCategory};
 #[derive(Debug, Clone)]
 pub struct BorderUtilitiesParser;
 
+impl Default for BorderUtilitiesParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BorderUtilitiesParser {
     /// Create a new BorderUtilitiesParser
     pub fn new() -> Self {
@@ -258,7 +264,7 @@ impl BorderUtilitiesParser {
                 // Numeric border widths
                 if class.starts_with("border-") && class.len() > 7 {
                     let number = &class[7..];
-                    if let Ok(_) = number.parse::<u32>() {
+                    if number.parse::<u32>().is_ok() {
                         return Some(vec![CssProperty {
                             name: "border-width".to_string(),
                             value: format!("{}px", number),
@@ -292,7 +298,7 @@ impl BorderUtilitiesParser {
                 // Side-specific border widths
                 if class.starts_with("border-t-") {
                     if let Some(number) = class.strip_prefix("border-t-") {
-                        if let Ok(_) = number.parse::<u32>() {
+                        if number.parse::<u32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "border-top-width".to_string(),
                                 value: format!("{}px", number),
@@ -304,7 +310,7 @@ impl BorderUtilitiesParser {
                 
                 if class.starts_with("border-r-") {
                     if let Some(number) = class.strip_prefix("border-r-") {
-                        if let Ok(_) = number.parse::<u32>() {
+                        if number.parse::<u32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "border-right-width".to_string(),
                                 value: format!("{}px", number),
@@ -316,7 +322,7 @@ impl BorderUtilitiesParser {
                 
                 if class.starts_with("border-b-") {
                     if let Some(number) = class.strip_prefix("border-b-") {
-                        if let Ok(_) = number.parse::<u32>() {
+                        if number.parse::<u32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "border-bottom-width".to_string(),
                                 value: format!("{}px", number),
@@ -328,7 +334,7 @@ impl BorderUtilitiesParser {
                 
                 if class.starts_with("border-l-") {
                     if let Some(number) = class.strip_prefix("border-l-") {
-                        if let Ok(_) = number.parse::<u32>() {
+                        if number.parse::<u32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "border-left-width".to_string(),
                                 value: format!("{}px", number),
@@ -341,7 +347,7 @@ impl BorderUtilitiesParser {
                 // Horizontal and vertical borders
                 if class.starts_with("border-x-") {
                     if let Some(number) = class.strip_prefix("border-x-") {
-                        if let Ok(_) = number.parse::<u32>() {
+                        if number.parse::<u32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "border-inline-width".to_string(),
                                 value: format!("{}px", number),
@@ -353,7 +359,7 @@ impl BorderUtilitiesParser {
                 
                 if class.starts_with("border-y-") {
                     if let Some(number) = class.strip_prefix("border-y-") {
-                        if let Ok(_) = number.parse::<u32>() {
+                        if number.parse::<u32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "border-block-width".to_string(),
                                 value: format!("{}px", number),
@@ -525,7 +531,7 @@ impl BorderUtilitiesParser {
                 // Numeric outline widths
                 if class.starts_with("outline-") && class.len() > 8 {
                     let number = &class[8..];
-                    if let Ok(_) = number.parse::<u32>() {
+                    if number.parse::<u32>().is_ok() {
                         return Some(vec![CssProperty {
                             name: "outline-width".to_string(),
                             value: format!("{}px", number),
@@ -640,9 +646,8 @@ impl BorderUtilitiesParser {
 
     /// Parse outline-offset classes
     fn parse_outline_offset_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        if class.starts_with("outline-offset-") {
-            let number = &class[15..];
-            if let Ok(_) = number.parse::<u32>() {
+        if let Some(number) = class.strip_prefix("outline-offset-") {
+            if number.parse::<u32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "outline-offset".to_string(),
                     value: format!("{}px", number),
@@ -651,9 +656,8 @@ impl BorderUtilitiesParser {
             }
         }
         
-        if class.starts_with("-outline-offset-") {
-            let number = &class[16..];
-            if let Ok(_) = number.parse::<u32>() {
+        if let Some(number) = class.strip_prefix("-outline-offset-") {
+            if number.parse::<u32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "outline-offset".to_string(),
                     value: format!("calc({}px * -1)", number),

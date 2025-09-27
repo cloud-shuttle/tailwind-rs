@@ -5,6 +5,12 @@ use super::{UtilityParser, ParserCategory};
 #[derive(Debug, Clone)]
 pub struct BackgroundParser;
 
+impl Default for BackgroundParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BackgroundParser {
     /// Create a new BackgroundParser
     pub fn new() -> Self {
@@ -148,7 +154,7 @@ impl BackgroundParser {
                 // Linear gradient with angle
                 if let Some(angle) = class.strip_prefix("bg-linear-") {
                     if let Some(angle) = angle.strip_suffix("deg") {
-                        if let Ok(_) = angle.parse::<f32>() {
+                        if angle.parse::<f32>().is_ok() {
                             return Some(vec![CssProperty {
                                 name: "background-image".to_string(),
                                 value: format!("linear-gradient({}deg, var(--tw-gradient-stops))", angle),
@@ -193,7 +199,7 @@ impl BackgroundParser {
                     // Conic gradient with angle
                     if let Some(angle) = class.strip_prefix("bg-conic-") {
                         if let Some(angle) = angle.strip_suffix("deg") {
-                            if let Ok(_) = angle.parse::<f32>() {
+                            if angle.parse::<f32>().is_ok() {
                                 return Some(vec![CssProperty {
                                     name: "background-image".to_string(),
                                     value: format!("conic-gradient({}deg, var(--tw-gradient-stops))", angle),

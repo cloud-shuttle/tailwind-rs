@@ -94,7 +94,7 @@ pub fn pixel_to_css(value: f32) -> String {
 }
 
 /// Convert viewport unit to CSS
-pub fn viewport_to_css(value: f32, unit: &str) -> String {
+pub fn viewport_to_css(value: f32, _unit: &str) -> String {
     format!("{}vw", value)
 }
 

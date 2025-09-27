@@ -8,6 +8,12 @@ use crate::css_generator::types::CssProperty;
 #[derive(Debug, Clone)]
 pub struct InteractivityParser;
 
+impl Default for InteractivityParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl InteractivityParser {
     /// Create a new InteractivityParser
     pub fn new() -> Self {

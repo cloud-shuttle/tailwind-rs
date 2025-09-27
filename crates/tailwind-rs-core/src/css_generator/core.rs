@@ -5,7 +5,7 @@
 
 use crate::error::{Result, TailwindError};
 use crate::responsive::Breakpoint;
-use crate::css_generator::types::{CssProperty, CssRule, CssGenerationConfig};
+use crate::css_generator::types::{CssProperty, CssRule};
 use std::collections::HashMap;
 
 // CssRule is now defined in types.rs
@@ -21,6 +21,12 @@ pub struct CssGenerator {
     breakpoints: HashMap<Breakpoint, String>,
     /// Custom CSS properties
     custom_properties: HashMap<String, String>,
+}
+
+impl Default for CssGenerator {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl CssGenerator {
@@ -82,7 +88,7 @@ impl CssGenerator {
         // Group rules by media query
         let mut media_queries: HashMap<Option<String>, Vec<&CssRule>> = HashMap::new();
         for rule in self.rules.values() {
-            media_queries.entry(rule.media_query.clone()).or_insert_with(Vec::new).push(rule);
+            media_queries.entry(rule.media_query.clone()).or_default().push(rule);
         }
         
         // Generate CSS for each media query
@@ -403,8 +409,7 @@ impl CssGenerator {
     fn parse_background_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_filter_class(&self, _class: &str) -> Option<Vec<CssProperty>> { None }
     fn parse_transition_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        if class.starts_with("transition-") {
-            let value = &class[11..];
+        if let Some(value) = class.strip_prefix("transition-") {
             return Some(vec![CssProperty { 
                 name: "transition-property".to_string(), 
                 value: value.to_string(), 
@@ -412,8 +417,7 @@ impl CssGenerator {
             }]);
         }
         
-        if class.starts_with("duration-") {
-            let value = &class[9..];
+        if let Some(value) = class.strip_prefix("duration-") {
             return Some(vec![CssProperty { 
                 name: "transition-duration".to_string(), 
                 value: format!("{}ms", value), 
@@ -421,8 +425,7 @@ impl CssGenerator {
             }]);
         }
         
-        if class.starts_with("ease-") {
-            let value = &class[5..];
+        if let Some(value) = class.strip_prefix("ease-") {
             return Some(vec![CssProperty { 
                 name: "transition-timing-function".to_string(), 
                 value: self.parse_ease_value(value), 
@@ -430,8 +433,7 @@ impl CssGenerator {
             }]);
         }
         
-        if class.starts_with("delay-") {
-            let value = &class[6..];
+        if let Some(value) = class.strip_prefix("delay-") {
             return Some(vec![CssProperty { 
                 name: "transition-delay".to_string(), 
                 value: format!("{}ms", value), 

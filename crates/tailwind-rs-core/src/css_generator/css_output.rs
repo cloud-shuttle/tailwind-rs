@@ -75,7 +75,7 @@ impl CssOutputGenerator {
             for (name, value) in custom_properties {
                 css.push_str(&format!("--{}:{};", name, value));
             }
-            css.push_str("}");
+            css.push('}');
         }
         
         // Group rules by media query
@@ -101,7 +101,7 @@ impl CssOutputGenerator {
             for rule in rules {
                 css.push_str(&Self::rule_to_minified_css(rule));
             }
-            css.push_str("}");
+            css.push('}');
         }
         
         css
@@ -117,7 +117,7 @@ impl CssOutputGenerator {
             css.push_str(&format!("{}:{}{};", property.name, property.value, important));
         }
         
-        css.push_str("}");
+        css.push('}');
         css
     }
 }

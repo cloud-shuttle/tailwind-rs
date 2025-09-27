@@ -16,7 +16,7 @@ impl ColumnsParser {
     fn parse_column_number_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(number) = class.strip_prefix("columns-") {
             // Check if it's a number (1-12)
-            if let Ok(_) = number.parse::<u32>() {
+            if number.parse::<u32>().is_ok() {
                 return Some(vec![CssProperty { name: "columns".to_string(), value: number.to_string(), important: false }]);
             }
         }

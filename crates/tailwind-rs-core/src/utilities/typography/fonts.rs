@@ -219,7 +219,7 @@ impl FontFamilyUtilities for ClassBuilder {
     fn font_family(&mut self, family: FontFamily) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("font-{}", family.to_class_name()));
+            .class(format!("font-{}", family.to_class_name()));
         self
     }
 
@@ -240,7 +240,7 @@ impl FontSizeUtilities for ClassBuilder {
     fn text_size(&mut self, size: FontSize) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("text-{}", size.to_class_name()));
+            .class(format!("text-{}", size.to_class_name()));
         self
     }
 
@@ -301,7 +301,7 @@ impl FontWeightUtilities for ClassBuilder {
     fn font_weight(&mut self, weight: FontWeight) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("font-{}", weight.to_class_name()));
+            .class(format!("font-{}", weight.to_class_name()));
         self
     }
 

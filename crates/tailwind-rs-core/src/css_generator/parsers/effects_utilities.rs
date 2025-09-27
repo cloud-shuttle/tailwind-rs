@@ -5,6 +5,12 @@ use super::{UtilityParser, ParserCategory};
 #[derive(Debug, Clone)]
 pub struct EffectsUtilitiesParser;
 
+impl Default for EffectsUtilitiesParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl EffectsUtilitiesParser {
     /// Create a new EffectsUtilitiesParser
     pub fn new() -> Self {
@@ -153,9 +159,8 @@ impl EffectsUtilitiesParser {
 
     /// Parse opacity classes
     fn parse_opacity_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        if class.starts_with("opacity-") {
-            let number = &class[8..];
-            if let Ok(_) = number.parse::<u32>() {
+        if let Some(number) = class.strip_prefix("opacity-") {
+            if number.parse::<u32>().is_ok() {
                 return Some(vec![CssProperty {
                     name: "opacity".to_string(),
                     value: format!("{}%", number),

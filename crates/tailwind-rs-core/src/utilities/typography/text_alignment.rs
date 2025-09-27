@@ -68,7 +68,7 @@ impl TextAlignUtilities for ClassBuilder {
     fn text_align(&mut self, align: TextAlign) -> &mut Self {
         *self = self
             .clone()
-            .class(&format!("text-{}", align.to_class_name()));
+            .class(format!("text-{}", align.to_class_name()));
         self
     }
 

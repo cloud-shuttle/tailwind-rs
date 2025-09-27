@@ -70,82 +70,82 @@ pub trait LogicalPropertiesUtilities {
 
 impl LogicalPropertiesUtilities for ClassBuilder {
     fn margin_inline_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("ms-{}", value.to_string());
+        let class_name = format!("ms-{}", value);
         self.class(class_name)
     }
 
     fn margin_inline_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("me-{}", value.to_string());
+        let class_name = format!("me-{}", value);
         self.class(class_name)
     }
 
     fn margin_block_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("mt-{}", value.to_string());
+        let class_name = format!("mt-{}", value);
         self.class(class_name)
     }
 
     fn margin_block_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("mb-{}", value.to_string());
+        let class_name = format!("mb-{}", value);
         self.class(class_name)
     }
 
     fn padding_inline_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("ps-{}", value.to_string());
+        let class_name = format!("ps-{}", value);
         self.class(class_name)
     }
 
     fn padding_inline_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("pe-{}", value.to_string());
+        let class_name = format!("pe-{}", value);
         self.class(class_name)
     }
 
     fn padding_block_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("pt-{}", value.to_string());
+        let class_name = format!("pt-{}", value);
         self.class(class_name)
     }
 
     fn padding_block_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("pb-{}", value.to_string());
+        let class_name = format!("pb-{}", value);
         self.class(class_name)
     }
 
     fn border_inline_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("border-s-{}", value.to_string());
+        let class_name = format!("border-s-{}", value);
         self.class(class_name)
     }
 
     fn border_inline_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("border-e-{}", value.to_string());
+        let class_name = format!("border-e-{}", value);
         self.class(class_name)
     }
 
     fn border_block_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("border-t-{}", value.to_string());
+        let class_name = format!("border-t-{}", value);
         self.class(class_name)
     }
 
     fn border_block_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("border-b-{}", value.to_string());
+        let class_name = format!("border-b-{}", value);
         self.class(class_name)
     }
 
     fn inset_inline_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("start-{}", value.to_string());
+        let class_name = format!("start-{}", value);
         self.class(class_name)
     }
 
     fn inset_inline_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("end-{}", value.to_string());
+        let class_name = format!("end-{}", value);
         self.class(class_name)
     }
 
     fn inset_block_start(self, value: SpacingValue) -> Self {
-        let class_name = format!("top-{}", value.to_string());
+        let class_name = format!("top-{}", value);
         self.class(class_name)
     }
 
     fn inset_block_end(self, value: SpacingValue) -> Self {
-        let class_name = format!("bottom-{}", value.to_string());
+        let class_name = format!("bottom-{}", value);
         self.class(class_name)
     }
 }

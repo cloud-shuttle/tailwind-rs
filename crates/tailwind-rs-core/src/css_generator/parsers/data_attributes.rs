@@ -58,7 +58,7 @@ impl DataAttributeParser {
     }
 
     /// Parse a property with data attribute modifier
-    fn parse_property_with_data_attribute(&self, property_class: &str, data_attribute: &str) -> Option<Vec<CssProperty>> {
+    fn parse_property_with_data_attribute(&self, property_class: &str, _data_attribute: &str) -> Option<Vec<CssProperty>> {
         // Handle background colors with opacity
         if let Some(color_part) = property_class.strip_prefix("bg-") {
             if let Some((color_name, opacity)) = color_part.split_once('/') {

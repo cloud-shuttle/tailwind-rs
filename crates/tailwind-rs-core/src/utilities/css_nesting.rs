@@ -110,7 +110,7 @@ impl NestingPseudoClass {
             NestingPseudoClass::FirstChild => "nest-first-child".to_string(),
             NestingPseudoClass::LastChild => "nest-last-child".to_string(),
             NestingPseudoClass::NthChild(n) => {
-                format!("nest-nth-child-{}", n.replace("n", "n").replace(" ", "-"))
+                format!("nest-nth-child-{}", n.replace(" ", "-"))
             }
             NestingPseudoClass::Custom(pseudo) => format!("nest-{}", pseudo),
         }
@@ -209,15 +209,15 @@ pub trait CssNestingUtilities {
 
 impl CssNestingUtilities for ClassBuilder {
     fn nesting_selector(self, selector: NestingSelector) -> Self {
-        self.class(&selector.to_class_name())
+        self.class(selector.to_class_name())
     }
 
     fn nesting_pseudo_class(self, pseudo_class: NestingPseudoClass) -> Self {
-        self.class(&pseudo_class.to_class_name())
+        self.class(pseudo_class.to_class_name())
     }
 
     fn nesting_media_query(self, media_query: NestingMediaQuery) -> Self {
-        self.class(&media_query.to_class_name())
+        self.class(media_query.to_class_name())
     }
 
     fn nested_class(self, selector: NestingSelector, class: &str) -> Self {

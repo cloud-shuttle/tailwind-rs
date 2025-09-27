@@ -86,6 +86,8 @@ pub mod background;
 pub mod border_utilities;
 pub mod effects_utilities;
 pub mod mask_utilities;
+pub mod mask_image_parser;
+pub mod mask_properties_parser;
 
 pub use spacing::SpacingParser;
 pub use spacing_advanced::AdvancedSpacingParser;

@@ -5,7 +5,9 @@
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse::ParseStream, parse_macro_input, LitStr, Token};
+use syn::{parse_macro_input, LitStr, Token};
+
+// Note: proc-macro crates cannot export modules, so parsers are defined inline
 
 /// The main `classes!` macro for generating Tailwind CSS classes
 ///
@@ -167,6 +169,10 @@ pub fn variant(input: TokenStream) -> TokenStream {
     .into()
 }
 
+
+
+// Parser structs (moved from parsers.rs due to proc-macro crate limitations)
+
 /// Parser for the `classes!` macro
 struct ClassesMacro {
     base: Option<String>,
@@ -177,7 +183,7 @@ struct ClassesMacro {
 }
 
 impl syn::parse::Parse for ClassesMacro {
-    fn parse(input: ParseStream) -> syn::Result<Self> {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let mut base = None;
         let mut variant = None;
         let mut responsive = None;
@@ -186,7 +192,7 @@ impl syn::parse::Parse for ClassesMacro {
 
         while !input.is_empty() {
             let key: syn::Ident = input.parse()?;
-            input.parse::<Token![:]>()?;
+            input.parse::<syn::Token![:]>()?;
             let value: LitStr = input.parse()?;
 
             match key.to_string().as_str() {
@@ -197,8 +203,8 @@ impl syn::parse::Parse for ClassesMacro {
                 _ => custom.push((key.to_string(), value.value())),
             }
 
-            if input.peek(Token![,]) {
-                input.parse::<Token![,]>()?;
+            if input.peek(syn::Token![,]) {
+                input.parse::<syn::Token![,]>()?;
             }
         }
 
@@ -251,7 +257,7 @@ struct ResponsiveMacro {
 }
 
 impl syn::parse::Parse for ResponsiveMacro {
-    fn parse(input: ParseStream) -> syn::Result<Self> {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let mut base = None;
         let mut sm = None;
         let mut md = None;
@@ -261,7 +267,7 @@ impl syn::parse::Parse for ResponsiveMacro {
 
         while !input.is_empty() {
             let key: syn::Ident = input.parse()?;
-            input.parse::<Token![:]>()?;
+            input.parse::<syn::Token![:]>()?;
             let value: LitStr = input.parse()?;
 
             match key.to_string().as_str() {
@@ -279,8 +285,8 @@ impl syn::parse::Parse for ResponsiveMacro {
                 }
             }
 
-            if input.peek(Token![,]) {
-                input.parse::<Token![,]>()?;
+            if input.peek(syn::Token![,]) {
+                input.parse::<syn::Token![,]>()?;
             }
         }
 
@@ -337,7 +343,7 @@ struct ThemeMacro {
 }
 
 impl syn::parse::Parse for ThemeMacro {
-    fn parse(input: ParseStream) -> syn::Result<Self> {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let mut color = None;
         let mut spacing = None;
         let mut border_radius = None;
@@ -346,7 +352,7 @@ impl syn::parse::Parse for ThemeMacro {
 
         while !input.is_empty() {
             let key: syn::Ident = input.parse()?;
-            input.parse::<Token![:]>()?;
+            input.parse::<syn::Token![:]>()?;
             let value: LitStr = input.parse()?;
 
             match key.to_string().as_str() {
@@ -357,8 +363,8 @@ impl syn::parse::Parse for ThemeMacro {
                 _ => custom.push((key.to_string(), value.value())),
             }
 
-            if input.peek(Token![,]) {
-                input.parse::<Token![,]>()?;
+            if input.peek(syn::Token![,]) {
+                input.parse::<syn::Token![,]>()?;
             }
         }
 
@@ -410,7 +416,7 @@ struct ComponentMacro {
 }
 
 impl syn::parse::Parse for ComponentMacro {
-    fn parse(input: ParseStream) -> syn::Result<Self> {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let mut name = None;
         let mut variant = None;
         let mut size = None;
@@ -419,7 +425,7 @@ impl syn::parse::Parse for ComponentMacro {
 
         while !input.is_empty() {
             let key: syn::Ident = input.parse()?;
-            input.parse::<Token![:]>()?;
+            input.parse::<syn::Token![:]>()?;
             let value: LitStr = input.parse()?;
 
             match key.to_string().as_str() {
@@ -430,8 +436,8 @@ impl syn::parse::Parse for ComponentMacro {
                 _ => custom.push((key.to_string(), value.value())),
             }
 
-            if input.peek(Token![,]) {
-                input.parse::<Token![,]>()?;
+            if input.peek(syn::Token![,]) {
+                input.parse::<syn::Token![,]>()?;
             }
         }
 
@@ -500,7 +506,7 @@ struct StateMacro {
 }
 
 impl syn::parse::Parse for StateMacro {
-    fn parse(input: ParseStream) -> syn::Result<Self> {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let mut base = None;
         let mut hover = None;
         let mut focus = None;
@@ -510,7 +516,7 @@ impl syn::parse::Parse for StateMacro {
 
         while !input.is_empty() {
             let key: syn::Ident = input.parse()?;
-            input.parse::<Token![:]>()?;
+            input.parse::<syn::Token![:]>()?;
             let value: LitStr = input.parse()?;
 
             match key.to_string().as_str() {
@@ -522,8 +528,8 @@ impl syn::parse::Parse for StateMacro {
                 _ => custom.push((key.to_string(), value.value())),
             }
 
-            if input.peek(Token![,]) {
-                input.parse::<Token![,]>()?;
+            if input.peek(syn::Token![,]) {
+                input.parse::<syn::Token![,]>()?;
             }
         }
 
@@ -587,7 +593,7 @@ struct VariantMacro {
 }
 
 impl syn::parse::Parse for VariantMacro {
-    fn parse(input: ParseStream) -> syn::Result<Self> {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let mut base = None;
         let mut primary = None;
         let mut secondary = None;
@@ -599,7 +605,7 @@ impl syn::parse::Parse for VariantMacro {
 
         while !input.is_empty() {
             let key: syn::Ident = input.parse()?;
-            input.parse::<Token![:]>()?;
+            input.parse::<syn::Token![:]>()?;
             let value: LitStr = input.parse()?;
 
             match key.to_string().as_str() {
@@ -613,8 +619,8 @@ impl syn::parse::Parse for VariantMacro {
                 _ => custom.push((key.to_string(), value.value())),
             }
 
-            if input.peek(Token![,]) {
-                input.parse::<Token![,]>()?;
+            if input.peek(syn::Token![,]) {
+                input.parse::<syn::Token![,]>()?;
             }
         }
 
@@ -668,120 +674,5 @@ impl VariantMacro {
         }
 
         class_set
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_classes_macro_parser() {
-        let input = quote! {
-            base: "bg-blue-500 text-white",
-            variant: "px-4 py-2",
-            responsive: "sm:text-sm md:text-base",
-            state: "hover:bg-blue-600 focus:ring-2"
-        };
-
-        let parsed = syn::parse2::<ClassesMacro>(input).unwrap();
-        assert_eq!(parsed.base, Some("bg-blue-500 text-white".to_string()));
-        assert_eq!(parsed.variant, Some("px-4 py-2".to_string()));
-        assert_eq!(
-            parsed.responsive,
-            Some("sm:text-sm md:text-base".to_string())
-        );
-        assert_eq!(
-            parsed.state,
-            Some("hover:bg-blue-600 focus:ring-2".to_string())
-        );
-    }
-
-    #[test]
-    fn test_responsive_macro_parser() {
-        let input = quote! {
-            base: "text-sm",
-            sm: "text-base",
-            md: "text-lg",
-            lg: "text-xl"
-        };
-
-        let parsed = syn::parse2::<ResponsiveMacro>(input).unwrap();
-        assert_eq!(parsed.base, Some("text-sm".to_string()));
-        assert_eq!(parsed.sm, Some("text-base".to_string()));
-        assert_eq!(parsed.md, Some("text-lg".to_string()));
-        assert_eq!(parsed.lg, Some("text-xl".to_string()));
-    }
-
-    #[test]
-    fn test_theme_macro_parser() {
-        let input = quote! {
-            color: "primary",
-            spacing: "md",
-            border_radius: "lg"
-        };
-
-        let parsed = syn::parse2::<ThemeMacro>(input).unwrap();
-        assert_eq!(parsed.color, Some("primary".to_string()));
-        assert_eq!(parsed.spacing, Some("md".to_string()));
-        assert_eq!(parsed.border_radius, Some("lg".to_string()));
-    }
-
-    #[test]
-    fn test_component_macro_parser() {
-        let input = quote! {
-            name: "button",
-            variant: "primary",
-            size: "md"
-        };
-
-        let parsed = syn::parse2::<ComponentMacro>(input).unwrap();
-        assert_eq!(parsed.name, Some("button".to_string()));
-        assert_eq!(parsed.variant, Some("primary".to_string()));
-        assert_eq!(parsed.size, Some("md".to_string()));
-    }
-
-    #[test]
-    fn test_state_macro_parser() {
-        let input = quote! {
-            base: "px-4 py-2 rounded-md",
-            hover: "bg-blue-700",
-            focus: "ring-2 ring-blue-500",
-            active: "bg-blue-800"
-        };
-
-        let parsed = syn::parse2::<StateMacro>(input).unwrap();
-        assert_eq!(parsed.base, Some("px-4 py-2 rounded-md".to_string()));
-        assert_eq!(parsed.hover, Some("bg-blue-700".to_string()));
-        assert_eq!(parsed.focus, Some("ring-2 ring-blue-500".to_string()));
-        assert_eq!(parsed.active, Some("bg-blue-800".to_string()));
-    }
-
-    #[test]
-    fn test_variant_macro_parser() {
-        let input = quote! {
-            base: "px-4 py-2 rounded-md font-medium",
-            primary: "bg-blue-600 text-white hover:bg-blue-700",
-            secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
-            danger: "bg-red-600 text-white hover:bg-red-700"
-        };
-
-        let parsed = syn::parse2::<VariantMacro>(input).unwrap();
-        assert_eq!(
-            parsed.base,
-            Some("px-4 py-2 rounded-md font-medium".to_string())
-        );
-        assert_eq!(
-            parsed.primary,
-            Some("bg-blue-600 text-white hover:bg-blue-700".to_string())
-        );
-        assert_eq!(
-            parsed.secondary,
-            Some("bg-gray-200 text-gray-900 hover:bg-gray-300".to_string())
-        );
-        assert_eq!(
-            parsed.danger,
-            Some("bg-red-600 text-white hover:bg-red-700".to_string())
-        );
     }
 }

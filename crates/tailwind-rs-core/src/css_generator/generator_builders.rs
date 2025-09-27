@@ -20,7 +20,7 @@ use super::parsers::{
     GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser, GapParser, JustifyContentParser,
     JustifyItemsParser, JustifySelfParser, AlignContentParser, AlignItemsParser, AlignSelfParser,
     PlaceContentParser, PlaceItemsParser, PlaceSelfParser, BackgroundParser, BorderUtilitiesParser,
-    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser
+    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser, AccentColorParser
 };
 use super::variants::VariantParser;
 

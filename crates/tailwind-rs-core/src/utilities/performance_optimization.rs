@@ -696,7 +696,7 @@ mod tests {
         purger.keep_classes(vec!["bg-red-500".to_string()].into_iter().collect());
         purger.remove_classes(vec!["unused-class".to_string()].into_iter().collect());
 
-        let css = "
+        let css = r#"
 .bg-red-500 { background-color: #ef4444; }
 .unused-class { display: none; }
 .text-white { color: white; }
@@ -739,7 +739,7 @@ mod tests {
     #[test]
     fn test_bundle_analyzer_analyze_bundle() {
         let mut analyzer = BundleAnalyzer::new();
-        let css = "
+        let css = r#"
 .bg-red-500 { background-color: #ef4444; }
 .text-white { color: white; }
 "#;

@@ -44,7 +44,7 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_css_minification_color_compression() {
         let minifier = AdvancedCssMinifier::new();
-        let css = "
+        let css = r#"
         .test-class {
             color: #ffffff;
             background: #000000;
@@ -67,7 +67,7 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_critical_css_extraction() {
         let extractor = CriticalCssExtractor::new();
-        let css = "
+        let css = r#"
         body { margin: 0; padding: 0; }
         .header { background: #fff; }
         .footer { background: #000; }
@@ -86,7 +86,7 @@ mod advanced_performance_optimization_tests {
             .critical_selectors
             .insert(".custom-critical".to_string());
 
-        let css = "
+        let css = r#"
         .custom-critical { color: red; }
         .non-critical { color: blue; }
         "#;
@@ -136,7 +136,7 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_bundle_splitting_by_feature() {
         let splitter = BundleSplitter::new();
-        let css = "
+        let css = r#"
         .display-block { display: block; }
         .margin-4 { margin: 1rem; }
         .color-red { color: red; }

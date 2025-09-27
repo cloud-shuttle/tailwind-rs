@@ -99,6 +99,28 @@ pub use config::parser::ConfigParser;
 pub use config::{BuildConfig, TailwindConfig};
 // Use the modular CssGenerator structure
 pub use css_generator::{CssGenerationConfig, CssGenerator, CssProperty, CssRule};
+
+// Re-export key parsers for direct access (avoiding conflicts with utilities::*)
+pub use css_generator::parsers::{
+    SpacingParser, AdvancedSpacingParser, ColorParser, AdvancedColorParser,
+    TypographyParser, LayoutParser, PositioningParser, SizingParser,
+    FlexboxParser, GridParser, AdvancedGridParser, BorderParser, AdvancedBorderParser,
+    BorderUtilitiesParser, RingParser, ShadowParser, EffectsParser, EffectsUtilitiesParser,
+    TransformParser, FractionalTransformsParser, AnimationParser, TransitionParser,
+    TransitionPropertiesParser, InteractiveParser, SvgParser, ProseParser, DivideParser,
+    GradientParser, ObjectFitParser, ArbitraryParser, DataAttributeParser,
+    BackgroundPropertiesParser, AspectRatioParser, ColumnsParser, BreakControlParser,
+    BoxUtilitiesParser, LayoutUtilitiesParser, OverflowParser, OverscrollParser,
+    PositionParser, InsetParser, VisibilityParser, ZIndexParser, FlexBasisParser,
+    FlexDirectionParser, FlexWrapParser, FlexParser, FlexGrowParser, FlexShrinkParser,
+    OrderParser, GridTemplateColumnsParser, GridColumnParser, GridTemplateRowsParser,
+    GridRowParser, GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser,
+    GapParser, JustifyContentParser, JustifyItemsParser, JustifySelfParser,
+    AlignContentParser, AlignItemsParser, AlignSelfParser, PlaceContentParser,
+    PlaceItemsParser, PlaceSelfParser, BackgroundParser, FilterUtilitiesParser,
+    BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser,
+    AccentColorParser, UtilityParser, ParserCategory
+};
 pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};
 pub use dark_mode::{DarkModeVariant, DarkModeVariantError, DarkModeVariantUtilities};

@@ -183,6 +183,130 @@ impl CssGeneratorParsers for super::CssGenerator {
             return Ok(properties);
         }
         
+        if let Some(properties) = self.place_content_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.place_items_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.place_self_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        // Grid and Flexbox parsers
+        if let Some(properties) = self.grid_template_columns_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.grid_column_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.grid_template_rows_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.grid_row_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.grid_auto_flow_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.grid_auto_columns_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.grid_auto_rows_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.gap_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        // Flexbox parsers
+        if let Some(properties) = self.flex_basis_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.flex_direction_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.flex_wrap_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.flex_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.flex_grow_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.flex_shrink_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.order_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        // Justify and Align parsers
+        if let Some(properties) = self.justify_content_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.justify_items_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.justify_self_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.align_content_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.align_items_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.align_self_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        // Layout parsers
+        if let Some(properties) = self.overflow_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.overscroll_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.position_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.inset_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.visibility_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
+        if let Some(properties) = self.z_index_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
         if let Some(properties) = self.typography_parser.parse_class(&base_class) {
             return Ok(properties);
         }

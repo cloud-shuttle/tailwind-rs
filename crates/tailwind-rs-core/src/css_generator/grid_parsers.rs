@@ -9,7 +9,7 @@ use super::parsers::{
     GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser, GapParser, 
     JustifyContentParser, JustifyItemsParser, JustifySelfParser, AlignContentParser,
     AlignItemsParser, AlignSelfParser, PlaceContentParser, PlaceItemsParser, 
-    PlaceSelfParser, UtilityParser
+    PlaceSelfParser
 };
 
 /// Grid parser methods for CssGenerator

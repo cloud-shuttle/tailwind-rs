@@ -1029,10 +1029,10 @@ mod tests {
         let minifier = AdvancedCssMinifier::new();
         let css = ".test-class { color: red; }";
 
-        let minified = minifier.minify(css);
+        let result = minifier.minify(css);
         // Just check that we get some output and it doesn't contain comments
-        assert!(!minified.is_empty());
-        assert!(!minified.contains("/*"));
+        assert!(!result.is_empty());
+        assert!(!result.contains("/*"));
     }
 
     #[test]
@@ -1074,8 +1074,8 @@ mod tests {
     fn test_memory_optimization() {
         let optimizer = MemoryOptimizer::new();
         let data = "test data";
-        let optimized = optimizer.optimize_memory(data);
-        assert_eq!(optimized, data);
+        let result = optimizer.optimize_memory(data);
+        assert_eq!(result, data);
     }
 
     #[test]
@@ -1090,12 +1090,12 @@ mod tests {
     fn test_advanced_optimization_result_display() {
         let result = AdvancedOptimizationResult {
             original_metrics: OptimizationMetrics {
-                bundle_size: 100000,
+                bundle_size: 100_000,
                 class_count: 1000,
                 rule_count: 500,
                 parse_time: 10.0,
                 render_time: 5.0,
-                memory_usage: 50000000,
+                memory_usage: 50_000_000,
                 cpu_usage: 50.0,
             },
             optimized_metrics: OptimizationMetrics {
@@ -1104,7 +1104,7 @@ mod tests {
                 rule_count: 250,
                 parse_time: 5.0,
                 render_time: 2.5,
-                memory_usage: 25000000,
+                memory_usage: 25_000_000,
                 cpu_usage: 25.0,
             },
             strategies_applied: vec!["minification".to_string(), "tree-shaking".to_string()],

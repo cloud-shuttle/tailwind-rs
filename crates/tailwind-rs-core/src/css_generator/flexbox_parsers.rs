@@ -6,7 +6,7 @@
 use super::types::CssProperty;
 use super::parsers::{
     FlexBasisParser, FlexDirectionParser, FlexWrapParser, FlexParser, 
-    FlexGrowParser, FlexShrinkParser, OrderParser, UtilityParser
+    FlexGrowParser, FlexShrinkParser, OrderParser
 };
 
 /// Flexbox parser methods for CssGenerator

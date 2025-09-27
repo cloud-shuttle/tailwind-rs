@@ -71,15 +71,15 @@ impl SpacingScale {
     }
 
     /// Creates a custom spacing scale
-    pub fn custom(xs: &str, sm: &str, md: &str, lg: &str, xl: &str, xxl: &str, xxxl: &str) -> Self {
+    pub fn custom(xs: &str, sm: &str, md: &str, lg: &str, xl: &str, xl2: &str, xl3: &str) -> Self {
         let mut values = HashMap::new();
         values.insert(SpacingSize::Xs, xs.to_string());
         values.insert(SpacingSize::Sm, sm.to_string());
         values.insert(SpacingSize::Md, md.to_string());
         values.insert(SpacingSize::Lg, lg.to_string());
         values.insert(SpacingSize::Xl, xl.to_string());
-        values.insert(SpacingSize::Xxl, xxl.to_string());
-        values.insert(SpacingSize::Xxxl, xxxl.to_string());
+        values.insert(SpacingSize::Xxl, xl2.to_string());
+        values.insert(SpacingSize::Xxxl, xl3.to_string());
 
         Self { values }
     }

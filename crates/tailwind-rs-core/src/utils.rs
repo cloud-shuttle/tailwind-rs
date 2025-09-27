@@ -409,11 +409,11 @@ mod tests {
         let elapsed = timer.elapsed();
         assert!(elapsed.as_millis() >= 10);
 
-        let elapsed_ms = timer.elapsed_ms();
-        assert!(elapsed_ms >= 10);
+        let elapsed_millis = timer.elapsed_ms();
+        assert!(elapsed_millis >= 10);
 
-        let elapsed_us = timer.elapsed_us();
-        assert!(elapsed_us >= 10000);
+        let elapsed_micros = timer.elapsed_us();
+        assert!(elapsed_micros >= 10000);
 
         timer.reset();
         let reset_elapsed = timer.elapsed();

@@ -6,7 +6,7 @@
 use super::types::CssProperty;
 use super::parsers::{
     OverflowParser, OverscrollParser, PositionParser, InsetParser, 
-    VisibilityParser, ZIndexParser, UtilityParser
+    VisibilityParser, ZIndexParser
 };
 
 /// Layout parser methods for CssGenerator

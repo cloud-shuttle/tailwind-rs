@@ -88,17 +88,17 @@ impl FromStr for Color {
                 return Err(TailwindError::theme("RGB must have 3 values"));
             }
 
-            let r = values[0]
+            let red = values[0]
                 .parse::<u8>()
                 .map_err(|_| TailwindError::theme("Invalid RGB red value"))?;
-            let g = values[1]
+            let green = values[1]
                 .parse::<u8>()
                 .map_err(|_| TailwindError::theme("Invalid RGB green value"))?;
-            let b = values[2]
+            let blue = values[2]
                 .parse::<u8>()
                 .map_err(|_| TailwindError::theme("Invalid RGB blue value"))?;
 
-            Ok(Color::rgb(r, g, b))
+            Ok(Color::rgb(red, green, blue))
         } else if s.starts_with("rgba(") {
             // Parse rgba(r, g, b, a) format
             let content = s
@@ -111,20 +111,20 @@ impl FromStr for Color {
                 return Err(TailwindError::theme("RGBA must have 4 values"));
             }
 
-            let r = values[0]
+            let red = values[0]
                 .parse::<u8>()
                 .map_err(|_| TailwindError::theme("Invalid RGBA red value"))?;
-            let g = values[1]
+            let green = values[1]
                 .parse::<u8>()
                 .map_err(|_| TailwindError::theme("Invalid RGBA green value"))?;
-            let b = values[2]
+            let blue = values[2]
                 .parse::<u8>()
                 .map_err(|_| TailwindError::theme("Invalid RGBA blue value"))?;
-            let a = values[3]
+            let alpha = values[3]
                 .parse::<f32>()
                 .map_err(|_| TailwindError::theme("Invalid RGBA alpha value"))?;
 
-            Ok(Color::rgba(r, g, b, a))
+            Ok(Color::rgba(red, green, blue, alpha))
         } else {
             // Named color
             Ok(Color::named(s))

@@ -267,8 +267,8 @@ mod sync_builder_tests {
         let result = optimizer.optimize_css(css);
         assert!(result.is_ok());
 
-        let optimized = result.unwrap();
-        assert!(optimized.len() <= css.len());
+        let result_data = result.unwrap();
+        assert!(result_data.len() <= css.len());
     }
 }
 

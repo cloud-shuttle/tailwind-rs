@@ -4,16 +4,14 @@
 //! including backdrop-blur, backdrop-brightness, backdrop-contrast, backdrop-grayscale,
 //! backdrop-hue-rotate, backdrop-invert, backdrop-opacity, backdrop-saturate, and backdrop-sepia.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct BackdropFilterUtilitiesParser;
 
 impl BackdropFilterUtilitiesParser {
-    pub fn new() -> Self {
-        Self
-    }
+    pub fn new() -> Self { Self }
 
     /// Parse backdrop-filter classes
     fn parse_backdrop_filter_class(&self, class: &str) -> Option<Vec<CssProperty>> {
@@ -34,7 +32,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for backdrop-filter
                 if let Some(value) = class.strip_prefix("backdrop-filter-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -45,7 +43,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 None
             }
         }
@@ -105,7 +103,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for backdrop-blur
                 if let Some(value) = class.strip_prefix("backdrop-blur-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -116,7 +114,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 None
             }
         }
@@ -136,7 +134,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for backdrop-brightness
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -147,7 +145,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for backdrop-brightness
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -175,7 +173,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for backdrop-contrast
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -186,7 +184,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for backdrop-contrast
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -226,7 +224,7 @@ impl BackdropFilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Arbitrary values for backdrop-grayscale
                         if let Some(value) = value.strip_prefix("[") {
                             if let Some(value) = value.strip_suffix("]") {
@@ -237,7 +235,7 @@ impl BackdropFilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Numeric values for backdrop-grayscale
                         if let Ok(_) = value.parse::<f32>() {
                             return Some(vec![CssProperty {
@@ -267,7 +265,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for backdrop-hue-rotate
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -278,7 +276,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for backdrop-hue-rotate
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -329,7 +327,7 @@ impl BackdropFilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Arbitrary values for backdrop-invert
                         if let Some(value) = value.strip_prefix("[") {
                             if let Some(value) = value.strip_suffix("]") {
@@ -340,7 +338,7 @@ impl BackdropFilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Numeric values for backdrop-invert
                         if let Ok(_) = value.parse::<f32>() {
                             return Some(vec![CssProperty {
@@ -370,7 +368,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for backdrop-opacity
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -381,7 +379,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for backdrop-opacity
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -409,7 +407,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Arbitrary values for backdrop-saturate
                 if let Some(value) = value.strip_prefix("[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -420,7 +418,7 @@ impl BackdropFilterUtilitiesParser {
                         }]);
                     }
                 }
-
+                
                 // Numeric values for backdrop-saturate
                 if let Ok(_) = value.parse::<f32>() {
                     return Some(vec![CssProperty {
@@ -460,7 +458,7 @@ impl BackdropFilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Arbitrary values for backdrop-sepia
                         if let Some(value) = value.strip_prefix("[") {
                             if let Some(value) = value.strip_suffix("]") {
@@ -471,7 +469,7 @@ impl BackdropFilterUtilitiesParser {
                                 }]);
                             }
                         }
-
+                        
                         // Numeric values for backdrop-sepia
                         if let Ok(_) = value.parse::<f32>() {
                             return Some(vec![CssProperty {
@@ -491,81 +489,70 @@ impl BackdropFilterUtilitiesParser {
 impl UtilityParser for BackdropFilterUtilitiesParser {
     fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         // Try each parser in order of specificity
-
+        
         // Backdrop-filter (most specific)
         if let Some(properties) = self.parse_backdrop_filter_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-blur
         if let Some(properties) = self.parse_backdrop_blur_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-brightness
         if let Some(properties) = self.parse_backdrop_brightness_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-contrast
         if let Some(properties) = self.parse_backdrop_contrast_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-grayscale
         if let Some(properties) = self.parse_backdrop_grayscale_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-hue-rotate
         if let Some(properties) = self.parse_backdrop_hue_rotate_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-invert
         if let Some(properties) = self.parse_backdrop_invert_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-opacity
         if let Some(properties) = self.parse_backdrop_opacity_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-saturate
         if let Some(properties) = self.parse_backdrop_saturate_class(class) {
             return Some(properties);
         }
-
+        
         // Backdrop-sepia (least specific)
         if let Some(properties) = self.parse_backdrop_sepia_class(class) {
             return Some(properties);
         }
-
+        
         None
     }
-
-    fn get_supported_patterns(&self) -> Vec<&'static str> {
+    
+    fn get_supported_patterns(&self) -> Vec<&'static str> { 
         vec![
-            "backdrop-filter-*",
-            "backdrop-blur-*",
-            "backdrop-brightness-*",
-            "backdrop-contrast-*",
-            "backdrop-grayscale-*",
-            "backdrop-hue-rotate-*",
-            "backdrop-invert-*",
-            "backdrop-opacity-*",
-            "backdrop-saturate-*",
-            "backdrop-sepia-*",
-        ]
+            "backdrop-filter-*", "backdrop-blur-*", "backdrop-brightness-*", "backdrop-contrast-*", 
+            "backdrop-grayscale-*", "backdrop-hue-rotate-*", "backdrop-invert-*", "backdrop-opacity-*", 
+            "backdrop-saturate-*", "backdrop-sepia-*"
+        ] 
     }
-
-    fn get_priority(&self) -> u32 {
-        50
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Effects
-    }
+    
+    fn get_priority(&self) -> u32 { 50 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Effects }
 }
 
 impl Default for BackdropFilterUtilitiesParser {

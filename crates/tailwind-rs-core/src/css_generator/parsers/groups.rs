@@ -3,24 +3,22 @@
 //! This module provides parsing logic for group-related Tailwind CSS utilities,
 //! including group classes and group hover states.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct GroupParser;
 
 impl GroupParser {
-    pub fn new() -> Self {
-        Self
-    }
+    pub fn new() -> Self { Self }
 
     /// Parse group class
     fn parse_group_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "group" => Some(vec![CssProperty {
-                name: "position".to_string(),
-                value: "relative".to_string(),
-                important: false,
+            "group" => Some(vec![CssProperty { 
+                name: "position".to_string(), 
+                value: "relative".to_string(), 
+                important: false 
             }]),
             _ => None,
         }
@@ -54,16 +52,10 @@ impl UtilityParser for GroupParser {
         vec!["group", "group-hover:*"]
     }
 
-    fn get_priority(&self) -> u32 {
-        60
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Layout
-    }
+    fn get_priority(&self) -> u32 { 60 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Layout }
 }
 
 impl Default for GroupParser {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }

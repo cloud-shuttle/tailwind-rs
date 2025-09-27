@@ -3,16 +3,14 @@
 //! This module provides parsing logic for transition-related Tailwind CSS utilities,
 //! including transition properties, duration, timing, and delay.
 
-use super::{ParserCategory, UtilityParser};
+use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct TransitionParser;
 
 impl TransitionParser {
-    pub fn new() -> Self {
-        Self
-    }
+    pub fn new() -> Self { Self }
 
     /// Parse transition property classes
     fn parse_transition_property_class(&self, class: &str) -> Option<Vec<CssProperty>> {
@@ -32,11 +30,7 @@ impl TransitionParser {
     fn parse_transition_duration_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(duration) = class.strip_prefix("duration-") {
             let duration_value = self.parse_duration_value(duration)?;
-            return Some(vec![CssProperty {
-                name: "transition-duration".to_string(),
-                value: duration_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "transition-duration".to_string(), value: duration_value, important: false }]);
         }
         None
     }
@@ -45,11 +39,7 @@ impl TransitionParser {
     fn parse_transition_timing_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(timing) = class.strip_prefix("ease-") {
             let timing_value = self.parse_timing_value(timing)?;
-            return Some(vec![CssProperty {
-                name: "transition-timing-function".to_string(),
-                value: timing_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "transition-timing-function".to_string(), value: timing_value, important: false }]);
         }
         None
     }
@@ -58,11 +48,7 @@ impl TransitionParser {
     fn parse_transition_delay_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(delay) = class.strip_prefix("delay-") {
             let delay_value = self.parse_delay_value(delay)?;
-            return Some(vec![CssProperty {
-                name: "transition-delay".to_string(),
-                value: delay_value,
-                important: false,
-            }]);
+            return Some(vec![CssProperty { name: "transition-delay".to_string(), value: delay_value, important: false }]);
         }
         None
     }
@@ -128,30 +114,15 @@ impl UtilityParser for TransitionParser {
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
-        vec![
-            "transition-none",
-            "transition-all",
-            "transition",
-            "transition-colors",
-            "transition-opacity",
-            "transition-shadow",
-            "transition-transform",
-            "duration-*",
-            "ease-*",
-            "delay-*",
-        ]
+        vec!["transition-none", "transition-all", "transition", "transition-colors", 
+             "transition-opacity", "transition-shadow", "transition-transform",
+             "duration-*", "ease-*", "delay-*"]
     }
 
-    fn get_priority(&self) -> u32 {
-        75
-    }
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Animations
-    }
+    fn get_priority(&self) -> u32 { 75 }
+    fn get_category(&self) -> ParserCategory { ParserCategory::Animations }
 }
 
 impl Default for TransitionParser {
-    fn default() -> Self {
-        Self::new()
-    }
+    fn default() -> Self { Self::new() }
 }

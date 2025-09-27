@@ -3,20 +3,20 @@
 //! This module provides the main CSS generation interface,
 //! orchestrating the various parser modules to generate CSS.
 
-pub mod core;
-pub mod css_output;
+pub mod types;
 pub mod generator;
 pub mod generator_builders;
 pub mod generator_operations;
 pub mod generator_parsers;
-pub mod parsers;
-pub mod types;
-pub mod utils;
+pub mod css_output;
+pub mod core;
 pub mod variants;
+pub mod utils;
+pub mod parsers;
 
 // Re-export main types and functionality
-pub use css_output::CssOutputGenerator;
+pub use types::{CssRule, CssProperty, CssGenerationConfig};
 pub use generator::CssGenerator;
-pub use parsers::*;
-pub use types::{CssGenerationConfig, CssProperty, CssRule};
+pub use css_output::CssOutputGenerator;
 pub use variants::VariantParser;
+pub use parsers::*;

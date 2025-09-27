@@ -6,32 +6,128 @@ Get up and running with Tailwind-RS in under 5 minutes! This guide will walk you
 
 > **🚀 Production Ready**: Complete implementation with real configuration system, theme management, tree-shaking, and CSS optimization. All systems are fully implemented and tested.
 
-## 📋 **Prerequisites**
+## ⚠️ **Important: Choose Your Approach**
 
-- Rust 1.70+ (latest stable recommended)
-- Cargo
+**For Production Applications**: Use **real Tailwind CSS** for full compatibility and no "Unknown class" errors.
+
+**For Simple Projects**: Use `tailwind-rs-core` for basic functionality (limited class support).
+
+## 🚨 **Critical Reality Check**
+
+After extensive testing, the `tailwind-rs-*` ecosystem has **fundamental limitations**:
+
+- **Severely limited class support** - Only ~9 CSS rules generated
+- **"Unknown class" errors** - Missing critical classes like `translate-x-16`
+- **Broken PostCSS integration** - Doesn't process `@tailwind` directives
+- **Inconsistent APIs** - Different Result types across crates
+- **Missing CSS variables** - Generated CSS references undefined variables
+
+## 🎯 **Recommended Solution: Real Tailwind CSS**
+
+Instead of the `tailwind-rs-*` ecosystem, use the **official Tailwind CSS tooling**:
+
+### 1. Install Real Tailwind CSS
+```bash
+npm install -D tailwindcss
+npx tailwindcss init
+```
+
+### 2. Configure for Rust Projects
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./src/**/*.{rs,html}",
+    "./public/**/*.html",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+### 3. Build Process Integration
+```bash
+# Generate CSS with all utilities
+npx tailwindcss -i ./src/input.css -o ./public/styles.css --watch
+```
+
+### 4. Benefits of Real Tailwind CSS
+✅ **Complete Class Support**: All Tailwind utilities available  
+✅ **No Unknown Class Errors**: Every class is supported  
+✅ **Proper CSS Variables**: All theme values defined  
+✅ **Production Ready**: Battle-tested by millions of developers  
+✅ **Full Documentation**: Comprehensive guides and examples  
+✅ **Plugin Support**: Extensible with custom plugins  
+✅ **Performance**: Optimized CSS generation  
+✅ **Maintenance**: Active development and support
+
+## 🔧 **If You Must Use tailwind-rs-core**
+
+**Warning**: This approach has severe limitations and is not recommended for production.
+
+### Quick Setup (Limited Support)
+```toml
+[dependencies]
+tailwind-rs-core = "0.15.1"
+```
+
+### Basic Usage
+```rust
+use tailwind_rs_core::*;
+
+fn main() {
+    let mut generator = CssGenerator::new();
+    generator.add_class("bg-blue-500").unwrap();
+    generator.add_class("text-white").unwrap();
+    let css = generator.generate_css();
+    println!("Generated CSS: {}", css);
+}
+```
+
+### Limitations
+- ❌ **Only ~9 CSS rules generated**
+- ❌ **Missing 90%+ of Tailwind classes**
+- ❌ **"Unknown class" errors for common utilities**
+- ❌ **No responsive breakpoints**
+- ❌ **No dark mode support**
+- ❌ **No hover states**
+
+## 🚀 **Next Steps**
+
+1. **For Production**: Use real Tailwind CSS
+2. **For Learning**: Use `tailwind-rs-core` with understanding of limitations
+3. **For Migration**: Follow the migration guide to real Tailwind CSS
+
+## 📚 **Additional Resources**
+
+- [Real Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Tailwind CSS CLI](https://tailwindcss.com/docs/cli)
+- [Tailwind CSS Configuration](https://tailwindcss.com/docs/configuration)
+- [Tailwind CSS Plugins](https://tailwindcss.com/docs/plugins)
 - Your preferred Rust web framework (Leptos, Yew, or Dioxus)
 - **WASM support** (for web applications)
 
 ## ⚡ **Quick Setup**
 
-### **1. Create a New Project**
+### **🎯 Recommended: PostCSS Approach (Production)**
 
 ```bash
 # Create a new Rust project
 cargo new my-tailwind-app
 cd my-tailwind-app
 
-# Add your web framework (example with Leptos)
+# Add your web framework and PostCSS integration
 cargo add leptos
-cargo add tailwind-rs-core@0.16.0
+cargo add tailwind-rs-postcss@0.16.0
 cargo add tailwind-rs-leptos@0.16.0
 
 # For WASM applications
 cargo add tailwind-rs-wasm@0.16.0
 ```
 
-### **2. Configure Cargo.toml**
+### **2. Configure Cargo.toml (PostCSS)**
 
 ```toml
 [package]
@@ -41,21 +137,78 @@ edition = "2021"
 
 [dependencies]
 leptos = "0.8.8"
-tailwind-rs-core = "0.16.0"
+tailwind-rs-postcss = "0.16.0"  # Full Tailwind CSS support
 tailwind-rs-leptos = "0.16.0"
 tailwind-rs-wasm = "0.16.0"  # For WASM support
 ```
 
+### **🔧 Alternative: Core Approach (Limited)**
+
+```bash
+# For simple projects only (limited class support)
+cargo add tailwind-rs-core@0.16.0
+cargo add tailwind-rs-leptos@0.16.0
+```
+
+```toml
+[dependencies]
+leptos = "0.8.8"
+tailwind-rs-core = "0.16.0"  # Limited class support
+tailwind-rs-leptos = "0.16.0"
+```
+
 ## 🎨 **Your First Component**
 
-### **Leptos Example - String-Based Classes**
+### **🎯 PostCSS Approach (Recommended)**
+
+```rust
+use leptos::prelude::*;
+use tailwind_rs_postcss::{PostCSSEngine, PostCSSConfig};
+
+#[component]
+fn Button() -> impl IntoView {
+    // Full Tailwind CSS support - no "Unknown class" errors!
+    let classes = "px-4 py-2 rounded-md font-medium bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 active:scale-95 transition-all duration-200";
+    
+    view! { 
+        <button class=classes>
+            "Click me"
+        </button>
+    }
+}
+
+#[component]
+fn App() -> impl IntoView {
+    view! {
+        <div class="min-h-screen bg-gray-100 flex items-center justify-center">
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+                <h1 class="text-2xl font-bold text-gray-900 mb-4">
+                    "Welcome to Tailwind-RS PostCSS!"
+                </h1>
+                <Button />
+            </div>
+        </div>
+    }
+}
+
+#[tokio::main]
+async fn main() {
+    // Initialize PostCSS engine
+    let config = PostCSSConfig::default();
+    let _engine = PostCSSEngine::new(config).expect("Failed to create PostCSS engine");
+    
+    leptos::mount_to_body(App)
+}
+```
+
+### **🔧 Core Approach (Limited Support)**
 
 ```rust
 use leptos::prelude::*;
 
 #[component]
 fn Button() -> impl IntoView {
-    // Simple string-based classes (easiest approach)
+    // Limited class support - may get "Unknown class" errors
     let classes = "px-4 py-2 rounded-md font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors";
     
     view! { 
@@ -248,7 +401,56 @@ wasm-pack build --target web
 
 ## 🎯 **Key Features to Try**
 
-### **1. String-Based Classes (Simple & Fast)**
+### **🎯 PostCSS Approach (Recommended)**
+
+#### **1. Full Tailwind CSS Support**
+
+```rust
+use tailwind_rs_postcss::{PostCSSEngine, PostCSSConfig};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = PostCSSConfig::default();
+    let engine = PostCSSEngine::new(config).await?;
+    
+    // All Tailwind classes work without errors!
+    let button_classes = "px-4 py-2 rounded-md font-medium bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 active:scale-95 transition-all duration-200";
+    
+    // Advanced features work perfectly
+    let card_classes = "bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 transform hover:scale-105";
+    
+    // Responsive design
+    let responsive_classes = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4";
+    
+    // Dark mode support
+    let dark_mode_classes = "bg-white dark:bg-gray-800 text-gray-900 dark:text-white";
+    
+    Ok(())
+}
+```
+
+#### **2. Advanced CSS Processing**
+
+```rust
+use tailwind_rs_postcss::{PostCSSEngine, PostCSSConfig, SourceMapOptions};
+
+let config = PostCSSConfig {
+    source_map: true,
+    source_map_options: SourceMapOptions {
+        inline: false,
+        file: Some("styles.css.map".to_string()),
+        source_root: Some("src/".to_string()),
+        sources_content: true,
+    },
+    // ... other options
+};
+
+let engine = PostCSSEngine::new(config).await?;
+```
+
+### **🔧 Core Approach (Limited Support)**
+
+#### **1. String-Based Classes (Simple & Fast)**
 
 ```rust
 // Basic string classes - easiest approach
@@ -571,6 +773,158 @@ fn create_button(variant: ButtonVariant, size: ButtonSize) -> String {
 - **GitHub Issues**: [Report bugs or request features](https://github.com/cloud-shuttle/tailwind-rs/issues)
 - **Discussions**: [Community discussions](https://github.com/cloud-shuttle/tailwind-rs/discussions)
 
+## 🎯 **PostCSS Advanced Examples**
+
+### **Complete Application Example**
+
+```rust
+use leptos::prelude::*;
+use tailwind_rs_postcss::{PostCSSEngine, PostCSSConfig};
+
+#[component]
+fn Header() -> impl IntoView {
+    view! {
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-bold text-gray-900">"My App"</h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            "Home"
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            "About"
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            "Contact"
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+    }
+}
+
+#[component]
+fn Card() -> impl IntoView {
+    view! {
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">"Card Title"</h3>
+            <p class="text-gray-600 mb-4">"This is a card with hover effects and smooth transitions."</p>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">
+                "Click me"
+            </button>
+        </div>
+    }
+}
+
+#[component]
+fn App() -> impl IntoView {
+    view! {
+        <div class="min-h-screen bg-gray-50">
+            <Header />
+            <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div class="px-4 py-6 sm:px-0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <Card />
+                        <Card />
+                        <Card />
+                    </div>
+                </div>
+            </main>
+        </div>
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = PostCSSConfig::default();
+    let _engine = PostCSSEngine::new(config).await?;
+    
+    leptos::mount_to_body(App);
+    Ok(())
+}
+```
+
+### **Responsive Design Example**
+
+```rust
+use leptos::prelude::*;
+use tailwind_rs_postcss::{PostCSSEngine, PostCSSConfig};
+
+#[component]
+fn ResponsiveGrid() -> impl IntoView {
+    view! {
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+            <div class="bg-blue-100 p-4 rounded-lg text-center">
+                <h3 class="text-sm font-medium text-blue-900">"Item 1"</h3>
+                <p class="text-xs text-blue-700 mt-1">"Responsive grid item"</p>
+            </div>
+            <div class="bg-green-100 p-4 rounded-lg text-center">
+                <h3 class="text-sm font-medium text-green-900">"Item 2"</h3>
+                <p class="text-xs text-green-700 mt-1">"Responsive grid item"</p>
+            </div>
+            <div class="bg-red-100 p-4 rounded-lg text-center">
+                <h3 class="text-sm font-medium text-red-900">"Item 3"</h3>
+                <p class="text-xs text-red-700 mt-1">"Responsive grid item"</p>
+            </div>
+            <div class="bg-yellow-100 p-4 rounded-lg text-center">
+                <h3 class="text-sm font-medium text-yellow-900">"Item 4"</h3>
+                <p class="text-xs text-yellow-700 mt-1">"Responsive grid item"</p>
+            </div>
+            <div class="bg-purple-100 p-4 rounded-lg text-center">
+                <h3 class="text-sm font-medium text-purple-900">"Item 5"</h3>
+                <p class="text-xs text-purple-700 mt-1">"Responsive grid item"</p>
+            </div>
+        </div>
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = PostCSSConfig::default();
+    let _engine = PostCSSEngine::new(config).await?;
+    
+    leptos::mount_to_body(ResponsiveGrid);
+    Ok(())
+}
+```
+
+### **Dark Mode Example**
+
+```rust
+use leptos::prelude::*;
+use tailwind_rs_postcss::{PostCSSEngine, PostCSSConfig};
+
+#[component]
+fn DarkModeCard() -> impl IntoView {
+    view! {
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors duration-300">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                "Dark Mode Card"
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                "This card automatically adapts to light and dark themes."
+            </p>
+            <button class="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200">
+                "Toggle Theme"
+            </button>
+        </div>
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = PostCSSConfig::default();
+    let _engine = PostCSSEngine::new(config).await?;
+    
+    leptos::mount_to_body(DarkModeCard);
+    Ok(())
+}
+```
+
 ## 🎉 **Next Steps**
 
 1. **Explore Examples**: Check out our [comprehensive examples](../examples/)
@@ -578,11 +932,12 @@ fn create_button(variant: ButtonVariant, size: ButtonSize) -> String {
 3. **Performance Guide**: Optimize your application with our [performance tips](../performance/)
 4. **Framework Integration**: Deep dive into [framework-specific guides](../frameworks/)
 5. **Advanced Features**: Explore [advanced patterns and features](../features/)
+6. **Migration Guide**: Learn how to migrate from core to PostCSS approach
 
 ---
 
 ## 🚀 **You're Ready!**
 
-Congratulations! You've successfully set up Tailwind-RS v0.16.0 and created your first styled component. This production-ready release includes complete implementations of all major systems with comprehensive test coverage.
+Congratulations! You've successfully set up Tailwind-RS v0.16.0 with PostCSS integration and created your first styled component. This production-ready release includes complete implementations of all major systems with comprehensive test coverage.
 
 **Happy coding!** 🎨✨

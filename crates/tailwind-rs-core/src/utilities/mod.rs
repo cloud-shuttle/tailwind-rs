@@ -56,7 +56,6 @@ pub use layout::*;
 pub use logical_properties::*;
 pub use mask::*;
 pub use modern_css_features::*;
-pub use performance_optimization::*;
 pub use sizing::*;
 pub use spacing::*;
 pub use text_shadow::*;

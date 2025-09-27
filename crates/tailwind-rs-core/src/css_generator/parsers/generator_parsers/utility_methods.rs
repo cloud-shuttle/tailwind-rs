@@ -6,7 +6,7 @@ use crate::css_generator::types::{CssProperty, CssRule};
 use crate::error::Result;
 
 /// Utility methods for CssGenerator
-impl crate::css_generator::core::CssGenerator {
+impl crate::css_generator::CssGenerator {
     /// Parse variants from a class name and return (variants, base_class)
     pub fn parse_variants(&self, class: &str) -> (Vec<String>, String) {
         self.variant_parser.parse_variants(class)

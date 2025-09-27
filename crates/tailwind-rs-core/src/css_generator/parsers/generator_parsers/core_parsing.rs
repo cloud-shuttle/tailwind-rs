@@ -6,7 +6,7 @@ use crate::css_generator::types::CssProperty;
 use crate::error::{Result, TailwindError};
 
 /// Core parsing implementation for CssGenerator
-impl crate::css_generator::core::CssGenerator {
+impl crate::css_generator::CssGenerator {
     /// Convert a class name to CSS properties
     /// 
     /// This is the main parsing method that tries all available parsers

@@ -16,7 +16,7 @@ use crate::css_generator::parsers::{
 };
 
 /// Specialized parser methods for CssGenerator
-impl crate::css_generator::core::CssGenerator {
+impl crate::css_generator::CssGenerator {
     // Basic parser methods - delegate to the actual parser modules
     pub fn parse_spacing_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         self.spacing_parser.parse_class(class)

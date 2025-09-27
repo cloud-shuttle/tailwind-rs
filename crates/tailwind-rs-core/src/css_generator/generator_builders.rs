@@ -119,6 +119,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
             accessibility_parser: AccessibilityParser::new(),
             table_parser: TableParser::new(),
             mask_utilities_parser: MaskUtilitiesParser::new(),
+            accent_color_parser: AccentColorParser::new(),
             variant_parser: VariantParser::new(),
         };
         
@@ -205,6 +206,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
             accessibility_parser: AccessibilityParser::new(),
             table_parser: TableParser::new(),
             mask_utilities_parser: MaskUtilitiesParser::new(),
+            accent_color_parser: AccentColorParser::new(),
             variant_parser: VariantParser::new(),
         };
         

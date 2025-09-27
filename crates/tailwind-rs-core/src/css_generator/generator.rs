@@ -22,7 +22,7 @@ use super::parsers::{
     GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser, GapParser, JustifyContentParser,
     JustifyItemsParser, JustifySelfParser, AlignContentParser, AlignItemsParser, AlignSelfParser,
     PlaceContentParser, PlaceItemsParser, PlaceSelfParser, BackgroundParser, BorderUtilitiesParser,
-    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser
+    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser, AccentColorParser
 };
 
 /// CSS generator that converts Tailwind classes to CSS rules
@@ -182,6 +182,8 @@ pub struct CssGenerator {
     pub table_parser: TableParser,
     /// Mask utilities parser
     pub mask_utilities_parser: MaskUtilitiesParser,
+    /// Accent color parser
+    pub accent_color_parser: AccentColorParser,
     /// Variant parser
     pub variant_parser: VariantParser,
 }

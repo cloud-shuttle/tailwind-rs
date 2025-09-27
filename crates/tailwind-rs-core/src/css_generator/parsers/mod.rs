@@ -88,6 +88,7 @@ pub mod effects_utilities;
 pub mod mask_utilities;
 pub mod mask_image_parser;
 pub mod mask_properties_parser;
+pub mod accent_color;
 
 pub use spacing::SpacingParser;
 pub use spacing_advanced::AdvancedSpacingParser;
@@ -160,6 +161,7 @@ pub use background::BackgroundParser;
 pub use border_utilities::BorderUtilitiesParser;
 pub use effects_utilities::EffectsUtilitiesParser;
 pub use mask_utilities::MaskUtilitiesParser;
+pub use accent_color::AccentColorParser;
 
 /// Common parser interface for all utility parsers
 pub trait UtilityParser {

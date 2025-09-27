@@ -355,6 +355,10 @@ impl CssGeneratorParsers for super::CssGenerator {
             return Ok(properties);
         }
         
+        if let Some(properties) = self.accent_color_parser.parse_class(&base_class) {
+            return Ok(properties);
+        }
+        
         if let Some(properties) = self.parse_sizing_class(&base_class) {
             return Ok(properties);
         }

@@ -2,6 +2,27 @@
 //!
 //! This module provides the main CSS generation interface,
 //! orchestrating the various parser modules to generate CSS.
+//!
+//! ## Example
+//!
+//! ```rust
+//! use tailwind_rs_core::CssGenerator;
+//!
+//! // Create a CSS generator
+//! let mut generator = CssGenerator::new();
+//!
+//! // Add classes (returns Result<()>)
+//! generator.add_class("bg-blue-500").unwrap();
+//! generator.add_class("text-white").unwrap();
+//! generator.add_class("hover:bg-blue-600").unwrap();
+//!
+//! // Generate CSS
+//! let css = generator.generate_css();
+//! // Returns actual CSS with properties like:
+//! // .bg-blue-500 { background-color: #3b82f6; }
+//! // .text-white { color: #ffffff; }
+//! // .hover\:bg-blue-600:hover { background-color: #2563eb; }
+//! ```
 
 pub mod types;
 pub mod generator;

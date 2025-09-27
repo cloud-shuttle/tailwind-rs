@@ -1,6 +1,28 @@
 //! ClassSet implementation
 //!
 //! This module contains the ClassSet struct and its methods.
+//!
+//! ## Example
+//!
+//! ```rust
+//! use tailwind_rs_core::ClassSet;
+//!
+//! // Create and use a class set
+//! let mut class_set = ClassSet::new();
+//! class_set.add_class("bg-blue-500");
+//! class_set.add_class("text-white");
+//! class_set.add_class("hover:bg-blue-600");
+//!
+//! // Check if class exists
+//! let has_class = class_set.has_class("bg-blue-500"); // true
+//!
+//! // Get all classes
+//! let classes = class_set.get_classes();
+//!
+//! // Convert to CSS string
+//! let css = class_set.to_css_classes();
+//! // Result: "bg-blue-500 text-white hover:bg-blue-600"
+//! ```
 
 use crate::responsive::Breakpoint;
 use std::collections::{HashMap, HashSet};

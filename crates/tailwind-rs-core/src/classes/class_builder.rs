@@ -1,6 +1,27 @@
 //! ClassBuilder implementation
 //!
 //! This module contains the ClassBuilder struct and its methods.
+//!
+//! ## Example
+//!
+//! ```rust
+//! use tailwind_rs_core::ClassBuilder;
+//!
+//! // Create type-safe Tailwind classes
+//! let class_builder = ClassBuilder::new();
+//! let class_set = class_builder
+//!     .class("bg-blue-500")
+//!     .class("text-white")
+//!     .class("px-4")
+//!     .class("py-2")
+//!     .class("rounded-lg")
+//!     .class("hover:bg-blue-600")
+//!     .build();
+//!
+//! // Convert to CSS classes
+//! let css_classes = class_set.to_css_classes();
+//! // Result: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+//! ```
 
 use crate::responsive::Breakpoint;
 use super::ClassSet;

@@ -9,7 +9,7 @@
 //! - Radial masks (mask-radial-from-*, mask-radial-to-*)
 //! - Conic masks (mask-conic-from-*, mask-conic-to-*, mask-conic-*)
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 /// Parser for mask image utilities
@@ -31,7 +31,11 @@ impl MaskImageParser {
     /// Parse mask-image classes
     pub fn parse_mask_image_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "mask-none" => Some(vec![CssProperty { name: "mask-image".to_string(), value: "none".to_string(), important: false }]),
+            "mask-none" => Some(vec![CssProperty {
+                name: "mask-image".to_string(),
+                value: "none".to_string(),
+                important: false,
+            }]),
             _ => {
                 // Try different mask types in order of specificity
                 self.parse_arbitrary_mask_values(class)
@@ -56,7 +60,7 @@ impl MaskImageParser {
                 }]);
             }
         }
-        
+
         // Custom properties for mask image
         if let Some(value) = class.strip_prefix("mask-(") {
             if let Some(value) = value.strip_suffix(")") {
@@ -67,7 +71,7 @@ impl MaskImageParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -85,7 +89,7 @@ impl MaskImageParser {
                 }
             }
         }
-        
+
         // Negative linear gradient masks
         if class.starts_with("-mask-linear-") {
             if let Some(angle) = class.strip_prefix("-mask-linear-") {
@@ -98,14 +102,14 @@ impl MaskImageParser {
                 }
             }
         }
-        
+
         // Linear gradient from values
         if class.starts_with("mask-linear-from-") {
             if let Some(value) = class.strip_prefix("mask-linear-from-") {
                 return self.parse_linear_from_value(value);
             }
         }
-        
+
         None
     }
 
@@ -116,25 +120,25 @@ impl MaskImageParser {
                 return self.parse_side_mask_value("top", value);
             }
         }
-        
+
         if class.starts_with("mask-r-from-") {
             if let Some(value) = class.strip_prefix("mask-r-from-") {
                 return self.parse_side_mask_value("right", value);
             }
         }
-        
+
         if class.starts_with("mask-b-from-") {
             if let Some(value) = class.strip_prefix("mask-b-from-") {
                 return self.parse_side_mask_value("bottom", value);
             }
         }
-        
+
         if class.starts_with("mask-l-from-") {
             if let Some(value) = class.strip_prefix("mask-l-from-") {
                 return self.parse_side_mask_value("left", value);
             }
         }
-        
+
         None
     }
 
@@ -145,25 +149,25 @@ impl MaskImageParser {
                 return self.parse_axis_mask_value("x", value);
             }
         }
-        
+
         if class.starts_with("mask-y-from-") {
             if let Some(value) = class.strip_prefix("mask-y-from-") {
                 return self.parse_axis_mask_value("y", value);
             }
         }
-        
+
         if class.starts_with("mask-x-to-") {
             if let Some(value) = class.strip_prefix("mask-x-to-") {
                 return self.parse_axis_mask_to_value("x", value);
             }
         }
-        
+
         if class.starts_with("mask-y-to-") {
             if let Some(value) = class.strip_prefix("mask-y-to-") {
                 return self.parse_axis_mask_to_value("y", value);
             }
         }
-        
+
         None
     }
 
@@ -174,13 +178,13 @@ impl MaskImageParser {
                 return self.parse_radial_mask_value(value);
             }
         }
-        
+
         if class.starts_with("mask-radial-to-") {
             if let Some(value) = class.strip_prefix("mask-radial-to-") {
                 return self.parse_radial_mask_to_value(value);
             }
         }
-        
+
         None
     }
 
@@ -191,19 +195,19 @@ impl MaskImageParser {
                 return self.parse_conic_mask_value(value);
             }
         }
-        
+
         if class.starts_with("mask-conic-to-") {
             if let Some(value) = class.strip_prefix("mask-conic-to-") {
                 return self.parse_conic_mask_to_value(value);
             }
         }
-        
+
         if class.starts_with("mask-conic-") {
             if let Some(angle) = class.strip_prefix("mask-conic-") {
                 return self.parse_conic_angle_value(angle);
             }
         }
-        
+
         None
     }
 
@@ -222,7 +226,10 @@ impl MaskImageParser {
         // Implementation for side mask values
         Some(vec![CssProperty {
             name: "mask-image".to_string(),
-            value: format!("linear-gradient(to {}, black {}), transparent var(--tw-mask-linear-to))", side, value),
+            value: format!(
+                "linear-gradient(to {}, black {}), transparent var(--tw-mask-linear-to))",
+                side, value
+            ),
             important: false,
         }])
     }
@@ -232,7 +239,10 @@ impl MaskImageParser {
         // Implementation for axis mask values
         Some(vec![CssProperty {
             name: "mask-image".to_string(),
-            value: format!("linear-gradient(to {}, black {}), transparent var(--tw-mask-linear-to))", axis, value),
+            value: format!(
+                "linear-gradient(to {}, black {}), transparent var(--tw-mask-linear-to))",
+                axis, value
+            ),
             important: false,
         }])
     }
@@ -242,7 +252,10 @@ impl MaskImageParser {
         // Implementation for axis mask to values
         Some(vec![CssProperty {
             name: "mask-image".to_string(),
-            value: format!("linear-gradient(to {}, black var(--tw-mask-linear-from)), transparent {})", axis, value),
+            value: format!(
+                "linear-gradient(to {}, black var(--tw-mask-linear-from)), transparent {})",
+                axis, value
+            ),
             important: false,
         }])
     }
@@ -252,7 +265,10 @@ impl MaskImageParser {
         // Implementation for radial mask values
         Some(vec![CssProperty {
             name: "mask-image".to_string(),
-            value: format!("radial-gradient(circle, black {}), transparent var(--tw-mask-radial-to))", value),
+            value: format!(
+                "radial-gradient(circle, black {}), transparent var(--tw-mask-radial-to))",
+                value
+            ),
             important: false,
         }])
     }
@@ -262,7 +278,10 @@ impl MaskImageParser {
         // Implementation for radial mask to values
         Some(vec![CssProperty {
             name: "mask-image".to_string(),
-            value: format!("radial-gradient(circle, black var(--tw-mask-radial-from)), transparent {})", value),
+            value: format!(
+                "radial-gradient(circle, black var(--tw-mask-radial-from)), transparent {})",
+                value
+            ),
             important: false,
         }])
     }

@@ -1,5 +1,5 @@
 //! Utility Functions for CSS Generation
-//! 
+//!
 //! This module provides utility functions for CSS generation,
 //! including helper functions and common operations.
 
@@ -43,7 +43,10 @@ pub fn create_css_property(name: &str, value: &str, important: bool) -> CssPrope
 }
 
 /// Create multiple CSS properties for a single value
-pub fn create_multiple_properties(properties: &[(&str, &str)], important: bool) -> Vec<CssProperty> {
+pub fn create_multiple_properties(
+    properties: &[(&str, &str)],
+    important: bool,
+) -> Vec<CssProperty> {
     properties
         .iter()
         .map(|(name, value)| create_css_property(name, value, important))
@@ -100,23 +103,26 @@ pub fn viewport_to_css(value: f32, _unit: &str) -> String {
 
 /// Check if a value is a valid CSS color
 pub fn is_valid_color(value: &str) -> bool {
-    value.starts_with('#') || 
-    value.starts_with("rgb") || 
-    value.starts_with("hsl") ||
-    value.starts_with("var(") ||
-    matches!(value, "transparent" | "currentColor" | "inherit" | "initial" | "unset")
+    value.starts_with('#')
+        || value.starts_with("rgb")
+        || value.starts_with("hsl")
+        || value.starts_with("var(")
+        || matches!(
+            value,
+            "transparent" | "currentColor" | "inherit" | "initial" | "unset"
+        )
 }
 
 /// Check if a value is a valid CSS length
 pub fn is_valid_length(value: &str) -> bool {
-    value.ends_with("px") || 
-    value.ends_with("rem") || 
-    value.ends_with("em") || 
-    value.ends_with("%") || 
-    value.ends_with("vw") || 
-    value.ends_with("vh") ||
-    value == "0" ||
-    value == "auto"
+    value.ends_with("px")
+        || value.ends_with("rem")
+        || value.ends_with("em")
+        || value.ends_with("%")
+        || value.ends_with("vw")
+        || value.ends_with("vh")
+        || value == "0"
+        || value == "auto"
 }
 
 /// Normalize CSS property name
@@ -153,14 +159,14 @@ pub fn validate_css_property(property: &CssProperty) -> bool {
 pub fn merge_properties(properties: &[CssProperty]) -> Vec<CssProperty> {
     let mut merged = Vec::new();
     let mut seen = std::collections::HashSet::new();
-    
+
     for property in properties {
         let key = format!("{}:{}", property.name, property.value);
         if seen.insert(key) {
             merged.push(property.clone());
         }
     }
-    
+
     merged
 }
 

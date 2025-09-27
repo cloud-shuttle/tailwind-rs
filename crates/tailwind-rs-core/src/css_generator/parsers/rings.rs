@@ -3,25 +3,55 @@
 //! This module provides parsing logic for ring-related Tailwind CSS utilities,
 //! including ring width, ring color, and ring offset.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct RingParser;
 
 impl RingParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse ring width classes
     fn parse_ring_width_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "ring-0" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "0 0 0 0 #000".to_string(), important: false }]),
-            "ring-1" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "0 0 0 1px #000".to_string(), important: false }]),
-            "ring-2" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "0 0 0 2px #000".to_string(), important: false }]),
-            "ring-4" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "0 0 0 4px #000".to_string(), important: false }]),
-            "ring-8" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "0 0 0 8px #000".to_string(), important: false }]),
-            "ring" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "0 0 0 3px #000".to_string(), important: false }]),
-            "ring-inset" => Some(vec![CssProperty { name: "box-shadow".to_string(), value: "inset 0 0 0 3px #000".to_string(), important: false }]),
+            "ring-0" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 0 0 #000".to_string(),
+                important: false,
+            }]),
+            "ring-1" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 0 1px #000".to_string(),
+                important: false,
+            }]),
+            "ring-2" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 0 2px #000".to_string(),
+                important: false,
+            }]),
+            "ring-4" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 0 4px #000".to_string(),
+                important: false,
+            }]),
+            "ring-8" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 0 8px #000".to_string(),
+                important: false,
+            }]),
+            "ring" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 0 3px #000".to_string(),
+                important: false,
+            }]),
+            "ring-inset" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "inset 0 0 0 3px #000".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -34,17 +64,17 @@ impl RingParser {
                 let color_value = self.get_ring_color_value(color_name)?;
                 let opacity_value = self.parse_opacity_value(opacity)?;
                 let final_color = self.apply_opacity_to_color(&color_value, &opacity_value);
-                return Some(vec![CssProperty { 
-                    name: "box-shadow".to_string(), 
-                    value: format!("0 0 0 3px {}", final_color), 
-                    important: false 
+                return Some(vec![CssProperty {
+                    name: "box-shadow".to_string(),
+                    value: format!("0 0 0 3px {}", final_color),
+                    important: false,
                 }]);
             }
             let color_value = self.get_ring_color_value(color_part)?;
-            return Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: format!("0 0 0 3px {}", color_value), 
-                important: false 
+            return Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: format!("0 0 0 3px {}", color_value),
+                important: false,
             }]);
         }
         None
@@ -54,7 +84,11 @@ impl RingParser {
     fn parse_ring_offset_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("ring-offset-") {
             let offset_value = self.parse_ring_offset_value(value)?;
-            return Some(vec![CssProperty { name: "box-shadow".to_string(), value: format!("0 0 0 {} #000", offset_value), important: false }]);
+            return Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: format!("0 0 0 {} #000", offset_value),
+                important: false,
+            }]);
         }
         None
     }
@@ -175,14 +209,29 @@ impl UtilityParser for RingParser {
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
-        vec!["ring-0", "ring-1", "ring-2", "ring-4", "ring-8", "ring", "ring-inset", 
-             "ring-*", "ring-offset-*"]
+        vec![
+            "ring-0",
+            "ring-1",
+            "ring-2",
+            "ring-4",
+            "ring-8",
+            "ring",
+            "ring-inset",
+            "ring-*",
+            "ring-offset-*",
+        ]
     }
 
-    fn get_priority(&self) -> u32 { 85 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Effects }
+    fn get_priority(&self) -> u32 {
+        85
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Effects
+    }
 }
 
 impl Default for RingParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

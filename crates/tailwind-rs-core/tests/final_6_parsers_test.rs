@@ -1,5 +1,5 @@
 //! Final 6 Parsers Test
-//! 
+//!
 //! This test identifies and tests the remaining 6 parsers to reach 100% coverage.
 
 use tailwind_rs_core::*;
@@ -8,24 +8,24 @@ use tailwind_rs_core::*;
 fn final_6_parsers_test() -> Result<()> {
     println!("🔍 FINAL 6 PARSERS TEST");
     println!("Testing remaining 6 parsers to reach 100% coverage...\n");
-    
+
     let mut working_parsers = 0;
     let mut stub_parsers = 0;
     let mut broken_parsers = 0;
     let mut total_parsers = 0;
-    
+
     let mut working_list: Vec<&str> = Vec::new();
     let mut stub_list: Vec<&str> = Vec::new();
     let mut broken_list: Vec<&str> = Vec::new();
-    
+
     println!("🔍 TESTING REMAINING 6 PARSERS...\n");
-    
+
     // Test parsers that might not have been tested yet
     // Based on the mod.rs file, let's test some that might be missing
-    
+
     // ===== SHADOW PARSERS =====
     println!("🌫️ SHADOW PARSERS:");
-    
+
     total_parsers += 1;
     let shadow_parser = ShadowParser::new();
     let shadow_result = shadow_parser.parse_class("shadow-lg");
@@ -38,10 +38,10 @@ fn final_6_parsers_test() -> Result<()> {
         stub_list.push("ShadowParser");
         println!("  ❌ ShadowParser - STUB");
     }
-    
+
     // ===== RING PARSERS =====
     println!("\n💍 RING PARSERS:");
-    
+
     total_parsers += 1;
     let ring_parser = RingParser::new();
     let ring_result = ring_parser.parse_class("ring-4");
@@ -54,10 +54,10 @@ fn final_6_parsers_test() -> Result<()> {
         stub_list.push("RingParser");
         println!("  ❌ RingParser - STUB");
     }
-    
+
     // ===== MASK UTILITIES PARSERS =====
     println!("\n🎭 MASK UTILITIES PARSERS:");
-    
+
     total_parsers += 1;
     let mask_utilities_parser = MaskUtilitiesParser::new();
     let mask_utilities_result = mask_utilities_parser.parse_class("mask-none");
@@ -70,10 +70,10 @@ fn final_6_parsers_test() -> Result<()> {
         stub_list.push("MaskUtilitiesParser");
         println!("  ❌ MaskUtilitiesParser - STUB");
     }
-    
+
     // ===== EFFECTS PARSERS =====
     println!("\n✨ EFFECTS PARSERS:");
-    
+
     total_parsers += 1;
     let effects_parser = EffectsParser::new();
     let effects_result = effects_parser.parse_class("opacity-50");
@@ -86,10 +86,10 @@ fn final_6_parsers_test() -> Result<()> {
         stub_list.push("EffectsParser");
         println!("  ❌ EffectsParser - STUB");
     }
-    
+
     // ===== INTERACTIVE PARSERS =====
     println!("\n🎮 INTERACTIVE PARSERS:");
-    
+
     total_parsers += 1;
     let interactive_parser = InteractiveParser::new();
     let interactive_result = interactive_parser.parse_class("cursor-pointer");
@@ -102,10 +102,10 @@ fn final_6_parsers_test() -> Result<()> {
         stub_list.push("InteractiveParser");
         println!("  ❌ InteractiveParser - STUB");
     }
-    
+
     // ===== GAP PARSERS =====
     println!("\n📏 GAP PARSERS:");
-    
+
     total_parsers += 1;
     let gap_parser = GapParser::new();
     let gap_result = gap_parser.parse_class("gap-4");
@@ -118,43 +118,58 @@ fn final_6_parsers_test() -> Result<()> {
         stub_list.push("GapParser");
         println!("  ❌ GapParser - STUB");
     }
-    
+
     // Final assessment
     println!("\n🎯 FINAL 6 PARSERS TEST RESULTS:");
     println!("📊 Parser Status Summary:");
-    println!("  ✅ Working parsers: {}/{} ({:.1}%)", working_parsers, total_parsers, (working_parsers as f64 / total_parsers as f64) * 100.0);
-    println!("  🚨 Stub parsers: {}/{} ({:.1}%)", stub_parsers, total_parsers, (stub_parsers as f64 / total_parsers as f64) * 100.0);
-    println!("  💥 Broken parsers: {}/{} ({:.1}%)", broken_parsers, total_parsers, (broken_parsers as f64 / total_parsers as f64) * 100.0);
-    
+    println!(
+        "  ✅ Working parsers: {}/{} ({:.1}%)",
+        working_parsers,
+        total_parsers,
+        (working_parsers as f64 / total_parsers as f64) * 100.0
+    );
+    println!(
+        "  🚨 Stub parsers: {}/{} ({:.1}%)",
+        stub_parsers,
+        total_parsers,
+        (stub_parsers as f64 / total_parsers as f64) * 100.0
+    );
+    println!(
+        "  💥 Broken parsers: {}/{} ({:.1}%)",
+        broken_parsers,
+        total_parsers,
+        (broken_parsers as f64 / total_parsers as f64) * 100.0
+    );
+
     if !working_list.is_empty() {
         println!("\n✅ WORKING PARSERS:");
         for parser in working_list {
             println!("  - {}", parser);
         }
     }
-    
+
     if !stub_list.is_empty() {
         println!("\n🚨 STUB PARSERS (CRITICAL ISSUE):");
         for parser in stub_list {
             println!("  - {}", parser);
         }
     }
-    
+
     if !broken_list.is_empty() {
         println!("\n💥 BROKEN PARSERS:");
         for parser in broken_list {
             println!("  - {}", parser);
         }
     }
-    
+
     // Critical assessment
     let success_rate = (working_parsers as f64 / total_parsers as f64) * 100.0;
     let stub_rate = (stub_parsers as f64 / total_parsers as f64) * 100.0;
-    
+
     println!("\n📊 CRITICAL ASSESSMENT:");
     println!("Success Rate: {:.1}%", success_rate);
     println!("Stub Rate: {:.1}%", stub_rate);
-    
+
     if success_rate >= 95.0 && stub_rate <= 5.0 {
         println!("🎉 EXCELLENT: Almost all parsers are working for end users!");
     } else if success_rate >= 80.0 && stub_rate <= 20.0 {
@@ -164,15 +179,15 @@ fn final_6_parsers_test() -> Result<()> {
     } else {
         println!("💥 CRITICAL: Most parsers are broken - this will severely impact end users!");
     }
-    
+
     // Assert that we have a reasonable success rate
-    assert!(success_rate >= 80.0, 
-        "Parser functionality success rate is too low: {:.1}%. This will severely impact end users. Only {}/{} parsers are working properly.", 
+    assert!(success_rate >= 80.0,
+        "Parser functionality success rate is too low: {:.1}%. This will severely impact end users. Only {}/{} parsers are working properly.",
         success_rate, working_parsers, total_parsers);
-    
-    assert!(stub_rate <= 20.0, 
-        "Too many stub parsers: {:.1}%. This will severely impact end users. {}/{} parsers are stubs.", 
+
+    assert!(stub_rate <= 20.0,
+        "Too many stub parsers: {:.1}%. This will severely impact end users. {}/{} parsers are stubs.",
         stub_rate, stub_parsers, total_parsers);
-    
+
     Ok(())
 }

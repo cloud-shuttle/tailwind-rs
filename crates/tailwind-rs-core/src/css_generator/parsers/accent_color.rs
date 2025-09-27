@@ -4,7 +4,7 @@
 //! - Accent color (accent-*)
 //! - Arbitrary accent colors (accent-[...], accent-(...))
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 /// Parser for accent color utilities
@@ -26,35 +26,35 @@ impl AccentColorParser {
     /// Parse accent color classes
     fn parse_accent_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "accent-auto" => Some(vec![CssProperty { 
-                name: "accent-color".to_string(), 
-                value: "auto".to_string(), 
-                important: false 
+            "accent-auto" => Some(vec![CssProperty {
+                name: "accent-color".to_string(),
+                value: "auto".to_string(),
+                important: false,
             }]),
-            "accent-inherit" => Some(vec![CssProperty { 
-                name: "accent-color".to_string(), 
-                value: "inherit".to_string(), 
-                important: false 
+            "accent-inherit" => Some(vec![CssProperty {
+                name: "accent-color".to_string(),
+                value: "inherit".to_string(),
+                important: false,
             }]),
-            "accent-current" => Some(vec![CssProperty { 
-                name: "accent-color".to_string(), 
-                value: "currentColor".to_string(), 
-                important: false 
+            "accent-current" => Some(vec![CssProperty {
+                name: "accent-color".to_string(),
+                value: "currentColor".to_string(),
+                important: false,
             }]),
-            "accent-transparent" => Some(vec![CssProperty { 
-                name: "accent-color".to_string(), 
-                value: "transparent".to_string(), 
-                important: false 
+            "accent-transparent" => Some(vec![CssProperty {
+                name: "accent-color".to_string(),
+                value: "transparent".to_string(),
+                important: false,
             }]),
-            "accent-black" => Some(vec![CssProperty { 
-                name: "accent-color".to_string(), 
-                value: "#000000".to_string(), 
-                important: false 
+            "accent-black" => Some(vec![CssProperty {
+                name: "accent-color".to_string(),
+                value: "#000000".to_string(),
+                important: false,
             }]),
-            "accent-white" => Some(vec![CssProperty { 
-                name: "accent-color".to_string(), 
-                value: "#ffffff".to_string(), 
-                important: false 
+            "accent-white" => Some(vec![CssProperty {
+                name: "accent-color".to_string(),
+                value: "#ffffff".to_string(),
+                important: false,
             }]),
             _ => {
                 // Custom properties for accent color
@@ -67,7 +67,7 @@ impl AccentColorParser {
                         }]);
                     }
                 }
-                
+
                 // Arbitrary values for accent color
                 if let Some(value) = class.strip_prefix("accent-[") {
                     if let Some(value) = value.strip_suffix("]") {
@@ -78,7 +78,7 @@ impl AccentColorParser {
                         }]);
                     }
                 }
-                
+
                 // Standard color classes (accent-red-500, accent-blue-600, etc.)
                 if let Some(color_value) = self.get_color_value(class) {
                     return Some(vec![CssProperty {
@@ -87,7 +87,7 @@ impl AccentColorParser {
                         important: false,
                     }]);
                 }
-                
+
                 None
             }
         }
@@ -99,22 +99,22 @@ impl AccentColorParser {
         if let Some(tailwind_color) = self.parse_tailwind_color(color) {
             return Some(tailwind_color);
         }
-        
+
         // Handle hex colors
         if color.starts_with('#') {
             return Some(color.to_string());
         }
-        
+
         // Handle rgb/rgba
         if color.starts_with("rgb") {
             return Some(color.to_string());
         }
-        
+
         // Handle hsl/hsla
         if color.starts_with("hsl") {
             return Some(color.to_string());
         }
-        
+
         None
     }
 
@@ -126,7 +126,7 @@ impl AccentColorParser {
         } else {
             color
         };
-        
+
         match color_name {
             // Red colors
             "red-50" => Some("#fef2f2".to_string()),
@@ -139,7 +139,7 @@ impl AccentColorParser {
             "red-700" => Some("#b91c1c".to_string()),
             "red-800" => Some("#991b1b".to_string()),
             "red-900" => Some("#7f1d1d".to_string()),
-            
+
             // Blue colors
             "blue-50" => Some("#eff6ff".to_string()),
             "blue-100" => Some("#dbeafe".to_string()),
@@ -151,7 +151,7 @@ impl AccentColorParser {
             "blue-700" => Some("#1d4ed8".to_string()),
             "blue-800" => Some("#1e40af".to_string()),
             "blue-900" => Some("#1e3a8a".to_string()),
-            
+
             // Green colors
             "green-50" => Some("#f0fdf4".to_string()),
             "green-100" => Some("#dcfce7".to_string()),
@@ -163,7 +163,7 @@ impl AccentColorParser {
             "green-700" => Some("#15803d".to_string()),
             "green-800" => Some("#166534".to_string()),
             "green-900" => Some("#14532d".to_string()),
-            
+
             // Gray colors
             "gray-50" => Some("#f9fafb".to_string()),
             "gray-100" => Some("#f3f4f6".to_string()),
@@ -175,7 +175,7 @@ impl AccentColorParser {
             "gray-700" => Some("#374151".to_string()),
             "gray-800" => Some("#1f2937".to_string()),
             "gray-900" => Some("#111827".to_string()),
-            
+
             _ => None,
         }
     }
@@ -187,11 +187,7 @@ impl UtilityParser for AccentColorParser {
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
-        vec![
-            "accent-*",
-            "accent-[*]",
-            "accent-(*)",
-        ]
+        vec!["accent-*", "accent-[*]", "accent-(*)"]
     }
 
     fn get_priority(&self) -> u32 {

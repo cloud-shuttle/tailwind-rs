@@ -1,8 +1,8 @@
 //! Color Utilities Parser
-//! 
+//!
 //! This module handles parsing of color-related utilities.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 /// Parser for color utilities
@@ -13,7 +13,7 @@ impl ColorParser {
     pub fn new() -> Self {
         Self
     }
-    
+
     /// Parse a color value and return CSS properties
     fn parse_color_property(&self, property: &str, color: &str) -> Option<Vec<CssProperty>> {
         let value = self.parse_color_value(color)?;
@@ -23,42 +23,42 @@ impl ColorParser {
             important: false,
         }])
     }
-    
+
     /// Parse a color value (hex, rgb, named colors, etc.)
     fn parse_color_value(&self, color: &str) -> Option<String> {
         // Handle transparent
         if color == "transparent" {
             return Some("transparent".to_string());
         }
-        
+
         // Handle named colors
         if let Some(named_color) = self.parse_named_color(color) {
             return Some(named_color);
         }
-        
+
         // Handle hex colors
         if color.starts_with('#') {
             return Some(color.to_string());
         }
-        
+
         // Handle rgb/rgba
         if color.starts_with("rgb") {
             return Some(color.to_string());
         }
-        
+
         // Handle hsl/hsla
         if color.starts_with("hsl") {
             return Some(color.to_string());
         }
-        
+
         // Handle Tailwind color scale (e.g., "blue-500", "red-300")
         if let Some(tailwind_color) = self.parse_tailwind_color(color) {
             return Some(tailwind_color);
         }
-        
+
         None
     }
-    
+
     /// Parse named colors
     fn parse_named_color(&self, color: &str) -> Option<String> {
         match color {
@@ -74,7 +74,7 @@ impl ColorParser {
             _ => None,
         }
     }
-    
+
     /// Parse Tailwind color scale
     fn parse_tailwind_color(&self, color: &str) -> Option<String> {
         // Parse format like "blue-500", "red-300", etc.
@@ -87,7 +87,7 @@ impl ColorParser {
         }
         None
     }
-    
+
     /// Get Tailwind color value for a given color and intensity
     fn get_tailwind_color_value(&self, color_name: &str, intensity: u16) -> String {
         match color_name {
@@ -148,7 +148,8 @@ impl ColorParser {
                 _ => "#6b7280",
             },
             _ => "#000000", // Default to black for unknown colors
-        }.to_string()
+        }
+        .to_string()
     }
 }
 
@@ -158,17 +159,17 @@ impl UtilityParser for ColorParser {
         if let Some(color) = class.strip_prefix("bg-") {
             return self.parse_color_property("background-color", color);
         }
-        
+
         // Parse text colors
         if let Some(color) = class.strip_prefix("text-") {
             return self.parse_color_property("color", color);
         }
-        
+
         // Parse border colors
         if let Some(color) = class.strip_prefix("border-") {
             return self.parse_color_property("border-color", color);
         }
-        
+
         None
     }
 

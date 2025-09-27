@@ -8,8 +8,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 /// Builder for creating responsive classes
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct ResponsiveBuilder {
     /// Classes for each breakpoint
     classes: HashMap<Breakpoint, Vec<String>>,
@@ -42,10 +41,7 @@ impl ResponsiveBuilder {
 
     /// Add classes for a specific breakpoint
     pub fn add_classes(&mut self, breakpoint: Breakpoint, classes: Vec<String>) -> &mut Self {
-        self.classes
-            .entry(breakpoint)
-            .or_default()
-            .extend(classes);
+        self.classes.entry(breakpoint).or_default().extend(classes);
         self
     }
 
@@ -201,7 +197,6 @@ impl ResponsiveBuilder {
         self.config = config;
     }
 }
-
 
 impl std::fmt::Display for ResponsiveBuilder {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

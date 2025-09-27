@@ -2,28 +2,29 @@
 //!
 //! This module contains the core CssGenerator struct and its main functionality.
 
+use super::parsers::{
+    AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
+    AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
+    AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
+    BackdropFilterUtilitiesParser, BackgroundParser, BackgroundPropertiesParser,
+    BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
+    DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
+    FilterUtilitiesParser, FlexBasisParser, FlexDirectionParser, FlexGrowParser, FlexParser,
+    FlexShrinkParser, FlexWrapParser, FlexboxParser, FractionalTransformsParser, GapParser,
+    GradientParser, GridAutoColumnsParser, GridAutoFlowParser, GridAutoRowsParser,
+    GridColumnParser, GridRowParser, GridTemplateColumnsParser, GridTemplateRowsParser,
+    GroupParser, InsetParser, InteractiveParser, JustifyContentParser, JustifyItemsParser,
+    JustifySelfParser, LayoutParser, LayoutUtilitiesParser, MarginParser, MaskUtilitiesParser,
+    ObjectFitParser, OrderParser, OverflowParser, OverscrollParser, PlaceContentParser,
+    PlaceItemsParser, PlaceSelfParser, PositionParser, PositioningParser, ProseParser, RingParser,
+    ShadowParser, SizingParser, SpacingParser, SvgParser, TableParser, TransformParser,
+    TransitionParser, TransitionPropertiesParser, TypographyParser, VisibilityParser, ZIndexParser,
+};
+use super::types::{CssGenerationConfig, CssProperty, CssRule};
+use super::variants::VariantParser;
 use crate::error::Result;
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
-use super::types::{CssRule, CssProperty, CssGenerationConfig};
-use super::variants::VariantParser;
-use super::parsers::{
-    SpacingParser, AnimationParser, InteractiveParser,
-    AdvancedSpacingParser, AdvancedColorParser, PositioningParser, TypographyParser,
-    FlexboxParser, LayoutParser, ColorParser, EffectsParser, SizingParser,
-    AdvancedBorderParser, RingParser, TransitionParser, ShadowParser, SvgParser,
-    MarginParser, GroupParser, AdvancedGridParser, ProseParser, DivideParser,
-    GradientParser, ObjectFitParser, TransformParser,     ArbitraryParser, DataAttributeParser, 
-    BackgroundPropertiesParser, TransitionPropertiesParser, FractionalTransformsParser,
-    AspectRatioParser, ColumnsParser, BreakControlParser, BoxUtilitiesParser, LayoutUtilitiesParser,
-    OverflowParser, OverscrollParser, PositionParser, InsetParser, VisibilityParser, ZIndexParser,
-    FlexBasisParser, FlexDirectionParser, FlexWrapParser, FlexParser, FlexGrowParser, FlexShrinkParser,
-    OrderParser, GridTemplateColumnsParser, GridColumnParser, GridTemplateRowsParser, GridRowParser,
-    GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser, GapParser, JustifyContentParser,
-    JustifyItemsParser, JustifySelfParser, AlignContentParser, AlignItemsParser, AlignSelfParser,
-    PlaceContentParser, PlaceItemsParser, PlaceSelfParser, BackgroundParser, BorderUtilitiesParser,
-    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser, AccentColorParser
-};
 
 /// CSS generator that converts Tailwind classes to CSS rules
 #[derive(Debug, Clone)]
@@ -255,14 +256,21 @@ impl CssGenerator {
     pub fn generate_comprehensive_css(&mut self, _config: &CssGenerationConfig) -> Result<String> {
         // Add common utility classes
         let common_classes = vec![
-            "p-4", "m-4", "bg-blue-500", "text-white", "rounded-md",
-            "hover:bg-blue-600", "focus:outline-none", "sm:p-6", "md:p-8"
+            "p-4",
+            "m-4",
+            "bg-blue-500",
+            "text-white",
+            "rounded-md",
+            "hover:bg-blue-600",
+            "focus:outline-none",
+            "sm:p-6",
+            "md:p-8",
         ];
-        
+
         for class in common_classes {
             let _ = self.add_class(class);
         }
-        
+
         Ok(self.generate_css())
     }
 
@@ -290,14 +298,17 @@ impl CssGenerator {
 
     /// Generate minified CSS from all added classes
     pub fn generate_minified_css(&self) -> String {
-        super::css_output::CssOutputGenerator::generate_minified_css(&self.rules, &self.custom_properties)
+        super::css_output::CssOutputGenerator::generate_minified_css(
+            &self.rules,
+            &self.custom_properties,
+        )
     }
 
     /// Convert a class name to a CSS rule
     pub fn class_to_css_rule(&self, class: &str) -> Result<CssRule> {
         let (variants, base_class) = self.parse_variants(class);
         let properties = self.class_to_properties(class)?;
-        
+
         // Build selector with variants
         let mut selector = String::new();
         for variant in &variants {
@@ -306,22 +317,22 @@ impl CssGenerator {
                 selector.push_str(&variant_selector);
             }
         }
-        
+
         // Add the base class
         selector.push_str(&format!(".{}", base_class));
-        
+
         // Determine media query for responsive and device variants
-        let media_query = variants.iter()
-            .find_map(|variant| {
-                // Try responsive media query first
-                if let Some(responsive_query) = self.variant_parser.get_responsive_media_query(variant) {
-                    Some(responsive_query)
-                } else {
-                    // Try device media query
-                    self.variant_parser.get_device_media_query(variant)
-                }
-            });
-        
+        let media_query = variants.iter().find_map(|variant| {
+            // Try responsive media query first
+            if let Some(responsive_query) = self.variant_parser.get_responsive_media_query(variant)
+            {
+                Some(responsive_query)
+            } else {
+                // Try device media query
+                self.variant_parser.get_device_media_query(variant)
+            }
+        });
+
         Ok(CssRule {
             selector,
             properties,

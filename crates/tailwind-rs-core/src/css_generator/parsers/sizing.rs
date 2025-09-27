@@ -3,14 +3,16 @@
 //! This module provides parsing logic for sizing-related Tailwind CSS utilities,
 //! including width, height, min-width, min-height, max-width, and max-height.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct SizingParser;
 
 impl SizingParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse width classes
     fn parse_width_class(&self, class: &str) -> Option<Vec<CssProperty>> {
@@ -24,13 +26,17 @@ impl SizingParser {
                 }]);
             }
         }
-        
+
         // Regular width classes
         if let Some(value) = class.strip_prefix("w-") {
             let css_value = self.parse_sizing_value(value)?;
-            return Some(vec![CssProperty { name: "width".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "width".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
-        
+
         None
     }
 
@@ -46,13 +52,17 @@ impl SizingParser {
                 }]);
             }
         }
-        
+
         // Regular height classes
         if let Some(value) = class.strip_prefix("h-") {
             let css_value = self.parse_sizing_value(value)?;
-            return Some(vec![CssProperty { name: "height".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "height".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
-        
+
         None
     }
 
@@ -60,7 +70,11 @@ impl SizingParser {
     fn parse_max_width_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("max-w-") {
             let css_value = self.parse_max_width_value(value)?;
-            return Some(vec![CssProperty { name: "max-width".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "max-width".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         None
     }
@@ -69,7 +83,11 @@ impl SizingParser {
     fn parse_min_width_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("min-w-") {
             let css_value = self.parse_sizing_value(value)?;
-            return Some(vec![CssProperty { name: "min-width".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "min-width".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         None
     }
@@ -78,7 +96,11 @@ impl SizingParser {
     fn parse_max_height_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("max-h-") {
             let css_value = self.parse_sizing_value(value)?;
-            return Some(vec![CssProperty { name: "max-height".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "max-height".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         None
     }
@@ -87,7 +109,11 @@ impl SizingParser {
     fn parse_min_height_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("min-h-") {
             let css_value = self.parse_sizing_value(value)?;
-            return Some(vec![CssProperty { name: "min-height".to_string(), value: css_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "min-height".to_string(),
+                value: css_value,
+                important: false,
+            }]);
         }
         None
     }
@@ -146,11 +172,11 @@ impl SizingParser {
             // Container scale utilities
             "3xs" => Some("var(--container-3xs)".to_string()), // 16rem (256px)
             "2xs" => Some("var(--container-2xs)".to_string()), // 18rem (288px)
-            "xs" => Some("var(--container-xs)".to_string()), // 20rem (320px)
-            "sm" => Some("var(--container-sm)".to_string()), // 24rem (384px)
-            "md" => Some("var(--container-md)".to_string()), // 28rem (448px)
-            "lg" => Some("var(--container-lg)".to_string()), // 32rem (512px)
-            "xl" => Some("var(--container-xl)".to_string()), // 36rem (576px)
+            "xs" => Some("var(--container-xs)".to_string()),   // 20rem (320px)
+            "sm" => Some("var(--container-sm)".to_string()),   // 24rem (384px)
+            "md" => Some("var(--container-md)".to_string()),   // 28rem (448px)
+            "lg" => Some("var(--container-lg)".to_string()),   // 32rem (512px)
+            "xl" => Some("var(--container-xl)".to_string()),   // 36rem (576px)
             "2xl" => Some("var(--container-2xl)".to_string()), // 42rem (672px)
             _ => self.parse_fractional_value(value),
         }
@@ -190,7 +216,9 @@ impl SizingParser {
         if value.contains('/') {
             let parts: Vec<&str> = value.split('/').collect();
             if parts.len() == 2 {
-                if let (Ok(numerator), Ok(denominator)) = (parts[0].parse::<f64>(), parts[1].parse::<f64>()) {
+                if let (Ok(numerator), Ok(denominator)) =
+                    (parts[0].parse::<f64>(), parts[1].parse::<f64>())
+                {
                     if denominator != 0.0 {
                         let percentage = (numerator / denominator) * 100.0;
                         return Some(format!("{}%", percentage));
@@ -230,10 +258,16 @@ impl UtilityParser for SizingParser {
         vec!["w-*", "h-*", "max-w-*", "min-w-*", "max-h-*", "min-h-*"]
     }
 
-    fn get_priority(&self) -> u32 { 80 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Layout }
+    fn get_priority(&self) -> u32 {
+        80
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Layout
+    }
 }
 
 impl Default for SizingParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

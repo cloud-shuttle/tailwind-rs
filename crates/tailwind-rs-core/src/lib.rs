@@ -102,24 +102,22 @@ pub use css_generator::{CssGenerationConfig, CssGenerator, CssProperty, CssRule}
 
 // Re-export key parsers for direct access (avoiding conflicts with utilities::*)
 pub use css_generator::parsers::{
-    SpacingParser, AdvancedSpacingParser, ColorParser, AdvancedColorParser,
-    TypographyParser, LayoutParser, PositioningParser, SizingParser,
-    FlexboxParser, GridParser, AdvancedGridParser, BorderParser, AdvancedBorderParser,
-    BorderUtilitiesParser, RingParser, ShadowParser, EffectsParser, EffectsUtilitiesParser,
-    TransformParser, FractionalTransformsParser, AnimationParser, TransitionParser,
-    TransitionPropertiesParser, InteractiveParser, SvgParser, ProseParser, DivideParser,
-    GradientParser, ObjectFitParser, ArbitraryParser, DataAttributeParser,
-    BackgroundPropertiesParser, AspectRatioParser, ColumnsParser, BreakControlParser,
-    BoxUtilitiesParser, LayoutUtilitiesParser, OverflowParser, OverscrollParser,
-    PositionParser, InsetParser, VisibilityParser, ZIndexParser, FlexBasisParser,
-    FlexDirectionParser, FlexWrapParser, FlexParser, FlexGrowParser, FlexShrinkParser,
-    OrderParser, GridTemplateColumnsParser, GridColumnParser, GridTemplateRowsParser,
-    GridRowParser, GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser,
-    GapParser, JustifyContentParser, JustifyItemsParser, JustifySelfParser,
-    AlignContentParser, AlignItemsParser, AlignSelfParser, PlaceContentParser,
-    PlaceItemsParser, PlaceSelfParser, BackgroundParser, FilterUtilitiesParser,
-    BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser,
-    AccentColorParser, UtilityParser, ParserCategory
+    AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
+    AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
+    AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
+    BackdropFilterUtilitiesParser, BackgroundParser, BackgroundPropertiesParser, BorderParser,
+    BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
+    DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
+    FilterUtilitiesParser, FlexBasisParser, FlexDirectionParser, FlexGrowParser, FlexParser,
+    FlexShrinkParser, FlexWrapParser, FlexboxParser, FractionalTransformsParser, GapParser,
+    GradientParser, GridAutoColumnsParser, GridAutoFlowParser, GridAutoRowsParser,
+    GridColumnParser, GridParser, GridRowParser, GridTemplateColumnsParser, GridTemplateRowsParser,
+    InsetParser, InteractiveParser, JustifyContentParser, JustifyItemsParser, JustifySelfParser,
+    LayoutParser, LayoutUtilitiesParser, MaskUtilitiesParser, ObjectFitParser, OrderParser,
+    OverflowParser, OverscrollParser, ParserCategory, PlaceContentParser, PlaceItemsParser,
+    PlaceSelfParser, PositionParser, PositioningParser, ProseParser, RingParser, ShadowParser,
+    SizingParser, SpacingParser, SvgParser, TableParser, TransformParser, TransitionParser,
+    TransitionPropertiesParser, TypographyParser, UtilityParser, VisibilityParser, ZIndexParser,
 };
 pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};

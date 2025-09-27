@@ -1,5 +1,5 @@
 //! Variant Parsing and Handling
-//! 
+//!
 //! This module handles the parsing and processing of CSS variants,
 //! including responsive, state, and custom variants.
 
@@ -57,7 +57,7 @@ impl VariantParser {
     pub fn parse_variants(&self, class: &str) -> (Vec<String>, String) {
         let mut variants = Vec::new();
         let mut remaining = class.to_string();
-        
+
         // Parse variants in order of specificity (most specific first)
         // Check for compound variants first
         let compound_patterns = [
@@ -66,15 +66,18 @@ impl VariantParser {
             ("dark:focus:", vec!["dark", "focus"]),
             ("dark:active:", vec!["dark", "active"]),
         ];
-        
+
         for (prefix, variant_list) in compound_patterns {
             if remaining.starts_with(prefix) {
                 variants.extend(variant_list.iter().map(|v| v.to_string()));
-                remaining = remaining.strip_prefix(prefix).unwrap_or(&remaining).to_string();
+                remaining = remaining
+                    .strip_prefix(prefix)
+                    .unwrap_or(&remaining)
+                    .to_string();
                 break;
             }
         }
-        
+
         // If no compound variant found, check individual variants
         if variants.is_empty() {
             let variant_patterns = [
@@ -109,16 +112,19 @@ impl VariantParser {
                 ("xl:", "xl"),
                 ("2xl:", "2xl"),
             ];
-            
+
             for (prefix, variant) in variant_patterns {
                 if remaining.starts_with(prefix) {
                     variants.push(variant.to_string());
-                    remaining = remaining.strip_prefix(prefix).unwrap_or(&remaining).to_string();
+                    remaining = remaining
+                        .strip_prefix(prefix)
+                        .unwrap_or(&remaining)
+                        .to_string();
                     break; // Only parse one variant at a time for now
                 }
             }
         }
-        
+
         (variants, remaining)
     }
 
@@ -144,7 +150,9 @@ impl VariantParser {
             "odd" => ":nth-child(odd)".to_string(),
             "even" => ":nth-child(even)".to_string(),
             // Device variants use media queries, not selectors
-            "pointer-coarse" | "pointer-fine" | "motion-reduce" | "motion-safe" | "light" => String::new(),
+            "pointer-coarse" | "pointer-fine" | "motion-reduce" | "motion-safe" | "light" => {
+                String::new()
+            }
             _ => String::new(),
         }
     }

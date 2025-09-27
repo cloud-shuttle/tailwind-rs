@@ -8,7 +8,7 @@
 //! - Space reverse utilities (space-x-reverse, space-y-reverse)
 //! - Arbitrary space utilities (space-x-[...], space-y-[...])
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 /// Parser for gap utilities
@@ -38,7 +38,7 @@ impl GapParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("gap-x-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -48,7 +48,7 @@ impl GapParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("gap-y-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -58,21 +58,21 @@ impl GapParser {
                 }]);
             }
         }
-        
+
         // Space utilities
         if let Some(direction_and_value) = class.strip_prefix("space-") {
             if let Some(value) = direction_and_value.strip_prefix("x-") {
                 if let Some(spacing) = self.get_spacing_value(value) {
                     return Some(vec![
-                        CssProperty { 
-                            name: "margin-left".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-left".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
-                        CssProperty { 
-                            name: "margin-right".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-right".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
                     ]);
                 }
@@ -80,21 +80,21 @@ impl GapParser {
             if let Some(value) = direction_and_value.strip_prefix("y-") {
                 if let Some(spacing) = self.get_spacing_value(value) {
                     return Some(vec![
-                        CssProperty { 
-                            name: "margin-top".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-top".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
-                        CssProperty { 
-                            name: "margin-bottom".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-bottom".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
                     ]);
                 }
             }
         }
-        
+
         // Space reverse utilities
         if class == "space-x-reverse" {
             return Some(vec![CssProperty {
@@ -103,7 +103,7 @@ impl GapParser {
                 important: false,
             }]);
         }
-        
+
         if class == "space-y-reverse" {
             return Some(vec![CssProperty {
                 name: "--tw-space-y-reverse".to_string(),
@@ -111,42 +111,42 @@ impl GapParser {
                 important: false,
             }]);
         }
-        
+
         // Arbitrary space utilities
         if let Some(value) = class.strip_prefix("space-x-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![
-                    CssProperty { 
-                        name: "margin-left".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-left".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
-                    CssProperty { 
-                        name: "margin-right".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-right".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
                 ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("space-y-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![
-                    CssProperty { 
-                        name: "margin-top".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-top".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
-                    CssProperty { 
-                        name: "margin-bottom".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-bottom".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
                 ]);
             }
         }
-        
+
         None
     }
 

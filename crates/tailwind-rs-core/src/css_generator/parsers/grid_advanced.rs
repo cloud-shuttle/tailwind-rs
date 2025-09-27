@@ -3,23 +3,25 @@
 //! This module provides parsing logic for advanced grid-related Tailwind CSS utilities,
 //! including grid columns, grid rows, and grid gaps.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct AdvancedGridParser;
 
 impl AdvancedGridParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse grid columns classes
     fn parse_grid_columns_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(columns) = class.strip_prefix("grid-cols-") {
             let columns_value = self.parse_grid_columns_value(columns)?;
-            return Some(vec![CssProperty { 
-                name: "grid-template-columns".to_string(), 
-                value: columns_value, 
-                important: false 
+            return Some(vec![CssProperty {
+                name: "grid-template-columns".to_string(),
+                value: columns_value,
+                important: false,
             }]);
         }
         None
@@ -29,10 +31,10 @@ impl AdvancedGridParser {
     fn parse_grid_rows_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(rows) = class.strip_prefix("grid-rows-") {
             let rows_value = self.parse_grid_rows_value(rows)?;
-            return Some(vec![CssProperty { 
-                name: "grid-template-rows".to_string(), 
-                value: rows_value, 
-                important: false 
+            return Some(vec![CssProperty {
+                name: "grid-template-rows".to_string(),
+                value: rows_value,
+                important: false,
             }]);
         }
         None
@@ -42,10 +44,10 @@ impl AdvancedGridParser {
     fn parse_col_span_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(span) = class.strip_prefix("col-span-") {
             let span_value = self.parse_span_value(span)?;
-            return Some(vec![CssProperty { 
-                name: "grid-column".to_string(), 
-                value: format!("span {} / span {}", span_value, span_value), 
-                important: false 
+            return Some(vec![CssProperty {
+                name: "grid-column".to_string(),
+                value: format!("span {} / span {}", span_value, span_value),
+                important: false,
             }]);
         }
         None
@@ -55,10 +57,10 @@ impl AdvancedGridParser {
     fn parse_row_span_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(span) = class.strip_prefix("row-span-") {
             let span_value = self.parse_span_value(span)?;
-            return Some(vec![CssProperty { 
-                name: "grid-row".to_string(), 
-                value: format!("span {} / span {}", span_value, span_value), 
-                important: false 
+            return Some(vec![CssProperty {
+                name: "grid-row".to_string(),
+                value: format!("span {} / span {}", span_value, span_value),
+                important: false,
             }]);
         }
         None
@@ -142,10 +144,16 @@ impl UtilityParser for AdvancedGridParser {
         vec!["grid-cols-*", "grid-rows-*", "col-span-*", "row-span-*"]
     }
 
-    fn get_priority(&self) -> u32 { 80 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Grid }
+    fn get_priority(&self) -> u32 {
+        80
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Grid
+    }
 }
 
 impl Default for AdvancedGridParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

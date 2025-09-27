@@ -8,7 +8,7 @@
 //! - Arbitrary padding (pt-[...], pr-[...], etc.)
 //! - Custom padding (pt-(...), pr-(...), etc.)
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 /// Parser for padding utilities
@@ -53,32 +53,38 @@ impl PaddingParser {
     fn parse_axis_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("px-") {
             if let Some(spacing) = self.get_spacing_value(value) {
-                return Some(vec![CssProperty {
-                    name: "padding-left".to_string(),
-                    value: spacing.clone(),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-right".to_string(),
-                    value: spacing,
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "padding-left".to_string(),
+                        value: spacing.clone(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "padding-right".to_string(),
+                        value: spacing,
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("py-") {
             if let Some(spacing) = self.get_spacing_value(value) {
-                return Some(vec![CssProperty {
-                    name: "padding-top".to_string(),
-                    value: spacing.clone(),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-bottom".to_string(),
-                    value: spacing,
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "padding-top".to_string(),
+                        value: spacing.clone(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "padding-bottom".to_string(),
+                        value: spacing,
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         None
     }
 
@@ -102,7 +108,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pr-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -112,7 +118,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pb-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -122,7 +128,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pl-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -132,7 +138,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -147,7 +153,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pe-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -157,7 +163,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -172,7 +178,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pr-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -182,7 +188,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pb-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -192,7 +198,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pl-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -202,7 +208,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ps-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -212,7 +218,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pe-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -222,7 +228,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -237,7 +243,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pr-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -247,7 +253,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pb-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -257,7 +263,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pl-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -267,7 +273,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ps-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -277,7 +283,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pe-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -287,7 +293,7 @@ impl PaddingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -355,27 +361,9 @@ impl UtilityParser for PaddingParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "p-*",
-            "px-*",
-            "py-*",
-            "pt-*",
-            "pr-*",
-            "pb-*",
-            "pl-*",
-            "ps-*",
-            "pe-*",
-            "pt-[*]",
-            "pr-[*]",
-            "pb-[*]",
-            "pl-[*]",
-            "ps-[*]",
-            "pe-[*]",
-            "pt-(*)",
-            "pr-(*)",
-            "pb-(*)",
-            "pl-(*)",
-            "ps-(*)",
-            "pe-(*)",
+            "p-*", "px-*", "py-*", "pt-*", "pr-*", "pb-*", "pl-*", "ps-*", "pe-*", "pt-[*]",
+            "pr-[*]", "pb-[*]", "pl-[*]", "ps-[*]", "pe-[*]", "pt-(*)", "pr-(*)", "pb-(*)",
+            "pl-(*)", "ps-(*)", "pe-(*)",
         ]
     }
 

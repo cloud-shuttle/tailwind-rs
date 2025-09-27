@@ -2,39 +2,40 @@
 //!
 //! This module contains the constructor and initialization methods for CssGenerator.
 
+use super::parsers::{
+    AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
+    AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
+    AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
+    BackdropFilterUtilitiesParser, BackgroundParser, BackgroundPropertiesParser,
+    BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
+    DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
+    FilterUtilitiesParser, FlexBasisParser, FlexDirectionParser, FlexGrowParser, FlexParser,
+    FlexShrinkParser, FlexWrapParser, FlexboxParser, FractionalTransformsParser, GapParser,
+    GradientParser, GridAutoColumnsParser, GridAutoFlowParser, GridAutoRowsParser,
+    GridColumnParser, GridRowParser, GridTemplateColumnsParser, GridTemplateRowsParser,
+    GroupParser, InsetParser, InteractiveParser, JustifyContentParser, JustifyItemsParser,
+    JustifySelfParser, LayoutParser, LayoutUtilitiesParser, MarginParser, MaskUtilitiesParser,
+    ObjectFitParser, OrderParser, OverflowParser, OverscrollParser, PlaceContentParser,
+    PlaceItemsParser, PlaceSelfParser, PositionParser, PositioningParser, ProseParser, RingParser,
+    ShadowParser, SizingParser, SpacingParser, SvgParser, TableParser, TransformParser,
+    TransitionParser, TransitionPropertiesParser, TypographyParser, VisibilityParser, ZIndexParser,
+};
+use super::types::CssGenerationConfig;
+use super::variants::VariantParser;
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
-use super::types::CssGenerationConfig;
-use super::parsers::{
-    SpacingParser, AnimationParser, InteractiveParser,
-    AdvancedSpacingParser, AdvancedColorParser, PositioningParser, TypographyParser,
-    FlexboxParser, LayoutParser, ColorParser, EffectsParser, SizingParser,
-    AdvancedBorderParser, RingParser, TransitionParser, ShadowParser, SvgParser,
-    MarginParser, GroupParser, AdvancedGridParser, ProseParser, DivideParser,
-    GradientParser, ObjectFitParser, TransformParser, ArbitraryParser, DataAttributeParser, 
-    BackgroundPropertiesParser, TransitionPropertiesParser, FractionalTransformsParser,
-    AspectRatioParser, ColumnsParser, BreakControlParser, BoxUtilitiesParser, LayoutUtilitiesParser,
-    OverflowParser, OverscrollParser, PositionParser, InsetParser, VisibilityParser, ZIndexParser,
-    FlexBasisParser, FlexDirectionParser, FlexWrapParser, FlexParser, FlexGrowParser, FlexShrinkParser,
-    OrderParser, GridTemplateColumnsParser, GridColumnParser, GridTemplateRowsParser, GridRowParser,
-    GridAutoFlowParser, GridAutoColumnsParser, GridAutoRowsParser, GapParser, JustifyContentParser,
-    JustifyItemsParser, JustifySelfParser, AlignContentParser, AlignItemsParser, AlignSelfParser,
-    PlaceContentParser, PlaceItemsParser, PlaceSelfParser, BackgroundParser, BorderUtilitiesParser,
-    EffectsUtilitiesParser, FilterUtilitiesParser, BackdropFilterUtilitiesParser, AccessibilityParser, TableParser, MaskUtilitiesParser, AccentColorParser
-};
-use super::variants::VariantParser;
 
 /// Builder methods for CssGenerator
 pub trait CssGeneratorBuilder {
     /// Create a new CSS generator
     fn new() -> Self;
-    
+
     /// Create a new CSS generator with custom configuration
     fn with_config(config: CssGenerationConfig) -> Self;
-    
+
     /// Initialize default breakpoints
     fn initialize_default_breakpoints(&mut self);
-    
+
     /// Initialize custom breakpoints from config
     fn initialize_custom_breakpoints(&mut self);
 }
@@ -122,7 +123,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
             accent_color_parser: AccentColorParser::new(),
             variant_parser: VariantParser::new(),
         };
-        
+
         generator.initialize_default_breakpoints();
         generator
     }
@@ -209,24 +210,29 @@ impl CssGeneratorBuilder for super::CssGenerator {
             accent_color_parser: AccentColorParser::new(),
             variant_parser: VariantParser::new(),
         };
-        
+
         if generator.config.custom_breakpoints.is_empty() {
             generator.initialize_default_breakpoints();
         } else {
             generator.initialize_custom_breakpoints();
         }
-        
+
         generator
     }
-    
+
     fn initialize_default_breakpoints(&mut self) {
-        self.breakpoints.insert(Breakpoint::Sm, "(min-width: 640px)".to_string());
-        self.breakpoints.insert(Breakpoint::Md, "(min-width: 768px)".to_string());
-        self.breakpoints.insert(Breakpoint::Lg, "(min-width: 1024px)".to_string());
-        self.breakpoints.insert(Breakpoint::Xl, "(min-width: 1280px)".to_string());
-        self.breakpoints.insert(Breakpoint::Xl2, "(min-width: 1536px)".to_string());
+        self.breakpoints
+            .insert(Breakpoint::Sm, "(min-width: 640px)".to_string());
+        self.breakpoints
+            .insert(Breakpoint::Md, "(min-width: 768px)".to_string());
+        self.breakpoints
+            .insert(Breakpoint::Lg, "(min-width: 1024px)".to_string());
+        self.breakpoints
+            .insert(Breakpoint::Xl, "(min-width: 1280px)".to_string());
+        self.breakpoints
+            .insert(Breakpoint::Xl2, "(min-width: 1536px)".to_string());
     }
-    
+
     fn initialize_custom_breakpoints(&mut self) {
         self.breakpoints = self.config.custom_breakpoints.clone();
     }

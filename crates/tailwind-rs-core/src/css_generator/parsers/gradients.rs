@@ -3,28 +3,70 @@
 //! This module provides parsing logic for gradient-related Tailwind CSS utilities,
 //! such as `bg-linear-to-r`, `from-teal-500/0`, `via-teal-500/40`, `to-teal-500/0`.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct GradientParser;
 
 impl GradientParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse gradient direction classes
     fn parse_gradient_direction_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "bg-gradient-to-r" | "bg-linear-to-r" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-linear-to-l" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to left, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-linear-to-t" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to top, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-linear-to-b" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to bottom, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-linear-to-tr" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to top right, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-linear-to-tl" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to top left, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-linear-to-br" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to bottom right, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-linear-to-bl" => Some(vec![CssProperty { name: "background-image".to_string(), value: "linear-gradient(to bottom left, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-radial" => Some(vec![CssProperty { name: "background-image".to_string(), value: "radial-gradient(ellipse at center, var(--tw-gradient-stops))".to_string(), important: false }]),
-            "bg-conic" => Some(vec![CssProperty { name: "background-image".to_string(), value: "conic-gradient(from 0deg, var(--tw-gradient-stops))".to_string(), important: false }]),
+            "bg-gradient-to-r" | "bg-linear-to-r" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-linear-to-l" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to left, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-linear-to-t" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to top, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-linear-to-b" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to bottom, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-linear-to-tr" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to top right, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-linear-to-tl" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to top left, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-linear-to-br" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to bottom right, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-linear-to-bl" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "linear-gradient(to bottom left, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-radial" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "radial-gradient(ellipse at center, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
+            "bg-conic" => Some(vec![CssProperty {
+                name: "background-image".to_string(),
+                value: "conic-gradient(from 0deg, var(--tw-gradient-stops))".to_string(),
+                important: false,
+            }]),
             _ => None,
         }
     }
@@ -33,15 +75,27 @@ impl GradientParser {
     fn parse_gradient_stop_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(color_part) = class.strip_prefix("from-") {
             let color_value = self.get_gradient_color_value(color_part)?;
-            return Some(vec![CssProperty { name: "--tw-gradient-from".to_string(), value: color_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "--tw-gradient-from".to_string(),
+                value: color_value,
+                important: false,
+            }]);
         }
         if let Some(color_part) = class.strip_prefix("via-") {
             let color_value = self.get_gradient_color_value(color_part)?;
-            return Some(vec![CssProperty { name: "--tw-gradient-via".to_string(), value: color_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "--tw-gradient-via".to_string(),
+                value: color_value,
+                important: false,
+            }]);
         }
         if let Some(color_part) = class.strip_prefix("to-") {
             let color_value = self.get_gradient_color_value(color_part)?;
-            return Some(vec![CssProperty { name: "--tw-gradient-to".to_string(), value: color_value, important: false }]);
+            return Some(vec![CssProperty {
+                name: "--tw-gradient-to".to_string(),
+                value: color_value,
+                important: false,
+            }]);
         }
         None
     }
@@ -54,7 +108,7 @@ impl GradientParser {
             let opacity_value = self.parse_opacity_value(opacity)?;
             return Some(self.apply_opacity_to_color(&base_color, &opacity_value));
         }
-        
+
         self.get_base_color_value(color)
     }
 
@@ -134,15 +188,25 @@ impl UtilityParser for GradientParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "bg-linear-to-*", "bg-radial", "bg-conic",
-            "from-*", "via-*", "to-*"
+            "bg-linear-to-*",
+            "bg-radial",
+            "bg-conic",
+            "from-*",
+            "via-*",
+            "to-*",
         ]
     }
 
-    fn get_priority(&self) -> u32 { 95 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Color }
+    fn get_priority(&self) -> u32 {
+        95
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Color
+    }
 }
 
 impl Default for GradientParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

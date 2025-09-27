@@ -281,10 +281,9 @@ impl ClassScanner {
                     continue;
                 }
                 self.scan_directory_recursive(&path, files)?;
-            } else if path.is_file()
-                && self.should_scan_file(&path) {
-                    files.push(path);
-                }
+            } else if path.is_file() && self.should_scan_file(&path) {
+                files.push(path);
+            }
         }
 
         Ok(())

@@ -3,7 +3,7 @@
 //! This module provides parsing logic for Tailwind CSS flex-basis utilities,
 //! such as `basis-64`, `basis-1/2`, `basis-full`, `basis-auto`, etc.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 use std::collections::HashMap;
 
@@ -87,11 +87,11 @@ impl FlexBasisParser {
         let mut container_map = HashMap::new();
         container_map.insert("3xs".to_string(), "var(--container-3xs)".to_string()); // 16rem
         container_map.insert("2xs".to_string(), "var(--container-2xs)".to_string()); // 18rem
-        container_map.insert("xs".to_string(), "var(--container-xs)".to_string());  // 20rem
-        container_map.insert("sm".to_string(), "var(--container-sm)".to_string());  // 24rem
-        container_map.insert("md".to_string(), "var(--container-md)".to_string());  // 28rem
-        container_map.insert("lg".to_string(), "var(--container-lg)".to_string());  // 32rem
-        container_map.insert("xl".to_string(), "var(--container-xl)".to_string());  // 36rem
+        container_map.insert("xs".to_string(), "var(--container-xs)".to_string()); // 20rem
+        container_map.insert("sm".to_string(), "var(--container-sm)".to_string()); // 24rem
+        container_map.insert("md".to_string(), "var(--container-md)".to_string()); // 28rem
+        container_map.insert("lg".to_string(), "var(--container-lg)".to_string()); // 32rem
+        container_map.insert("xl".to_string(), "var(--container-xl)".to_string()); // 36rem
         container_map.insert("2xl".to_string(), "var(--container-2xl)".to_string()); // 42rem
         container_map.insert("3xl".to_string(), "var(--container-3xl)".to_string()); // 48rem
         container_map.insert("4xl".to_string(), "var(--container-4xl)".to_string()); // 56rem
@@ -99,32 +99,56 @@ impl FlexBasisParser {
         container_map.insert("6xl".to_string(), "var(--container-6xl)".to_string()); // 72rem
         container_map.insert("7xl".to_string(), "var(--container-7xl)".to_string()); // 80rem
 
-        Self { spacing_map, fraction_map, container_map }
+        Self {
+            spacing_map,
+            fraction_map,
+            container_map,
+        }
     }
 
     fn parse_basis_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("basis-") {
             // Try spacing values first
             if let Some(basis_value) = self.spacing_map.get(value) {
-                return Some(vec![CssProperty { name: "flex-basis".to_string(), value: basis_value.clone(), important: false }]);
+                return Some(vec![CssProperty {
+                    name: "flex-basis".to_string(),
+                    value: basis_value.clone(),
+                    important: false,
+                }]);
             }
             // Try fraction values
             if let Some(basis_value) = self.fraction_map.get(value) {
-                return Some(vec![CssProperty { name: "flex-basis".to_string(), value: basis_value.clone(), important: false }]);
+                return Some(vec![CssProperty {
+                    name: "flex-basis".to_string(),
+                    value: basis_value.clone(),
+                    important: false,
+                }]);
             }
             // Try container values
             if let Some(basis_value) = self.container_map.get(value) {
-                return Some(vec![CssProperty { name: "flex-basis".to_string(), value: basis_value.clone(), important: false }]);
+                return Some(vec![CssProperty {
+                    name: "flex-basis".to_string(),
+                    value: basis_value.clone(),
+                    important: false,
+                }]);
             }
             // Handle arbitrary values like basis-[30vw]
             if value.starts_with('[') && value.ends_with(']') {
                 let inner_value = value[1..value.len() - 1].to_string();
-                return Some(vec![CssProperty { name: "flex-basis".to_string(), value: inner_value, important: false }]);
+                return Some(vec![CssProperty {
+                    name: "flex-basis".to_string(),
+                    value: inner_value,
+                    important: false,
+                }]);
             }
             // Handle custom properties like basis-(--my-basis)
             if value.starts_with('(') && value.ends_with(')') {
                 let inner_value = value[1..value.len() - 1].to_string();
-                return Some(vec![CssProperty { name: "flex-basis".to_string(), value: format!("var({})", inner_value), important: false }]);
+                return Some(vec![CssProperty {
+                    name: "flex-basis".to_string(),
+                    value: format!("var({})", inner_value),
+                    important: false,
+                }]);
             }
         }
         None
@@ -138,23 +162,97 @@ impl UtilityParser for FlexBasisParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "basis-0", "basis-px", "basis-0.5", "basis-1", "basis-1.5", "basis-2", "basis-2.5", "basis-3", "basis-3.5", "basis-4",
-            "basis-5", "basis-6", "basis-7", "basis-8", "basis-9", "basis-10", "basis-11", "basis-12", "basis-14", "basis-16",
-            "basis-20", "basis-24", "basis-28", "basis-32", "basis-36", "basis-40", "basis-44", "basis-48", "basis-52", "basis-56",
-            "basis-60", "basis-64", "basis-72", "basis-80", "basis-96", "basis-auto", "basis-full",
-            "basis-1/2", "basis-1/3", "basis-2/3", "basis-1/4", "basis-2/4", "basis-3/4", "basis-1/5", "basis-2/5", "basis-3/5", "basis-4/5",
-            "basis-1/6", "basis-2/6", "basis-3/6", "basis-4/6", "basis-5/6", "basis-1/12", "basis-2/12", "basis-3/12", "basis-4/12", "basis-5/12",
-            "basis-6/12", "basis-7/12", "basis-8/12", "basis-9/12", "basis-10/12", "basis-11/12",
-            "basis-3xs", "basis-2xs", "basis-xs", "basis-sm", "basis-md", "basis-lg", "basis-xl", "basis-2xl", "basis-3xl", "basis-4xl",
-            "basis-5xl", "basis-6xl", "basis-7xl",
-            "basis-[*]", "basis-(*)"
+            "basis-0",
+            "basis-px",
+            "basis-0.5",
+            "basis-1",
+            "basis-1.5",
+            "basis-2",
+            "basis-2.5",
+            "basis-3",
+            "basis-3.5",
+            "basis-4",
+            "basis-5",
+            "basis-6",
+            "basis-7",
+            "basis-8",
+            "basis-9",
+            "basis-10",
+            "basis-11",
+            "basis-12",
+            "basis-14",
+            "basis-16",
+            "basis-20",
+            "basis-24",
+            "basis-28",
+            "basis-32",
+            "basis-36",
+            "basis-40",
+            "basis-44",
+            "basis-48",
+            "basis-52",
+            "basis-56",
+            "basis-60",
+            "basis-64",
+            "basis-72",
+            "basis-80",
+            "basis-96",
+            "basis-auto",
+            "basis-full",
+            "basis-1/2",
+            "basis-1/3",
+            "basis-2/3",
+            "basis-1/4",
+            "basis-2/4",
+            "basis-3/4",
+            "basis-1/5",
+            "basis-2/5",
+            "basis-3/5",
+            "basis-4/5",
+            "basis-1/6",
+            "basis-2/6",
+            "basis-3/6",
+            "basis-4/6",
+            "basis-5/6",
+            "basis-1/12",
+            "basis-2/12",
+            "basis-3/12",
+            "basis-4/12",
+            "basis-5/12",
+            "basis-6/12",
+            "basis-7/12",
+            "basis-8/12",
+            "basis-9/12",
+            "basis-10/12",
+            "basis-11/12",
+            "basis-3xs",
+            "basis-2xs",
+            "basis-xs",
+            "basis-sm",
+            "basis-md",
+            "basis-lg",
+            "basis-xl",
+            "basis-2xl",
+            "basis-3xl",
+            "basis-4xl",
+            "basis-5xl",
+            "basis-6xl",
+            "basis-7xl",
+            "basis-[*]",
+            "basis-(*)",
         ]
     }
 
-    fn get_priority(&self) -> u32 { 70 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Flexbox }
+    fn get_priority(&self) -> u32 {
+        70
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Flexbox
+    }
 }
 
 impl Default for FlexBasisParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

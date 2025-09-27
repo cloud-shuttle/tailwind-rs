@@ -3,52 +3,57 @@
 //! This module provides parsing logic for shadow-related Tailwind CSS utilities,
 //! including box-shadow, drop-shadow, and shadow colors.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 #[derive(Debug, Clone)]
 pub struct ShadowParser;
 
 impl ShadowParser {
-    pub fn new() -> Self { Self }
+    pub fn new() -> Self {
+        Self
+    }
 
     /// Parse shadow size classes
     fn parse_shadow_size_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "shadow-sm" => Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: "0 1px 2px 0 rgb(0 0 0 / 0.05)".to_string(), 
-                important: false 
+            "shadow-sm" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 1px 2px 0 rgb(0 0 0 / 0.05)".to_string(),
+                important: false,
             }]),
-            "shadow" => Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)".to_string(), 
-                important: false 
+            "shadow" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)".to_string(),
+                important: false,
             }]),
-            "shadow-md" => Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)".to_string(), 
-                important: false 
+            "shadow-md" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)"
+                    .to_string(),
+                important: false,
             }]),
-            "shadow-lg" => Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)".to_string(), 
-                important: false 
+            "shadow-lg" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"
+                    .to_string(),
+                important: false,
             }]),
-            "shadow-xl" => Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)".to_string(), 
-                important: false 
+            "shadow-xl" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
+                    .to_string(),
+                important: false,
             }]),
-            "shadow-2xl" => Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: "0 25px 50px -12px rgb(0 0 0 / 0.25)".to_string(), 
-                important: false 
+            "shadow-2xl" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 25px 50px -12px rgb(0 0 0 / 0.25)".to_string(),
+                important: false,
             }]),
-            "shadow-none" => Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: "0 0 #0000".to_string(), 
-                important: false 
+            "shadow-none" => Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: "0 0 #0000".to_string(),
+                important: false,
             }]),
             _ => None,
         }
@@ -62,17 +67,23 @@ impl ShadowParser {
                 let color_value = self.get_shadow_color_value(color_name)?;
                 let opacity_value = self.parse_opacity_value(opacity)?;
                 let final_color = self.apply_opacity_to_color(&color_value, &opacity_value);
-                return Some(vec![CssProperty { 
-                    name: "box-shadow".to_string(), 
-                    value: format!("0 1px 3px 0 {}, 0 1px 2px -1px {}", final_color, final_color), 
-                    important: false 
+                return Some(vec![CssProperty {
+                    name: "box-shadow".to_string(),
+                    value: format!(
+                        "0 1px 3px 0 {}, 0 1px 2px -1px {}",
+                        final_color, final_color
+                    ),
+                    important: false,
                 }]);
             }
             let color_value = self.get_shadow_color_value(color_part)?;
-            return Some(vec![CssProperty { 
-                name: "box-shadow".to_string(), 
-                value: format!("0 1px 3px 0 {}, 0 1px 2px -1px {}", color_value, color_value), 
-                important: false 
+            return Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: format!(
+                    "0 1px 3px 0 {}, 0 1px 2px -1px {}",
+                    color_value, color_value
+                ),
+                important: false,
             }]);
         }
         None
@@ -159,13 +170,28 @@ impl UtilityParser for ShadowParser {
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
-        vec!["shadow-sm", "shadow", "shadow-md", "shadow-lg", "shadow-xl", "shadow-2xl", "shadow-none", "shadow-*"]
+        vec![
+            "shadow-sm",
+            "shadow",
+            "shadow-md",
+            "shadow-lg",
+            "shadow-xl",
+            "shadow-2xl",
+            "shadow-none",
+            "shadow-*",
+        ]
     }
 
-    fn get_priority(&self) -> u32 { 85 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Effects }
+    fn get_priority(&self) -> u32 {
+        85
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Effects
+    }
 }
 
 impl Default for ShadowParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

@@ -3,7 +3,7 @@
 //! This module provides parsing logic for Tailwind CSS justify-content utilities,
 //! such as `justify-start`, `justify-end`, `justify-center`, `justify-between`, etc.
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 use std::collections::HashMap;
 
@@ -26,13 +26,17 @@ impl JustifyContentParser {
         justify_map.insert("justify-stretch".to_string(), "stretch".to_string());
         justify_map.insert("justify-baseline".to_string(), "baseline".to_string());
         justify_map.insert("justify-normal".to_string(), "normal".to_string());
-        
+
         Self { justify_map }
     }
 
     fn parse_justify_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(justify_value) = self.justify_map.get(class) {
-            return Some(vec![CssProperty { name: "justify-content".to_string(), value: justify_value.clone(), important: false }]);
+            return Some(vec![CssProperty {
+                name: "justify-content".to_string(),
+                value: justify_value.clone(),
+                important: false,
+            }]);
         }
         None
     }
@@ -45,15 +49,30 @@ impl UtilityParser for JustifyContentParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "justify-start", "justify-end", "justify-end-safe", "justify-center", "justify-center-safe",
-            "justify-between", "justify-around", "justify-evenly", "justify-stretch", "justify-baseline", "justify-normal"
+            "justify-start",
+            "justify-end",
+            "justify-end-safe",
+            "justify-center",
+            "justify-center-safe",
+            "justify-between",
+            "justify-around",
+            "justify-evenly",
+            "justify-stretch",
+            "justify-baseline",
+            "justify-normal",
         ]
     }
 
-    fn get_priority(&self) -> u32 { 70 }
-    fn get_category(&self) -> ParserCategory { ParserCategory::Flexbox }
+    fn get_priority(&self) -> u32 {
+        70
+    }
+    fn get_category(&self) -> ParserCategory {
+        ParserCategory::Flexbox
+    }
 }
 
 impl Default for JustifyContentParser {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

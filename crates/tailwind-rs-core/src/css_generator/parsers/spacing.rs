@@ -1,11 +1,11 @@
 //! Spacing Utilities Parser
-//! 
+//!
 //! This module handles parsing of spacing-related utilities:
 //! - Padding (p-*, px-*, py-*, etc.)
 //! - Margin (m-*, mx-*, my-*, etc.)
 //! - Gap (gap-*, gap-x-*, gap-y-*, etc.)
 
-use super::{UtilityParser, ParserCategory};
+use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
 
 /// Parser for spacing utilities
@@ -44,32 +44,38 @@ impl SpacingParser {
     fn parse_axis_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("px-") {
             if let Some(spacing) = self.get_spacing_value(value) {
-                return Some(vec![CssProperty {
-                    name: "padding-left".to_string(),
-                    value: spacing.clone(),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-right".to_string(),
-                    value: spacing,
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "padding-left".to_string(),
+                        value: spacing.clone(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "padding-right".to_string(),
+                        value: spacing,
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("py-") {
             if let Some(spacing) = self.get_spacing_value(value) {
-                return Some(vec![CssProperty {
-                    name: "padding-top".to_string(),
-                    value: spacing.clone(),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-bottom".to_string(),
-                    value: spacing,
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "padding-top".to_string(),
+                        value: spacing.clone(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "padding-bottom".to_string(),
+                        value: spacing,
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         None
     }
 
@@ -93,7 +99,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pr-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -103,7 +109,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pb-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -113,7 +119,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pl-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -123,7 +129,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -138,7 +144,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pe-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -148,7 +154,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -163,7 +169,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pr-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -173,7 +179,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pb-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -183,7 +189,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pl-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -193,7 +199,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ps-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -203,7 +209,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pe-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -213,7 +219,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -228,7 +234,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pr-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -238,7 +244,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pb-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -248,7 +254,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pl-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -258,7 +264,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ps-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -268,7 +274,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("pe-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -278,7 +284,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -293,35 +299,41 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mx-") {
             if let Some(spacing) = self.get_spacing_value(value) {
-                return Some(vec![CssProperty {
-                    name: "margin-left".to_string(),
-                    value: spacing.clone(),
-                    important: false,
-                }, CssProperty {
-                    name: "margin-right".to_string(),
-                    value: spacing,
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-left".to_string(),
+                        value: spacing.clone(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-right".to_string(),
+                        value: spacing,
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("my-") {
             if let Some(spacing) = self.get_spacing_value(value) {
-                return Some(vec![CssProperty {
-                    name: "margin-top".to_string(),
-                    value: spacing.clone(),
-                    important: false,
-                }, CssProperty {
-                    name: "margin-bottom".to_string(),
-                    value: spacing,
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-top".to_string(),
+                        value: spacing.clone(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-bottom".to_string(),
+                        value: spacing,
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mt-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -331,7 +343,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mr-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -341,7 +353,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mb-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -351,7 +363,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ml-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -361,7 +373,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         // Logical properties for margin
         if let Some(value) = class.strip_prefix("ms-") {
             if let Some(spacing) = self.get_spacing_value(value) {
@@ -372,7 +384,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("me-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -382,7 +394,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         // Arbitrary values for margin
         if let Some(value) = class.strip_prefix("m-[") {
             if let Some(value) = value.strip_suffix("]") {
@@ -393,35 +405,41 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mx-[") {
             if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "margin-left".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }, CssProperty {
-                    name: "margin-right".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-left".to_string(),
+                        value: value.to_string(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-right".to_string(),
+                        value: value.to_string(),
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("my-[") {
             if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "margin-top".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }, CssProperty {
-                    name: "margin-bottom".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-top".to_string(),
+                        value: value.to_string(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-bottom".to_string(),
+                        value: value.to_string(),
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mt-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -431,7 +449,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mr-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -441,7 +459,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mb-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -451,7 +469,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ml-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -461,7 +479,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ms-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -471,7 +489,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("me-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -481,7 +499,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         // Custom properties for margin
         if let Some(value) = class.strip_prefix("m-(") {
             if let Some(value) = value.strip_suffix(")") {
@@ -492,35 +510,41 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mx-(") {
             if let Some(value) = value.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "margin-left".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }, CssProperty {
-                    name: "margin-right".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-left".to_string(),
+                        value: format!("var({})", value),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-right".to_string(),
+                        value: format!("var({})", value),
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("my-(") {
             if let Some(value) = value.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "margin-top".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }, CssProperty {
-                    name: "margin-bottom".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }]);
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-top".to_string(),
+                        value: format!("var({})", value),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-bottom".to_string(),
+                        value: format!("var({})", value),
+                        important: false,
+                    },
+                ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mt-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -530,7 +554,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mr-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -540,7 +564,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("mb-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -550,7 +574,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ml-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -560,7 +584,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("ms-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -570,7 +594,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("me-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {
@@ -580,7 +604,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         None
     }
 
@@ -595,7 +619,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("gap-x-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -605,7 +629,7 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("gap-y-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -615,21 +639,21 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+
         // Space utilities
         if let Some(direction_and_value) = class.strip_prefix("space-") {
             if let Some(value) = direction_and_value.strip_prefix("x-") {
                 if let Some(spacing) = self.get_spacing_value(value) {
                     return Some(vec![
-                        CssProperty { 
-                            name: "margin-left".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-left".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
-                        CssProperty { 
-                            name: "margin-right".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-right".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
                     ]);
                 }
@@ -637,21 +661,21 @@ impl SpacingParser {
             if let Some(value) = direction_and_value.strip_prefix("y-") {
                 if let Some(spacing) = self.get_spacing_value(value) {
                     return Some(vec![
-                        CssProperty { 
-                            name: "margin-top".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-top".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
-                        CssProperty { 
-                            name: "margin-bottom".to_string(), 
-                            value: format!("calc({} * 0.5)", spacing), 
-                            important: false 
+                        CssProperty {
+                            name: "margin-bottom".to_string(),
+                            value: format!("calc({} * 0.5)", spacing),
+                            important: false,
                         },
                     ]);
                 }
             }
         }
-        
+
         // Space reverse utilities
         if class == "space-x-reverse" {
             return Some(vec![CssProperty {
@@ -660,7 +684,7 @@ impl SpacingParser {
                 important: false,
             }]);
         }
-        
+
         if class == "space-y-reverse" {
             return Some(vec![CssProperty {
                 name: "--tw-space-y-reverse".to_string(),
@@ -668,42 +692,42 @@ impl SpacingParser {
                 important: false,
             }]);
         }
-        
+
         // Arbitrary space utilities
         if let Some(value) = class.strip_prefix("space-x-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![
-                    CssProperty { 
-                        name: "margin-left".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-left".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
-                    CssProperty { 
-                        name: "margin-right".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-right".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
                 ]);
             }
         }
-        
+
         if let Some(value) = class.strip_prefix("space-y-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![
-                    CssProperty { 
-                        name: "margin-top".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-top".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
-                    CssProperty { 
-                        name: "margin-bottom".to_string(), 
-                        value: format!("calc({} * 0.5)", value), 
-                        important: false 
+                    CssProperty {
+                        name: "margin-bottom".to_string(),
+                        value: format!("calc({} * 0.5)", value),
+                        important: false,
                     },
                 ]);
             }
         }
-        
+
         None
     }
 
@@ -756,25 +780,24 @@ impl UtilityParser for SpacingParser {
         if let Some(properties) = self.parse_padding_class(class) {
             return Some(properties);
         }
-        
+
         // Try margin
         if let Some(properties) = self.parse_margin_class(class) {
             return Some(properties);
         }
-        
+
         // Try gap
         if let Some(properties) = self.parse_gap_class(class) {
             return Some(properties);
         }
-        
+
         None
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
-            "p-*", "px-*", "py-*", "pt-*", "pr-*", "pb-*", "pl-*",
-            "m-*", "mx-*", "my-*", "mt-*", "mr-*", "mb-*", "ml-*",
-            "gap-*", "gap-x-*", "gap-y-*",
+            "p-*", "px-*", "py-*", "pt-*", "pr-*", "pb-*", "pl-*", "m-*", "mx-*", "my-*", "mt-*",
+            "mr-*", "mb-*", "ml-*", "gap-*", "gap-x-*", "gap-y-*",
         ]
     }
 

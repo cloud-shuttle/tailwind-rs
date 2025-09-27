@@ -20,6 +20,14 @@ impl SpacingParser {
 
     /// Parse padding classes
     fn parse_padding_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Try different padding patterns in order of specificity
+        self.parse_all_padding(class)
+            .or_else(|| self.parse_axis_padding(class))
+            .or_else(|| self.parse_directional_padding(class))
+    }
+
+    /// Parse all-direction padding (p-*)
+    fn parse_all_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("p-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -29,7 +37,11 @@ impl SpacingParser {
                 }]);
             }
         }
-        
+        None
+    }
+
+    /// Parse axis padding (px-*, py-*)
+    fn parse_axis_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("px-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -58,6 +70,20 @@ impl SpacingParser {
             }
         }
         
+        None
+    }
+
+    /// Parse directional padding (pt-*, pr-*, pb-*, pl-*)
+    fn parse_directional_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Try different directional patterns
+        self.parse_standard_directional_padding(class)
+            .or_else(|| self.parse_logical_directional_padding(class))
+            .or_else(|| self.parse_arbitrary_directional_padding(class))
+            .or_else(|| self.parse_custom_directional_padding(class))
+    }
+
+    /// Parse standard directional padding (pt-*, pr-*, pb-*, pl-*)
+    fn parse_standard_directional_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("pt-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -98,7 +124,11 @@ impl SpacingParser {
             }
         }
         
-        // Logical properties for padding
+        None
+    }
+
+    /// Parse logical directional padding (ps-*, pe-*)
+    fn parse_logical_directional_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("ps-") {
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
@@ -119,45 +149,11 @@ impl SpacingParser {
             }
         }
         
-        // Arbitrary values for padding
-        if let Some(value) = class.strip_prefix("p-[") {
-            if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "padding".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
-            }
-        }
-        
-        if let Some(value) = class.strip_prefix("px-[") {
-            if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "padding-left".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-right".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
-            }
-        }
-        
-        if let Some(value) = class.strip_prefix("py-[") {
-            if let Some(value) = value.strip_suffix("]") {
-                return Some(vec![CssProperty {
-                    name: "padding-top".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-bottom".to_string(),
-                    value: value.to_string(),
-                    important: false,
-                }]);
-            }
-        }
-        
+        None
+    }
+
+    /// Parse arbitrary directional padding (pt-[...], pr-[...], etc.)
+    fn parse_arbitrary_directional_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("pt-[") {
             if let Some(value) = value.strip_suffix("]") {
                 return Some(vec![CssProperty {
@@ -218,45 +214,11 @@ impl SpacingParser {
             }
         }
         
-        // Custom properties for padding
-        if let Some(value) = class.strip_prefix("p-(") {
-            if let Some(value) = value.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "padding".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }]);
-            }
-        }
-        
-        if let Some(value) = class.strip_prefix("px-(") {
-            if let Some(value) = value.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "padding-left".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-right".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }]);
-            }
-        }
-        
-        if let Some(value) = class.strip_prefix("py-(") {
-            if let Some(value) = value.strip_suffix(")") {
-                return Some(vec![CssProperty {
-                    name: "padding-top".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }, CssProperty {
-                    name: "padding-bottom".to_string(),
-                    value: format!("var({})", value),
-                    important: false,
-                }]);
-            }
-        }
-        
+        None
+    }
+
+    /// Parse custom directional padding (pt-(...), pr-(...), etc.)
+    fn parse_custom_directional_padding(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("pt-(") {
             if let Some(value) = value.strip_suffix(")") {
                 return Some(vec![CssProperty {

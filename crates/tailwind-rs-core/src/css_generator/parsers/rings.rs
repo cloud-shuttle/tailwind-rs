@@ -39,14 +39,13 @@ impl RingParser {
                     value: format!("0 0 0 3px {}", final_color), 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_ring_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "box-shadow".to_string(), 
-                    value: format!("0 0 0 3px {}", color_value), 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_ring_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "box-shadow".to_string(), 
+                value: format!("0 0 0 3px {}", color_value), 
+                important: false 
+            }]);
         }
         None
     }

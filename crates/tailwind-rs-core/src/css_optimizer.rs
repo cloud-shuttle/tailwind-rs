@@ -562,7 +562,7 @@ mod tests {
     #[test]
     fn test_optimize_css() {
         let optimizer = CssOptimizer::new();
-        let css = r#"
+        let css = "
             .test {
                 padding: 1rem;
                 margin: 0px;
@@ -577,7 +577,7 @@ mod tests {
     #[test]
     fn test_compress_css() {
         let optimizer = CssOptimizer::new();
-        let css = r#"
+        let css = "
             /* This is a comment */
             .test {
                 padding: 1rem;

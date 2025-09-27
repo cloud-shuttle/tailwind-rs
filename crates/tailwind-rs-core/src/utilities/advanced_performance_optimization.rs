@@ -543,7 +543,7 @@ impl LazyLoadingOptimizer {
     /// Generate lazy loading JavaScript
     pub fn generate_lazy_loading_js(&self) -> String {
         format!(
-            r#"
+            "
 // Lazy loading implementation
 const observer = new IntersectionObserver((entries) => {{
     entries.forEach(entry => {{
@@ -573,7 +573,7 @@ document.querySelectorAll('[data-lazy-classes]').forEach(el => {{
     /// Generate lazy loading CSS
     pub fn generate_lazy_loading_css(&self) -> String {
         format!(
-            r#"
+            "
 /* Lazy loading styles */
 [data-lazy-classes] {{
     opacity: 0;
@@ -593,12 +593,12 @@ document.querySelectorAll('[data-lazy-classes]').forEach(el => {{
 
     /// Get critical styles that should load immediately
     fn get_critical_styles(&self) -> String {
-        r#"
+        "
 /* Critical above-the-fold styles */
 html, body { margin: 0; padding: 0; }
 .container { max-width: 1200px; margin: 0 auto; }
 .header { background: #fff; padding: 1rem; }
-"#
+"
         .to_string()
     }
 }
@@ -1038,7 +1038,7 @@ mod tests {
     #[test]
     fn test_critical_css_extraction() {
         let extractor = CriticalCssExtractor::new();
-        let css = r#"
+        let css = "
         body { margin: 0; padding: 0; }
         .header { background: #fff; }
         .footer { background: #000; }
@@ -1060,7 +1060,7 @@ mod tests {
     #[test]
     fn test_bundle_splitting() {
         let splitter = BundleSplitter::new();
-        let css = r#"
+        let css = "
         .display-block { display: block; }
         .margin-4 { margin: 1rem; }
         .color-red { color: red; }

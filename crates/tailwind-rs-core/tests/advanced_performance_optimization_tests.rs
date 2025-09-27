@@ -15,12 +15,12 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_css_minification_whitespace_removal() {
         let minifier = AdvancedCssMinifier::new();
-        let css = r#"
+        let css = "
         .test-class {
             color: red;
             background: blue;
         }
-        "#;
+        ";
 
         let minified = minifier.minify(css);
         assert!(!minified.contains("\n"));
@@ -30,12 +30,12 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_css_minification_comment_removal() {
         let minifier = AdvancedCssMinifier::new();
-        let css = r#"
+        let css = "
         /* This is a comment */
         .test-class {
             color: red;
         }
-        "#;
+        ";
 
         let minified = minifier.minify(css);
         assert!(!minified.contains("/* This is a comment */"));
@@ -44,7 +44,7 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_css_minification_color_compression() {
         let minifier = AdvancedCssMinifier::new();
-        let css = r#"
+        let css = "
         .test-class {
             color: #ffffff;
             background: #000000;
@@ -67,7 +67,7 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_critical_css_extraction() {
         let extractor = CriticalCssExtractor::new();
-        let css = r#"
+        let css = "
         body { margin: 0; padding: 0; }
         .header { background: #fff; }
         .footer { background: #000; }
@@ -86,7 +86,7 @@ mod advanced_performance_optimization_tests {
             .critical_selectors
             .insert(".custom-critical".to_string());
 
-        let css = r#"
+        let css = "
         .custom-critical { color: red; }
         .non-critical { color: blue; }
         "#;
@@ -136,7 +136,7 @@ mod advanced_performance_optimization_tests {
     #[test]
     fn test_bundle_splitting_by_feature() {
         let splitter = BundleSplitter::new();
-        let css = r#"
+        let css = "
         .display-block { display: block; }
         .margin-4 { margin: 1rem; }
         .color-red { color: red; }

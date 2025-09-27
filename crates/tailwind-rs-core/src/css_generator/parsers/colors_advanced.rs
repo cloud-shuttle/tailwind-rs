@@ -26,14 +26,13 @@ impl AdvancedColorParser {
                     value: final_color, 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_advanced_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "background-color".to_string(), 
-                    value: color_value, 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_advanced_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "background-color".to_string(), 
+                value: color_value, 
+                important: false 
+            }]);
         }
         None
     }
@@ -51,14 +50,13 @@ impl AdvancedColorParser {
                     value: final_color, 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_advanced_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "border-color".to_string(), 
-                    value: color_value, 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_advanced_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "border-color".to_string(), 
+                value: color_value, 
+                important: false 
+            }]);
         }
         None
     }

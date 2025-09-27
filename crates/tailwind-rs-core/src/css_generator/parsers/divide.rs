@@ -44,10 +44,9 @@ impl DivideParser {
                 let opacity_value = self.parse_opacity_value(opacity)?;
                 let final_color = self.apply_opacity_to_color(&color_value, &opacity_value);
                 return Some(vec![CssProperty { name: "border-color".to_string(), value: final_color, important: false }]);
-            } else {
-                let color_value = self.get_color_value(color_part)?;
-                return Some(vec![CssProperty { name: "border-color".to_string(), value: color_value, important: false }]);
             }
+            let color_value = self.get_color_value(color_part)?;
+            return Some(vec![CssProperty { name: "border-color".to_string(), value: color_value, important: false }]);
         }
         None
     }

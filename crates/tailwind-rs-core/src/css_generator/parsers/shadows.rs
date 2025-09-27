@@ -67,14 +67,13 @@ impl ShadowParser {
                     value: format!("0 1px 3px 0 {}, 0 1px 2px -1px {}", final_color, final_color), 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_shadow_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "box-shadow".to_string(), 
-                    value: format!("0 1px 3px 0 {}, 0 1px 2px -1px {}", color_value, color_value), 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_shadow_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "box-shadow".to_string(), 
+                value: format!("0 1px 3px 0 {}, 0 1px 2px -1px {}", color_value, color_value), 
+                important: false 
+            }]);
         }
         None
     }

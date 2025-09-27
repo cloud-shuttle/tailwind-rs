@@ -70,14 +70,13 @@ impl DataAttributeParser {
                     value: final_color, 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "background-color".to_string(), 
-                    value: color_value, 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "background-color".to_string(), 
+                value: color_value, 
+                important: false 
+            }]);
         }
         
         // Handle text colors with opacity
@@ -91,14 +90,13 @@ impl DataAttributeParser {
                     value: final_color, 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "color".to_string(), 
-                    value: color_value, 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "color".to_string(), 
+                value: color_value, 
+                important: false 
+            }]);
         }
         
         // Handle border colors with opacity
@@ -112,14 +110,13 @@ impl DataAttributeParser {
                     value: final_color, 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "border-color".to_string(), 
-                    value: color_value, 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "border-color".to_string(), 
+                value: color_value, 
+                important: false 
+            }]);
         }
         
         // Handle ring colors with opacity
@@ -133,14 +130,13 @@ impl DataAttributeParser {
                     value: format!("0 0 0 3px {}", final_color), 
                     important: false 
                 }]);
-            } else {
-                let color_value = self.get_color_value(color_part)?;
-                return Some(vec![CssProperty { 
-                    name: "box-shadow".to_string(), 
-                    value: format!("0 0 0 3px {}", color_value), 
-                    important: false 
-                }]);
             }
+            let color_value = self.get_color_value(color_part)?;
+            return Some(vec![CssProperty { 
+                name: "box-shadow".to_string(), 
+                value: format!("0 0 0 3px {}", color_value), 
+                important: false 
+            }]);
         }
         
         // Handle transition timing functions

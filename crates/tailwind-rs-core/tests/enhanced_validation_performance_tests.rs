@@ -1,5 +1,5 @@
 use std::time::Instant;
-use tailwind_rs_core::utilities::enhanced_validation::*;
+use tailwind_rs_core::utilities::enhanced_validation_module::*;
 use tailwind_rs_core::Breakpoint;
 use tailwind_rs_core::ClassBuilder;
 

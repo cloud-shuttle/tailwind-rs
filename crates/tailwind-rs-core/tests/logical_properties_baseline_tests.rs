@@ -1,5 +1,5 @@
 use tailwind_rs_core::utilities::logical_properties::*;
-use tailwind_rs_core::utilities::spacing::SpacingValue;
+use tailwind_rs_core::utilities::spacing_module::SpacingValue;
 use tailwind_rs_core::Breakpoint;
 use tailwind_rs_core::ClassBuilder;
 

@@ -1,9 +1,12 @@
+[workspace]
+
 [package]
 name = "tailwind-rs-leptos-demo"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tailwind-rs-core = "0.15.4"
 tailwind-rs-leptos = "0.15.4"
-leptos = "0.8"
+leptos = "0.8.9"
 leptos_dom = "0.8"

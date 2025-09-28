@@ -1,10 +1,10 @@
 //! Tailwind-RS Leptos Demo Application
 //!
-//! This demo showcases the integration of Tailwind-RS with Leptos,
-//! demonstrating various Tailwind CSS classes and components.
+//! This demo showcases the integration of Tailwind-RS with Leptos v0.8.9,
+//! demonstrating API contracts, new parsers, and modern web development features.
 
-use leptos::*;
-use tailwind_rs_leptos::*;
+use leptos::prelude::*;
+use tailwind_rs_core::api_contracts::{ClassBuilderContract, ApiVersion, ClassBuilderInput, ApiContract};
 
 #[component]
 fn Header() -> impl IntoView {
@@ -136,10 +136,201 @@ fn Features() -> impl IntoView {
 }
 
 #[component]
+fn ApiContractsDemo() -> impl IntoView {
+    let (contract_result, set_contract_result) = signal(String::new());
+    let (is_validating, set_is_validating) = signal(false);
+
+    let run_contract_validation = move |_| {
+        set_is_validating.set(true);
+
+        // Demonstrate API contracts in action
+        let contract = ClassBuilderContract::new(ApiVersion::V2_0_0);
+        let input = ClassBuilderInput {
+            classes: vec!["p-4".to_string(), "bg-blue-500".to_string(), "text-white".to_string()],
+            responsive: vec![],
+            conditional: vec![],
+            custom: vec![],
+        };
+
+        // Validate input
+        match contract.validate_input(&input) {
+            Ok(_) => {
+                // Process with contract
+                match contract.process(input) {
+                    Ok(output) => {
+                        // Validate output
+                        match contract.validate_output(&output) {
+                            Ok(_) => {
+                                set_contract_result.set(format!(
+                                    "✅ Contract validation successful!\nClasses: {}",
+                                    output.to_css_classes()
+                                ));
+                            }
+                            Err(e) => {
+                                set_contract_result.set(format!("❌ Output validation failed: {}", e));
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        set_contract_result.set(format!("❌ Processing failed: {:?}", e));
+                    }
+                }
+            }
+            Err(e) => {
+                set_contract_result.set(format!("❌ Input validation failed: {}", e));
+            }
+        }
+
+        set_is_validating.set(false);
+    };
+
+    view! {
+        <section class="py-12 bg-gradient-to-br from-purple-50 to-blue-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900">
+                        "🔒 API Contracts Demo"
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600">
+                        "Experience the power of contract-based validation for guaranteed API stability."
+                    </p>
+                </div>
+                <div class="mt-12 flex justify-center">
+                    <div class="bg-white rounded-xl shadow-xl p-8 max-w-2xl w-full">
+                        <div class="text-center space-y-6">
+                            <div class="bg-blue-50 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2">
+                                    "Contract Validation Process"
+                                </h3>
+                                <div class="text-sm text-blue-700 space-y-1">
+                                    <p>"1. Input validation with type safety"</p>
+                                    <p>"2. Processing with guaranteed behavior"</p>
+                                    <p>"3. Output validation with format guarantees"</p>
+                                </div>
+                            </div>
+
+                            <button
+                                class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
+                                on:click=run_contract_validation
+                                disabled=is_validating
+                            >
+                                {move || if is_validating.get() { "🔄 Validating..." } else { "🚀 Run Contract Validation" }}
+                            </button>
+
+                            {move || (!contract_result.get().is_empty()).then(|| {
+                                view! {
+                                    <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm">
+                                        <pre class="whitespace-pre-wrap text-gray-800">
+                                            {contract_result.get()}
+                                        </pre>
+                                    </div>
+                                }
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+#[component]
+fn TransformParsersDemo() -> impl IntoView {
+    let (transform_classes, set_transform_classes) = signal(vec![
+        "translate-x-4".to_string(),
+        "translate-y-2".to_string(),
+        "scale-x-110".to_string(),
+        "scale-y-95".to_string(),
+    ]);
+
+    let add_transform_class = move |class: String| {
+        set_transform_classes.update(|classes| classes.push(class));
+    };
+
+    view! {
+        <section class="py-12 bg-gradient-to-br from-green-50 to-teal-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900">
+                        "🎨 New Transform Parsers Demo"
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600">
+                        "Showcasing the latest translate-x/y and scale-x/y parsers with O(1) performance."
+                    </p>
+                </div>
+                <div class="mt-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        // Transform Demo Box
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">
+                                "Live Transform Demo"
+                            </h3>
+                            <div class="flex justify-center">
+                                <div
+                                    class="w-32 h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg shadow-lg transform transition-all duration-300 hover:translate-x-4 hover:translate-y-2 hover:scale-x-110 hover:scale-y-95"
+                                    style="transform-origin: center;"
+                                >
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <span class="text-white font-bold text-lg">"Hover Me!"</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-4 text-sm text-gray-600 text-center">
+                                "Hover to see translate-x-4, translate-y-2, scale-x-110, scale-y-95 in action"
+                            </p>
+                        </div>
+
+                        // Parser Performance Info
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">
+                                "Parser Performance"
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">"Lookup Time"</span>
+                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                        "O(1) HashMap"
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">"Memory Usage"</span>
+                                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                                        "Minimal"
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">"Coverage"</span>
+                                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                                        "100% Complete"
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <h4 class="text-lg font-medium text-gray-900 mb-3">"Supported Classes"</h4>
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    {transform_classes.get().into_iter().map(|class| {
+                                        view! {
+                                            <div class="bg-gray-100 text-gray-800 px-3 py-2 rounded text-center font-mono">
+                                                {class}
+                                            </div>
+                                        }
+                                    }).collect::<Vec<_>>()}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+#[component]
 fn InteractiveDemo() -> impl IntoView {
-    let (count, set_count) = create_signal(0);
-    let (is_hovered, set_hovered) = create_signal(false);
-    
+    let (count, set_count) = signal(0);
+    let (is_hovered, set_hovered) = signal(false);
+
     view! {
         <section class="py-12 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -158,13 +349,7 @@ fn InteractiveDemo() -> impl IntoView {
                                 {move || count.get()}
                             </div>
                             <button
-                                class=move || {
-                                    if is_hovered.get() {
-                                        "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 transform scale-105"
-                                    } else {
-                                        "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
-                                    }
-                                }
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200 transform hover:scale-105"
                                 on:click=move |_| set_count.update(|c| *c += 1)
                                 on:mouseenter=move |_| set_hovered.set(true)
                                 on:mouseleave=move |_| set_hovered.set(false)
@@ -226,6 +411,8 @@ fn App() -> impl IntoView {
             <Header />
             <Hero />
             <Features />
+            <ApiContractsDemo />
+            <TransformParsersDemo />
             <InteractiveDemo />
             <Footer />
         </div>
@@ -233,5 +420,5 @@ fn App() -> impl IntoView {
 }
 
 fn main() {
-    leptos::mount_to_body(App)
+    mount_to_body(App)
 }

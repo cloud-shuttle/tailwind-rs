@@ -419,6 +419,10 @@ fn App() -> impl IntoView {
     }
 }
 
-fn main() {
+use wasm_bindgen::prelude::*;
+
+// This is the entry point for the web app
+#[wasm_bindgen(start)]
+pub fn main() {
     mount_to_body(App)
 }

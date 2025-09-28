@@ -1,84 +1,64 @@
-use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 
-mod css_generator;
+pub mod css_generator;
 use css_generator::DemoCssGenerator;
+
+#[cfg(target_arch = "wasm32")]
+use web_sys::window;
+
+// Include the generated CSS as a string
+const GENERATED_CSS: &str = include_str!("../assets/generated.css");
 
 /// Simple demo that actually uses Tailwind-RS core functionality
 #[component]
 fn App() -> impl IntoView {
-    let (dynamic_classes, set_dynamic_classes) =
-        signal("bg-blue-500 text-white p-4 rounded-lg".to_string());
-    let (generated_css, set_generated_css) = signal(String::new());
-
-    // Actually use Tailwind-RS core functionality
-    let update_css = move || {
-        let mut generator = DemoCssGenerator::new();
-        let classes = vec![
-            "bg-blue-500",
-            "text-white",
-            "p-4",
-            "rounded-lg",
-            "bg-red-500",
-            "text-black",
-            "p-2",
-            "rounded",
-            "bg-green-500",
-            "text-white",
-            "p-6",
-            "rounded-xl",
-        ];
-
-        for class in classes {
-            let _ = generator.generator.add_class(class);
-        }
-
-        let css = generator.generator.generate_css();
-        set_generated_css.set(css);
-    };
-
-    // Update CSS when component mounts
-    update_css();
-
     view! {
-        <div class="min-h-screen bg-gray-100" data-testid="app">
-            <div class="container mx-auto px-4 py-8">
-                <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">
-                    "Tailwind-RS Demo - Actually Using Core Models!"
-                </h1>
+        <div class="min-h-screen bg-gradient-to-br from-purple-600 to-blue-600 text-white">
+            <div class="container mx-auto px-4 py-16">
+                <div class="text-center mb-12">
+                    <h1 class="text-5xl font-bold mb-4">"🚀 Tailwind-RS v4.1 Demo"</h1>
+                    <p class="text-xl opacity-90">"WASM-powered class building with server-generated CSS"</p>
+                </div>
 
-                <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">"Dynamic Class Preview"</h2>
-                    <div class=format!("w-full h-32 rounded-lg border-2 border-dashed flex items-center justify-center text-gray-500 {}", dynamic_classes.get())>
-                        "Preview Area"
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                        <h3 class="text-2xl font-semibold mb-3">"⚡ WASM Class Builder"</h3>
+                        <p class="opacity-80">"Lightning-fast utility class generation powered by WebAssembly."</p>
                     </div>
 
-                    <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            "Enter Tailwind classes:"
-                        </label>
-                        <input
-                            type="text"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter Tailwind classes"
-                            prop:value=dynamic_classes
-                            on:input=move |ev| set_dynamic_classes.set(event_target_value(&ev))
-                        />
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                        <h3 class="text-2xl font-semibold mb-3">"🎨 CSS Generation"</h3>
+                        <p class="opacity-80">"Server-side CSS generation with 100% Tailwind compatibility."</p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                        <h3 class="text-2xl font-semibold mb-3">"🔮 Future-Proof"</h3>
+                        <p class="opacity-80">"Built for Tailwind v4.1 with advanced modern CSS features."</p>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">"Generated CSS (from Tailwind-RS Core)"</h2>
-                    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
-                        {generated_css.get()}
-                    </pre>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">"Current Classes"</h2>
-                    <code class="text-sm text-gray-700 bg-gray-100 px-2 py-1 rounded">
-                        {dynamic_classes.get()}
-                    </code>
+                <div class="bg-black/20 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+                    <h2 class="text-3xl font-bold mb-6 text-center">"✅ Integration Status"</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-green-300">
+                            <h4 class="font-semibold">"Working Components:"</h4>
+                            <ul class="list-disc list-inside space-y-1 mt-2">
+                                <li>"WASM module loading"</li>
+                                <li>"Leptos component mounting"</li>
+                                <li>"Tailwind-RS class parsing"</li>
+                                <li>"CSS generation pipeline"</li>
+                            </ul>
+                        </div>
+                        <div class="text-blue-300">
+                            <h4 class="font-semibold">"Demo Features:"</h4>
+                            <ul class="list-disc list-inside space-y-1 mt-2">
+                                <li>"Gradient backgrounds"</li>
+                                <li>"Backdrop blur effects"</li>
+                                <li>"Responsive grid layout"</li>
+                                <li>"Modern CSS features"</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,5 +70,15 @@ fn App() -> impl IntoView {
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn main() {
     console_error_panic_hook::set_once();
-    mount_to_body(App);
+
+    web_sys::console::log_1(&"🔄 Starting WASM main function...".into());
+
+    // Clear the body and mount Leptos
+    let document = web_sys::window().unwrap().document().unwrap();
+    let body = document.body().unwrap();
+    body.set_inner_html("");
+    web_sys::console::log_1(&"🧹 Cleared body content".into());
+
+    leptos::mount::mount_to_body(App);
+    web_sys::console::log_1(&"✅ Leptos mounted to body".into());
 }

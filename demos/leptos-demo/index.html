@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peter Hanssens - Data Engineer & Community Leader</title>
-    <meta name="description" content="Interactive demo showcasing Tailwind-RS v0.15.0 capabilities with Leptos">
+    <title>Tailwind-RS Demo - WASM + Generated CSS</title>
+    <meta name="description" content="Interactive demo showcasing Tailwind-RS WASM class building and server-generated CSS">
     
-    <!-- Tailwind CSS from CDN for demo -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <!-- Tailwind-RS Generated CSS -->
+    <link rel="stylesheet" href="./assets/generated.css">
+
     <!-- Custom styles for the demo -->
     <style>
         /* Custom animations and styles */
@@ -49,18 +49,16 @@
     </style>
 </head>
 <body>
-    <div id="app" class="demo-container" data-testid="app">
-        <!-- Loading indicator -->
-        <div id="loading" class="flex items-center justify-center min-h-screen">
-            <div class="text-center">
-                <div class="loading mx-auto mb-4"></div>
-                <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">
-                    Loading Tailwind-RS Demo...
-                </h2>
-                <p class="text-gray-500 dark:text-gray-400 mt-2">
-                    Initializing WASM runtime and Leptos application
-                </p>
-            </div>
+    <!-- Leptos will mount here and replace everything -->
+    <div id="app" class="flex items-center justify-center min-h-screen">
+        <div class="text-center">
+            <div class="loading mx-auto mb-4"></div>
+            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                Loading Tailwind-RS Demo...
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">
+                Initializing WASM runtime and Leptos application
+            </p>
         </div>
     </div>
     
@@ -88,47 +86,57 @@
         // Error handling
         window.addEventListener('error', function(e) {
             console.error('Demo error:', e.error);
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('error').classList.remove('hidden');
+            // Try to show error, but don't fail if elements don't exist
+            try {
+                const loading = document.getElementById('loading');
+                const error = document.getElementById('error');
+                if (loading && loading.classList) loading.classList.add('hidden');
+                if (error && error.classList) error.classList.remove('hidden');
+            } catch (e) {
+                console.error('Error handling failed:', e);
+            }
         });
-        
+
         // WASM loading indicator
         console.log('🚀 Starting Tailwind-RS Leptos Demo...');
-        
-        // Hide loading when WASM is ready
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                const loading = document.getElementById('loading');
-                if (loading && !loading.classList.contains('hidden')) {
-                    loading.classList.add('hidden');
-                }
-            }, 2000);
-        });
     </script>
     
     <!-- Load the WASM module -->
     <script type="module">
-        import init, { main } from './pkg/tailwind_rs_leptos_demo_working.js';
-        
+        import init from './pkg/tailwind_rs_leptos_demo_working.js';
+
         async function run() {
             try {
                 console.log('📦 Loading WASM module...');
                 await init();
                 console.log('✅ WASM module loaded successfully');
-                
-                console.log('🎨 Starting Leptos application...');
-                main();
-                console.log('✅ Demo application started');
-                
-                // Hide loading indicator
-                document.getElementById('loading').classList.add('hidden');
+
+                // The main function is called automatically via #[wasm_bindgen(start)]
+                console.log('🎨 Leptos application started automatically');
+
+                // Hide loading indicator (if it still exists)
+                try {
+                    const loading = document.getElementById('loading');
+                    if (loading && loading.classList) {
+                        loading.classList.add('hidden');
+                    }
+                } catch (e) {
+                    // Element might not exist if Leptos already replaced content
+                }
             } catch (error) {
                 console.error('❌ Failed to load demo:', error);
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('error').classList.remove('hidden');
+                // Try to show error, but don't fail if elements don't exist
+                try {
+                    const loading = document.getElementById('loading');
+                    const errorDiv = document.getElementById('error');
+                    if (loading && loading.classList) loading.classList.add('hidden');
+                    if (errorDiv && errorDiv.classList) errorDiv.classList.remove('hidden');
+                } catch (e) {
+                    console.error('Error handling failed:', e);
+                }
             }
         }
-        
+
         run();
     </script>
 </body>

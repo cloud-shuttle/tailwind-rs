@@ -3,6 +3,13 @@
 
 use leptos::prelude::*;
 
+// Provide missing wasm-bindgen extern function for document.head access
+#[cfg(target_arch = "wasm32")]
+extern "C" {
+    #[link_name = "__wbg_head_e5bcca7f38d7ca47"]
+    fn head_e5bcca7f38d7ca47(arg0: u32) -> u32;
+}
+
 /// Working WASM-compatible demo component
 #[component]
 fn App() -> impl IntoView {

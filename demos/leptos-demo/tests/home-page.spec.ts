@@ -8,76 +8,77 @@ test.describe('Home Page', () => {
 
   test('should display hero section', async ({ page }) => {
     // Check main title
-    const title = page.locator('h1:has-text("Tailwind-RS Demo")');
+    const title = page.locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")');
     await expect(title).toBeVisible();
-    await expect(title).toHaveClass(/text-5xl/);
-    
-    // Check subtitle
-    const subtitle = page.locator('p:has-text("Experience the power of Rust-native Tailwind CSS")');
-    await expect(subtitle).toBeVisible();
-    await expect(subtitle).toHaveClass(/text-xl/);
+    await expect(title).toHaveClass(/text-4xl/);
+
+    // Check that the demo shows the dynamic class preview
+    const previewArea = page.locator('div.w-full.h-32.rounded-lg.border-2.border-dashed:has-text("Preview Area")');
+    await expect(previewArea).toBeVisible();
   });
 
-  test('should display call-to-action buttons', async ({ page }) => {
-    const ctaButtons = page.locator('button:has-text("Get Started"), button:has-text("View Documentation")');
-    await expect(ctaButtons).toHaveCount(2);
-    
-    // Check button styles
-    const getStartedButton = page.locator('button:has-text("Get Started")');
-    await expect(getStartedButton).toHaveClass(/bg-blue-500/);
-    
-    const docButton = page.locator('button:has-text("View Documentation")');
-    await expect(docButton).toHaveClass(/border-2.*border-blue-600/);
+  test('should have dynamic class input', async ({ page }) => {
+    // Check input field exists
+    const inputField = page.locator('input[placeholder="Enter Tailwind classes"]');
+    await expect(inputField).toBeVisible();
+
+    // Check input has proper styling
+    await expect(inputField).toHaveClass(/border.*border-gray-300/);
+
+    // Check label exists
+    const label = page.locator('label:has-text("Enter Tailwind classes:")');
+    await expect(label).toBeVisible();
   });
 
-  test('should display feature cards', async ({ page }) => {
-    const featureCards = page.locator('.bg-white.dark\\:bg-gray-800.rounded-lg.shadow-md');
-    await expect(featureCards).toHaveCount(3);
-    
-    // Check Performance card
-    const performanceCard = featureCards.nth(0);
-    await expect(performanceCard).toContainText('🚀 Performance');
-    await expect(performanceCard).toContainText('Optimized for speed with tree-shaking');
-    
-    // Check Type Safety card
-    const typeSafetyCard = featureCards.nth(1);
-    await expect(typeSafetyCard).toContainText('🛡️ Type Safety');
-    await expect(typeSafetyCard).toContainText('Compile-time validation ensures');
-    
-    // Check Dynamic Styling card
-    const dynamicCard = featureCards.nth(2);
-    await expect(dynamicCard).toContainText('🎨 Dynamic Styling');
-    await expect(dynamicCard).toContainText('Generate classes at runtime');
+  test('should display demo sections', async ({ page }) => {
+    // Check for the dynamic class preview section
+    const previewSection = page.locator('h2:has-text("Dynamic Class Preview")');
+    await expect(previewSection).toBeVisible();
+
+    // Check for the generated CSS section
+    const cssSection = page.locator('h2:has-text("Generated CSS (from Tailwind-RS Core)")');
+    await expect(cssSection).toBeVisible();
+
+    // Check for the current classes section
+    const classesSection = page.locator('h2:has-text("Current Classes")');
+    await expect(classesSection).toBeVisible();
+
+    // Check that classes are actually generated and displayed
+    const cssPre = page.locator('pre');
+    await expect(cssPre).toBeVisible();
+    const cssContent = await cssPre.textContent();
+    expect(cssContent).toContain('bg-blue-500');
   });
 
   test('should have responsive layout', async ({ page }) => {
-    // Check grid layout
-    const featureGrid = page.locator('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
-    await expect(featureGrid).toBeVisible();
-    
+    // Check that the main container has responsive classes
+    const container = page.locator('.container.mx-auto.px-4.py-8');
+    await expect(container).toBeVisible();
+
     // Test mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    await expect(featureGrid).toBeVisible();
-    
-    // Test tablet viewport
-    await page.setViewportSize({ width: 768, height: 1024 });
-    await expect(featureGrid).toBeVisible();
-    
+    await expect(container).toBeVisible();
+
     // Test desktop viewport
-    await page.setViewportSize({ width: 1920, height: 1080 });
-    await expect(featureGrid).toBeVisible();
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await expect(container).toBeVisible();
   });
 
-  test('should support dark mode', async ({ page }) => {
-    // Toggle to dark mode
-    await page.click('button:has-text("☀️")');
-    
-    // Check that cards have dark mode classes
-    const featureCards = page.locator('.bg-white.dark\\:bg-gray-800');
-    await expect(featureCards).toHaveCount(3);
-    
-    // Check that text colors adapt
-    const subtitle = page.locator('p:has-text("Experience the power")');
-    await expect(subtitle).toHaveClass(/dark:text-gray-300/);
+  test('should demonstrate dynamic class functionality', async ({ page }) => {
+    // Get initial preview area classes - use more specific selector
+    const previewArea = page.locator('div.w-full.h-32.rounded-lg.border-2.border-dashed');
+    const initialClass = await previewArea.getAttribute('class');
+
+    // Type new classes into the input
+    const inputField = page.locator('input[placeholder="Enter Tailwind classes"]');
+    await inputField.fill('bg-red-500 text-white p-6 rounded-xl');
+
+    // Check that the preview area updates (this shows the demo is interactive)
+    await expect(previewArea).toHaveClass(/bg-red-500/);
+    await expect(previewArea).toHaveClass(/text-white/);
+
+    // Check that current classes section shows the new classes
+    const currentClasses = page.locator('code');
+    await expect(currentClasses).toContainText('bg-red-500 text-white p-6 rounded-xl');
   });
 });

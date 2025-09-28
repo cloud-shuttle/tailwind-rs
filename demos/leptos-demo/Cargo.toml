@@ -9,7 +9,11 @@ rust-version = "1.89.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-path = "src/lib_working.rs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "generate_css"
+path = "generate_css.rs"
 
 [dependencies]
 # Leptos dependencies
@@ -18,9 +22,11 @@ leptos = { version = "0.8.9", features = ["csr"] }
 # Use the published tailwind-rs-wasm crate (WORKING SOLUTION)
 tailwind-rs-wasm = "0.1.0"
 
+# Tailwind-RS core for CSS generation
+tailwind-rs-core = { path = "../../crates/tailwind-rs-core" }
+
 # Web dependencies (only for WASM builds)
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = "0.2.99"
-web-sys = "0.3.77"
-js-sys = "0.3.77"
+wasm-bindgen = "0.2.104"
 console_error_panic_hook = "0.1.7"
+web-sys = { version = "0.3", features = ["Window", "Document", "Element"] }

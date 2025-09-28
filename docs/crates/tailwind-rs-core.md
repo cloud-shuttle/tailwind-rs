@@ -20,6 +20,7 @@ The **core library** for type-safe Tailwind CSS utilities in Rust. This crate pr
 - **📱 Responsive Design**: Complete breakpoint system (sm, md, lg, xl, 2xl)
 - **🎯 State Variants**: All interactive states (hover, focus, active, disabled)
 - **🛡️ Type Safety**: 100% compile-time validation of class combinations
+- **🔒 API Contracts**: Comprehensive contract-based validation system for API stability
 - **🧪 Testing**: 593/593 tests passing (100% pass rate) with comprehensive coverage
 - **⚙️ Configuration System**: Real TOML parsing with type-safe validation
 - **🔧 CSS Optimization**: Real optimization algorithms with accurate statistics
@@ -57,6 +58,34 @@ let classes = ClassBuilder::new()
 let css_classes = classes.to_string();
 // Result: "p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
 ```
+
+### 🔒 API Contracts
+
+Tailwind-RS Core provides comprehensive API contracts for guaranteed API stability and reliability:
+
+```rust
+use tailwind_rs_core::api_contracts::{ClassBuilderContract, ApiVersion, ClassBuilderInput};
+
+let contract = ClassBuilderContract::new(ApiVersion::V2_0_0);
+let input = ClassBuilderInput {
+    classes: vec!["p-4".to_string(), "bg-blue-500".to_string()],
+    responsive: vec![],
+    conditional: vec![],
+    custom: vec![],
+};
+
+// Validate input and process with guarantees
+contract.validate_input(&input)?;
+let output = contract.process(input)?;
+contract.validate_output(&output)?;
+```
+
+**Contract Benefits:**
+- ✅ **Input Validation**: Type-safe validation of all API inputs
+- ✅ **Output Guarantees**: Consistent output formats and behavior
+- ✅ **Error Handling**: Comprehensive error reporting with specific error types
+- ✅ **API Stability**: Contract-based versioning ensures backward compatibility
+- ✅ **Runtime Safety**: Optional runtime validation for dynamic inputs
 
 ### Configuration System
 

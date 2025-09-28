@@ -2,7 +2,76 @@
 
 ## Overview
 
-This document provides a comprehensive API reference for the Tailwind-RS ecosystem, covering all public APIs, their usage, and examples.
+This document provides a comprehensive API reference for the Tailwind-RS ecosystem, covering all public APIs, their usage, and examples. The API now includes comprehensive contract-based validation for API stability and reliability.
+
+## 🔒 API Contracts System
+
+### Contract-Based API Design
+
+All major APIs in Tailwind-RS implement the `ApiContract` trait, providing:
+
+- **Input Validation**: Type-safe validation of API inputs
+- **Processing**: Reliable transformation of inputs to outputs
+- **Output Validation**: Guaranteed output format compliance
+- **Error Handling**: Comprehensive error reporting with specific error types
+
+### Available Contracts
+
+- **ClassBuilderContract**: Validates class building operations
+- **CssGeneratorContract**: Validates CSS generation operations
+- **ThemeContract**: Validates theme configuration operations
+- **ValidationContract**: Validates class validation operations
+
+### Example Usage
+
+```rust
+use tailwind_rs_core::api_contracts::{ClassBuilderContract, ApiVersion, ClassBuilderInput};
+
+let contract = ClassBuilderContract::new(ApiVersion::V2_0_0);
+let input = ClassBuilderInput {
+    classes: vec!["p-4".to_string(), "m-2".to_string()],
+    responsive: vec![],
+    conditional: vec![],
+    custom: vec![],
+};
+
+// Validate input
+contract.validate_input(&input)?;
+
+// Process with validation
+let output = contract.process(input)?;
+contract.validate_output(&output)?;
+```
+
+### Contract Testing Framework
+
+```rust
+use tailwind_rs_core::api_contracts::{ContractTester, TestCase};
+
+let mut tester = ContractTester::new();
+tester.add_test_case(TestCase {
+    name: "class_builder_test".to_string(),
+    input: "test_input".to_string(),
+    expected_output: "test_output".to_string(),
+    should_fail: false,
+});
+
+let results = tester.run_tests()?;
+println!("Tests passed: {}/{}", results.passed_tests, results.total_tests);
+```
+
+### Runtime Contract Validation
+
+```rust
+use tailwind_rs_core::api_contracts::{ContractValidator, ClassBuilderContract, ApiVersion};
+
+let mut validator = ContractValidator::new();
+let contract = ClassBuilderContract::new(ApiVersion::V2_0_0);
+validator.add_contract("class_builder".to_string(), contract);
+
+// Validate API calls at runtime
+validator.validate_call("class_builder", your_input_data)?;
+```
 
 ## 🎨 Core API (`tailwind-rs-core`)
 

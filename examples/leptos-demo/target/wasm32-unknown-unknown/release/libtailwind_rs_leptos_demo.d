@@ -1,0 +1,1 @@
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-demo/target/wasm32-unknown-unknown/release/libtailwind_rs_leptos_demo.rlib: /Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-demo/src/lib.rs

@@ -1,0 +1,527 @@
+{
+  "config": {
+    "configFile": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/playwright.config.ts",
+    "rootDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 5
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 5,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "home-page.spec.ts",
+      "file": "home-page.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Home Page",
+          "file": "home-page.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display hero section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6045,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25",
+                        "location": {
+                          "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                          "column": 25,
+                          "line": 12
+                        },
+                        "snippet": "  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                            "column": 25,
+                            "line": 12
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n\n  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T09:51:42.096Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                        "column": 25,
+                        "line": 12
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d186ff7d110502c4a7d9-50eec4fe108e042d1123",
+              "file": "home-page.spec.ts",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "should display hero section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 6580,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25",
+                        "location": {
+                          "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                          "column": 25,
+                          "line": 12
+                        },
+                        "snippet": "  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                            "column": 25,
+                            "line": 12
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n\n  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T09:51:42.097Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-firefox/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-firefox/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-firefox/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                        "column": 25,
+                        "line": 12
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d186ff7d110502c4a7d9-4be3ad4dce76047ba994",
+              "file": "home-page.spec.ts",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "should display hero section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 6407,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25",
+                        "location": {
+                          "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                          "column": 25,
+                          "line": 12
+                        },
+                        "snippet": "  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                            "column": 25,
+                            "line": 12
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n\n  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T09:51:42.099Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-webkit/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-webkit/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-webkit/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                        "column": 25,
+                        "line": 12
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d186ff7d110502c4a7d9-e8c5332d4d131832244b",
+              "file": "home-page.spec.ts",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "should display hero section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 6167,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25",
+                        "location": {
+                          "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                          "column": 25,
+                          "line": 12
+                        },
+                        "snippet": "  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                            "column": 25,
+                            "line": 12
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n\n  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T09:51:42.096Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                        "column": 25,
+                        "line": 12
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d186ff7d110502c4a7d9-89c48203a683fc3c62ef",
+              "file": "home-page.spec.ts",
+              "line": 9,
+              "column": 3
+            },
+            {
+              "title": "should display hero section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 6340,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25",
+                        "location": {
+                          "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                          "column": 25,
+                          "line": 12
+                        },
+                        "snippet": "  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                            "column": 25,
+                            "line": 12
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")')\u001b[22m\n\n\n  10 |     // Check main title\n  11 |     const title = page.locator('h1:has-text(\"Tailwind-RS Demo - Actually Using Core Models!\")');\n> 12 |     await expect(title).toBeVisible();\n     |                         ^\n  13 |     await expect(title).toHaveClass(/text-4xl/);\n  14 |\n  15 |     // Check that the demo shows the dynamic class preview\n    at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T09:51:42.096Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts",
+                        "column": 25,
+                        "line": 12
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d186ff7d110502c4a7d9-256bba3ad9dc6551dc90",
+              "file": "home-page.spec.ts",
+              "line": 9,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-28T09:51:41.566Z",
+    "duration": 8637.083999999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}

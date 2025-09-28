@@ -1,0 +1,1 @@
+fn(RouteProps<&str, _>) -> <NestedRoute<&str, (), (), _> as IntoMaybeErased>::Output {Route::<&str, _>}

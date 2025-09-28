@@ -1,0 +1,10 @@
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-demo/target/debug/deps/serde_qs-94fb3c3db33fe50e.d: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/lib.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/de/mod.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/de/parse.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/error.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/ser.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/utils.rs
+
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-demo/target/debug/deps/libserde_qs-94fb3c3db33fe50e.rmeta: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/lib.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/de/mod.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/de/parse.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/error.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/ser.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/utils.rs
+
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/lib.rs:
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/de/mod.rs:
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/de/parse.rs:
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/error.rs:
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/ser.rs:
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_qs-0.15.0/src/utils.rs:

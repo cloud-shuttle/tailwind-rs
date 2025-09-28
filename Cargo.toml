@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "crates/tailwind-rs-core",
-    "crates/tailwind-rs-macros", 
+    "crates/tailwind-rs-macros",
     "crates/tailwind-rs-testing",
     "crates/tailwind-rs-postcss",
     "crates/tailwind-rs-scanner",
@@ -12,6 +12,7 @@ members = [
     "crates/tailwind-rs-wasm",
     "demos/leptos-demo",
     "demos/ssr-demo",
+    "debug_parsers",
 ]
 resolver = "2"
 

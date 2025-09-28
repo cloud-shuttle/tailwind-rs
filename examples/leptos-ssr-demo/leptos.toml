@@ -1,0 +1,23 @@
+[package]
+name = "tailwind-rs-leptos-ssr-demo"
+version = "0.1.0"
+edition = "2021"
+
+[leptos]
+# Server configuration
+site_addr = "127.0.0.1:3000"
+site_root = "target/site"
+site_pkg_dir = "pkg"
+
+# Build configuration
+output_name = "tailwind_rs_leptos_ssr_demo"
+env = "DEV"
+
+# CSS configuration
+css_file = "styles.css"
+
+# Hydration
+hydrate = true
+
+# Hot reload
+hot_reload = true

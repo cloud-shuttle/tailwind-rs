@@ -311,7 +311,7 @@ impl CssGenerator {
     /// Convert a class name to a CSS rule
     pub fn class_to_css_rule(&self, class: &str) -> Result<CssRule> {
         let (variants, base_class) = self.parse_variants(class);
-        let properties = self.class_to_properties(class)?;
+        let properties = self.class_to_properties(&base_class)?;
 
         // Build selector with variants
         let mut selector = String::new();

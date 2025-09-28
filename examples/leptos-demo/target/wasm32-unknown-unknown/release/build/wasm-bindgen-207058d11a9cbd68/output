@@ -1,0 +1,6 @@
+cargo:rerun-if-changed=build.rs
+cargo:warning=The `msrv` feature is deprecated and will be removed in the next major version.
+cargo:rustc-check-cfg=cfg(wbg_diagnostic)
+cargo:rustc-cfg=wbg_diagnostic
+cargo:rustc-check-cfg=cfg(wbg_reference_types)
+cargo:rustc-cfg=wbg_reference_types

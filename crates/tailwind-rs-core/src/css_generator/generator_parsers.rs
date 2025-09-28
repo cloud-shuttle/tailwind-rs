@@ -141,7 +141,12 @@ impl CssGeneratorParsers for super::CssGenerator {
             return Ok(properties);
         }
 
-        // Try background parser
+        // Try background parser (gradients, colors, etc.)
+        if let Some(properties) = self.background_parser.parse_class(class) {
+            return Ok(properties);
+        }
+
+        // Try background properties parser (size, position, repeat, etc.)
         if let Some(properties) = self.background_properties_parser.parse_class(class) {
             return Ok(properties);
         }

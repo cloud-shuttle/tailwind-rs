@@ -1,0 +1,242 @@
+<testsuites id="" name="" tests="5" failures="5" skipped="0" errors="0" time="8.637084">
+<testsuite name="home-page.spec.ts" timestamp="2025-09-28T09:51:41.629Z" hostname="chromium" tests="1" failures="1" skipped="0" time="6.045" errors="0">
+<testcase name="Home Page › should display hero section" classname="home-page.spec.ts" time="6.045">
+<failure message="home-page.spec.ts:9:3 should display hero section" type="FAILURE">
+<![CDATA[  [chromium] › home-page.spec.ts:9:3 › Home Page › should display hero section ─────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+
+
+      10 |     // Check main title
+      11 |     const title = page.locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")');
+    > 12 |     await expect(title).toBeVisible();
+         |                         ^
+      13 |     await expect(title).toHaveClass(/text-4xl/);
+      14 |
+      15 |     // Check that the demo shows the dynamic class preview
+        at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/home-page-Home-Page-should-display-hero-section-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="home-page.spec.ts" timestamp="2025-09-28T09:51:41.629Z" hostname="firefox" tests="1" failures="1" skipped="0" time="6.58" errors="0">
+<testcase name="Home Page › should display hero section" classname="home-page.spec.ts" time="6.58">
+<failure message="home-page.spec.ts:9:3 should display hero section" type="FAILURE">
+<![CDATA[  [firefox] › home-page.spec.ts:9:3 › Home Page › should display hero section ──────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+
+
+      10 |     // Check main title
+      11 |     const title = page.locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")');
+    > 12 |     await expect(title).toBeVisible();
+         |                         ^
+      13 |     await expect(title).toHaveClass(/text-4xl/);
+      14 |
+      15 |     // Check that the demo shows the dynamic class preview
+        at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/home-page-Home-Page-should-display-hero-section-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-firefox/video.webm]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-firefox/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="home-page.spec.ts" timestamp="2025-09-28T09:51:41.629Z" hostname="webkit" tests="1" failures="1" skipped="0" time="6.407" errors="0">
+<testcase name="Home Page › should display hero section" classname="home-page.spec.ts" time="6.407">
+<failure message="home-page.spec.ts:9:3 should display hero section" type="FAILURE">
+<![CDATA[  [webkit] › home-page.spec.ts:9:3 › Home Page › should display hero section ───────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+
+
+      10 |     // Check main title
+      11 |     const title = page.locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")');
+    > 12 |     await expect(title).toBeVisible();
+         |                         ^
+      13 |     await expect(title).toHaveClass(/text-4xl/);
+      14 |
+      15 |     // Check that the demo shows the dynamic class preview
+        at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/home-page-Home-Page-should-display-hero-section-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-webkit/video.webm]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-webkit/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="home-page.spec.ts" timestamp="2025-09-28T09:51:41.629Z" hostname="Mobile Chrome" tests="1" failures="1" skipped="0" time="6.167" errors="0">
+<testcase name="Home Page › should display hero section" classname="home-page.spec.ts" time="6.167">
+<failure message="home-page.spec.ts:9:3 should display hero section" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › home-page.spec.ts:9:3 › Home Page › should display hero section ────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+
+
+      10 |     // Check main title
+      11 |     const title = page.locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")');
+    > 12 |     await expect(title).toBeVisible();
+         |                         ^
+      13 |     await expect(title).toHaveClass(/text-4xl/);
+      14 |
+      15 |     // Check that the demo shows the dynamic class preview
+        at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="home-page.spec.ts" timestamp="2025-09-28T09:51:41.629Z" hostname="Mobile Safari" tests="1" failures="1" skipped="0" time="6.34" errors="0">
+<testcase name="Home Page › should display hero section" classname="home-page.spec.ts" time="6.34">
+<failure message="home-page.spec.ts:9:3 should display hero section" type="FAILURE">
+<![CDATA[  [Mobile Safari] › home-page.spec.ts:9:3 › Home Page › should display hero section ────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")')
+
+
+      10 |     // Check main title
+      11 |     const title = page.locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")');
+    > 12 |     await expect(title).toBeVisible();
+         |                         ^
+      13 |     await expect(title).toHaveClass(/text-4xl/);
+      14 |
+      15 |     // Check that the demo shows the dynamic class preview
+        at /Users/peterhanssens/consulting/Leptos/tailwind-rs/demos/leptos-demo/tests/home-page.spec.ts:12:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|test-results/home-page-Home-Page-should-display-hero-section-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

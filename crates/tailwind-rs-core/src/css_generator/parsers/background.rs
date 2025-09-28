@@ -71,46 +71,102 @@ impl BackgroundParser {
     /// Parse background-image gradient direction classes
     fn parse_background_gradient_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "bg-gradient-to-t" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to top, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
-            "bg-gradient-to-tr" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to top right, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
-            "bg-gradient-to-r" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
-            "bg-gradient-to-br" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to bottom right, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
-            "bg-gradient-to-b" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to bottom, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
-            "bg-gradient-to-bl" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to bottom left, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
-            "bg-gradient-to-l" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to left, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
-            "bg-gradient-to-tl" => Some(vec![CssProperty {
-                name: "background-image".to_string(),
-                value: "linear-gradient(to top left, var(--tw-gradient-stops))".to_string(),
-                important: false,
-            }]),
+            "bg-gradient-to-t" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to top, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
+            "bg-gradient-to-tr" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to top right, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
+            "bg-gradient-to-r" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
+            "bg-gradient-to-br" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to bottom right, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
+            "bg-gradient-to-b" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to bottom, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
+            "bg-gradient-to-bl" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to bottom left, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
+            "bg-gradient-to-l" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to left, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
+            "bg-gradient-to-tl" => Some(vec![
+                CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "background-image".to_string(),
+                    value: "linear-gradient(to top left, var(--tw-gradient-stops))".to_string(),
+                    important: false,
+                },
+            ]),
             _ => None,
         }
     }

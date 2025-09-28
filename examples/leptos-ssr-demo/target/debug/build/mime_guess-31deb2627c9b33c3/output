@@ -1,0 +1,1 @@
+cargo:rustc-env=MIME_TYPES_GENERATED_PATH=/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-ssr-demo/target/debug/build/mime_guess-31deb2627c9b33c3/out/mime_types_generated.rs

@@ -1,0 +1,7 @@
+[package]
+name = "debug_parsers"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tailwind-rs-core = { path = "../crates/tailwind-rs-core" }

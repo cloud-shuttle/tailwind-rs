@@ -1,0 +1,8 @@
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-ssr-demo/target/release/deps/linear_map-b0fe91c70d7341f6.d: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/lib.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/set.rs
+
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-ssr-demo/target/release/deps/liblinear_map-b0fe91c70d7341f6.rlib: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/lib.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/set.rs
+
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-ssr-demo/target/release/deps/liblinear_map-b0fe91c70d7341f6.rmeta: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/lib.rs /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/set.rs
+
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/lib.rs:
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/linear-map-1.2.0/src/set.rs:

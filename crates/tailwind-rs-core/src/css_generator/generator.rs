@@ -7,7 +7,8 @@ use super::parsers::{
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
     AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
     BackdropFilterUtilitiesParser, BackgroundParser, BackgroundPropertiesParser,
-    BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
+    BorderRadiusParser, BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
+    OutlineParser,
     DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
     FilterUtilitiesParser, FlexBasisParser, FlexDirectionParser, FlexGrowParser, FlexParser,
     FlexShrinkParser, FlexWrapParser, FlexboxParser, FractionalTransformsParser, GapParser,
@@ -22,12 +23,14 @@ use super::parsers::{
 };
 use super::types::{CssGenerationConfig, CssProperty, CssRule};
 use super::variants::VariantParser;
+use super::trie::{ParserTrie, ParserType};
+use super::core::GradientContext;
 use crate::error::Result;
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 
 /// CSS generator that converts Tailwind classes to CSS rules
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct CssGenerator {
     /// Generated CSS rules
     pub rules: HashMap<String, CssRule>,
@@ -37,6 +40,8 @@ pub struct CssGenerator {
     pub custom_properties: HashMap<String, String>,
     /// Generation configuration
     pub config: CssGenerationConfig,
+    /// Context for gradient state (from-*, via-*, to-* classes)
+    pub gradient_context: GradientContext,
     /// Spacing parser
     pub spacing_parser: SpacingParser,
     /// Advanced spacing parser
@@ -59,12 +64,16 @@ pub struct CssGenerator {
     pub sizing_parser: SizingParser,
     /// Advanced border parser
     pub advanced_border_parser: AdvancedBorderParser,
+    /// Outline parser
+    pub outline_parser: OutlineParser,
     /// Ring parser
     pub ring_parser: RingParser,
     /// Transition parser
     pub transition_parser: TransitionParser,
     /// Shadow parser
     pub shadow_parser: ShadowParser,
+    /// Border radius parser
+    pub border_radius_parser: BorderRadiusParser,
     /// SVG parser
     pub svg_parser: SvgParser,
     /// Margin parser
@@ -191,6 +200,8 @@ pub struct CssGenerator {
     pub accent_color_parser: AccentColorParser,
     /// Variant parser
     pub variant_parser: VariantParser,
+    /// Parser trie for fast lookups
+    pub parser_trie: ParserTrie,
 }
 
 impl Default for CssGenerator {
@@ -216,6 +227,12 @@ impl CssGenerator {
     pub fn add_class(&mut self, class: &str) -> Result<()> {
         use super::generator_operations::CssGeneratorOperations;
         <Self as CssGeneratorOperations>::add_class(self, class)
+    }
+
+    /// Add multiple classes for an element (useful for gradient combinations)
+    pub fn add_classes_for_element(&mut self, classes: &[&str]) -> Result<()> {
+        use super::generator_operations::CssGeneratorOperations;
+        <Self as CssGeneratorOperations>::add_classes_for_element(self, classes)
     }
 
     /// Add a CSS selector directly (for non-Tailwind CSS selectors)
@@ -354,5 +371,51 @@ impl CssGenerator {
     pub fn class_to_properties(&self, class: &str) -> Result<Vec<CssProperty>> {
         use super::generator_parsers::CssGeneratorParsers;
         <Self as CssGeneratorParsers>::class_to_properties(self, class)
+    }
+
+    /// Add a gradient stop to the current gradient context
+    pub fn add_gradient_stop(&mut self, stop_type: &str, color: String) {
+        match stop_type {
+            "from" => self.gradient_context.from_color = Some(color),
+            "via" => self.gradient_context.via_color = Some(color),
+            "to" => self.gradient_context.to_color = Some(color),
+            _ => {}
+        }
+    }
+
+    /// Generate gradient CSS using current context and direction
+    pub fn generate_gradient_css(&mut self, direction: &str) -> Option<String> {
+        self.gradient_context.direction = Some(direction.to_string());
+
+        let mut colors = Vec::new();
+
+        // Add colors in order: from, via, to
+        if let Some(from) = &self.gradient_context.from_color {
+            colors.push(from.clone());
+        }
+        if let Some(via) = &self.gradient_context.via_color {
+            colors.push(via.clone());
+        }
+        if let Some(to) = &self.gradient_context.to_color {
+            colors.push(to.clone());
+        }
+
+        // If no colors collected, return None (let fallback handle it)
+        if colors.is_empty() {
+            return None;
+        }
+
+        // Generate the gradient CSS
+        let gradient_css = format!("linear-gradient({}, {})", direction, colors.join(", "));
+
+        // Reset context for next gradient
+        self.gradient_context = super::core::GradientContext::default();
+
+        Some(gradient_css)
+    }
+
+    /// Clear gradient context (useful for resetting between elements)
+    pub fn clear_gradient_context(&mut self) {
+        self.gradient_context = super::core::GradientContext::default();
     }
 }

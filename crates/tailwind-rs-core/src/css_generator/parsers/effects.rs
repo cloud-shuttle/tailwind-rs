@@ -157,6 +157,120 @@ impl EffectsParser {
         }
     }
 
+    /// Parse shadow color classes with opacity support
+    fn parse_shadow_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        if let Some(color_part) = class.strip_prefix("shadow-") {
+            // Handle opacity modifiers (e.g., shadow-purple-500/25)
+            if let Some((color_name, opacity)) = color_part.split_once('/') {
+                let color_value = self.get_shadow_color_value(color_name)?;
+                let final_color = self.convert_hex_to_rgba(&color_value, opacity)?;
+                return Some(vec![CssProperty {
+                    name: "box-shadow".to_string(),
+                    value: format!(
+                        "0 1px 3px 0 {}, 0 1px 2px -1px {}",
+                        final_color, final_color
+                    ),
+                    important: false,
+                }]);
+            }
+            let color_value = self.get_shadow_color_value(color_part)?;
+            return Some(vec![CssProperty {
+                name: "box-shadow".to_string(),
+                value: format!(
+                    "0 1px 3px 0 {}, 0 1px 2px -1px {}",
+                    color_value, color_value
+                ),
+                important: false,
+            }]);
+        }
+        None
+    }
+
+    /// Get shadow color values with comprehensive Tailwind support
+    fn get_shadow_color_value(&self, color: &str) -> Option<String> {
+        // Handle named colors
+        match color {
+            "transparent" => Some("#00000000".to_string()),
+            "current" => Some("currentColor".to_string()),
+            "black" => Some("#000000".to_string()),
+            "white" => Some("#ffffff".to_string()),
+            // Custom neon colors for shadows
+            "neon-blue" => Some("#00FFFF".to_string()),
+            "neon-purple" => Some("#FF00FF".to_string()),
+            "neon-green" => Some("#00FF00".to_string()),
+            _ => {
+                // Handle Tailwind color scale (e.g., "blue-500", "red-300")
+                if let Some((color_name, intensity)) = color.split_once('-') {
+                    if let Ok(intensity_num) = intensity.parse::<u16>() {
+                        if (100..=950).contains(&intensity_num) && intensity_num % 50 == 0 {
+                            return self.get_tailwind_color_value(color_name, intensity_num);
+                        }
+                    }
+                }
+                None
+            },
+        }
+    }
+
+    /// Get Tailwind color value for shadows
+    fn get_tailwind_color_value(&self, color_name: &str, intensity: u16) -> Option<String> {
+        match color_name {
+            "red" => match intensity {
+                500 => Some("#ef4444".to_string()), 600 => Some("#dc2626".to_string()),
+                700 => Some("#b91c1c".to_string()), _ => Some("#ef4444".to_string()),
+            },
+            "blue" => match intensity {
+                500 => Some("#3b82f6".to_string()), 600 => Some("#2563eb".to_string()),
+                700 => Some("#1d4ed8".to_string()), _ => Some("#3b82f6".to_string()),
+            },
+            "green" => match intensity {
+                500 => Some("#22c55e".to_string()), 600 => Some("#16a34a".to_string()),
+                700 => Some("#15803d".to_string()), _ => Some("#22c55e".to_string()),
+            },
+            "purple" => match intensity {
+                500 => Some("#a855f7".to_string()), 600 => Some("#9333ea".to_string()),
+                700 => Some("#7c3aed".to_string()), _ => Some("#a855f7".to_string()),
+            },
+            "gray" | "grey" => match intensity {
+                500 => Some("#6b7280".to_string()), 600 => Some("#4b5563".to_string()),
+                700 => Some("#374151".to_string()), _ => Some("#6b7280".to_string()),
+            },
+            _ => None,
+        }
+    }
+
+    /// Convert hex color to rgba with opacity for shadows
+    fn convert_hex_to_rgba(&self, hex_color: &str, opacity: &str) -> Option<String> {
+        if !hex_color.starts_with('#') {
+            return None;
+        }
+
+        // Parse opacity (e.g., "25" -> 0.25)
+        let opacity_value: f32 = opacity.parse::<f32>().ok()? / 100.0;
+
+        // Parse hex color to RGB components
+        let hex = &hex_color[1..];
+        let r: u8;
+        let g: u8;
+        let b: u8;
+
+        match hex.len() {
+            3 => {
+                r = u8::from_str_radix(&hex[0..1].repeat(2), 16).ok()?;
+                g = u8::from_str_radix(&hex[1..2].repeat(2), 16).ok()?;
+                b = u8::from_str_radix(&hex[2..3].repeat(2), 16).ok()?;
+            },
+            6 => {
+                r = u8::from_str_radix(&hex[0..2], 16).ok()?;
+                g = u8::from_str_radix(&hex[2..4], 16).ok()?;
+                b = u8::from_str_radix(&hex[4..6], 16).ok()?;
+            },
+            _ => return None,
+        }
+
+        Some(format!("rgba({}, {}, {}, {:.2})", r, g, b, opacity_value))
+    }
+
     /// Parse backdrop blur classes
     fn parse_backdrop_blur_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
@@ -388,6 +502,11 @@ impl UtilityParser for EffectsParser {
 
         // Try drop shadow classes
         if let Some(properties) = self.parse_drop_shadow_class(class) {
+            return Some(properties);
+        }
+
+        // Try shadow color classes
+        if let Some(properties) = self.parse_shadow_color_class(class) {
             return Some(properties);
         }
 

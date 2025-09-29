@@ -280,6 +280,7 @@ pub fn generate_comprehensive_css(output_path: &str, config: &CssGenerationConfi
 #[cfg(test)]
 mod tests {
     mod sync_api_tests;
+    mod integration_test;
     // mod tailwind_v4_1_missing_features_tests; // Temporarily disabled for v0.7.0 release
 
     use super::*;

@@ -1,89 +1,300 @@
 import { chromium } from 'playwright';
 
-async function checkStyling() {
+async function runComprehensiveTests() {
   const browser = await chromium.launch();
-  const page = await browser.newPage();
-
-  console.log('🔍 Checking Tailwind-RS demo styling...');
+  console.log('🚀 Starting comprehensive Tailwind-RS Playwright tests...');
 
   try {
-    // Navigate to the demo
-    await page.goto('http://localhost:8080');
-    await page.waitForTimeout(2000); // Wait for WASM to load
+    // Test 1: SSR Demo (Port 3000)
+    console.log('\n' + '='.repeat(60));
+    console.log('🧪 TEST 1: SSR Demo (http://localhost:3000)');
+    console.log('='.repeat(60));
 
-    console.log('📄 Page loaded, checking for content...');
+    const ssrPage = await browser.newPage();
+    await testSSRDemo(ssrPage);
 
-    // Check if content is loaded
-    const content = await page.textContent('body');
-    console.log('Page content length:', content.length);
+    // Test 2: Leptos WASM Demo (Port 3001)
+    console.log('\n' + '='.repeat(60));
+    console.log('🧪 TEST 2: Leptos WASM Demo (http://localhost:3001)');
+    console.log('='.repeat(60));
 
-    // Check for specific elements and their colors
-    const titleElement = await page.locator('h1').first();
-    if (await titleElement.count() > 0) {
-      const titleText = await titleElement.textContent();
-      console.log('📝 Title found:', titleText);
+    const leptosPage = await browser.newPage();
+    await testLeptosDemo(leptosPage);
 
-      const titleColor = await titleElement.evaluate(el => {
-        return window.getComputedStyle(el).color;
-      });
-      console.log('🎨 Title color:', titleColor);
-    }
+    // Test 3: CSS Quality Validation
+    console.log('\n' + '='.repeat(60));
+    console.log('🧪 TEST 3: CSS Quality Validation');
+    console.log('='.repeat(60));
 
-    // Check for purple/cyan text
-    const purpleElements = await page.locator('[class*="text-purple"]').all();
-    console.log('🟣 Purple elements found:', purpleElements.length);
+    await testCSSQuality(ssrPage);
 
-    for (let i = 0; i < Math.min(purpleElements.length, 3); i++) {
-      const color = await purpleElements[i].evaluate(el => {
-        return window.getComputedStyle(el).color;
-      });
-      console.log(`🟣 Purple element ${i + 1} color:`, color);
-    }
+    // Test 4: Performance Validation
+    console.log('\n' + '='.repeat(60));
+    console.log('🧪 TEST 4: Performance Validation');
+    console.log('='.repeat(60));
 
-    const cyanElements = await page.locator('[class*="text-cyan"]').all();
-    console.log('🔵 Cyan elements found:', cyanElements.length);
-
-    for (let i = 0; i < Math.min(cyanElements.length, 3); i++) {
-      const color = await cyanElements[i].evaluate(el => {
-        return window.getComputedStyle(el).color;
-      });
-      console.log(`🔵 Cyan element ${i + 1} color:`, color);
-    }
-
-    // Check background gradients
-    const gradientElements = await page.locator('[class*="bg-gradient"]').all();
-    console.log('🌈 Gradient elements found:', gradientElements.length);
-
-    for (let i = 0; i < Math.min(gradientElements.length, 2); i++) {
-      const background = await gradientElements[i].evaluate(el => {
-        return window.getComputedStyle(el).background;
-      });
-      console.log(`🌈 Gradient element ${i + 1} background:`, background);
-    }
-
-    // Check if CSS is loaded
-    const cssLinks = await page.locator('link[rel="stylesheet"]').all();
-    console.log('📄 CSS links found:', cssLinks.length);
-
-    for (let link of cssLinks) {
-      const href = await link.getAttribute('href');
-      console.log('📄 CSS href:', href);
-    }
-
-    // Check for CSS content
-    const cssResponse = await page.request.get('http://localhost:8080/assets/generated.css');
-    console.log('📄 CSS response status:', cssResponse.status());
-    console.log('📄 CSS content length:', cssResponse.text().length);
-
-    // Take a screenshot
-    await page.screenshot({ path: 'demo-screenshot.png', fullPage: true });
-    console.log('📸 Screenshot saved as demo-screenshot.png');
+    await testPerformance(ssrPage);
 
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('❌ Test suite failed:', error.message);
   } finally {
     await browser.close();
+    console.log('\n🎉 Playwright testing completed!');
   }
 }
 
-checkStyling();
+async function testSSRDemo(page) {
+  try {
+    console.log('🔍 Testing SSR Demo...');
+    await page.goto('http://localhost:3000');
+    await page.waitForTimeout(2000);
+
+    // Check page title
+    const title = await page.title();
+    console.log('📄 Page title:', title);
+    const hasCorrectTitle = title.includes('Self-Contained');
+    console.log('✅ Correct title:', hasCorrectTitle);
+
+    // Check no CDN script
+    const scripts = await page.locator('script[src*="cdn"]').all();
+    const hasNoCDN = scripts.length === 0;
+    console.log('✅ No CDN scripts:', hasNoCDN);
+
+    // Check for main content
+    const h1Element = await page.locator('h1').first();
+    const h1Text = await h1Element.textContent();
+    console.log('📝 Main heading:', h1Text);
+
+    // Check for Tailwind-RS status
+    const statusElement = await page.locator('text="CSS Generated Server-Side: This page was rendered with Tailwind-RS!"');
+    const hasStatusMessage = await statusElement.count() > 0;
+    console.log('✅ Status message found:', hasStatusMessage);
+
+    // Check for interactive elements
+    const counterElement = await page.locator('#count');
+    const hasCounter = await counterElement.count() > 0;
+    console.log('✅ Interactive counter:', hasCounter);
+
+    // Test counter functionality
+    if (hasCounter) {
+      const initialCount = await counterElement.textContent();
+      console.log('🔢 Initial count:', initialCount);
+
+      await page.click('text="Increment"');
+      await page.waitForTimeout(100);
+      const afterIncrement = await counterElement.textContent();
+      console.log('⬆️ After increment:', afterIncrement);
+
+      await page.click('text="Decrement"');
+      await page.waitForTimeout(100);
+      const afterDecrement = await counterElement.textContent();
+      console.log('⬇️ After decrement:', afterDecrement);
+
+      const counterWorks = parseInt(afterIncrement) === parseInt(initialCount) + 1 &&
+                          parseInt(afterDecrement) === parseInt(initialCount);
+      console.log('✅ Counter functionality:', counterWorks);
+    }
+
+    // Check CSS quality
+    const styleTag = await page.locator('style');
+    if (await styleTag.count() > 0) {
+      const cssContent = await styleTag.textContent();
+      const hasNoCSSVars = !cssContent.includes('var(--');
+      console.log('✅ CSS has no variables:', hasNoCSSVars);
+
+      const hasRGBA = cssContent.includes('rgba(');
+      console.log('✅ CSS has rgba() values:', hasRGBA);
+
+      const hasHexColors = cssContent.includes('#') && cssContent.match(/#[0-9a-f]{6}/gi);
+      console.log('✅ CSS has hex colors:', !!hasHexColors);
+    }
+
+    // Screenshot
+    await page.screenshot({ path: 'ssr-demo-test.png', fullPage: true });
+    console.log('📸 SSR demo screenshot saved');
+
+    return true;
+
+  } catch (error) {
+    console.error('❌ SSR Demo test failed:', error.message);
+    return false;
+  }
+}
+
+async function testLeptosDemo(page) {
+  try {
+    console.log('🔍 Testing Leptos WASM Demo...');
+    await page.goto('http://localhost:3001');
+    await page.waitForTimeout(3000); // WASM takes longer
+
+    const title = await page.title();
+    console.log('📄 Leptos page title:', title);
+
+    // Check for Leptos-specific content
+    const body = await page.textContent('body');
+    const hasLeptosContent = body.length > 1000; // Should have substantial content
+    console.log('✅ Has substantial content:', hasLeptosContent);
+
+    // Check for WASM-related elements
+    const buttons = await page.locator('button').all();
+    console.log('🔘 Buttons found:', buttons.length);
+
+    // Screenshot
+    await page.screenshot({ path: 'leptos-demo-test.png', fullPage: true });
+    console.log('📸 Leptos demo screenshot saved');
+
+    return true;
+
+  } catch (error) {
+    console.error('❌ Leptos Demo test failed:', error.message);
+    return false;
+  }
+}
+
+async function testCSSQuality(page) {
+  console.log('🔍 Testing CSS quality...');
+
+  try {
+    await page.goto('http://localhost:3000');
+
+    // Get all stylesheets and analyze both inline and external CSS
+    const styles = await page.evaluate(async () => {
+      const result = {
+        inlineStyles: 0,
+        externalStyles: 0,
+        cssRules: 0,
+        cssVars: 0,
+        rgbaValues: 0,
+        hexColors: 0,
+        remUnits: 0,
+        gradientRules: 0
+      };
+
+      // Count stylesheets
+      result.externalStyles = document.querySelectorAll('link[rel="stylesheet"]').length;
+      result.inlineStyles = document.querySelectorAll('style').length;
+
+      // Analyze inline CSS rules
+      const styleElements = document.querySelectorAll('style');
+      styleElements.forEach(style => {
+        const cssText = style.textContent || '';
+        result.cssRules += (cssText.match(/\{[^}]*\}/g) || []).length;
+        result.cssVars += (cssText.match(/var\(--[^)]+\)/g) || []).length;
+        result.rgbaValues += (cssText.match(/rgba\([^)]+\)/g) || []).length;
+        result.hexColors += (cssText.match(/#[0-9a-f]{6}/gi) || []).length;
+        result.remUnits += (cssText.match(/\d*\.?\d+rem/g) || []).length;
+        result.gradientRules += (cssText.match(/linear-gradient/g) || []).length;
+      });
+
+      // Try to fetch and analyze external CSS
+      const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+      for (const link of cssLinks) {
+        const href = link.getAttribute('href');
+        if (href && !href.startsWith('http')) {
+          try {
+            const response = await fetch(href);
+            const cssText = await response.text();
+            result.cssRules += (cssText.match(/\{[^}]*\}/g) || []).length;
+            result.cssVars += (cssText.match(/var\(--[^)]+\)/g) || []).length;
+            result.rgbaValues += (cssText.match(/rgba\([^)]+\)/g) || []).length;
+            result.hexColors += (cssText.match(/#[0-9a-f]{6}/gi) || []).length;
+            result.remUnits += (cssText.match(/\d*\.?\d+rem/g) || []).length;
+            result.gradientRules += (cssText.match(/linear-gradient/g) || []).length;
+          } catch (e) {
+            console.log('Could not fetch external CSS:', href);
+          }
+        }
+      }
+
+      return result;
+    });
+
+    console.log('📊 CSS Analysis Results:');
+    console.log(`   Inline styles: ${styles.inlineStyles}`);
+    console.log(`   External styles: ${styles.externalStyles}`);
+    console.log(`   CSS rules: ${styles.cssRules}`);
+    console.log(`   CSS variables: ${styles.cssVars}`);
+    console.log(`   RGBA values: ${styles.rgbaValues}`);
+    console.log(`   Hex colors: ${styles.hexColors}`);
+    console.log(`   REM units: ${styles.remUnits}`);
+    console.log(`   Gradients: ${styles.gradientRules}`);
+
+    // Quality checks
+    const qualityChecks = {
+      'No external stylesheets': styles.externalStyles === 1, // Only our generated CSS
+      'Has inline styles': styles.inlineStyles > 0,
+      'No CSS variables': styles.cssVars === 0,
+      'Has RGBA opacity': styles.rgbaValues > 0,
+      'Has hex colors': styles.hexColors > 0,
+      'Has REM units': styles.remUnits > 0,
+      'Has gradients': styles.gradientRules > 0
+    };
+
+    console.log('\n🔍 Quality Checks:');
+    Object.entries(qualityChecks).forEach(([check, passed]) => {
+      console.log(`   ${passed ? '✅' : '❌'} ${check}: ${passed}`);
+    });
+
+    return qualityChecks;
+
+  } catch (error) {
+    console.error('❌ CSS quality test failed:', error.message);
+    return null;
+  }
+}
+
+async function testPerformance(page) {
+  console.log('🔍 Testing performance...');
+
+  try {
+    await page.goto('http://localhost:3000');
+
+    // Measure page load time
+    const loadTime = await page.evaluate(() => {
+      return performance.timing.loadEventEnd - performance.timing.navigationStart;
+    });
+
+    console.log(`⚡ Page load time: ${loadTime}ms`);
+
+    // Check for console errors
+    const errors = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        errors.push(msg.text());
+      }
+    });
+
+    await page.waitForTimeout(2000);
+
+    console.log(`🚨 Console errors: ${errors.length}`);
+    if (errors.length > 0) {
+      errors.forEach(error => console.log(`   ❌ ${error}`));
+    }
+
+    // Check for layout shifts
+    const layoutShifts = await page.evaluate(() => {
+      let shifts = 0;
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.value > 0) shifts++;
+        }
+      });
+      observer.observe({ entryTypes: ['layout-shift'] });
+      return shifts;
+    });
+
+    console.log(`📐 Layout shifts: ${layoutShifts}`);
+
+    return {
+      loadTime,
+      errors: errors.length,
+      layoutShifts
+    };
+
+  } catch (error) {
+    console.error('❌ Performance test failed:', error.message);
+    return null;
+  }
+}
+
+runComprehensiveTests();

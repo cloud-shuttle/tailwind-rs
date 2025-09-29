@@ -13,6 +13,7 @@ members = [
     "demos/leptos-demo",
     "demos/ssr-demo",
     "debug_parsers",
+    "trie_benchmark",
 ]
 resolver = "2"
 
@@ -81,6 +82,15 @@ proptest = "1.4"
 cargo-watch = "8.6"
 cargo-tarpaulin = "0.27"
 cargo-nextest = "0.9"
+
+# Root package for integration tests
+[package]
+name = "tailwind-rs-integration-tests"
+version = "0.15.4"
+edition = "2021"
+
+[dependencies]
+tailwind-rs-core = { workspace = true }
 
 [profile.dev]
 opt-level = 0

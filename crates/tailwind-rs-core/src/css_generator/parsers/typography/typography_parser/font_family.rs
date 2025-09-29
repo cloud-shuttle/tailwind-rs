@@ -19,7 +19,7 @@ pub fn parse_font_family_class(class: &str) -> Option<Vec<CssProperty>> {
         }]),
         "font-mono" => Some(vec![CssProperty {
             name: "font-family".to_string(),
-            value: "var(--font-mono)".to_string(),
+            value: "ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace".to_string(),
             important: false,
         }]),
         _ => {

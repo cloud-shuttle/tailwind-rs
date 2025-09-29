@@ -75,89 +75,89 @@ fn HomePage() -> impl IntoView {
 
     view! {
         <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div class="text-center mb-16">
-                    <h1 class="text-6xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-                        "Tailwind-RS"
-                    </h1>
-                    <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-                        "Server-side rendering with API contracts, modern parsers, and type-safe CSS generation."
-                    </p>
-                    <div class="flex justify-center space-x-4">
-                        <a href="/contracts" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">
-                            "API Contracts Demo"
-                        </a>
-                        <a href="/transforms" class="bg-white text-gray-900 px-8 py-3 rounded-lg border border-gray-300 hover:border-gray-400 transition-all duration-200 transform hover:scale-105">
-                            "Transform Parsers Demo"
-                        </a>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                    <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">"🚀"</span>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div class="text-center mb-16">
+                        <h1 class="text-6xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
+                            "Tailwind-RS"
+                        </h1>
+                        <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+                            "Server-side rendering with API contracts, modern parsers, and type-safe CSS generation."
+                        </p>
+                        <div class="flex justify-center space-x-4">
+                            <a href="/contracts" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">
+                                "API Contracts Demo"
+                            </a>
+                            <a href="/transforms" class="bg-white text-gray-900 px-8 py-3 rounded-lg border border-gray-300 hover:border-gray-400 transition-all duration-200 transform hover:scale-105">
+                                "Transform Parsers Demo"
+                            </a>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">"Server-Side Rendering"</h3>
-                        <p class="text-gray-600">"Fast initial page loads with SEO-friendly server-rendered HTML."</p>
                     </div>
 
-                    <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">"🔒"</span>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">"API Contracts"</h3>
-                        <p class="text-gray-600">"Guaranteed API stability with contract-based validation."</p>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">"🎨"</span>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">"Transform Parsers"</h3>
-                        <p class="text-gray-600">"O(1) performance parsers for translate and scale utilities."</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">"Interactive Demo"</h2>
-                    <div class="max-w-md mx-auto">
-                        <div class="text-center mb-6">
-                            <div class="text-5xl font-bold text-blue-600 mb-4">{move || count.get()}</div>
-                            <div class="flex justify-center space-x-4">
-                                <button
-                                    class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105"
-                                    on:click=move |_| set_count.set(count.get() + 1)
-                                >
-                                    "Increment"
-                                </button>
-                                <button
-                                    class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors duration-200"
-                                    on:click=move |_| set_count.set(0)
-                                >
-                                    "Reset"
-                                </button>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                        <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-2xl">"🚀"</span>
                             </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-3">"Server-Side Rendering"</h3>
+                            <p class="text-gray-600">"Fast initial page loads with SEO-friendly server-rendered HTML."</p>
                         </div>
 
-                        <div class="space-y-4">
-                            <label class="block">
-                                <span class="text-sm font-medium text-gray-700 mb-2 block">"Your Name:"</span>
-                                <input
-                                    type="text"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                    prop:value=name
-                                    on:input=move |ev| set_name.set(event_target_value(&ev))
-                                />
-                            </label>
-                            <p class="text-center text-gray-600">
-                                "Hello, " <span class="font-semibold text-blue-600">{move || name.get()}</span> "! Welcome to Tailwind-RS SSR!"
-                            </p>
+                        <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-2xl">"🔒"</span>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-3">"API Contracts"</h3>
+                            <p class="text-gray-600">"Guaranteed API stability with contract-based validation."</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                                <span class="text-2xl">"🎨"</span>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-3">"Transform Parsers"</h3>
+                            <p class="text-gray-600">"O(1) performance parsers for translate and scale utilities."</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">"Interactive Demo"</h2>
+                        <div class="max-w-md mx-auto">
+                            <div class="text-center mb-6">
+                                <div class="text-5xl font-bold text-blue-600 mb-4">{move || count.get()}</div>
+                                <div class="flex justify-center space-x-4">
+                                    <button
+                                        class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105"
+                                        on:click=move |_| set_count.set(count.get() + 1)
+                                    >
+                                        "Increment"
+                                    </button>
+                                    <button
+                                        class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors duration-200"
+                                        on:click=move |_| set_count.set(0)
+                                    >
+                                        "Reset"
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <label class="block">
+                                    <span class="text-sm font-medium text-gray-700 mb-2 block">"Your Name:"</span>
+                                    <input
+                                        type="text"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                        prop:value=name
+                                        on:input=move |ev| set_name.set(event_target_value(&ev))
+                                    />
+                                </label>
+                                <p class="text-center text-gray-600">
+                                    "Hello, " <span class="font-semibold text-blue-600">{move || name.get()}</span> "! Welcome to Tailwind-RS SSR!"
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     }
 }
 
@@ -224,15 +224,15 @@ fn ApiContractsPage() -> impl IntoView {
 
     view! {
         <div class="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div class="text-center mb-16">
-                    <h1 class="text-5xl font-black bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
-                        "🔒 API Contracts Demo"
-                    </h1>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                        "Experience guaranteed API stability with contract-based validation. Server-side rendered with full type safety."
-                    </p>
-                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div class="text-center mb-16">
+                        <h1 class="text-5xl font-black bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
+                            "🔒 API Contracts Demo"
+                        </h1>
+                        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                            "Experience guaranteed API stability with contract-based validation. Server-side rendered with full type safety."
+                        </p>
+                    </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div class="space-y-8">
@@ -335,8 +335,8 @@ fn ApiContractsPage() -> impl IntoView {
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
-        </div>
     }
 }
 
@@ -505,8 +505,8 @@ impl UtilityParser for BasicTransformsParser {
 "}</pre>
                     </div>
                 </div>
+                </div>
             </div>
-        </div>
     }
 }
 
@@ -525,48 +525,13 @@ pub fn App() -> impl IntoView {
                 <link rel="stylesheet" href="/styles.css"/>
             </head>
             <body class="font-sans">
-                <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                        <div class="text-center mb-16">
-                            <h1 class="text-6xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-                                "🚀 Tailwind-RS SSR Demo"
-                            </h1>
-                            <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-                                "Server-side rendering with API contracts, modern parsers, and type-safe CSS generation."
-                            </p>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                                    <span class="text-blue-600 text-2xl">"🚀"</span>
-                                </div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-3">"Server-Side Rendering"</h3>
-                                <p class="text-gray-600">"Full SSR with Leptos and Axum - this page was rendered on the server!"</p>
-                            </div>
-
-                            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                                    <span class="text-purple-600 text-2xl">"🔒"</span>
-                                </div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-3">"API Contracts"</h3>
-                                <p class="text-gray-600">"Type-safe validation with contract-based API guarantees."</p>
-                            </div>
-
-                            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                                    <span class="text-green-600 text-2xl">"🎨"</span>
-                                </div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-3">"Transform Parsers"</h3>
-                                <p class="text-gray-600">"O(1) HashMap-based parsers for translate and scale utilities."</p>
-                            </div>
-                        </div>
-
-                        <ApiContractsPage/>
-                        <TransformParsersPage/>
-                    </div>
-                </div>
+                <Header/>
+                <HomePage/>
+                <ApiContractsPage/>
+                <TransformParsersPage/>
+                <Footer/>
             </body>
         </html>
     }
 }
+

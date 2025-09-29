@@ -49,5 +49,8 @@
   "bugs": {
     "url": "https://github.com/your-org/tailwind-rs/issues"
   },
-  "homepage": "https://github.com/your-org/tailwind-rs#readme"
+  "homepage": "https://github.com/your-org/tailwind-rs#readme",
+  "dependencies": {
+    "playwright": "^1.55.1"
+  }
 }

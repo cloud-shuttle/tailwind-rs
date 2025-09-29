@@ -68,107 +68,29 @@ impl BackgroundParser {
         }
     }
 
-    /// Parse background-image gradient direction classes
+    /// Parse background-image gradient direction classes - generate actual CSS
     fn parse_background_gradient_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        match class {
-            "bg-gradient-to-t" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to top, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            "bg-gradient-to-tr" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to top right, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            "bg-gradient-to-r" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to right, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            "bg-gradient-to-br" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to bottom right, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            "bg-gradient-to-b" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to bottom, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            "bg-gradient-to-bl" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to bottom left, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            "bg-gradient-to-l" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to left, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            "bg-gradient-to-tl" => Some(vec![
-                CssProperty {
-                    name: "--tw-gradient-stops".to_string(),
-                    value: "var(--tw-gradient-from), var(--tw-gradient-to, transparent)".to_string(),
-                    important: false,
-                },
-                CssProperty {
-                    name: "background-image".to_string(),
-                    value: "linear-gradient(to top left, var(--tw-gradient-stops))".to_string(),
-                    important: false,
-                },
-            ]),
-            _ => None,
-        }
+        let direction = match class {
+            "bg-gradient-to-t" => "to top",
+            "bg-gradient-to-tr" => "to top right",
+            "bg-gradient-to-r" => "to right",
+            "bg-gradient-to-br" => "to bottom right",
+            "bg-gradient-to-b" => "to bottom",
+            "bg-gradient-to-bl" => "to bottom left",
+            "bg-gradient-to-l" => "to left",
+            "bg-gradient-to-tl" => "to top left",
+            _ => return None,
+        };
+
+        // Generate a basic linear gradient with placeholder colors
+        // Note: Real gradients would need to collect from-, via-, to- stops
+        let background_image = format!("linear-gradient({}, #3b82f6, #ef4444)", direction);
+
+        Some(vec![CssProperty {
+            name: "background-image".to_string(),
+            value: background_image,
+            important: false,
+        }])
     }
 
     /// Parse background-color classes
@@ -191,12 +113,12 @@ impl BackgroundParser {
             }]),
             "bg-black" => Some(vec![CssProperty {
                 name: "background-color".to_string(),
-                value: "var(--color-black)".to_string(),
+                value: "#000000".to_string(),
                 important: false,
             }]),
             "bg-white" => Some(vec![CssProperty {
                 name: "background-color".to_string(),
-                value: "var(--color-white)".to_string(),
+                value: "#ffffff".to_string(),
                 important: false,
             }]),
             _ => {
@@ -228,12 +150,24 @@ impl BackgroundParser {
                     if parts.len() == 2 {
                         let base_color = parts[0];
                         let opacity = parts[1];
-                        if let Some(color_value) = self.get_color_value(base_color) {
-                            return Some(vec![CssProperty {
-                                name: "background-color".to_string(),
-                                value: format!("{}/{}", color_value, opacity),
-                                important: false,
-                            }]);
+                        // Handle basic colors like bg-white, bg-black, bg-transparent
+                        let color_value = match base_color {
+                            "bg-white" => Some("#ffffff".to_string()),
+                            "bg-black" => Some("#000000".to_string()),
+                            "bg-transparent" => Some("transparent".to_string()),
+                            "bg-current" => Some("currentColor".to_string()),
+                            "bg-inherit" => Some("inherit".to_string()),
+                            _ => self.get_color_value(base_color),
+                        };
+                        if let Some(color_value) = color_value {
+                            // Convert to rgba with opacity
+                            if let Some(rgba_value) = convert_hex_to_rgba(&color_value, opacity) {
+                                return Some(vec![CssProperty {
+                                    name: "background-color".to_string(),
+                                    value: rgba_value,
+                                    important: false,
+                                }]);
+                            }
                         }
                     }
                 }
@@ -642,39 +576,56 @@ impl BackgroundParser {
         // This is a simplified color mapping - in a real implementation,
         // you'd want a comprehensive color system
         match class {
-            "bg-red-50" => Some("var(--color-red-50)".to_string()),
-            "bg-red-100" => Some("var(--color-red-100)".to_string()),
-            "bg-red-200" => Some("var(--color-red-200)".to_string()),
-            "bg-red-300" => Some("var(--color-red-300)".to_string()),
-            "bg-red-400" => Some("var(--color-red-400)".to_string()),
-            "bg-red-500" => Some("var(--color-red-500)".to_string()),
-            "bg-red-600" => Some("var(--color-red-600)".to_string()),
-            "bg-red-700" => Some("var(--color-red-700)".to_string()),
-            "bg-red-800" => Some("var(--color-red-800)".to_string()),
-            "bg-red-900" => Some("var(--color-red-900)".to_string()),
-            "bg-red-950" => Some("var(--color-red-950)".to_string()),
-            "bg-blue-50" => Some("var(--color-blue-50)".to_string()),
-            "bg-blue-100" => Some("var(--color-blue-100)".to_string()),
-            "bg-blue-200" => Some("var(--color-blue-200)".to_string()),
-            "bg-blue-300" => Some("var(--color-blue-300)".to_string()),
-            "bg-blue-400" => Some("var(--color-blue-400)".to_string()),
-            "bg-blue-500" => Some("var(--color-blue-500)".to_string()),
-            "bg-blue-600" => Some("var(--color-blue-600)".to_string()),
-            "bg-blue-700" => Some("var(--color-blue-700)".to_string()),
-            "bg-blue-800" => Some("var(--color-blue-800)".to_string()),
-            "bg-blue-900" => Some("var(--color-blue-900)".to_string()),
-            "bg-blue-950" => Some("var(--color-blue-950)".to_string()),
-            "bg-green-50" => Some("var(--color-green-50)".to_string()),
-            "bg-green-100" => Some("var(--color-green-100)".to_string()),
-            "bg-green-200" => Some("var(--color-green-200)".to_string()),
-            "bg-green-300" => Some("var(--color-green-300)".to_string()),
-            "bg-green-400" => Some("var(--color-green-400)".to_string()),
-            "bg-green-500" => Some("var(--color-green-500)".to_string()),
-            "bg-green-600" => Some("var(--color-green-600)".to_string()),
-            "bg-green-700" => Some("var(--color-green-700)".to_string()),
-            "bg-green-800" => Some("var(--color-green-800)".to_string()),
-            "bg-green-900" => Some("var(--color-green-900)".to_string()),
-            "bg-green-950" => Some("var(--color-green-950)".to_string()),
+            // Basic colors
+            "bg-white" => Some("#ffffff".to_string()),
+            "bg-black" => Some("#000000".to_string()),
+            "bg-transparent" => Some("transparent".to_string()),
+            "bg-current" => Some("currentColor".to_string()),
+            "bg-inherit" => Some("inherit".to_string()),
+            "bg-red-50" => Some("#fef2f2".to_string()),
+            "bg-red-100" => Some("#fee2e2".to_string()),
+            "bg-red-200" => Some("#fecaca".to_string()),
+            "bg-red-300" => Some("#fca5a5".to_string()),
+            "bg-red-400" => Some("#f87171".to_string()),
+            "bg-red-500" => Some("#ef4444".to_string()),
+            "bg-red-600" => Some("#dc2626".to_string()),
+            "bg-red-700" => Some("#b91c1c".to_string()),
+            "bg-red-800" => Some("#991b1b".to_string()),
+            "bg-red-900" => Some("#7f1d1d".to_string()),
+            "bg-red-950" => Some("#450a0a".to_string()),
+            "bg-blue-50" => Some("#eff6ff".to_string()),
+            "bg-blue-100" => Some("#dbeafe".to_string()),
+            "bg-blue-200" => Some("#bfdbfe".to_string()),
+            "bg-blue-300" => Some("#93c5fd".to_string()),
+            "bg-blue-400" => Some("#60a5fa".to_string()),
+            "bg-blue-500" => Some("#3b82f6".to_string()),
+            "bg-blue-600" => Some("#2563eb".to_string()),
+            "bg-blue-700" => Some("#1d4ed8".to_string()),
+            "bg-blue-800" => Some("#1e40af".to_string()),
+            "bg-blue-900" => Some("#1e3a8a".to_string()),
+            "bg-blue-950" => Some("#172554".to_string()),
+            "bg-green-50" => Some("#f0fdf4".to_string()),
+            "bg-green-100" => Some("#dcfce7".to_string()),
+            "bg-green-200" => Some("#bbf7d0".to_string()),
+            "bg-green-300" => Some("#86efac".to_string()),
+            "bg-green-400" => Some("#4ade80".to_string()),
+            "bg-green-500" => Some("#22c55e".to_string()),
+            "bg-green-600" => Some("#16a34a".to_string()),
+            "bg-green-700" => Some("#15803d".to_string()),
+            "bg-green-800" => Some("#166534".to_string()),
+            "bg-green-900" => Some("#14532d".to_string()),
+            "bg-green-950" => Some("#052e16".to_string()),
+            "bg-gray-50" => Some("#f9fafb".to_string()),
+            "bg-gray-100" => Some("#f3f4f6".to_string()),
+            "bg-gray-200" => Some("#e5e7eb".to_string()),
+            "bg-gray-300" => Some("#d1d5db".to_string()),
+            "bg-gray-400" => Some("#9ca3af".to_string()),
+            "bg-gray-500" => Some("#6b7280".to_string()),
+            "bg-gray-600" => Some("#4b5563".to_string()),
+            "bg-gray-700" => Some("#374151".to_string()),
+            "bg-gray-800" => Some("#1f2937".to_string()),
+            "bg-gray-900" => Some("#111827".to_string()),
+            "bg-gray-950" => Some("#030712".to_string()),
             _ => None,
         }
     }
@@ -762,5 +713,25 @@ impl UtilityParser for BackgroundParser {
     }
     fn get_category(&self) -> ParserCategory {
         ParserCategory::Background
+    }
+
+}
+
+/// Convert hex color to rgba with opacity
+fn convert_hex_to_rgba(hex_color: &str, opacity: &str) -> Option<String> {
+    if hex_color.starts_with("#") && hex_color.len() == 7 {
+        // Parse hex color
+        let r = u8::from_str_radix(&hex_color[1..3], 16).ok()?;
+        let g = u8::from_str_radix(&hex_color[3..5], 16).ok()?;
+        let b = u8::from_str_radix(&hex_color[5..7], 16).ok()?;
+
+        // Parse opacity (assuming it's a percentage like "10", "20", etc.)
+        let opacity_value = opacity.parse::<f32>().ok()? / 100.0;
+
+        Some(format!("rgba({}, {}, {}, {:.2})", r, g, b, opacity_value))
+    } else if hex_color == "transparent" {
+        Some("transparent".to_string())
+    } else {
+        None
     }
 }

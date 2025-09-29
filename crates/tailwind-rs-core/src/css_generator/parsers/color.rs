@@ -24,13 +24,37 @@ impl ColorParser {
         }])
     }
 
-    /// Parse a color value (hex, rgb, named colors, etc.)
+    /// Parse a color value (hex, rgb, named colors, etc.) with opacity support
     fn parse_color_value(&self, color: &str) -> Option<String> {
         // Handle transparent
         if color == "transparent" {
             return Some("transparent".to_string());
         }
 
+        // Split color and opacity (e.g., "blue-500/20" -> "blue-500", "20")
+        let (color_part, opacity_part) = if let Some((color_base, opacity_str)) = color.split_once('/') {
+            (color_base, Some(opacity_str))
+        } else {
+            (color, None)
+        };
+
+        // Parse the base color
+        let base_color = self.parse_base_color_value(color_part)?;
+
+        // If there's opacity, convert to rgba
+        if let Some(opacity_str) = opacity_part {
+            if let Ok(opacity_value) = opacity_str.parse::<f32>() {
+                let alpha = opacity_value / 100.0;
+                return self.convert_to_rgba(&base_color, alpha);
+            }
+        }
+
+        // No opacity, return the base color
+        Some(base_color)
+    }
+
+    /// Parse base color value without opacity
+    fn parse_base_color_value(&self, color: &str) -> Option<String> {
         // Handle named colors
         if let Some(named_color) = self.parse_named_color(color) {
             return Some(named_color);
@@ -57,6 +81,37 @@ impl ColorParser {
         }
 
         None
+    }
+
+    /// Convert hex color to rgba with opacity
+    fn convert_to_rgba(&self, hex_color: &str, alpha: f32) -> Option<String> {
+        if !hex_color.starts_with('#') {
+            return None;
+        }
+
+        // Parse hex color to RGB components
+        let hex = &hex_color[1..]; // Remove '#'
+        let r: u8;
+        let g: u8;
+        let b: u8;
+
+        match hex.len() {
+            3 => {
+                // Short format like #RGB
+                r = u8::from_str_radix(&hex[0..1].repeat(2), 16).ok()?;
+                g = u8::from_str_radix(&hex[1..2].repeat(2), 16).ok()?;
+                b = u8::from_str_radix(&hex[2..3].repeat(2), 16).ok()?;
+            },
+            6 => {
+                // Full format like #RRGGBB
+                r = u8::from_str_radix(&hex[0..2], 16).ok()?;
+                g = u8::from_str_radix(&hex[2..4], 16).ok()?;
+                b = u8::from_str_radix(&hex[4..6], 16).ok()?;
+            },
+            _ => return None,
+        }
+
+        Some(format!("rgba({}, {}, {}, {:.2})", r, g, b, alpha))
     }
 
     /// Parse named colors

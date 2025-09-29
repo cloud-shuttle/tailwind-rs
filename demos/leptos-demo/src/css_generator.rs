@@ -36,7 +36,7 @@ impl DemoCssGenerator {
         Ok(css)
     }
 
-    /// Get comprehensive classes for the impressive demo - ONLY classes that are actually implemented
+    /// Get comprehensive classes for the impressive demo - ALL classes that should work
     fn get_comprehensive_classes(&self) -> Vec<String> {
         vec![
             // Core layout and positioning
@@ -56,17 +56,18 @@ impl DemoCssGenerator {
             "gap-8".to_string(),
             "gap-6".to_string(),
 
-            // Backgrounds and gradients (WORKING!)
+            // Backgrounds and gradients
             "bg-gradient-to-br".to_string(),
             "from-purple-600".to_string(),
             "to-blue-600".to_string(),
             "bg-white/10".to_string(),
             "bg-black/30".to_string(),
+            "bg-black/20".to_string(),
             "backdrop-blur-sm".to_string(),
             "bg-white".to_string(),
             "bg-gray-100".to_string(),
 
-            // Typography (WORKING!)
+            // Typography
             "text-5xl".to_string(),
             "text-xl".to_string(),
             "text-2xl".to_string(),
@@ -80,12 +81,17 @@ impl DemoCssGenerator {
             "text-white".to_string(),
             "text-purple-600".to_string(),
             "text-green-300".to_string(),
+            "text-blue-300".to_string(),
 
-            // Responsive classes
+            // Responsive classes - base classes
             "md:grid-cols-3".to_string(),
             "sm:flex-row".to_string(),
             "lg:grid-cols-2".to_string(),
             "md:grid-cols-4".to_string(),
+            // Also add the base responsive classes
+            "grid-cols-1".to_string(),
+            "grid-cols-2".to_string(),
+            "grid-cols-3".to_string(),
 
             // Borders and shadows
             "rounded-lg".to_string(),
@@ -94,6 +100,7 @@ impl DemoCssGenerator {
             "border-2".to_string(),
             "border-white/20".to_string(),
             "border-white/30".to_string(),
+            "border-white/10".to_string(),
 
             // Flexbox and alignment
             "flex".to_string(),
@@ -130,6 +137,73 @@ impl DemoCssGenerator {
 
             // Additional spacing for the new demo
             "space-y-2".to_string(),
+
+            // List styling
+            "list-disc".to_string(),
+            "list-inside".to_string(),
+
+            // More comprehensive classes for the spectacular demo
+            "min-h-screen".to_string(),
+            "text-6xl".to_string(),
+            "bg-gradient-to-r".to_string(),
+            "from-yellow-300".to_string(),
+            "via-pink-500".to_string(),
+            "to-blue-600".to_string(),
+            "bg-clip-text".to_string(),
+            "text-transparent".to_string(),
+            "max-w-2xl".to_string(),
+            "rounded-full".to_string(),
+            "px-8".to_string(),
+            "py-3".to_string(),
+            "transition-all".to_string(),
+            "duration-300".to_string(),
+            "hover:scale-105".to_string(),
+            "backdrop-blur-lg".to_string(),
+            "rounded-2xl".to_string(),
+            "hover:border-white/40".to_string(),
+            "hover:shadow-2xl".to_string(),
+            "text-4xl".to_string(),
+            "leading-relaxed".to_string(),
+            "backdrop-blur-xl".to_string(),
+            "rounded-3xl".to_string(),
+            "bg-gradient-to-br".to_string(),
+            "from-red-500".to_string(),
+            "to-pink-500".to_string(),
+            "from-blue-500".to_string(),
+            "to-cyan-500".to_string(),
+            "from-green-500".to_string(),
+            "to-emerald-500".to_string(),
+            "from-purple-500".to_string(),
+            "to-violet-500".to_string(),
+            "text-red-400".to_string(),
+            "text-blue-400".to_string(),
+            "text-green-400".to_string(),
+            "text-yellow-400".to_string(),
+            "text-pink-400".to_string(),
+            "text-cyan-400".to_string(),
+            "text-orange-400".to_string(),
+            "text-red-100".to_string(),
+            "text-blue-100".to_string(),
+            "text-green-100".to_string(),
+            "text-purple-100".to_string(),
+            "inline-flex".to_string(),
+            "flex-wrap".to_string(),
+            "lg:grid-cols-2".to_string(),
+            "text-xs".to_string(),
+            "text-base".to_string(),
+            "text-purple-300".to_string(),
+            "aspect-square".to_string(),
+            "flex-shrink-0".to_string(),
+            "from-cyan-300".to_string(),
+            "to-blue-300".to_string(),
+            "from-pink-600".to_string(),
+            "to-purple-600".to_string(),
+            "hover:from-pink-600".to_string(),
+            "hover:to-purple-700".to_string(),
+            "bg-gradient-to-r".to_string(),
+            "from-black/40".to_string(),
+            "via-purple-900/20".to_string(),
+            "to-black/40".to_string(),
         ]
     }
 

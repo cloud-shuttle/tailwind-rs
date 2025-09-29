@@ -16,8 +16,8 @@ env = "DEV"
 # CSS configuration
 css_file = "styles.css"
 
-# Hydration
-hydrate = true
+# Hydration - disabled for SSR demo
+hydrate = false
 
 # Hot reload
 hot_reload = true

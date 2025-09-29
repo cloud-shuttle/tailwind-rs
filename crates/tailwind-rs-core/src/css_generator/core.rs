@@ -13,6 +13,19 @@ use super::generator_parsers::CssGeneratorParsers;
 
 // CssProperty is now defined in types.rs
 
+/// Context for collecting gradient stops before generating final gradient CSS
+#[derive(Debug, Clone, Default)]
+pub struct GradientContext {
+    /// Color for gradient start (from-*)
+    pub from_color: Option<String>,
+    /// Color for gradient middle (via-*)
+    pub via_color: Option<String>,
+    /// Color for gradient end (to-*)
+    pub to_color: Option<String>,
+    /// Current gradient direction
+    pub direction: Option<String>,
+}
+
 /// CSS generator that converts Tailwind classes to CSS rules
 #[derive(Debug, Clone)]
 pub struct CssGenerator {
@@ -22,6 +35,8 @@ pub struct CssGenerator {
     breakpoints: HashMap<Breakpoint, String>,
     /// Custom CSS properties
     custom_properties: HashMap<String, String>,
+    /// Context for gradient state (from-*, via-*, to-* classes)
+    gradient_context: GradientContext,
 }
 
 impl Default for CssGenerator {
@@ -37,6 +52,7 @@ impl CssGenerator {
             rules: HashMap::new(),
             breakpoints: HashMap::new(),
             custom_properties: HashMap::new(),
+            gradient_context: GradientContext::default(),
         };
 
         // Initialize default breakpoints
@@ -82,6 +98,52 @@ impl CssGenerator {
     pub fn add_custom_property(&mut self, name: &str, value: &str) {
         self.custom_properties
             .insert(name.to_string(), value.to_string());
+    }
+
+    /// Add a gradient stop to the current gradient context
+    pub fn add_gradient_stop(&mut self, stop_type: &str, color: String) {
+        match stop_type {
+            "from" => self.gradient_context.from_color = Some(color),
+            "via" => self.gradient_context.via_color = Some(color),
+            "to" => self.gradient_context.to_color = Some(color),
+            _ => {}
+        }
+    }
+
+    /// Generate gradient CSS using current context and direction
+    pub fn generate_gradient_css(&mut self, direction: &str) -> Option<String> {
+        self.gradient_context.direction = Some(direction.to_string());
+
+        let mut colors = Vec::new();
+
+        // Add colors in order: from, via, to
+        if let Some(from) = &self.gradient_context.from_color {
+            colors.push(from.clone());
+        }
+        if let Some(via) = &self.gradient_context.via_color {
+            colors.push(via.clone());
+        }
+        if let Some(to) = &self.gradient_context.to_color {
+            colors.push(to.clone());
+        }
+
+        // If no colors collected, return None (let fallback handle it)
+        if colors.is_empty() {
+            return None;
+        }
+
+        // Generate the gradient CSS
+        let gradient_css = format!("linear-gradient({}, {})", direction, colors.join(", "));
+
+        // Reset context for next gradient
+        self.gradient_context = GradientContext::default();
+
+        Some(gradient_css)
+    }
+
+    /// Clear gradient context (useful for resetting between elements)
+    pub fn clear_gradient_context(&mut self) {
+        self.gradient_context = GradientContext::default();
     }
 
     /// Generate CSS from all added classes

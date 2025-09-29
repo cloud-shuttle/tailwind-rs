@@ -17,8 +17,8 @@ impl TransformParser {
     /// Parse basic transform classes
     fn parse_basic_transform_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "transform" => Some(vec![CssProperty { name: "transform".to_string(), value: "translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))".to_string(), important: false }]),
-            "transform-gpu" => Some(vec![CssProperty { name: "transform".to_string(), value: "translate3d(var(--tw-translate-x), var(--tw-translate-y), 0) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))".to_string(), important: false }]),
+            "transform" => Some(vec![CssProperty { name: "transform".to_string(), value: "translate(0px, 0px) rotate(0deg) skewX(0deg) skewY(0deg) scaleX(1) scaleY(1)".to_string(), important: false }]),
+            "transform-gpu" => Some(vec![CssProperty { name: "transform".to_string(), value: "translate3d(0px, 0px, 0) rotate(0deg) skewX(0deg) skewY(0deg) scaleX(1) scaleY(1)".to_string(), important: false }]),
             "transform-cpu" => Some(vec![CssProperty { name: "transform".to_string(), value: "var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y)".to_string(), important: false }]),
             "transform-none" => Some(vec![CssProperty { name: "transform".to_string(), value: "none".to_string(), important: false }]),
             _ => None,
@@ -45,6 +45,7 @@ impl TransformParser {
     /// Parse perspective classes
     fn parse_perspective_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
+            // Named perspective values
             "perspective-dramatic" => Some(vec![CssProperty {
                 name: "perspective".to_string(),
                 value: "var(--perspective-dramatic)".to_string(),
@@ -75,7 +76,19 @@ impl TransformParser {
                 value: "none".to_string(),
                 important: false,
             }]),
-            _ => None,
+            // Numerical perspective values
+            _ => {
+                if let Some(value) = class.strip_prefix("perspective-") {
+                    if let Ok(num) = value.parse::<u32>() {
+                        return Some(vec![CssProperty {
+                            name: "perspective".to_string(),
+                            value: format!("{}px", num),
+                            important: false,
+                        }]);
+                    }
+                }
+                None
+            },
         }
     }
 
@@ -134,12 +147,22 @@ impl TransformParser {
     /// Parse transform-style classes
     fn parse_transform_style_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
-            "transform-3d" => Some(vec![CssProperty {
+            "transform-style-flat" => Some(vec![CssProperty {
+                name: "transform-style".to_string(),
+                value: "flat".to_string(),
+                important: false,
+            }]),
+            "transform-style-3d" | "transform-style-preserve-3d" => Some(vec![CssProperty {
                 name: "transform-style".to_string(),
                 value: "preserve-3d".to_string(),
                 important: false,
             }]),
-            "transform-flat" => Some(vec![CssProperty {
+            "transform-3d" => Some(vec![CssProperty { // Legacy support
+                name: "transform-style".to_string(),
+                value: "preserve-3d".to_string(),
+                important: false,
+            }]),
+            "transform-flat" => Some(vec![CssProperty { // Legacy support
                 name: "transform-style".to_string(),
                 value: "flat".to_string(),
                 important: false,
@@ -265,6 +288,74 @@ impl TransformParser {
             }]),
             _ => None,
         }
+    }
+
+    /// Parse 3D rotate classes
+    fn parse_rotate_3d_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Handle rotate-x classes
+        if let Some(value) = class.strip_prefix("rotate-x-") {
+            if let Ok(degrees) = value.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "transform".to_string(),
+                    value: format!("rotateX({}deg)", degrees),
+                    important: false,
+                }]);
+            }
+            // Handle negative values
+            if let Some(positive_value) = value.strip_prefix("-") {
+                if let Ok(degrees) = positive_value.parse::<f32>() {
+                    return Some(vec![CssProperty {
+                        name: "transform".to_string(),
+                        value: format!("rotateX(-{}deg)", degrees),
+                        important: false,
+                    }]);
+                }
+            }
+        }
+
+        // Handle rotate-y classes
+        if let Some(value) = class.strip_prefix("rotate-y-") {
+            if let Ok(degrees) = value.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "transform".to_string(),
+                    value: format!("rotateY({}deg)", degrees),
+                    important: false,
+                }]);
+            }
+            // Handle negative values
+            if let Some(positive_value) = value.strip_prefix("-") {
+                if let Ok(degrees) = positive_value.parse::<f32>() {
+                    return Some(vec![CssProperty {
+                        name: "transform".to_string(),
+                        value: format!("rotateY(-{}deg)", degrees),
+                        important: false,
+                    }]);
+                }
+            }
+        }
+
+        // Handle rotate-z classes
+        if let Some(value) = class.strip_prefix("rotate-z-") {
+            if let Ok(degrees) = value.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "transform".to_string(),
+                    value: format!("rotateZ({}deg)", degrees),
+                    important: false,
+                }]);
+            }
+            // Handle negative values
+            if let Some(positive_value) = value.strip_prefix("-") {
+                if let Ok(degrees) = positive_value.parse::<f32>() {
+                    return Some(vec![CssProperty {
+                        name: "transform".to_string(),
+                        value: format!("rotateZ(-{}deg)", degrees),
+                        important: false,
+                    }]);
+                }
+            }
+        }
+
+        None
     }
 
     /// Parse rotate classes
@@ -577,6 +668,9 @@ impl UtilityParser for TransformParser {
         if let Some(properties) = self.parse_rotate_class(class) {
             return Some(properties);
         }
+        if let Some(properties) = self.parse_rotate_3d_class(class) {
+            return Some(properties);
+        }
         if let Some(properties) = self.parse_skew_class(class) {
             return Some(properties);
         }
@@ -603,6 +697,12 @@ impl UtilityParser for TransformParser {
             "scale-*",
             "rotate-*",
             "-rotate-*",
+            "rotate-x-*",
+            "-rotate-x-*",
+            "rotate-y-*",
+            "-rotate-y-*",
+            "rotate-z-*",
+            "-rotate-z-*",
             "skew-*",
             "-skew-*",
             "skew-x-*",

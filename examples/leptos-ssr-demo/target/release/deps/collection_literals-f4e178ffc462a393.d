@@ -1,0 +1,7 @@
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-ssr-demo/target/release/deps/collection_literals-f4e178ffc462a393.d: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/collection_literals-1.0.2/src/lib.rs
+
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-ssr-demo/target/release/deps/libcollection_literals-f4e178ffc462a393.rlib: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/collection_literals-1.0.2/src/lib.rs
+
+/Users/peterhanssens/consulting/Leptos/tailwind-rs/examples/leptos-ssr-demo/target/release/deps/libcollection_literals-f4e178ffc462a393.rmeta: /Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/collection_literals-1.0.2/src/lib.rs
+
+/Users/peterhanssens/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/collection_literals-1.0.2/src/lib.rs:

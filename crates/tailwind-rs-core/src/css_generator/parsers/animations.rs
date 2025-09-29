@@ -39,8 +39,63 @@ impl AnimationParser {
                 value: "bounce 1s infinite".to_string(),
                 important: false,
             }]),
+            // Advanced animations
+            "animate-float" => Some(vec![CssProperty {
+                name: "animation".to_string(),
+                value: "float 3s ease-in-out infinite".to_string(),
+                important: false,
+            }]),
+            "animate-twinkle" => Some(vec![CssProperty {
+                name: "animation".to_string(),
+                value: "twinkle 2s ease-in-out infinite".to_string(),
+                important: false,
+            }]),
+            "animate-rainbow" => Some(vec![CssProperty {
+                name: "animation".to_string(),
+                value: "rainbow 3s linear infinite".to_string(),
+                important: false,
+            }]),
+            "animate-shimmer" => Some(vec![CssProperty {
+                name: "animation".to_string(),
+                value: "shimmer 2s linear infinite".to_string(),
+                important: false,
+            }]),
+            "animate-drift" => Some(vec![CssProperty {
+                name: "animation".to_string(),
+                value: "drift 4s ease-in-out infinite".to_string(),
+                important: false,
+            }]),
+            "animate-glow" => Some(vec![CssProperty {
+                name: "animation".to_string(),
+                value: "glow 2s ease-in-out infinite alternate".to_string(),
+                important: false,
+            }]),
 
-            _ => None,
+            _ => {
+                // Handle custom property animations: animate-(<custom-property>)
+                if let Some(custom_prop) = class.strip_prefix("animate-(") {
+                    if let Some(custom_prop) = custom_prop.strip_suffix(")") {
+                        return Some(vec![CssProperty {
+                            name: "animation".to_string(),
+                            value: format!("var(--{})", custom_prop),
+                            important: false,
+                        }]);
+                    }
+                }
+
+                // Handle arbitrary animations: animate-[<value>]
+                if let Some(arbitrary_value) = class.strip_prefix("animate-[") {
+                    if let Some(arbitrary_value) = arbitrary_value.strip_suffix("]") {
+                        return Some(vec![CssProperty {
+                            name: "animation".to_string(),
+                            value: arbitrary_value.to_string(),
+                            important: false,
+                        }]);
+                    }
+                }
+
+                None
+            },
         }
     }
 }

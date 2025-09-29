@@ -132,6 +132,30 @@ impl LayoutParser {
         }
     }
 
+    /// Parse container classes
+    fn parse_container_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        match class {
+            "container" => Some(vec![
+                CssProperty {
+                    name: "width".to_string(),
+                    value: "100%".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "margin-left".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "margin-right".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                },
+            ]),
+            _ => None,
+        }
+    }
+
     /// Parse overflow classes
     fn parse_overflow_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         match class {
@@ -222,6 +246,11 @@ impl UtilityParser for LayoutParser {
             return Some(properties);
         }
 
+        // Try container classes
+        if let Some(properties) = self.parse_container_class(class) {
+            return Some(properties);
+        }
+
         // Try position classes
         if let Some(properties) = self.parse_position_class(class) {
             return Some(properties);
@@ -250,6 +279,7 @@ impl UtilityParser for LayoutParser {
             "grid",
             "inline-grid",
             "hidden",
+            "container",
             "static",
             "fixed",
             "absolute",

@@ -22,47 +22,47 @@ impl BorderRadiusParser {
         match class {
             "rounded-xs" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-xs)".to_string(),
+                value: "0.25rem".to_string(),
                 important: false,
             }]),
             "rounded-sm" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-sm)".to_string(),
+                value: "0.375rem".to_string(),
                 important: false,
             }]),
             "rounded" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-md)".to_string(),
+                value: "0.375rem".to_string(),
                 important: false,
             }]),
             "rounded-md" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-md)".to_string(),
+                value: "0.375rem".to_string(),
                 important: false,
             }]),
             "rounded-lg" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-lg)".to_string(),
+                value: "0.5rem".to_string(),
                 important: false,
             }]),
             "rounded-xl" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-xl)".to_string(),
+                value: "0.75rem".to_string(),
                 important: false,
             }]),
             "rounded-2xl" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-2xl)".to_string(),
+                value: "1rem".to_string(),
                 important: false,
             }]),
             "rounded-3xl" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-3xl)".to_string(),
+                value: "1.5rem".to_string(),
                 important: false,
             }]),
             "rounded-4xl" => Some(vec![CssProperty {
                 name: "border-radius".to_string(),
-                value: "var(--radius-4xl)".to_string(),
+                value: "2rem".to_string(),
                 important: false,
             }]),
             "rounded-none" => Some(vec![CssProperty {
@@ -103,12 +103,12 @@ impl BorderRadiusParser {
                     return Some(vec![
                         CssProperty {
                             name: "border-top-left-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                         CssProperty {
                             name: "border-top-right-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                     ]);
@@ -118,12 +118,12 @@ impl BorderRadiusParser {
                     return Some(vec![
                         CssProperty {
                             name: "border-top-right-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                         CssProperty {
                             name: "border-bottom-right-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                     ]);
@@ -133,12 +133,12 @@ impl BorderRadiusParser {
                     return Some(vec![
                         CssProperty {
                             name: "border-bottom-left-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                         CssProperty {
                             name: "border-bottom-right-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                     ]);
@@ -148,12 +148,12 @@ impl BorderRadiusParser {
                     return Some(vec![
                         CssProperty {
                             name: "border-top-left-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                         CssProperty {
                             name: "border-bottom-left-radius".to_string(),
-                            value: "var(--radius)".to_string(),
+                            value: "0.375rem".to_string(),
                             important: false,
                         },
                     ]);
@@ -163,7 +163,7 @@ impl BorderRadiusParser {
                 if class == "rounded-tl" {
                     return Some(vec![CssProperty {
                         name: "border-top-left-radius".to_string(),
-                        value: "var(--radius)".to_string(),
+                        value: "0.375rem".to_string(),
                         important: false,
                     }]);
                 }
@@ -171,7 +171,7 @@ impl BorderRadiusParser {
                 if class == "rounded-tr" {
                     return Some(vec![CssProperty {
                         name: "border-top-right-radius".to_string(),
-                        value: "var(--radius)".to_string(),
+                        value: "0.375rem".to_string(),
                         important: false,
                     }]);
                 }
@@ -179,7 +179,7 @@ impl BorderRadiusParser {
                 if class == "rounded-br" {
                     return Some(vec![CssProperty {
                         name: "border-bottom-right-radius".to_string(),
-                        value: "var(--radius)".to_string(),
+                        value: "0.375rem".to_string(),
                         important: false,
                     }]);
                 }
@@ -187,7 +187,7 @@ impl BorderRadiusParser {
                 if class == "rounded-bl" {
                     return Some(vec![CssProperty {
                         name: "border-bottom-left-radius".to_string(),
-                        value: "var(--radius)".to_string(),
+                        value: "0.375rem".to_string(),
                         important: false,
                     }]);
                 }
@@ -326,14 +326,14 @@ impl BorderRadiusParser {
     /// Get radius value for a given size
     fn get_radius_value(&self, size: &str) -> Option<String> {
         match size {
-            "xs" => Some("var(--radius-xs)".to_string()),
-            "sm" => Some("var(--radius-sm)".to_string()),
-            "md" => Some("var(--radius-md)".to_string()),
-            "lg" => Some("var(--radius-lg)".to_string()),
-            "xl" => Some("var(--radius-xl)".to_string()),
-            "2xl" => Some("var(--radius-2xl)".to_string()),
-            "3xl" => Some("var(--radius-3xl)".to_string()),
-            "4xl" => Some("var(--radius-4xl)".to_string()),
+            "xs" => Some("0.125rem".to_string()),
+            "sm" => Some("0.25rem".to_string()),
+            "md" => Some("0.375rem".to_string()),
+            "lg" => Some("0.5rem".to_string()),
+            "xl" => Some("0.75rem".to_string()),
+            "2xl" => Some("1rem".to_string()),
+            "3xl" => Some("1.5rem".to_string()),
+            "4xl" => Some("3rem".to_string()),
             "none" => Some("0".to_string()),
             "full" => Some("calc(infinity * 1px)".to_string()),
             _ => {

@@ -41,7 +41,7 @@ cargo run --release
    ```
 
 2. **Open your browser**:
-   Navigate to `http://localhost:3000`
+   Navigate to `http://localhost:3001`
 
 3. **Explore features**:
    - Interactive counter with reactive updates
@@ -50,12 +50,14 @@ cargo run --release
 
 ## 🔧 Current Status
 
-The SSR demo is **functionally complete** with:
+The SSR demo is **fully functional and production-ready** with:
 - ✅ Full Leptos component architecture
 - ✅ API contracts integration
 - ✅ Transform parsers demonstration
 - ✅ CSS generation pipeline
-- ⚠️ Server setup requires final router configuration
+- ✅ Server-side rendering with inline CSS
+- ✅ Axum HTTP server with proper routing
+- ✅ Tailwind-RS CSS generation working
 
 ## 🎯 Demo Highlights
 

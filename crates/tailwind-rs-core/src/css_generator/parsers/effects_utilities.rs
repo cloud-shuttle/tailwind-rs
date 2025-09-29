@@ -104,13 +104,15 @@ impl EffectsUtilitiesParser {
                     }
                 }
 
-                // Shadow with color (e.g., shadow-indigo-500)
-                if let Some(color_value) = self.get_color_value(class) {
-                    return Some(vec![CssProperty {
-                        name: "box-shadow".to_string(),
-                        value: color_value,
-                        important: false,
-                    }]);
+                // Shadow with color (e.g., shadow-indigo-500, shadow-indigo-500/50)
+                if let Some(color_part) = class.strip_prefix("shadow-") {
+                    if let Some(color_value) = self.get_color_value(color_part) {
+                        return Some(vec![CssProperty {
+                            name: "box-shadow".to_string(),
+                            value: color_value,
+                            important: false,
+                        }]);
+                    }
                 }
 
                 // Inset shadows
@@ -538,8 +540,37 @@ impl EffectsUtilitiesParser {
         }
     }
 
-    /// Get color value for shadows
+    /// Get color value for shadows (supports opacity syntax like shadow-red-500/50)
     fn get_color_value(&self, class: &str) -> Option<String> {
+        // Handle opacity syntax (e.g., shadow-red-500/50)
+        if let Some((color_part, opacity_part)) = class.split_once('/') {
+            if let Some(base_color) = self.get_base_color_value(color_part) {
+                if let Ok(opacity) = opacity_part.parse::<f32>() {
+                    let alpha = opacity / 100.0;
+                    // Convert hex color to rgba
+                    return self.hex_to_rgba(&base_color, alpha);
+                }
+            }
+            return None;
+        }
+
+        // Handle basic color without opacity
+        self.get_base_color_value(class)
+    }
+
+    /// Convert hex color with CSS variable to rgba with opacity
+    fn hex_to_rgba(&self, hex_value: &str, alpha: f32) -> Option<String> {
+        // Handle CSS variables like "var(--color-red-500)"
+        if hex_value.starts_with("var(--color-") && hex_value.ends_with(')') {
+            let color_name = &hex_value[13..hex_value.len() - 1]; // Extract color name
+            Some(format!("rgba(var(--color-{}), {})", color_name, alpha))
+        } else {
+            None
+        }
+    }
+
+    /// Get base color value (hex) without opacity
+    fn get_base_color_value(&self, class: &str) -> Option<String> {
         // This is a simplified color mapping - in a real implementation,
         // you'd want a comprehensive color system
         match class {
@@ -575,6 +606,17 @@ impl EffectsUtilitiesParser {
             "shadow-green-800" => Some("var(--color-green-800)".to_string()),
             "shadow-green-900" => Some("var(--color-green-900)".to_string()),
             "shadow-green-950" => Some("var(--color-green-950)".to_string()),
+            "shadow-purple-50" => Some("var(--color-purple-50)".to_string()),
+            "shadow-purple-100" => Some("var(--color-purple-100)".to_string()),
+            "shadow-purple-200" => Some("var(--color-purple-200)".to_string()),
+            "shadow-purple-300" => Some("var(--color-purple-300)".to_string()),
+            "shadow-purple-400" => Some("var(--color-purple-400)".to_string()),
+            "shadow-purple-500" => Some("var(--color-purple-500)".to_string()),
+            "shadow-purple-600" => Some("var(--color-purple-600)".to_string()),
+            "shadow-purple-700" => Some("var(--color-purple-700)".to_string()),
+            "shadow-purple-800" => Some("var(--color-purple-800)".to_string()),
+            "shadow-purple-900" => Some("var(--color-purple-900)".to_string()),
+            "shadow-purple-950" => Some("var(--color-purple-950)".to_string()),
             "text-shadow-red-50" => Some("var(--color-red-50)".to_string()),
             "text-shadow-red-100" => Some("var(--color-red-100)".to_string()),
             "text-shadow-red-200" => Some("var(--color-red-200)".to_string()),

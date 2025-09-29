@@ -33,6 +33,8 @@ pub mod generator_builders;
 pub mod generator_operations;
 pub mod generator_parsers;
 pub mod grid_parsers;
+pub mod trie;
+pub mod trie_benchmark;
 pub mod layout_parsers;
 pub mod parsers;
 pub mod types;

@@ -37,6 +37,7 @@ pub fn parse_outline_class(class: &str) -> Option<Vec<CssProperty>> {
 }
 
 /// Outline parser
+#[derive(Debug, Clone)]
 pub struct OutlineParser;
 
 impl OutlineParser {
@@ -46,5 +47,23 @@ impl OutlineParser {
 
     pub fn parse(&self, class: &str) -> Option<Vec<CssProperty>> {
         parse_outline_class(class)
+    }
+}
+
+impl super::super::super::UtilityParser for OutlineParser {
+    fn parse_class(&self, class: &str) -> Option<Vec<crate::css_generator::types::CssProperty>> {
+        self.parse(class)
+    }
+
+    fn get_supported_patterns(&self) -> Vec<&'static str> {
+        vec!["outline", "outline-*"]
+    }
+
+    fn get_priority(&self) -> u32 {
+        50
+    }
+
+    fn get_category(&self) -> super::super::super::ParserCategory {
+        super::super::super::ParserCategory::Borders
     }
 }

@@ -291,6 +291,13 @@ impl SpacingParser {
     /// Parse margin classes
     fn parse_margin_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("m-") {
+            if value == "auto" {
+                return Some(vec![CssProperty {
+                    name: "margin".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                }]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "margin".to_string(),
@@ -301,6 +308,20 @@ impl SpacingParser {
         }
 
         if let Some(value) = class.strip_prefix("mx-") {
+            if value == "auto" {
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-left".to_string(),
+                        value: "auto".to_string(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-right".to_string(),
+                        value: "auto".to_string(),
+                        important: false,
+                    },
+                ]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![
                     CssProperty {
@@ -318,6 +339,20 @@ impl SpacingParser {
         }
 
         if let Some(value) = class.strip_prefix("my-") {
+            if value == "auto" {
+                return Some(vec![
+                    CssProperty {
+                        name: "margin-top".to_string(),
+                        value: "auto".to_string(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "margin-bottom".to_string(),
+                        value: "auto".to_string(),
+                        important: false,
+                    },
+                ]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![
                     CssProperty {
@@ -335,6 +370,13 @@ impl SpacingParser {
         }
 
         if let Some(value) = class.strip_prefix("mt-") {
+            if value == "auto" {
+                return Some(vec![CssProperty {
+                    name: "margin-top".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                }]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "margin-top".to_string(),
@@ -345,6 +387,13 @@ impl SpacingParser {
         }
 
         if let Some(value) = class.strip_prefix("mr-") {
+            if value == "auto" {
+                return Some(vec![CssProperty {
+                    name: "margin-right".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                }]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "margin-right".to_string(),
@@ -355,6 +404,13 @@ impl SpacingParser {
         }
 
         if let Some(value) = class.strip_prefix("mb-") {
+            if value == "auto" {
+                return Some(vec![CssProperty {
+                    name: "margin-bottom".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                }]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "margin-bottom".to_string(),
@@ -365,6 +421,13 @@ impl SpacingParser {
         }
 
         if let Some(value) = class.strip_prefix("ml-") {
+            if value == "auto" {
+                return Some(vec![CssProperty {
+                    name: "margin-left".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                }]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "margin-left".to_string(),
@@ -376,6 +439,13 @@ impl SpacingParser {
 
         // Logical properties for margin
         if let Some(value) = class.strip_prefix("ms-") {
+            if value == "auto" {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-start".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                }]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "margin-inline-start".to_string(),
@@ -386,6 +456,13 @@ impl SpacingParser {
         }
 
         if let Some(value) = class.strip_prefix("me-") {
+            if value == "auto" {
+                return Some(vec![CssProperty {
+                    name: "margin-inline-end".to_string(),
+                    value: "auto".to_string(),
+                    important: false,
+                }]);
+            }
             if let Some(spacing) = self.get_spacing_value(value) {
                 return Some(vec![CssProperty {
                     name: "margin-inline-end".to_string(),

@@ -1,0 +1,1 @@
+{"rustc":9783247635632824192,"features":"[]","declared_features":"[\"nightly\"]","target":10111812390214232954,"profile":8829588955844408089,"path":13721134029934602385,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"release/.fingerprint/unicase-8bb01556cdcc7abc/dep-lib-unicase","checksum":false}}],"rustflags":["-Awarnings"],"config":2069994364910194474,"compile_kind":0}

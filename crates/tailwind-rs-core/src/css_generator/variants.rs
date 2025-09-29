@@ -53,6 +53,12 @@ impl VariantParser {
         }
     }
 
+    /// Check if a class is a gradient stop (from-*, to-*, via-*)
+    pub fn is_gradient_stop(&self, class: &str) -> bool {
+        class.starts_with("from-") || class.starts_with("to-") || class.starts_with("via-")
+    }
+
+
     /// Parse variants from a class string
     pub fn parse_variants(&self, class: &str) -> (Vec<String>, String) {
         let mut variants = Vec::new();
@@ -167,6 +173,19 @@ impl VariantParser {
             "light" => Some("(prefers-color-scheme: light)".to_string()),
             _ => None,
         }
+    }
+
+    /// Get media query for a list of variants
+    pub fn get_variant_media_query(&self, variants: &[String]) -> Option<String> {
+        for variant in variants {
+            if let Some(media_query) = self.get_responsive_media_query(variant) {
+                return Some(media_query);
+            }
+            if let Some(media_query) = self.get_device_media_query(variant) {
+                return Some(media_query);
+            }
+        }
+        None
     }
 
     /// Get the media query for a responsive variant

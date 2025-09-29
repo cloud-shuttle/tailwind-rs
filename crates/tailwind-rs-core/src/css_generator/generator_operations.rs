@@ -3,6 +3,7 @@
 //! This module contains the add/remove/update operations for CssGenerator.
 
 use super::types::{CssProperty, CssRule};
+use super::generator_parsers::CssGeneratorParsers;
 use crate::error::Result;
 use crate::responsive::Breakpoint;
 
@@ -32,7 +33,7 @@ pub trait CssGeneratorOperations {
 
 impl super::CssGenerator {
     /// Extract gradient stop type from a class name (from, via, to)
-    fn extract_gradient_stop_type(class: &str) -> Option<&'static str> {
+    pub fn extract_gradient_stop_type(class: &str) -> Option<&'static str> {
         if class.starts_with("from-") {
             Some("from")
         } else if class.starts_with("via-") {
@@ -45,7 +46,7 @@ impl super::CssGenerator {
     }
 
     /// Extract color from a gradient stop class
-    fn extract_gradient_color(class: &str, stop_type: &str) -> Option<String> {
+    pub fn extract_gradient_color(class: &str, stop_type: &str) -> Option<String> {
         let color_part = class.strip_prefix(&format!("{}-", stop_type))?;
 
         // Use the color parser to get the actual color value
@@ -56,9 +57,12 @@ impl super::CssGenerator {
             "green-500" => Some("#22c55e".to_string()),
             "purple-500" => Some("#a855f7".to_string()),
             "pink-500" => Some("#ec4899".to_string()),
+            "pink-700" => Some("#be185d".to_string()),
             "slate-900" => Some("#0f172a".to_string()),
             "emerald-600" => Some("#059669".to_string()),
             "gray-900" => Some("#111827".to_string()),
+            "gray-600" => Some("#4b5563".to_string()),
+            "gray-800" => Some("#1f2937".to_string()),
             "cyan-500" => Some("#06b6d4".to_string()),
             // Add more colors as needed
             _ => {
@@ -91,29 +95,64 @@ impl super::CssGenerator {
 
 impl CssGeneratorOperations for super::CssGenerator {
     fn add_class(&mut self, class: &str) -> Result<()> {
-        // Handle gradient stops specially - they don't generate CSS by themselves
-        // but add to the gradient context for later use
-        if let Some(stop_type) = Self::extract_gradient_stop_type(class) {
-            if let Some(color) = Self::extract_gradient_color(class, stop_type) {
-                self.add_gradient_stop(stop_type, color);
-                // Gradient stops don't generate CSS rules by themselves
-                return Ok(());
+        let (variants, base_class) = self.parse_variants(class);
+
+        // Handle gradient stops - they may need special handling based on variants
+        if let Some(stop_type) = Self::extract_gradient_stop_type(&base_class) {
+            if let Some(color) = Self::extract_gradient_color(&base_class, stop_type) {
+                // If this gradient stop has variants, generate CSS variable rule
+                if !variants.is_empty() {
+                    let mut selector = String::new();
+                    for variant in &variants {
+                        let variant_selector = self.variant_parser.get_variant_selector(variant);
+                        if !variant_selector.is_empty() {
+                            selector.push_str(&variant_selector);
+                        }
+                    }
+                    selector.push_str(&format!(".{}", class));
+
+                    let rule = super::types::CssRule {
+                        selector,
+                        properties: vec![super::types::CssProperty {
+                            name: format!("--tw-gradient-{}", stop_type),
+                            value: color,
+                            important: false,
+                        }],
+                        media_query: self.variant_parser.get_variant_media_query(&variants),
+                        specificity: variants.len() as u32 * 10 + 10,
+                    };
+                    self.rules.insert(class.to_string(), rule);
+                    return Ok(());
+                } else {
+                    // Standalone gradient stop - add to context for later use
+                    self.add_gradient_stop(stop_type, color);
+                    return Ok(());
+                }
             }
         }
 
         // Handle gradient directions - they may generate CSS using context
-        if let Some(direction) = Self::extract_gradient_direction(class) {
+        if let Some(direction) = Self::extract_gradient_direction(&base_class) {
             if let Some(gradient_css) = self.generate_gradient_css(direction) {
-                // Create a rule with the gradient CSS
+                // Build selector with variants
+                let mut selector = String::new();
+                for variant in &variants {
+                    let variant_selector = self.variant_parser.get_variant_selector(variant);
+                    if !variant_selector.is_empty() {
+                        selector.push_str(&variant_selector);
+                    }
+                }
+                selector.push_str(&format!(".{}", class));
+
                 let rule = super::types::CssRule {
-                    selector: format!(".{}", class),
+                    selector,
                     properties: vec![super::types::CssProperty {
                         name: "background-image".to_string(),
                         value: gradient_css,
                         important: false,
                     }],
-                    media_query: None,
-                    specificity: 10,
+                    media_query: self.variant_parser.get_variant_media_query(&variants),
+                    specificity: variants.len() as u32 * 10 + 10,
                 };
                 self.rules.insert(class.to_string(), rule);
                 return Ok(());

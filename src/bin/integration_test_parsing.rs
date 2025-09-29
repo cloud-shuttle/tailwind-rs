@@ -208,10 +208,10 @@ fn categorize_failure(class: &str, error: &str) -> String {
     if class.contains("/20") || class.contains("/30") || class.contains("/50") || class.contains("/5") || class.contains("/10") {
         "OPACITY_SUFFIX".to_string()
     }
-    // Gradient directions
+    // Gradient stops
     else if class.starts_with("from-") || class.starts_with("to-") || class.starts_with("via-") ||
               class.starts_with("dark:from-") || class.starts_with("dark:to-") || class.starts_with("dark:via-") {
-        "GRADIENT_DIRECTION".to_string()
+        "GRADIENT_STOP".to_string()
     }
     // Hover/focus states
     else if class.starts_with("hover:") {

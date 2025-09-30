@@ -6,7 +6,7 @@ use super::parsers::{
     AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
     AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
-    BackdropFilterUtilitiesParser, BackgroundParser, BackgroundPropertiesParser,
+    BackdropFilterUtilitiesParser, BackgroundPropertiesParser,
     BorderRadiusParser, BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
     OutlineParser,
     DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
@@ -181,7 +181,6 @@ pub struct CssGenerator {
     /// Place self parser
     pub place_self_parser: PlaceSelfParser,
     /// Background parser
-    pub background_parser: BackgroundParser,
     /// Border utilities parser
     pub border_utilities_parser: BorderUtilitiesParser,
     /// Effects utilities parser

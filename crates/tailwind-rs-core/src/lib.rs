@@ -106,7 +106,7 @@ pub use css_generator::parsers::{
     AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
     AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
-    BackdropFilterUtilitiesParser, BackgroundParser, BackgroundPropertiesParser, BorderParser,
+    BackdropFilterUtilitiesParser, BackgroundPropertiesParser, BorderParser,
     BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
     DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
     FilterUtilitiesParser, FlexBasisParser, FlexDirectionParser, FlexGrowParser, FlexParser,

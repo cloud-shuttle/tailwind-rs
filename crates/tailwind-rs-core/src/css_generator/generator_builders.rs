@@ -6,7 +6,7 @@ use super::parsers::{
     AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
     AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
-    BackdropFilterUtilitiesParser, BackgroundParser, BackgroundPropertiesParser,
+    BackdropFilterUtilitiesParser, BackgroundPropertiesParser,
     BasicTransformsParser, BorderRadiusParser, BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
     OutlineParser,
     DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
@@ -122,7 +122,6 @@ impl CssGeneratorBuilder for super::CssGenerator {
             place_content_parser: PlaceContentParser::new(),
             place_items_parser: PlaceItemsParser::new(),
             place_self_parser: PlaceSelfParser::new(),
-            background_parser: BackgroundParser::new(),
             border_utilities_parser: BorderUtilitiesParser::new(),
             effects_utilities_parser: EffectsUtilitiesParser::new(),
             filter_utilities_parser: FilterUtilitiesParser::new(),
@@ -217,7 +216,6 @@ impl CssGeneratorBuilder for super::CssGenerator {
             place_content_parser: PlaceContentParser::new(),
             place_items_parser: PlaceItemsParser::new(),
             place_self_parser: PlaceSelfParser::new(),
-            background_parser: BackgroundParser::new(),
             border_utilities_parser: BorderUtilitiesParser::new(),
             effects_utilities_parser: EffectsUtilitiesParser::new(),
             filter_utilities_parser: FilterUtilitiesParser::new(),
@@ -316,7 +314,6 @@ impl CssGeneratorBuilder for super::CssGenerator {
         self.parser_trie.insert("border-", ParserType::Color(self.color_parser.clone()));
 
         // Background parser
-        self.parser_trie.insert("bg-", ParserType::Background(self.background_parser.clone()));
 
         // Background properties parser
         self.parser_trie.insert("bg-size-", ParserType::BackgroundProperties(self.background_properties_parser.clone()));

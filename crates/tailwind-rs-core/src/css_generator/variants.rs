@@ -59,75 +59,96 @@ impl VariantParser {
     }
 
 
-    /// Parse variants from a class string
+    /// Parse variants from a class string - supports complex multi-variant combinations
     pub fn parse_variants(&self, class: &str) -> (Vec<String>, String) {
         let mut variants = Vec::new();
         let mut remaining = class.to_string();
 
-        // Parse variants in order of specificity (most specific first)
-        // Check for compound variants first
-        let compound_patterns = [
-            ("dark:hover:", vec!["dark", "hover"]),
-            ("dark:group-hover:", vec!["dark", "group-hover"]),
-            ("dark:focus:", vec!["dark", "focus"]),
-            ("dark:active:", vec!["dark", "active"]),
-        ];
+        // Parse all variants iteratively until no more variants are found
+        loop {
+            let mut found_variant = false;
 
-        for (prefix, variant_list) in compound_patterns {
-            if remaining.starts_with(prefix) {
-                variants.extend(variant_list.iter().map(|v| v.to_string()));
-                remaining = remaining
-                    .strip_prefix(prefix)
-                    .unwrap_or(&remaining)
-                    .to_string();
-                break;
-            }
-        }
-
-        // If no compound variant found, check individual variants
-        if variants.is_empty() {
-            let variant_patterns = [
-                ("dark:", "dark"),
-                ("hover:", "hover"),
-                ("focus:", "focus"),
-                ("active:", "active"),
-                ("visited:", "visited"),
-                ("disabled:", "disabled"),
-                ("group-hover:", "group-hover"),
-                ("group-focus:", "group-focus"),
-                ("group-active:", "group-active"),
-                ("group-disabled:", "group-disabled"),
-                ("peer-hover:", "peer-hover"),
-                ("peer-focus:", "peer-focus"),
-                ("peer-active:", "peer-active"),
-                ("peer-disabled:", "peer-disabled"),
-                ("first:", "first"),
-                ("last:", "last"),
-                ("odd:", "odd"),
-                ("even:", "even"),
-                // Device variants
-                ("pointer-coarse:", "pointer-coarse"),
-                ("pointer-fine:", "pointer-fine"),
-                ("motion-reduce:", "motion-reduce"),
-                ("motion-safe:", "motion-safe"),
-                ("light:", "light"),
-                // Responsive variants
-                ("sm:", "sm"),
-                ("md:", "md"),
-                ("lg:", "lg"),
-                ("xl:", "xl"),
-                ("2xl:", "2xl"),
+            // Check for compound variants first (most specific)
+            let compound_patterns = [
+                ("dark:hover:", vec!["dark", "hover"]),
+                ("dark:focus:", vec!["dark", "focus"]),
+                ("dark:active:", vec!["dark", "active"]),
+                ("dark:visited:", vec!["dark", "visited"]),
+                ("dark:disabled:", vec!["dark", "disabled"]),
+                ("dark:group-hover:", vec!["dark", "group-hover"]),
+                ("dark:group-focus:", vec!["dark", "group-focus"]),
+                ("dark:peer-hover:", vec!["dark", "peer-hover"]),
+                ("dark:peer-focus:", vec!["dark", "peer-focus"]),
+                ("hover:focus:", vec!["hover", "focus"]),
+                ("hover:active:", vec!["hover", "active"]),
+                ("focus:active:", vec!["focus", "active"]),
+                ("group-hover:focus:", vec!["group-hover", "focus"]),
+                ("peer-hover:focus:", vec!["peer-hover", "focus"]),
             ];
 
-            for (prefix, variant) in variant_patterns {
+            for (prefix, variant_list) in compound_patterns {
                 if remaining.starts_with(prefix) {
-                    variants.push(variant.to_string());
+                    variants.extend(variant_list.iter().map(|v| v.to_string()));
                     remaining = remaining
                         .strip_prefix(prefix)
                         .unwrap_or(&remaining)
                         .to_string();
-                    break; // Only parse one variant at a time for now
+                    found_variant = true;
+                    break;
                 }
+            }
+
+            // If no compound variant found, check individual variants
+            if !found_variant {
+                let variant_patterns = [
+                    ("dark:", "dark"),
+                    ("hover:", "hover"),
+                    ("focus:", "focus"),
+                    ("active:", "active"),
+                    ("visited:", "visited"),
+                    ("disabled:", "disabled"),
+                    ("group-hover:", "group-hover"),
+                    ("group-focus:", "group-focus"),
+                    ("group-active:", "group-active"),
+                    ("group-disabled:", "group-disabled"),
+                    ("peer-hover:", "peer-hover"),
+                    ("peer-focus:", "peer-focus"),
+                    ("peer-active:", "peer-active"),
+                    ("peer-disabled:", "peer-disabled"),
+                    ("first:", "first"),
+                    ("last:", "last"),
+                    ("odd:", "odd"),
+                    ("even:", "even"),
+                    // Device variants
+                    ("pointer-coarse:", "pointer-coarse"),
+                    ("pointer-fine:", "pointer-fine"),
+                    ("motion-reduce:", "motion-reduce"),
+                    ("motion-safe:", "motion-safe"),
+                    ("light:", "light"),
+                    // Responsive variants
+                    ("sm:", "sm"),
+                    ("md:", "md"),
+                    ("lg:", "lg"),
+                    ("xl:", "xl"),
+                    ("2xl:", "2xl"),
+                ];
+
+                for (prefix, variant) in variant_patterns {
+                    if remaining.starts_with(prefix) {
+                        variants.push(variant.to_string());
+                        remaining = remaining
+                            .strip_prefix(prefix)
+                            .unwrap_or(&remaining)
+                            .to_string();
+                        found_variant = true;
+                        break;
+                    }
+                }
+            }
+
+            // If no variant found in this iteration, we're done
+            if !found_variant {
+                break;
             }
         }
 
@@ -161,6 +182,73 @@ impl VariantParser {
             }
             _ => String::new(),
         }
+    }
+
+    /// Combine multiple variants into a single CSS selector with proper ordering
+    pub fn combine_variant_selectors(&self, variants: &[String]) -> String {
+        if variants.is_empty() {
+            return String::new();
+        }
+
+        // Separate variants by type for proper ordering
+        let mut pseudo_selectors = Vec::new();
+        let mut class_selectors = Vec::new();
+        let mut group_selectors = Vec::new();
+        let mut peer_selectors = Vec::new();
+
+        for variant in variants {
+            let selector = self.get_variant_selector(variant);
+            if !selector.is_empty() {
+                if selector.starts_with('.') && selector.contains(':') {
+                    // Group or peer selectors like ".group:hover "
+                    if selector.contains(".group:") {
+                        group_selectors.push(selector.trim_end().to_string());
+                    } else if selector.contains(".peer:") {
+                        peer_selectors.push(selector.trim_end().to_string());
+                    }
+                } else if selector.starts_with('.') {
+                    // Class selectors like ".dark "
+                    class_selectors.push(selector.trim_end().to_string());
+                } else if selector.starts_with(':') {
+                    // Pseudo selectors like ":hover"
+                    pseudo_selectors.push(selector);
+                }
+            }
+        }
+
+        // Combine in proper order: class selectors first, then group/peer, then pseudo
+        let mut result = String::new();
+
+        // Add class selectors (dark mode, etc.)
+        for selector in class_selectors {
+            result.push_str(&selector);
+        }
+
+        // Add group selectors
+        for selector in group_selectors {
+            if !result.is_empty() {
+                result.push(' ');
+            }
+            result.push_str(&selector);
+        }
+
+        // Add peer selectors
+        for selector in peer_selectors {
+            if !result.is_empty() {
+                result.push(' ');
+            }
+            result.push_str(&selector);
+        }
+
+        // Add pseudo selectors (combine multiple pseudo selectors)
+        if !pseudo_selectors.is_empty() {
+            if !result.is_empty() {
+                result.push(' ');
+            }
+            result.push_str(&pseudo_selectors.join(""));
+        }
+
+        result
     }
 
     /// Get the media query for device variants

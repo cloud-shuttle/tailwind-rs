@@ -112,7 +112,6 @@ fn generate_css() -> String {
 
     // Comprehensive list of all classes used in the HTML template
     let classes = vec![
-        "([^",
         "animate-float",
         "animate-glow",
         "animate-pulse",
@@ -152,7 +151,9 @@ fn generate_css() -> String {
         "font-bold",
         "font-medium",
         "font-mono",
+        "font-sans",
         "font-semibold",
+        "font-serif",
         "from-blue-400",
         "from-blue-500",
         "from-blue-500/20",
@@ -264,40 +265,24 @@ fn generate_css() -> String {
     let mut fallback_count = 0;
     let total_classes = classes.len();
 
-    // Convert Vec<String> to Vec<&str> for add_classes_for_element
-    let class_refs: Vec<&str> = classes.iter().map(|s| s.as_str()).collect();
+    // Use individual processing (proven to work from integration tests)
+    println!("🔧 Processing {} classes with individual parsing...", classes.len());
 
-    match generator.add_classes_for_element(&class_refs) {
-        Ok(_) => {
-            // Successfully processed all classes
-            parsed_count = classes.len();
-            println!("📊 Processed {} classes with element-based parsing", classes.len());
-        }
-        Err(e) => {
-            println!("❌ Element-based parsing failed: {}, falling back to individual processing", e);
-            // Fall back to individual processing
-            for class in &classes {
-                match generator.add_class(class) {
-                    Ok(_) => {
-                        // Successfully added class to our structured CSS
-                        parsed_count += 1;
-                    }
-                    Err(_) => {
-                        // For CDN coverage test, let CDN handle unparsed classes
-                        // Only generate fallback for critical classes that CDN might not handle
-                        if class.starts_with("bg-gradient-to-br") || class.starts_with("from-") || class.starts_with("to-") || class.starts_with("via-") {
-                            // Keep gradient fallbacks as CDN doesn't handle these well
-                            if let Some(fallback) = generate_fallback_css(class) {
-                                fallback_css.push_str(&fallback);
-                                fallback_css.push('\n');
-                                fallback_count += 1;
-                            }
-                        } else {
-                            // Let CDN handle this class
-                            fallback_count += 1;
-                            println!("📊 CDN will handle: {}", class);
-                        }
-                    }
+    for class in &classes {
+        match generator.add_class(class) {
+            Ok(_) => {
+                // Successfully added class to our structured CSS
+                parsed_count += 1;
+            }
+            Err(_) => {
+                // Generate fallback CSS for classes we couldn't parse
+                if let Some(fallback) = generate_fallback_css(class) {
+                    fallback_css.push_str(&fallback);
+                    fallback_css.push('\n');
+                    fallback_count += 1;
+                } else {
+                    // If we can't generate fallback, still count it
+                    fallback_count += 1;
                 }
             }
         }
@@ -306,7 +291,7 @@ fn generate_css() -> String {
     println!("📊 Coverage Report:");
     println!("   Total classes: {}", total_classes);
     println!("   Parsed by Tailwind-RS: {} ({:.1}%)", parsed_count, (parsed_count as f64 / total_classes as f64) * 100.0);
-    println!("   Handled by CDN: {} ({:.1}%)", fallback_count, (fallback_count as f64 / total_classes as f64) * 100.0);
+    println!("   Handled by fallback: {} ({:.1}%)", fallback_count, (fallback_count as f64 / total_classes as f64) * 100.0);
 
     // Test additional Tailwind-RS functionality
     let class_builder = ClassBuilder::new();
@@ -474,6 +459,35 @@ fn generate_html() -> String {
                     </div>
                 </div>
 
+                <!-- Typography Showcase -->
+                <div class="bg-white/5 dark:bg-gray-900/20 backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-white/10 dark:border-gray-700/20">
+                    <h2 class="text-4xl font-bold text-center mb-10 text-white drop-shadow-2xl">
+                        🔤 Typography Showcase
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="bg-gradient-to-br from-purple-500/30 to-pink-500/30 p-8 rounded-2xl text-center border border-purple-400/40 backdrop-blur-sm">
+                            <div class="text-4xl mb-4 font-black text-white">Ultra Bold</div>
+                            <div class="text-lg font-semibold text-purple-300 mb-2">Font Black (900)</div>
+                            <div class="text-sm text-gray-400 font-sans bg-gray-800 px-3 py-1 rounded mt-3">Sphinx of black quartz, judge my vow</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-500/30 to-cyan-500/30 p-8 rounded-2xl text-center border border-blue-400/40 backdrop-blur-sm">
+                            <div class="text-4xl mb-4 font-bold text-white">Just Bold</div>
+                            <div class="text-lg font-semibold text-blue-300 mb-2">Font Bold (700)</div>
+                            <div class="text-sm text-gray-400 font-serif bg-gray-800 px-3 py-1 rounded mt-3">Sphinx of black quartz, judge my vow</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-500/30 to-emerald-500/30 p-8 rounded-2xl text-center border border-green-400/40 backdrop-blur-sm">
+                            <div class="text-4xl mb-4 font-mono text-white bg-gray-700 px-2 py-1 rounded">CODE FONT</div>
+                            <div class="text-lg font-semibold text-green-300 mb-2">Font Mono</div>
+                            <div class="text-sm text-gray-400 font-mono bg-gray-800 px-3 py-1 rounded mt-3">Sphinx of black quartz, judge my vow</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-yellow-500/30 to-orange-500/30 p-8 rounded-2xl text-center border border-yellow-400/40 backdrop-blur-sm">
+                            <div class="text-4xl mb-4 font-medium text-white">Medium</div>
+                            <div class="text-lg font-semibold text-yellow-300 mb-2">Font Medium (500)</div>
+                            <div class="text-sm text-gray-400 font-sans bg-gray-800 px-3 py-1 rounded mt-3">Sphinx of black quartz, judge my vow</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Features List with Neon Effects -->
                 <div class="bg-gradient-to-br from-purple-500/20 to-pink-600/20 dark:from-purple-900/30 dark:to-pink-900/30 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-purple-500/50">
                     <h3 class="text-lg font-semibold text-white mb-2 text-center">
@@ -543,20 +557,27 @@ fn generate_html() -> String {
 
 fn handle_request(mut stream: TcpStream) -> std::io::Result<()> {
     let mut buffer = [0; 1024];
-    stream.read(&mut buffer)?;
+    let bytes_read = stream.read(&mut buffer)?;
 
-    let request = String::from_utf8_lossy(&buffer[..]);
-    let response = if request.starts_with("GET /styles.css") {
+    // Convert to string and find the request line
+    let request_str = String::from_utf8_lossy(&buffer[..bytes_read]);
+    let request_line = request_str.lines().next().unwrap_or("");
+
+    println!("📨 Received request: {}", request_line);
+
+    let response = if request_line.contains("GET /styles.css") {
+        println!("🎨 Serving CSS...");
         let css = generate_css();
         format!(
-            r"HTTP/1.1 200 OK\r\nContent-Type: text/css\r\nContent-Length: {}\r\n\r\n{}",
+            "HTTP/1.1 200 OK\r\nContent-Type: text/css\r\nContent-Length: {}\r\n\r\n{}",
             css.len(),
             css
         )
     } else {
+        println!("🌐 Serving HTML...");
         let html = generate_html();
         format!(
-            r"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: {}\r\n\r\n{}",
+            "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: {}\r\n\r\n{}",
             html.len(),
             html
         )

@@ -17,17 +17,13 @@ impl crate::css_generator::CssGenerator {
         let (variants, base_class) = self.parse_variants(class);
         let properties = self.class_to_properties(class)?;
 
-        // Build selector with variants
-        let mut selector = String::new();
-        for variant in &variants {
-            let variant_selector = self.variant_parser.get_variant_selector(variant);
-            if !variant_selector.is_empty() {
-                selector.push_str(&variant_selector);
-            }
-        }
-
-        // Add the base class
-        selector.push_str(&format!(".{}", base_class));
+        // Build selector with variants using the new complex variant system
+        let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
+        let selector = if variant_selector.is_empty() {
+            format!(".{}", base_class)
+        } else {
+            format!("{}{}", variant_selector, &format!(".{}", base_class))
+        };
 
         // Determine media query for responsive and device variants
         let media_query = variants.iter().find_map(|variant| {

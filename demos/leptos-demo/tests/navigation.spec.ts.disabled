@@ -1,0 +1,31 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Navigation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    // Wait for the app to load
+    await page.waitForSelector('[data-testid="app"]', { timeout: 10000 });
+  });
+
+  test('should display the navigation bar', async ({ page }) => {
+    // Check nav is visible
+    const nav = page.locator('nav');
+    await expect(nav).toBeVisible();
+
+    // Check logo/brand
+    const logo = nav.locator('.font-bold');
+    await expect(logo).toContainText('Tailwind-RS');
+
+    // Check navigation links (these are anchor tags, not buttons)
+    await expect(nav.locator('a:has-text("Features")')).toBeVisible();
+    await expect(nav.locator('a:has-text("Components")')).toBeVisible();
+    await expect(nav.locator('a:has-text("Animations")')).toBeVisible();
+  });
+
+  test('should display footer', async ({ page }) => {
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
+    await expect(footer).toContainText('Built with ❤️ using Rust & WebAssembly');
+    await expect(footer).toContainText('Tailwind-RS');
+  });
+});

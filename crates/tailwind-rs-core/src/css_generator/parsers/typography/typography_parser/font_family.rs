@@ -9,12 +9,12 @@ pub fn parse_font_family_class(class: &str) -> Option<Vec<CssProperty>> {
     match class {
         "font-sans" => Some(vec![CssProperty {
             name: "font-family".to_string(),
-            value: "var(--font-sans)".to_string(),
+            value: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif".to_string(),
             important: false,
         }]),
         "font-serif" => Some(vec![CssProperty {
             name: "font-family".to_string(),
-            value: "var(--font-serif)".to_string(),
+            value: "ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif".to_string(),
             important: false,
         }]),
         "font-mono" => Some(vec![CssProperty {

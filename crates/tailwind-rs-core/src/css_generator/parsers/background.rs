@@ -68,7 +68,7 @@ impl BackgroundParser {
         }
     }
 
-    /// Parse background-image gradient direction classes - generate actual CSS
+    /// Parse background-image gradient direction classes - generate CSS using gradient variables
     fn parse_background_gradient_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         let direction = match class {
             "bg-gradient-to-t" => "to top",
@@ -82,15 +82,19 @@ impl BackgroundParser {
             _ => return None,
         };
 
-        // Generate a basic linear gradient with placeholder colors
-        // Note: Real gradients would need to collect from-, via-, to- stops
-        let background_image = format!("linear-gradient({}, #3b82f6, #ef4444)", direction);
-
-        Some(vec![CssProperty {
-            name: "background-image".to_string(),
-            value: background_image,
-            important: false,
-        }])
+        // Set up CSS variables for gradient stops and generate background-image using them
+        Some(vec![
+            CssProperty {
+                name: "--tw-gradient-stops".to_string(),
+                value: "var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to, transparent)".to_string(),
+                important: false,
+            },
+            CssProperty {
+                name: "background-image".to_string(),
+                value: format!("linear-gradient({}, var(--tw-gradient-stops))", direction),
+                important: false,
+            },
+        ])
     }
 
     /// Parse background-color classes

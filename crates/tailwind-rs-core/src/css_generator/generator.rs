@@ -329,48 +329,40 @@ impl CssGenerator {
     pub fn class_to_css_rule(&self, class: &str) -> Result<CssRule> {
         let (variants, base_class) = self.parse_variants(class);
 
-        // Handle gradient stops with variants specially
-        if !variants.is_empty() {
-            if let Some(stop_type) = Self::extract_gradient_stop_type(&base_class) {
-                if let Some(color) = Self::extract_gradient_color(&base_class, stop_type) {
-                    let mut selector = String::new();
-                    for variant in &variants {
-                        let variant_selector = self.variant_parser.get_variant_selector(variant);
-                        if !variant_selector.is_empty() {
-                            selector.push_str(&variant_selector);
-                        }
-                    }
-                    selector.push_str(&format!(".{}", class));
+        // Handle gradient stops specially (with or without variants)
+        if let Some(stop_type) = Self::extract_gradient_stop_type(&base_class) {
+            if let Some(color) = Self::extract_gradient_color(&base_class, stop_type) {
+                let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
+                let selector = if variant_selector.is_empty() {
+                    format!(".{}", class)
+                } else {
+                    format!("{}{}", variant_selector, &format!(".{}", class))
+                };
 
-                    let properties = vec![super::types::CssProperty {
-                        name: format!("--tw-gradient-{}", stop_type),
-                        value: color,
-                        important: false,
-                    }];
+                let properties = vec![super::types::CssProperty {
+                    name: format!("--tw-gradient-{}", stop_type),
+                    value: color,
+                    important: false,
+                }];
 
-                    return Ok(CssRule {
-                        selector,
-                        properties,
-                        media_query: self.variant_parser.get_variant_media_query(&variants).map(|s| s.to_string()),
-                        specificity: variants.len() as u32 * 10 + 10,
-                    });
-                }
+                return Ok(CssRule {
+                    selector,
+                    properties,
+                    media_query: self.variant_parser.get_variant_media_query(&variants).map(|s| s.to_string()),
+                    specificity: variants.len() as u32 * 10 + 10,
+                });
             }
         }
 
         let properties = self.class_to_properties(&base_class)?;
 
-        // Build selector with variants
-        let mut selector = String::new();
-        for variant in &variants {
-            let variant_selector = self.variant_parser.get_variant_selector(variant);
-            if !variant_selector.is_empty() {
-                selector.push_str(&variant_selector);
-            }
-        }
-
-        // Add the base class
-        selector.push_str(&format!(".{}", base_class));
+        // Build selector with variants using the new complex variant system
+        let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
+        let selector = if variant_selector.is_empty() {
+            format!(".{}", base_class)
+        } else {
+            format!("{}{}", variant_selector, &format!(".{}", base_class))
+        };
 
         // Determine media query for responsive and device variants
         let media_query = variants.iter().find_map(|variant| {

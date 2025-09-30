@@ -5,6 +5,7 @@
 
 use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
+use super::super::generator::CssGenerator;
 
 #[derive(Debug, Clone)]
 pub struct GradientParser;
@@ -14,29 +15,33 @@ impl GradientParser {
         Self
     }
 
-    /// Parse gradient direction classes - generate actual CSS gradients
+    /// Parse gradient direction classes - generate CSS using gradient variables
     fn parse_gradient_direction_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         let direction = match class {
             "bg-gradient-to-r" | "bg-linear-to-r" => "to right",
-            "bg-linear-to-l" => "to left",
-            "bg-linear-to-t" => "to top",
-            "bg-linear-to-b" => "to bottom",
-            "bg-linear-to-tr" => "to top right",
-            "bg-linear-to-tl" => "to top left",
-            "bg-linear-to-br" => "to bottom right",
-            "bg-linear-to-bl" => "to bottom left",
+            "bg-gradient-to-l" | "bg-linear-to-l" => "to left",
+            "bg-gradient-to-t" | "bg-linear-to-t" => "to top",
+            "bg-gradient-to-b" | "bg-linear-to-b" => "to bottom",
+            "bg-gradient-to-tr" | "bg-linear-to-tr" => "to top right",
+            "bg-gradient-to-tl" | "bg-linear-to-tl" => "to top left",
+            "bg-gradient-to-br" | "bg-linear-to-br" => "to bottom right",
+            "bg-gradient-to-bl" | "bg-linear-to-bl" => "to bottom left",
             _ => return None,
         };
 
-        // Generate a basic linear gradient with placeholder colors
-        // Note: Real gradients would need to collect from-, via-, to- stops
-        let background_image = format!("linear-gradient({}, #3b82f6, #ef4444)", direction);
-
-        Some(vec![CssProperty {
-            name: "background-image".to_string(),
-            value: background_image,
-            important: false,
-        }])
+        // Set up CSS variables for gradient stops and generate background-image using them
+        Some(vec![
+            CssProperty {
+                name: "--tw-gradient-stops".to_string(),
+                value: "var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to, transparent)".to_string(),
+                important: false,
+            },
+            CssProperty {
+                name: "background-image".to_string(),
+                value: format!("linear-gradient({}, var(--tw-gradient-stops))", direction),
+                important: false,
+            },
+        ])
     }
 
     /// Parse gradient stop classes - add to gradient context for later combination
@@ -355,9 +360,18 @@ impl UtilityParser for GradientParser {
             return Some(properties);
         }
 
-        // For gradient stops, we can't generate meaningful CSS without the direction
-        // In a real implementation, this would need stateful parsing to collect stops
-        // For now, return None to let fallback CSS handle it
+        // Try gradient stop classes
+        if let Some(stop_type) = CssGenerator::extract_gradient_stop_type(class) {
+            if let Some(color) = CssGenerator::extract_gradient_color(class, stop_type) {
+                return Some(vec![CssProperty {
+                    name: format!("--tw-gradient-{}", stop_type),
+                    value: color,
+                    important: false,
+                }]);
+            }
+        }
+
+        // Return None for unknown gradient classes
         None
     }
 

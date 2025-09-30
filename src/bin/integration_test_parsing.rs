@@ -94,6 +94,11 @@ fn test_class(generator: &CssGenerator, class: &str, results: &mut TestResults) 
 
             for property in &rule.properties {
                 // Check for CSS variable issues - these should be resolved to actual values
+                // Allow CSS variables for gradient stops (they're expected to set --tw-gradient-* variables)
+                let is_gradient_stop = class.starts_with("from-") || class.starts_with("to-") || class.starts_with("via-") ||
+                                      class.starts_with("dark:from-") || class.starts_with("dark:to-") || class.starts_with("dark:via-") ||
+                                      class.starts_with("hover:from-") || class.starts_with("hover:to-") || class.starts_with("hover:via-");
+
                 if property.value.contains("var(--color-") {
                     css_value_issues.push(format!("CSS variable instead of color: {}", property.value));
                 }
@@ -106,7 +111,8 @@ fn test_class(generator: &CssGenerator, class: &str, results: &mut TestResults) 
                 if property.value.contains("var(--font-") {
                     css_value_issues.push(format!("CSS variable instead of font-family: {}", property.value));
                 }
-                if property.value.contains("var(--tw-gradient-") {
+                // Allow --tw-gradient- variables for gradient stops
+                if property.value.contains("var(--tw-gradient-") && !is_gradient_stop {
                     css_value_issues.push(format!("CSS variable instead of gradient: {}", property.value));
                 }
                 if property.value.contains("var(--tw-translate-") {

@@ -5,6 +5,9 @@
 use super::types::CssProperty;
 use crate::error::{Result, TailwindError};
 
+// Import the gradient extraction methods
+use super::generator::CssGenerator;
+
 /// Parser methods trait for CssGenerator
 pub trait CssGeneratorParsers {
     /// Convert a class name to CSS properties
@@ -97,41 +100,83 @@ impl CssGeneratorParsers for super::generator::CssGenerator {
         self.variant_parser.parse_variants(class)
     }
 
-
     fn class_to_css_rule(&self, class: &str) -> Result<super::types::CssRule> {
         let (variants, base_class) = self.parse_variants(class);
-        let properties = self.class_to_properties(&base_class)?;
 
-        // Build selector with variants
-        let mut selector = String::new();
-        for variant in &variants {
-            match variant.as_str() {
-                "dark" => selector.push_str(".dark "),
-                "hover" => selector.push_str(":hover"),
-                "focus" => selector.push_str(":focus"),
-                _ => {} // Other variants
+        // Handle gradient stops specially - they generate CSS variables
+        if let Some(stop_type) = CssGenerator::extract_gradient_stop_type(&base_class) {
+            if let Some(color) = CssGenerator::extract_gradient_color(&base_class, stop_type) {
+                // Build selector with variants using the new complex variant system
+                let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
+                let selector = if variant_selector.is_empty() {
+                    format!(".{}", class)
+                } else {
+                    format!("{}{}", variant_selector, &format!(".{}", class))
+                };
+
+                let properties = vec![super::types::CssProperty {
+                    name: format!("--tw-gradient-{}", stop_type),
+                    value: color,
+                    important: false,
+                }];
+
+                let media_query = self.variant_parser.get_variant_media_query(&variants).map(|s| s.to_string());
+
+                return Ok(super::types::CssRule {
+                    selector,
+                    properties,
+                    media_query,
+                    specificity: variants.len() as u32 * 10 + 10,
+                });
             }
         }
 
-        // Add the base class
-        selector.push_str(&format!(".{}", base_class));
+        // Handle gradient directions specially - they generate background-image using CSS variables
+        if let Some(direction) = CssGenerator::extract_gradient_direction(&base_class) {
+            // Build selector with variants using the new complex variant system
+            let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
+            let selector = if variant_selector.is_empty() {
+                format!(".{}", class)
+            } else {
+                format!("{}{}", variant_selector, &format!(".{}", class))
+            };
+
+            let properties = vec![
+                super::types::CssProperty {
+                    name: "--tw-gradient-stops".to_string(),
+                    value: "var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to, transparent)".to_string(),
+                    important: false,
+                },
+                super::types::CssProperty {
+                    name: "background-image".to_string(),
+                    value: format!("linear-gradient({}, var(--tw-gradient-stops))", direction),
+                    important: false,
+                },
+            ];
+
+            let media_query = self.variant_parser.get_variant_media_query(&variants).map(|s| s.to_string());
+
+            return Ok(super::types::CssRule {
+                selector,
+                properties,
+                media_query,
+                specificity: variants.len() as u32 * 10 + 10,
+            });
+        }
+
+        // Try parser trie for all other classes
+        let properties = self.class_to_properties(&base_class)?;
+
+        // Build selector with variants using the new complex variant system
+        let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
+        let selector = if variant_selector.is_empty() {
+            format!(".{}", base_class)
+        } else {
+            format!("{}{}", variant_selector, &format!(".{}", base_class))
+        };
 
         // Determine media query for responsive variants
-        let media_query = variants.iter().find_map(|variant| {
-            if variant.starts_with("sm:") {
-                Some("@media (min-width: 640px)".to_string())
-            } else if variant.starts_with("md:") {
-                Some("@media (min-width: 768px)".to_string())
-            } else if variant.starts_with("lg:") {
-                Some("@media (min-width: 1024px)".to_string())
-            } else if variant.starts_with("xl:") {
-                Some("@media (min-width: 1280px)".to_string())
-            } else if variant.starts_with("2xl:") {
-                Some("@media (min-width: 1536px)".to_string())
-            } else {
-                None
-            }
-        });
+        let media_query = self.variant_parser.get_variant_media_query(&variants).map(|s| s.to_string());
 
         Ok(super::types::CssRule {
             selector,

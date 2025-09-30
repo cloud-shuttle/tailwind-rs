@@ -293,7 +293,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
         self.parser_trie.insert("-rotate-", ParserType::Transform(self.transform_parser.clone()));
 
         // Gradient parser
-        self.parser_trie.insert("bg-gradient-", ParserType::Background(self.background_parser.clone()));
+        self.parser_trie.insert("bg-gradient-", ParserType::Gradient(self.gradient_parser.clone()));
         self.parser_trie.insert("bg-conic", ParserType::Gradient(self.gradient_parser.clone()));
         self.parser_trie.insert("bg-radial", ParserType::Gradient(self.gradient_parser.clone()));
         self.parser_trie.insert("from-", ParserType::Gradient(self.gradient_parser.clone()));

@@ -7,78 +7,116 @@ test.describe('Home Page', () => {
   });
 
   test('should display hero section', async ({ page }) => {
-    // Check main title
-    const title = page.locator('h1:has-text("Tailwind-RS Demo - Actually Using Core Models!")');
+    // Check main title - matches actual demo content
+    const title = page.locator('h1:has-text("TAILWIND")');
     await expect(title).toBeVisible();
-    await expect(title).toHaveClass(/text-4xl/);
 
-    // Check that the demo shows the dynamic class preview
-    const previewArea = page.locator('div.w-full.h-32.rounded-lg.border-2.border-dashed:has-text("Preview Area")');
-    await expect(previewArea).toBeVisible();
+    // Check subtitle
+    const subtitle = page.locator('p').filter({ hasText: 'The most advanced WebAssembly-powered CSS generation engine' });
+    await expect(subtitle).toBeVisible();
+
+    // Check action buttons
+    const getStartedButton = page.locator('button:has-text("Get Started")');
+    const viewSourceButton = page.locator('button:has-text("View Source")');
+    await expect(getStartedButton).toBeVisible();
+    await expect(viewSourceButton).toBeVisible();
+
+    // Check stats (more specific locators to avoid strict mode violations)
+    await expect(page.locator('div.text-3xl.font-bold.text-cyan-400').filter({ hasText: '100%' })).toBeVisible();
+    await expect(page.locator('div.text-3xl.font-bold.text-purple-400').filter({ hasText: '<1ms' })).toBeVisible();
+    await expect(page.locator('div.text-3xl.font-bold.text-pink-400').filter({ hasText: '0KB' })).toBeVisible();
+    await expect(page.locator('div.text-3xl.font-bold.text-orange-400').filter({ hasText: '∞' })).toBeVisible();
   });
 
-  test('should have dynamic class input', async ({ page }) => {
-    // Check input field exists
-    const inputField = page.locator('input[placeholder="Enter Tailwind classes"]');
-    await expect(inputField).toBeVisible();
+  test('should display component gallery', async ({ page }) => {
+    // Wait for hero to load first
+    await expect(page.locator('h1:has-text("TAILWIND")')).toBeVisible();
 
-    // Check input has proper styling
-    await expect(inputField).toHaveClass(/border.*border-gray-300/);
+    // Check component gallery title
+    const galleryTitle = page.locator('h2:has-text("🎨 Component Gallery")');
+    await expect(galleryTitle).toBeVisible();
 
-    // Check label exists
-    const label = page.locator('label:has-text("Enter Tailwind classes:")');
-    await expect(label).toBeVisible();
+    // Check component cards
+    await expect(page.locator('h3:has-text("Gradient Magic")')).toBeVisible();
+    await expect(page.locator('h3:has-text("Interactive Elements")')).toBeVisible();
+    await expect(page.locator('h4:has-text("Typography Scale")')).toBeVisible();
+    await expect(page.locator('h4:has-text("Color Harmony")')).toBeVisible();
+    await expect(page.locator('h3:has-text("Animation Engine")')).toBeVisible();
+    await expect(page.locator('h4:has-text("📐 Layout System")')).toBeVisible();
   });
 
-  test('should display demo sections', async ({ page }) => {
-    // Check for the dynamic class preview section
-    const previewSection = page.locator('h2:has-text("Dynamic Class Preview")');
-    await expect(previewSection).toBeVisible();
+  test('should display advanced features section', async ({ page }) => {
+    // Check advanced features title
+    const featuresTitle = page.locator('h2:has-text("🚀 Advanced Features")');
+    await expect(featuresTitle).toBeVisible();
 
-    // Check for the generated CSS section
-    const cssSection = page.locator('h2:has-text("Generated CSS (from Tailwind-RS Core)")');
-    await expect(cssSection).toBeVisible();
-
-    // Check for the current classes section
-    const classesSection = page.locator('h2:has-text("Current Classes")');
-    await expect(classesSection).toBeVisible();
-
-    // Check that classes are actually generated and displayed
-    const cssPre = page.locator('pre');
-    await expect(cssPre).toBeVisible();
-    const cssContent = await cssPre.textContent();
-    expect(cssContent).toContain('bg-blue-500');
+    // Check feature sections
+    await expect(page.locator('h3:has-text("✨ Visual Effects")')).toBeVisible();
+    await expect(page.locator('h3:has-text("🎭 Hover Interactions")')).toBeVisible();
+    await expect(page.locator('h3:has-text("📱 Responsive Design")')).toBeVisible();
+    await expect(page.locator('h3:has-text("⚡ Performance")')).toBeVisible();
   });
 
-  test('should have responsive layout', async ({ page }) => {
-    // Check that the main container has responsive classes
-    const container = page.locator('.container.mx-auto.px-4.py-8');
-    await expect(container).toBeVisible();
+  test('should display typography showcase', async ({ page }) => {
+    // Check typography card exists
+    const typographyCard = page.locator('h4:has-text("Typography Scale")');
+    await expect(typographyCard).toBeVisible();
 
-    // Test mobile viewport
-    await page.setViewportSize({ width: 375, height: 667 });
-    await expect(container).toBeVisible();
-
-    // Test desktop viewport
-    await page.setViewportSize({ width: 1024, height: 768 });
-    await expect(container).toBeVisible();
+    // Check different text sizes
+    await expect(page.locator('p:has-text("Extra Small")')).toBeVisible();
+    await expect(page.locator('p:has-text("Small Text")')).toBeVisible();
+    await expect(page.locator('p:has-text("Base Size")')).toBeVisible();
+    await expect(page.locator('p:has-text("Large Text")')).toBeVisible();
+    await expect(page.locator('p:has-text("Extra Large")')).toBeVisible();
+    await expect(page.locator('p:has-text("Display Size")')).toBeVisible();
   });
 
-  test('should demonstrate dynamic class functionality', async ({ page }) => {
-    // Get initial preview area classes - use more specific selector
-    const previewArea = page.locator('div.w-full.h-32.rounded-lg.border-2.border-dashed');
-    const initialClass = await previewArea.getAttribute('class');
+  test('should display color palette', async ({ page }) => {
+    // Check color harmony title
+    const colorTitle = page.locator('h4:has-text("Color Harmony")');
+    await expect(colorTitle).toBeVisible();
 
-    // Type new classes into the input
-    const inputField = page.locator('input[placeholder="Enter Tailwind classes"]');
-    await inputField.fill('bg-red-500 text-white p-6 rounded-xl');
+    // Check color description
+    await expect(page.locator('text=Full spectrum of Tailwind colors with opacity variants')).toBeVisible();
 
-    // Check that the preview area updates (this shows the demo is interactive)
-    await expect(previewArea).toHaveClass(/bg-red-500/);
-    await expect(previewArea).toHaveClass(/text-white/);
+    // Check color squares exist (8 gradient squares in Color Harmony card)
+    const colorSquares = page.locator('div.grid.grid-cols-4.gap-3 div.aspect-square');
+    await expect(colorSquares).toHaveCount(8);
+  });
 
-    // Check that current classes section shows the new classes
-    const currentClasses = page.locator('code');
-    await expect(currentClasses).toContainText('bg-red-500 text-white p-6 rounded-xl');
+  test('should debug page content', async ({ page }) => {
+    // Wait for page to load
+    await page.waitForTimeout(3000);
+
+    // Check the main app div (which has the classes)
+    const appDivInfo = await page.evaluate(() => {
+      const app = document.querySelector('[data-testid="app"]');
+      if (!app) return { exists: false };
+
+      const computed = window.getComputedStyle(app);
+      return {
+        exists: true,
+        classes: app.className,
+        minHeight: computed.minHeight,
+        backgroundImage: computed.backgroundImage,
+        color: computed.color
+      };
+    });
+    console.log('App div info:', appDivInfo);
+
+    // Check if the gradient variables are set correctly
+    const gradientVars = await page.evaluate(() => {
+      const app = document.querySelector('[data-testid="app"]');
+      if (!app) return {};
+
+      const computed = window.getComputedStyle(app);
+      return {
+        from: computed.getPropertyValue('--tw-gradient-from'),
+        via: computed.getPropertyValue('--tw-gradient-via'),
+        to: computed.getPropertyValue('--tw-gradient-to'),
+        stops: computed.getPropertyValue('--tw-gradient-stops')
+      };
+    });
+    console.log('Gradient CSS variables:', gradientVars);
   });
 });

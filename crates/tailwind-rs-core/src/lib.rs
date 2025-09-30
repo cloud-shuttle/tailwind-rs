@@ -57,12 +57,14 @@
 //! let css = generator.generate_css();
 //! ```
 
+pub mod api_contracts;
 pub mod arbitrary;
 pub mod ast_parser;
 pub mod class_scanner;
 pub mod classes;
 pub mod color;
 pub mod config;
+pub mod contracts;
 pub mod css_generator;
 pub mod css_optimizer;
 pub mod custom_variant;
@@ -75,7 +77,7 @@ pub mod plugin_system;
 #[cfg(feature = "postcss")]
 pub mod postcss_integration;
 pub mod responsive;
-
+pub mod spacing;
 pub mod theme;
 pub mod theme_new;
 pub mod tree_shaker;
@@ -86,8 +88,7 @@ pub mod validation;
 #[cfg(test)]
 mod api_stability;
 
-// API Contracts and Contract Testing
-pub mod api_contracts;
+// API Contracts and Contract Testing - now in contracts module
 
 // Re-export commonly used types
 pub use arbitrary::{ArbitraryValue, ArbitraryValueError, ArbitraryValueUtilities};

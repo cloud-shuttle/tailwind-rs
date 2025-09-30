@@ -11,7 +11,7 @@ pub mod borders_advanced;
 pub mod color;
 pub mod colors_advanced;
 pub mod effects;
-pub mod filter_utilities;
+pub mod filter_utilities_modules;
 pub mod flexbox;
 pub mod gap_parser;
 pub mod grid;
@@ -33,7 +33,7 @@ pub mod typography;
 
 pub use accessibility::AccessibilityParser;
 pub use backdrop_filter_utilities::BackdropFilterUtilitiesParser;
-pub use filter_utilities::FilterUtilitiesParser;
+pub use filter_utilities_modules::FilterUtilitiesParser;
 pub use table::TableParser;
 pub mod accent_color;
 pub mod align_content;

@@ -6,7 +6,7 @@
 pub mod advanced_animation_utilities;
 pub mod advanced_performance_optimization;
 pub mod advanced_plugin_system_modules;
-pub mod animations;
+pub mod animations_modules;
 pub mod background_utilities;
 pub mod borders;
 pub mod color_functions;
@@ -38,7 +38,7 @@ pub mod typography;
 pub use advanced_animation_utilities::*;
 pub use advanced_performance_optimization::*;
 pub use advanced_plugin_system_modules::*;
-pub use animations::*;
+pub use animations_modules::*;
 pub use background_utilities::*;
 pub use borders::*;
 pub use color_functions::*;

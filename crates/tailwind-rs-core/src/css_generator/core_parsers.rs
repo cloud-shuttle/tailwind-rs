@@ -4,9 +4,10 @@
 
 // Removed unused imports
 use super::parsers::{
-    BorderParser, ColorParser, EffectsParser, InteractiveParser, LayoutParser, TransformParser,
+    BorderParser, ColorParser, EffectsParser, InteractiveParser, LayoutParser,
     TypographyParser, UtilityParser,
 };
+use crate::transforms::TransformParser;
 use super::types::CssProperty;
 
 /// Core parser methods for CssGenerator

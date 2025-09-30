@@ -18,12 +18,13 @@ use super::parsers::{
     JustifySelfParser, LayoutParser, LayoutUtilitiesParser, MarginParser, MaskUtilitiesParser,
     ObjectFitParser, OrderParser, OverflowParser, OverscrollParser, PlaceContentParser,
     PlaceItemsParser, PlaceSelfParser, PositionParser, PositioningParser, ProseParser, RingParser,
-    ScaleParser, ShadowParser, SizingParser, SpacingParser, SvgParser, TableParser, TransformParser,
+    ScaleParser, ShadowParser, SizingParser, SpacingParser, SvgParser, TableParser,
     TransitionParser, TransitionPropertiesParser, TypographyParser, VisibilityParser, ZIndexParser,
 };
 use super::types::CssGenerationConfig;
 use super::variants::VariantParser;
 use super::trie::{ParserTrie, ParserType};
+use crate::transforms::TransformParser;
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 

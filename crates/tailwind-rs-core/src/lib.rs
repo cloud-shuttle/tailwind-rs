@@ -80,6 +80,7 @@ pub mod responsive;
 pub mod spacing;
 pub mod theme;
 pub mod theme_new;
+pub mod transforms;
 pub mod tree_shaker;
 pub mod utilities;
 pub mod utils;
@@ -117,9 +118,11 @@ pub use css_generator::parsers::{
     LayoutParser, LayoutUtilitiesParser, MaskUtilitiesParser, ObjectFitParser, OrderParser,
     OverflowParser, OverscrollParser, ParserCategory, PlaceContentParser, PlaceItemsParser,
     PlaceSelfParser, PositionParser, PositioningParser, ProseParser, RingParser, ShadowParser,
-    SizingParser, SpacingParser, SvgParser, TableParser, TransformParser, TransitionParser,
+    SizingParser, SpacingParser, SvgParser, TableParser, TransitionParser,
     TransitionPropertiesParser, TypographyParser, UtilityParser, VisibilityParser, ZIndexParser,
 };
+// Re-export transform parser from its new modular location
+pub use transforms::TransformParser;
 pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};
 pub use dark_mode::{DarkModeVariant, DarkModeVariantError, DarkModeVariantUtilities};

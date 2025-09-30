@@ -5,6 +5,7 @@
 
 use super::parsers::*;
 use super::types::CssProperty;
+use crate::transforms::TransformParser;
 use crate::error::{Result, TailwindError};
 use std::collections::HashMap;
 

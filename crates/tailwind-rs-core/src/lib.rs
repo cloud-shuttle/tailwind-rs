@@ -66,7 +66,7 @@ pub mod color;
 pub mod config;
 pub mod contracts;
 pub mod css_generator;
-pub mod css_optimizer;
+pub mod css_optimizer_modules;
 pub mod custom_variant;
 pub mod dark_mode;
 pub mod error;
@@ -123,7 +123,7 @@ pub use css_generator::parsers::{
 };
 // Re-export transform parser from its new modular location
 pub use transforms::TransformParser;
-pub use css_optimizer::{OptimizationConfig, OptimizationResults, OptimizationStats};
+pub use css_optimizer_modules::{OptimizationConfig, OptimizationResults, OptimizationStats, CssOptimizer};
 pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType};
 pub use dark_mode::{DarkModeVariant, DarkModeVariantError, DarkModeVariantUtilities};
 pub use error::{Result, TailwindError};

@@ -120,7 +120,7 @@ pub mod theme;
 pub mod validation;
 
 // Testing framework
-pub mod testing;
+pub mod testing_modules;
 
 // Re-exports for convenience
 pub use core::traits::*;
@@ -133,7 +133,7 @@ pub use theme::ThemeContract;
 pub use validation::ValidationContract;
 
 // Re-export testing framework
-pub use testing::{ContractTestRunner, ContractTestReport};
+pub use testing_modules::{ContractTestRunner, ContractTestReport};
 
 /// Global contract registry for managing all contracts
 pub type GlobalContractRegistry = core::traits::ContractRegistry;

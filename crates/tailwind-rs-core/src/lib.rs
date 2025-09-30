@@ -79,7 +79,7 @@ pub mod postcss_integration;
 pub mod responsive;
 pub mod spacing;
 pub mod theme;
-pub mod theme_new;
+pub mod theme_new_modules;
 pub mod transforms;
 pub mod tree_shaker;
 pub mod utilities;
@@ -135,10 +135,9 @@ pub use responsive::{
     ResponsiveFlex, ResponsiveGrid, ResponsiveValue, State,
 };
 pub use theme::{BorderRadius, BoxShadow, Spacing, Theme, ThemeValue};
-pub use theme_new::{
-    AnimationScale, BorderScale, FontFamily, FontSizeScale, FontWeightScale, LetterSpacingScale,
-    LineHeightScale, ShadowScale, SpacingScale, SpacingSize, Theme as NewTheme, ThemePreset,
-    ThemeVariant, ThemedComponent, TypographyScale,
+pub use theme_new_modules::{
+    FontFamily, FontSizeScale, FontWeightScale, SpacingScale, SpacingSize,
+    ThemeSystem, ThemeUtilities, ThemeVariant,
 };
 pub use tree_shaker::{TreeShakeConfig, TreeShakeResults, TreeShakeStats, TreeShaker};
 pub use utilities::*;

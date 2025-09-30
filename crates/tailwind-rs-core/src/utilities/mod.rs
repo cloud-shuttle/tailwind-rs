@@ -5,7 +5,7 @@
 
 pub mod advanced_animation_utilities;
 pub mod advanced_performance_optimization;
-pub mod advanced_plugin_system;
+pub mod advanced_plugin_system_modules;
 pub mod animations;
 pub mod background_utilities;
 pub mod borders;
@@ -37,7 +37,7 @@ pub mod typography;
 // Re-export all utility traits for easy access
 pub use advanced_animation_utilities::*;
 pub use advanced_performance_optimization::*;
-pub use advanced_plugin_system::*;
+pub use advanced_plugin_system_modules::*;
 pub use animations::*;
 pub use background_utilities::*;
 pub use borders::*;

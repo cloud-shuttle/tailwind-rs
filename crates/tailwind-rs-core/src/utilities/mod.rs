@@ -3,7 +3,7 @@
 //! This module contains all the utility class implementations organized by category.
 //! Each utility category follows a consistent pattern with traits and implementations.
 
-pub mod advanced_animations;
+pub mod advanced_animation_utilities;
 pub mod advanced_performance_optimization;
 pub mod advanced_plugin_system;
 pub mod animations;
@@ -35,7 +35,7 @@ pub mod transitions;
 pub mod typography;
 
 // Re-export all utility traits for easy access
-pub use advanced_animations::*;
+pub use advanced_animation_utilities::*;
 pub use advanced_performance_optimization::*;
 pub use advanced_plugin_system::*;
 pub use animations::*;

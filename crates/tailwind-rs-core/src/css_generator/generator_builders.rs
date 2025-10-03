@@ -318,6 +318,12 @@ impl CssGeneratorBuilder for super::CssGenerator {
         self.parser_trie.insert("italic", ParserType::Typography(self.typography_parser.clone()));
         self.parser_trie.insert("tracking-", ParserType::Typography(self.typography_parser.clone()));
 
+        // Advanced typography features
+        self.parser_trie.insert("text-shadow", ParserType::Typography(self.typography_parser.clone()));
+        self.parser_trie.insert("text-shadow-", ParserType::Typography(self.typography_parser.clone()));
+        self.parser_trie.insert("font-feature-", ParserType::Typography(self.typography_parser.clone()));
+        self.parser_trie.insert("font-variant-", ParserType::Typography(self.typography_parser.clone()));
+
         // Color parser (border colors only - text colors handled by Typography)
         self.parser_trie.insert("border-", ParserType::Color(self.color_parser.clone()));
 

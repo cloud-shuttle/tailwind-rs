@@ -1,11 +1,16 @@
 //! Grid utilities for tailwind-rs
 //!
-//! This module provides utilities for CSS Grid layout including grid template columns,
-//! grid template rows, grid column span, grid row span, grid auto flow, and gap utilities.
+//! This module provides comprehensive utilities for CSS Grid layout including:
+//! - Basic grid templates (columns, rows)
+//! - Grid spans and placement
+//! - Advanced grid features (areas, masonry, subgrid)
+//! - Auto-sizing and complex grid patterns
+//! - Grid line naming and advanced positioning
 
 pub mod auto_columns;
 pub mod auto_flow;
 pub mod auto_rows;
+pub mod advanced_grid;
 pub mod column_span;
 pub mod gap;
 pub mod placement;
@@ -14,6 +19,11 @@ pub mod template_columns;
 pub mod template_rows;
 
 // Re-export all the main types and traits
+pub use advanced_grid::{
+    AdvancedGridAutoColumns, AdvancedGridPlacement, AdvancedGridTemplate,
+    AdvancedGridUtilities, GridLineName, GridTemplateAreas, MasonryGrid,
+    SubgridConfig
+};
 pub use auto_columns::{GridAutoColumns, GridAutoColumnsUtilities};
 pub use auto_flow::{GridAutoFlow, GridAutoFlowUtilities};
 pub use auto_rows::{GridAutoRows, GridAutoRowsUtilities};

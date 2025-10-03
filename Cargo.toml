@@ -90,6 +90,7 @@ version = "0.15.4"
 edition = "2021"
 
 [dependencies]
+rayon = "1.11.0"
 tailwind-rs-core = { workspace = true }
 
 [profile.dev]

@@ -219,6 +219,7 @@ impl ParserTrie {
                 ParserType::GridAutoColumns(p) => p.parse_class(class),
                 ParserType::GridAutoFlow(p) => p.parse_class(class),
                 ParserType::GridAutoRows(p) => p.parse_class(class),
+                ParserType::AdvancedGrid(p) => p.parse_class(class),
                 ParserType::Gap(p) => p.parse_class(class),
                 ParserType::PlaceContent(p) => p.parse_class(class),
                 ParserType::PlaceItems(p) => p.parse_class(class),

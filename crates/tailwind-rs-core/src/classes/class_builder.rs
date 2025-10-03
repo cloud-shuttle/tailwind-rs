@@ -71,7 +71,7 @@ impl ClassBuilder {
     }
 
     /// Add a custom variant class (Tailwind v4.1.13 @custom-variant support)
-    pub fn custom_variant(mut self, variant: impl Into<String>, class: impl Into<String>) -> Self {
+    pub fn custom_variant(&mut self, variant: impl Into<String>, class: impl Into<String>) -> &mut Self {
         let variant = variant.into();
         let class = class.into();
 
@@ -81,30 +81,33 @@ impl ClassBuilder {
     }
 
     /// Add an ARIA variant class
-    pub fn aria(self, aria_attr: impl Into<String>, class: impl Into<String>) -> Self {
+    pub fn aria(&mut self, aria_attr: impl Into<String>, class: impl Into<String>) -> &mut Self {
         let variant = format!("aria-{}", aria_attr.into());
-        self.custom_variant(variant, class)
+        self.custom_variant(variant, class);
+        self
     }
 
     /// Add a data variant class
     pub fn data(
-        self,
+        &mut self,
         data_attr: impl Into<String>,
         value: Option<String>,
         class: impl Into<String>,
-    ) -> Self {
+    ) -> &mut Self {
         let variant = if let Some(val) = value {
             format!("data-{}={}", data_attr.into(), val)
         } else {
             format!("data-{}", data_attr.into())
         };
-        self.custom_variant(variant, class)
+        self.custom_variant(variant, class);
+        self
     }
 
     /// Add a supports variant class
-    pub fn supports(self, feature: impl Into<String>, class: impl Into<String>) -> Self {
+    pub fn supports(&mut self, feature: impl Into<String>, class: impl Into<String>) -> &mut Self {
         let variant = format!("supports-{}", feature.into());
-        self.custom_variant(variant, class)
+        self.custom_variant(variant, class);
+        self
     }
 
     /// Build the class set

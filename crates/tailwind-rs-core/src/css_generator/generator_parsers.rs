@@ -106,13 +106,25 @@ impl CssGeneratorParsers for super::generator::CssGenerator {
         // Handle gradient stops specially - they generate CSS variables
         if let Some(stop_type) = CssGenerator::extract_gradient_stop_type(&base_class) {
             if let Some(color) = CssGenerator::extract_gradient_color(&base_class, stop_type) {
-                // Build selector with variants using the new complex variant system
-                let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
-                let selector = if variant_selector.is_empty() {
-                    format!(".{}", class)
-                } else {
-                    format!("{}{}", variant_selector, &format!(".{}", class))
-                };
+                // Build selector with variants - use Tailwind's format: .escaped-class-name:modifiers
+                let escaped_class = class.replace(":", "\\:");
+                let mut selector = format!(".{}", escaped_class);
+
+                // Add variant modifiers
+                for variant in &variants {
+                    match variant.as_str() {
+                        "hover" => selector.push_str(":hover"),
+                        "focus" => selector.push_str(":focus"),
+                        "active" => selector.push_str(":active"),
+                        "visited" => selector.push_str(":visited"),
+                        "disabled" => selector.push_str(":disabled"),
+                        "first" => selector.push_str(":first-child"),
+                        "last" => selector.push_str(":last-child"),
+                        "odd" => selector.push_str(":nth-child(odd)"),
+                        "even" => selector.push_str(":nth-child(even)"),
+                        _ => {} // Other variants handled via media queries or class selectors
+                    }
+                }
 
                 let properties = vec![super::types::CssProperty {
                     name: format!("--tw-gradient-{}", stop_type),
@@ -167,13 +179,25 @@ impl CssGeneratorParsers for super::generator::CssGenerator {
         // Try parser trie for all other classes
         let properties = self.class_to_properties(&base_class)?;
 
-        // Build selector with variants using the new complex variant system
-        let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
-        let selector = if variant_selector.is_empty() {
-            format!(".{}", base_class)
-        } else {
-            format!("{}{}", variant_selector, &format!(".{}", base_class))
-        };
+        // Build selector with variants - use Tailwind's format: .escaped-class-name:modifiers
+        let escaped_class = class.replace(":", "\\:");
+        let mut selector = format!(".{}", escaped_class);
+
+        // Add variant modifiers
+        for variant in &variants {
+            match variant.as_str() {
+                "hover" => selector.push_str(":hover"),
+                "focus" => selector.push_str(":focus"),
+                "active" => selector.push_str(":active"),
+                "visited" => selector.push_str(":visited"),
+                "disabled" => selector.push_str(":disabled"),
+                "first" => selector.push_str(":first-child"),
+                "last" => selector.push_str(":last-child"),
+                "odd" => selector.push_str(":nth-child(odd)"),
+                "even" => selector.push_str(":nth-child(even)"),
+                _ => {} // Other variants handled via media queries or class selectors
+            }
+        }
 
         // Determine media query for responsive variants
         let media_query = self.variant_parser.get_variant_media_query(&variants).map(|s| s.to_string());

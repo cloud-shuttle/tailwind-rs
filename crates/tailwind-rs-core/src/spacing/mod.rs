@@ -146,7 +146,7 @@ mod integration_tests {
         // Test that modules work together correctly
         let parser = SpacingParser::new();
         let utilities = parser.utilities();
-        let values = utilities.values.get_value("4");
+        let values = utilities.get_spacing_value("4");
 
         assert_eq!(values, Some("1rem".to_string()));
 

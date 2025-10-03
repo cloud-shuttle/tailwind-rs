@@ -219,7 +219,7 @@ mod tests {
         let parser = TransformParser::new();
 
         assert_eq!(parser.get_priority(), 100);
-        assert_eq!(parser.get_category(), ParserCategory::Transform);
+        assert_eq!(parser.get_category(), ParserCategory::Transforms);
 
         let patterns = parser.get_supported_patterns();
         assert!(!patterns.is_empty());

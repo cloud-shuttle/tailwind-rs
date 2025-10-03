@@ -370,7 +370,7 @@ mod tests {
 
     #[test]
     fn animation_utilities_trait() {
-        let builder = ClassBuilder::new();
+        let mut builder = ClassBuilder::new();
 
         // Test basic animation methods
         let result = builder.animation(Animation::Spin);
@@ -382,7 +382,7 @@ mod tests {
 
     #[test]
     fn animation_with_modifiers() {
-        let builder = ClassBuilder::new();
+        let mut builder = ClassBuilder::new();
 
         let result = builder.animation_with_duration(Animation::Bounce, 2000);
         let result = builder.animation_once(Animation::FadeIn);
@@ -392,7 +392,7 @@ mod tests {
 
     #[test]
     fn hover_and_focus_animations() {
-        let builder = ClassBuilder::new();
+        let mut builder = ClassBuilder::new();
 
         let result = builder.hover_animation(Animation::ZoomIn);
         let result = builder.focus_animation(Animation::Shake);
@@ -446,7 +446,7 @@ mod tests {
 
     #[test]
     fn animation_pause_resume() {
-        let builder = ClassBuilder::new();
+        let mut builder = ClassBuilder::new();
 
         let paused = builder.animation_pause();
         let resumed = builder.animation_resume();

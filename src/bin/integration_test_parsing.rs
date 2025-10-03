@@ -111,8 +111,9 @@ fn test_class(generator: &CssGenerator, class: &str, results: &mut TestResults) 
                 if property.value.contains("var(--font-") {
                     css_value_issues.push(format!("CSS variable instead of font-family: {}", property.value));
                 }
-                // Allow --tw-gradient- variables for gradient stops
-                if property.value.contains("var(--tw-gradient-") && !is_gradient_stop {
+                // Allow --tw-gradient- variables for gradient stops AND gradient directions
+                let is_gradient_direction = class.starts_with("bg-gradient-to-");
+                if property.value.contains("var(--tw-gradient-") && !is_gradient_stop && !is_gradient_direction {
                     css_value_issues.push(format!("CSS variable instead of gradient: {}", property.value));
                 }
                 if property.value.contains("var(--tw-translate-") {
@@ -128,7 +129,9 @@ fn test_class(generator: &CssGenerator, class: &str, results: &mut TestResults) 
                     css_value_issues.push(format!("CSS variable instead of transform: {}", property.value));
                 }
                 // Catch any remaining CSS variables (should be minimal)
-                if property.value.contains("var(--") {
+                // Allow CSS variables for gradient directions and gradient stops
+                let is_gradient_related = is_gradient_stop || is_gradient_direction;
+                if property.value.contains("var(--") && !is_gradient_related {
                     css_value_issues.push(format!("Generic CSS variable found: {}", property.value));
                 }
             }

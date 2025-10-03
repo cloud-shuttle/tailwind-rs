@@ -17,19 +17,50 @@ impl GradientParser {
 
     /// Parse gradient direction classes - generate CSS using gradient variables
     fn parse_gradient_direction_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        let direction = match class {
-            "bg-gradient-to-r" | "bg-linear-to-r" => "to right",
-            "bg-gradient-to-l" | "bg-linear-to-l" => "to left",
-            "bg-gradient-to-t" | "bg-linear-to-t" => "to top",
-            "bg-gradient-to-b" | "bg-linear-to-b" => "to bottom",
-            "bg-gradient-to-tr" | "bg-linear-to-tr" => "to top right",
-            "bg-gradient-to-tl" | "bg-linear-to-tl" => "to top left",
-            "bg-gradient-to-br" | "bg-linear-to-br" => "to bottom right",
-            "bg-gradient-to-bl" | "bg-linear-to-bl" => "to bottom left",
-            _ => return None,
+        // Determine gradient type and parameters
+        let (gradient_type, params) = if class.contains("radial") {
+            ("radial", match class {
+                "bg-gradient-radial" | "bg-radial" => "ellipse at center",
+                "bg-radial-at-t" => "ellipse at top",
+                "bg-radial-at-b" => "ellipse at bottom",
+                "bg-radial-at-l" => "ellipse at left",
+                "bg-radial-at-r" => "ellipse at right",
+                "bg-radial-at-tl" => "ellipse at top left",
+                "bg-radial-at-tr" => "ellipse at top right",
+                "bg-radial-at-bl" => "ellipse at bottom left",
+                "bg-radial-at-br" => "ellipse at bottom right",
+                _ => "circle at center",
+            })
+        } else if class.contains("conic") {
+            ("conic", match class {
+                "bg-gradient-conic" | "bg-conic" => "from 0deg at center",
+                "bg-conic-at-t" => "from 0deg at top",
+                "bg-conic-at-b" => "from 0deg at bottom",
+                "bg-conic-at-l" => "from 0deg at left",
+                "bg-conic-at-r" => "from 0deg at right",
+                _ => "from 0deg at center",
+            })
+        } else {
+            ("linear", match class {
+                "bg-gradient-to-r" | "bg-linear-to-r" => "to right",
+                "bg-gradient-to-l" | "bg-linear-to-l" => "to left",
+                "bg-gradient-to-t" | "bg-linear-to-t" => "to top",
+                "bg-gradient-to-b" | "bg-linear-to-b" => "to bottom",
+                "bg-gradient-to-tr" | "bg-linear-to-tr" => "to top right",
+                "bg-gradient-to-tl" | "bg-linear-to-tl" => "to top left",
+                "bg-gradient-to-br" | "bg-linear-to-br" => "to bottom right",
+                "bg-gradient-to-bl" | "bg-linear-to-bl" => "to bottom left",
+                _ => return None,
+            })
         };
 
         // Set up CSS variables for gradient stops and generate background-image using them
+        let gradient_function = match gradient_type {
+            "radial" => format!("radial-gradient({}, var(--tw-gradient-stops))", params),
+            "conic" => format!("conic-gradient({}, var(--tw-gradient-stops))", params),
+            _ => format!("linear-gradient({}, var(--tw-gradient-stops))", params),
+        };
+
         Some(vec![
             CssProperty {
                 name: "--tw-gradient-stops".to_string(),
@@ -38,7 +69,7 @@ impl GradientParser {
             },
             CssProperty {
                 name: "background-image".to_string(),
-                value: format!("linear-gradient({}, var(--tw-gradient-stops))", direction),
+                value: gradient_function,
                 important: false,
             },
         ])

@@ -2,11 +2,12 @@
 //!
 //! This module contains the constructor and initialization methods for CssGenerator.
 
+use super::element_context::ElementContext;
 use super::parsers::{
     AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
     AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
-    BackdropFilterUtilitiesParser, BackgroundPropertiesParser,
+    BackdropFilterUtilitiesParser, BackgroundPropertiesParser, FieldSizingParser,
     BasicTransformsParser, BorderRadiusParser, BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
     OutlineParser,
     DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
@@ -21,6 +22,7 @@ use super::parsers::{
     ScaleParser, ShadowParser, SizingParser, SpacingParser, SvgParser, TableParser,
     TransitionParser, TransitionPropertiesParser, TypographyParser, VisibilityParser, ZIndexParser,
 };
+use crate::background::color::BackgroundColorParser;
 use super::types::CssGenerationConfig;
 use super::variants::VariantParser;
 use super::trie::{ParserTrie, ParserType};
@@ -53,7 +55,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
             breakpoints: HashMap::new(),
             custom_properties: HashMap::new(),
             config: CssGenerationConfig::default(),
-            gradient_context: super::core::GradientContext::default(),
+            element_context: ElementContext::default(),
             spacing_parser: SpacingParser::new(),
             advanced_spacing_parser: AdvancedSpacingParser::new(),
             color_parser: ColorParser::new(),
@@ -85,10 +87,12 @@ impl CssGeneratorBuilder for super::CssGenerator {
             scale_parser: ScaleParser::new(),
             arbitrary_parser: ArbitraryParser::new(),
             data_attribute_parser: DataAttributeParser::new(),
+            background_color_parser: BackgroundColorParser::new(),
             background_properties_parser: BackgroundPropertiesParser::new(),
             transition_properties_parser: TransitionPropertiesParser::new(),
             fractional_transforms_parser: FractionalTransformsParser::new(),
             aspect_ratio_parser: AspectRatioParser::new(),
+            field_sizing_parser: FieldSizingParser::new(),
             columns_parser: ColumnsParser::new(),
             break_control_parser: BreakControlParser::new(),
             box_utilities_parser: BoxUtilitiesParser::new(),
@@ -147,7 +151,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
             breakpoints: HashMap::new(),
             custom_properties: HashMap::new(),
             config,
-            gradient_context: super::core::GradientContext::default(),
+            element_context: ElementContext::default(),
             spacing_parser: SpacingParser::new(),
             advanced_spacing_parser: AdvancedSpacingParser::new(),
             color_parser: ColorParser::new(),
@@ -179,10 +183,12 @@ impl CssGeneratorBuilder for super::CssGenerator {
             scale_parser: ScaleParser::new(),
             arbitrary_parser: ArbitraryParser::new(),
             data_attribute_parser: DataAttributeParser::new(),
+            background_color_parser: BackgroundColorParser::new(),
             background_properties_parser: BackgroundPropertiesParser::new(),
             transition_properties_parser: TransitionPropertiesParser::new(),
             fractional_transforms_parser: FractionalTransformsParser::new(),
             aspect_ratio_parser: AspectRatioParser::new(),
+            field_sizing_parser: FieldSizingParser::new(),
             columns_parser: ColumnsParser::new(),
             break_control_parser: BreakControlParser::new(),
             box_utilities_parser: BoxUtilitiesParser::new(),
@@ -294,12 +300,13 @@ impl CssGeneratorBuilder for super::CssGenerator {
         // Gradient parser
         self.parser_trie.insert("bg-gradient-", ParserType::Gradient(self.gradient_parser.clone()));
         self.parser_trie.insert("bg-conic", ParserType::Gradient(self.gradient_parser.clone()));
-        self.parser_trie.insert("bg-radial", ParserType::Gradient(self.gradient_parser.clone()));
+        self.parser_trie.insert("bg-radial-at-", ParserType::Gradient(self.gradient_parser.clone()));
         self.parser_trie.insert("from-", ParserType::Gradient(self.gradient_parser.clone()));
         self.parser_trie.insert("to-", ParserType::Gradient(self.gradient_parser.clone()));
         self.parser_trie.insert("via-", ParserType::Gradient(self.gradient_parser.clone()));
 
         // Effects parser
+        self.parser_trie.insert("shadow-", ParserType::Effects(self.effects_parser.clone()));
         self.parser_trie.insert("opacity-", ParserType::Effects(self.effects_parser.clone()));
         self.parser_trie.insert("backdrop-blur-", ParserType::Effects(self.effects_parser.clone()));
         self.parser_trie.insert("backdrop-opacity-", ParserType::Effects(self.effects_parser.clone()));
@@ -315,6 +322,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
         self.parser_trie.insert("border-", ParserType::Color(self.color_parser.clone()));
 
         // Background parser
+        self.parser_trie.insert("bg-", ParserType::BackgroundColor(self.background_color_parser.clone()));
 
         // Background properties parser
         self.parser_trie.insert("bg-size-", ParserType::BackgroundProperties(self.background_properties_parser.clone()));
@@ -387,8 +395,8 @@ impl CssGeneratorBuilder for super::CssGenerator {
         // Border radius parser
         self.parser_trie.insert("rounded", ParserType::BorderRadius(self.border_radius_parser.clone()));
 
-        // Effects parser (registered after Shadow parser to handle shadow colors)
-        self.parser_trie.insert("shadow-", ParserType::Effects(self.effects_parser.clone()));
+        // Effects parser for backdrop filters and other effects
+        // Note: Shadow colors are handled by the Shadow parser above
 
         // Transition parser
         self.parser_trie.insert("transition", ParserType::Transition(self.transition_parser.clone()));
@@ -446,6 +454,9 @@ impl CssGeneratorBuilder for super::CssGenerator {
 
         // Aspect ratio parser
         self.parser_trie.insert("aspect-", ParserType::AspectRatio(self.aspect_ratio_parser.clone()));
+
+        // Field sizing parser
+        self.parser_trie.insert("field-sizing-", ParserType::FieldSizing(self.field_sizing_parser.clone()));
 
         // Columns parser
         self.parser_trie.insert("columns-", ParserType::Columns(self.columns_parser.clone()));

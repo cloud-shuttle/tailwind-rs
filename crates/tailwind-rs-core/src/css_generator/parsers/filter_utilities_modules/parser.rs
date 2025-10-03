@@ -40,7 +40,7 @@ impl FilterUtilitiesParser {
     /// Parse blur classes
     pub fn parse_blur_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(blur_size) = FilterClassParser::parse_blur_size(class) {
-            let value = format!("blur({})", blur_size.css_variable());
+            let value = format!("blur({})", blur_size.css_value());
             return Some(vec![FilterCssGenerator::generate_filter_property(&value)]);
         }
 

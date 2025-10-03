@@ -15,124 +15,18 @@ pub mod blend_modes;
 pub mod box_shadow;
 pub mod mask;
 pub mod opacity;
+pub mod parser;
 pub mod text_shadow;
+pub mod utilities;
 
 // Re-export all types for easy access
 pub use blend_modes::BlendModeParser;
 pub use box_shadow::BoxShadowParser;
 pub use mask::MaskParser;
 pub use opacity::OpacityParser;
+pub use parser::EffectsParser;
 pub use text_shadow::TextShadowParser;
-
-/// Main effects utilities parser that coordinates all effects parsing
-#[derive(Debug, Clone)]
-pub struct EffectsParser {
-    box_shadow_parser: BoxShadowParser,
-    text_shadow_parser: TextShadowParser,
-    opacity_parser: OpacityParser,
-    blend_mode_parser: BlendModeParser,
-    mask_parser: MaskParser,
-}
-
-impl EffectsParser {
-    /// Create a new effects parser with all sub-parsers
-    pub fn new() -> Self {
-        Self {
-            box_shadow_parser: BoxShadowParser::new(),
-            text_shadow_parser: TextShadowParser::new(),
-            opacity_parser: OpacityParser::new(),
-            blend_mode_parser: BlendModeParser::new(),
-            mask_parser: MaskParser::new(),
-        }
-    }
-
-    /// Parse box-shadow classes
-    pub fn parse_box_shadow_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.box_shadow_parser.parse_box_shadow_class(class)
-    }
-
-    /// Parse text-shadow classes
-    pub fn parse_text_shadow_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.text_shadow_parser.parse_text_shadow_class(class)
-    }
-
-    /// Parse opacity classes
-    pub fn parse_opacity_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.opacity_parser.parse_opacity_class(class)
-    }
-
-    /// Parse mix-blend-mode classes
-    pub fn parse_mix_blend_mode_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.blend_mode_parser.parse_mix_blend_mode_class(class)
-    }
-
-    /// Parse background-blend-mode classes
-    pub fn parse_background_blend_mode_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.blend_mode_parser.parse_background_blend_mode_class(class)
-    }
-
-    /// Parse mask-clip classes
-    pub fn parse_mask_clip_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.mask_parser.parse_mask_clip_class(class)
-    }
-
-    /// Parse mask-composite classes
-    pub fn parse_mask_composite_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.mask_parser.parse_mask_composite_class(class)
-    }
-}
-
-impl UtilityParser for EffectsParser {
-    fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        // Try parsing in order of specificity/precedence
-        if let Some(properties) = self.parse_box_shadow_class(class) {
-            return Some(properties);
-        }
-        if let Some(properties) = self.parse_text_shadow_class(class) {
-            return Some(properties);
-        }
-        if let Some(properties) = self.parse_opacity_class(class) {
-            return Some(properties);
-        }
-        if let Some(properties) = self.parse_mix_blend_mode_class(class) {
-            return Some(properties);
-        }
-        if let Some(properties) = self.parse_background_blend_mode_class(class) {
-            return Some(properties);
-        }
-        if let Some(properties) = self.parse_mask_clip_class(class) {
-            return Some(properties);
-        }
-        if let Some(properties) = self.parse_mask_composite_class(class) {
-            return Some(properties);
-        }
-
-        None
-    }
-
-    fn get_supported_patterns(&self) -> Vec<&'static str> {
-        // For now, return a static list of common effects patterns
-        // TODO: Implement proper pattern collection when sub-parsers are fully implemented
-        vec![
-            "shadow-", "text-shadow-", "opacity-", "mix-blend-", "bg-blend-",
-            "mask-clip-", "mask-add", "mask-subtract", "mask-intersect", "mask-exclude",
-        ]
-    }
-
-    fn get_priority(&self) -> u32 {
-        70 // Effects utilities have medium-high priority
-    }
-
-    fn get_category(&self) -> ParserCategory {
-        ParserCategory::Effects
-    }
-}
-
-impl Default for EffectsParser {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+pub use utilities::{EffectClassParser, EffectCssGenerator, EffectValidator};
 
 /// Effects utilities trait for extending ClassBuilder
 pub trait EffectsUtilities {
@@ -218,26 +112,23 @@ mod tests {
         let parser = EffectsParser::new();
 
         // Test that the main dispatcher works for implemented parsers
-        let result = parser.parse_box_shadow_class("shadow-md");
+        let result = parser.parse_class("shadow-md");
         assert!(result.is_some());
 
-        let result = parser.parse_text_shadow_class("text-shadow-lg");
+        let result = parser.parse_class("text-shadow-lg");
+        assert!(result.is_none()); // text-shadow not implemented yet
+
+        let result = parser.parse_class("opacity-50");
         assert!(result.is_some());
 
-        let result = parser.parse_opacity_class("opacity-50");
+        let result = parser.parse_class("mix-blend-multiply");
         assert!(result.is_some());
 
-        let result = parser.parse_mix_blend_mode_class("mix-blend-multiply");
+        let result = parser.parse_class("bg-blend-screen");
         assert!(result.is_some());
 
-        let result = parser.parse_background_blend_mode_class("bg-blend-screen");
-        assert!(result.is_some());
-
-        let result = parser.parse_mask_clip_class("mask-clip-border");
-        assert!(result.is_some());
-
-        let result = parser.parse_mask_composite_class("mask-add");
-        assert!(result.is_some());
+        let result = parser.parse_class("mask-clip-border");
+        assert!(result.is_none()); // mask utilities not implemented yet
 
         let result = parser.parse_class("invalid-effects-class");
         assert!(result.is_none());

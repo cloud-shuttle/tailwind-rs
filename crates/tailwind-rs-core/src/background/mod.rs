@@ -4,7 +4,7 @@
 //! CSS properties including colors, gradients, positioning, and more.
 
 use crate::css_generator::types::CssProperty;
-use super::super::css_generator::parsers::{ParserCategory, UtilityParser};
+use crate::css_generator::parsers::{ParserCategory, UtilityParser};
 
 pub mod attachment;
 pub mod clip;
@@ -148,7 +148,7 @@ impl UtilityParser for BackgroundParser {
 
         patterns.extend(self.attachment_parser.supported_patterns());
         patterns.extend(self.clip_parser.supported_patterns());
-        patterns.extend(self.color_parser.supported_patterns().iter().map(|s| s.as_str()));
+        patterns.extend(self.color_parser.supported_patterns());
         patterns.extend(self.gradient_parser.supported_patterns());
         patterns.extend(self.image_parser.supported_patterns());
         patterns.extend(self.origin_parser.supported_patterns());

@@ -218,6 +218,21 @@ impl ContractRegistry {
         self.metadata.get(name)
     }
 
+    /// Generic contract getter that checks if a contract exists
+    pub fn get_contract(&self, name: &str) -> Option<bool> {
+        if self.class_builder_contracts.contains_key(name) {
+            Some(true)
+        } else if self.css_generator_contracts.contains_key(name) {
+            Some(true)
+        } else if self.theme_contracts.contains_key(name) {
+            Some(true)
+        } else if self.validation_contracts.contains_key(name) {
+            Some(true)
+        } else {
+            None
+        }
+    }
+
     pub fn list_contracts(&self) -> Vec<String> {
         let mut contracts = Vec::new();
         contracts.extend(self.class_builder_contracts.keys().cloned());

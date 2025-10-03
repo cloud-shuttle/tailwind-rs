@@ -6,7 +6,7 @@ use super::parsers::{
     AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
     AlignSelfParser, AnimationParser, ArbitraryParser, AspectRatioParser,
-    BackdropFilterUtilitiesParser, BackgroundPropertiesParser,
+    BackdropFilterUtilitiesParser, BackgroundColorParser, BackgroundPropertiesParser, FieldSizingParser,
     BorderRadiusParser, BorderUtilitiesParser, BoxUtilitiesParser, BreakControlParser, ColorParser, ColumnsParser,
     OutlineParser,
     DataAttributeParser, DivideParser, EffectsParser, EffectsUtilitiesParser,
@@ -24,7 +24,7 @@ use super::parsers::{
 use super::types::{CssGenerationConfig, CssProperty, CssRule};
 use super::variants::VariantParser;
 use super::trie::{ParserTrie, ParserType};
-use super::core::GradientContext;
+use super::element_context::ElementContext;
 use crate::transforms::TransformParser;
 use crate::error::Result;
 use crate::responsive::Breakpoint;
@@ -41,8 +41,8 @@ pub struct CssGenerator {
     pub custom_properties: HashMap<String, String>,
     /// Generation configuration
     pub config: CssGenerationConfig,
-    /// Context for gradient state (from-*, via-*, to-* classes)
-    pub gradient_context: GradientContext,
+    /// Context for element state (gradients, shadows, transforms, etc.)
+    pub element_context: ElementContext,
     /// Spacing parser
     pub spacing_parser: SpacingParser,
     /// Advanced spacing parser
@@ -63,6 +63,8 @@ pub struct CssGenerator {
     pub effects_parser: EffectsParser,
     /// Sizing parser
     pub sizing_parser: SizingParser,
+    /// Field sizing parser
+    pub field_sizing_parser: FieldSizingParser,
     /// Advanced border parser
     pub advanced_border_parser: AdvancedBorderParser,
     /// Outline parser
@@ -105,6 +107,8 @@ pub struct CssGenerator {
     pub arbitrary_parser: ArbitraryParser,
     /// Data attributes parser
     pub data_attribute_parser: DataAttributeParser,
+    /// Background color parser
+    pub background_color_parser: BackgroundColorParser,
     /// Background properties parser
     pub background_properties_parser: BackgroundPropertiesParser,
     /// Transition properties parser
@@ -332,12 +336,25 @@ impl CssGenerator {
         // Handle gradient stops specially (with or without variants)
         if let Some(stop_type) = Self::extract_gradient_stop_type(&base_class) {
             if let Some(color) = Self::extract_gradient_color(&base_class, stop_type) {
-                let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
-                let selector = if variant_selector.is_empty() {
-                    format!(".{}", class)
-                } else {
-                    format!("{}{}", variant_selector, &format!(".{}", class))
-                };
+                // Build selector with variants - use Tailwind's format: .escaped-class-name:modifiers
+                let escaped_class = class.replace(":", "\\:");
+                let mut selector = format!(".{}", escaped_class);
+
+                // Add variant modifiers
+                for variant in &variants {
+                    match variant.as_str() {
+                        "hover" => selector.push_str(":hover"),
+                        "focus" => selector.push_str(":focus"),
+                        "active" => selector.push_str(":active"),
+                        "visited" => selector.push_str(":visited"),
+                        "disabled" => selector.push_str(":disabled"),
+                        "first" => selector.push_str(":first-child"),
+                        "last" => selector.push_str(":last-child"),
+                        "odd" => selector.push_str(":nth-child(odd)"),
+                        "even" => selector.push_str(":nth-child(even)"),
+                        _ => {} // Other variants handled via media queries or class selectors
+                    }
+                }
 
                 let properties = vec![super::types::CssProperty {
                     name: format!("--tw-gradient-{}", stop_type),
@@ -356,13 +373,25 @@ impl CssGenerator {
 
         let properties = self.class_to_properties(&base_class)?;
 
-        // Build selector with variants using the new complex variant system
-        let variant_selector = self.variant_parser.combine_variant_selectors(&variants);
-        let selector = if variant_selector.is_empty() {
-            format!(".{}", base_class)
-        } else {
-            format!("{}{}", variant_selector, &format!(".{}", base_class))
-        };
+        // Build selector with variants - use Tailwind's format: .escaped-class-name:modifiers
+        let escaped_class = class.replace(":", "\\:");
+        let mut selector = format!(".{}", escaped_class);
+
+        // Add variant modifiers
+        for variant in &variants {
+            match variant.as_str() {
+                "hover" => selector.push_str(":hover"),
+                "focus" => selector.push_str(":focus"),
+                "active" => selector.push_str(":active"),
+                "visited" => selector.push_str(":visited"),
+                "disabled" => selector.push_str(":disabled"),
+                "first" => selector.push_str(":first-child"),
+                "last" => selector.push_str(":last-child"),
+                "odd" => selector.push_str(":nth-child(odd)"),
+                "even" => selector.push_str(":nth-child(even)"),
+                _ => {} // Other variants handled via media queries or class selectors
+            }
+        }
 
         // Determine media query for responsive and device variants
         let media_query = variants.iter().find_map(|variant| {
@@ -398,27 +427,27 @@ impl CssGenerator {
     /// Add a gradient stop to the current gradient context
     pub fn add_gradient_stop(&mut self, stop_type: &str, color: String) {
         match stop_type {
-            "from" => self.gradient_context.from_color = Some(color),
-            "via" => self.gradient_context.via_color = Some(color),
-            "to" => self.gradient_context.to_color = Some(color),
+            "from" => self.element_context.gradients.from_color = Some(color),
+            "via" => self.element_context.gradients.via_color = Some(color),
+            "to" => self.element_context.gradients.to_color = Some(color),
             _ => {}
         }
     }
 
     /// Generate gradient CSS using current context and direction
     pub fn generate_gradient_css(&mut self, direction: &str) -> Option<String> {
-        self.gradient_context.direction = Some(direction.to_string());
+        self.element_context.gradients.direction = Some(direction.to_string());
 
         let mut colors = Vec::new();
 
         // Add colors in order: from, via, to
-        if let Some(from) = &self.gradient_context.from_color {
+        if let Some(from) = &self.element_context.gradients.from_color {
             colors.push(from.clone());
         }
-        if let Some(via) = &self.gradient_context.via_color {
+        if let Some(via) = &self.element_context.gradients.via_color {
             colors.push(via.clone());
         }
-        if let Some(to) = &self.gradient_context.to_color {
+        if let Some(to) = &self.element_context.gradients.to_color {
             colors.push(to.clone());
         }
 
@@ -431,14 +460,128 @@ impl CssGenerator {
         let gradient_css = format!("linear-gradient({}, {})", direction, colors.join(", "));
 
         // Reset context for next gradient
-        self.gradient_context = super::core::GradientContext::default();
+        self.element_context = ElementContext::default();
 
         Some(gradient_css)
     }
 
-    /// Clear gradient context (useful for resetting between elements)
-    pub fn clear_gradient_context(&mut self) {
-        self.gradient_context = super::core::GradientContext::default();
+    /// Clear element context (useful for resetting between elements)
+    pub fn clear_element_context(&mut self) {
+        self.element_context = ElementContext::default();
+    }
+
+    /// Process element classes using element-based processing (new architecture)
+    /// This method handles complex class combinations including gradients, shadows, transforms, filters, animations, and arbitrary values
+    pub fn process_element_classes(&mut self, classes: &[&str]) -> String {
+        // Reset element context for new element
+        self.element_context = ElementContext::default();
+
+        // First pass: collect stateful information from all classes
+        for class in classes {
+            self.element_context.update_from_class(class);
+        }
+
+        // Generate variant-aware CSS rules for all stateful classes
+        let mut css_output = String::new();
+
+        // Generate CSS for gradients
+        if self.element_context.gradients.has_gradient() {
+            let gradient_rules = self.element_context.generate_variant_css("bg-gradient-to-r");
+            for rule in gradient_rules {
+                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+            }
+        }
+
+        // Generate CSS for shadows
+        if self.element_context.shadows.has_shadow() {
+            let shadow_rules = self.element_context.generate_variant_css("shadow-lg");
+            for rule in shadow_rules {
+                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+            }
+        }
+
+        // Generate CSS for transforms
+        if self.element_context.transforms.has_transform() {
+            let transform_rules = self.element_context.generate_variant_css("scale-110");
+            for rule in transform_rules {
+                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+            }
+        }
+
+        // Generate CSS for filters
+        let filter_properties = self.element_context.filters.to_css_properties();
+        if !filter_properties.is_empty() {
+            let filter_rules = self.element_context.generate_variant_css("blur-md");
+            for rule in filter_rules {
+                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+            }
+        }
+
+        // Generate CSS for animations
+        let animation_properties = self.element_context.animations.to_css_properties();
+        if !animation_properties.is_empty() {
+            let animation_rules = self.element_context.generate_variant_css("animate-spin");
+            for rule in animation_rules {
+                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+            }
+        }
+
+        // Generate CSS for arbitrary values
+        let arbitrary_properties = self.element_context.arbitrary_values.to_css_properties();
+        if !arbitrary_properties.is_empty() {
+            // For arbitrary values, we need to create a representative class
+            let arbitrary_rules = self.element_context.generate_variant_css("w-[100px]");
+            for rule in arbitrary_rules {
+                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+            }
+        }
+
+        // Second pass: handle non-stateful classes using existing logic
+        let mut non_stateful_css = String::new();
+        for class in classes {
+            // Skip classes that were handled by element context
+            let base_class = if class.contains(':') {
+                class.split(':').last().unwrap_or(class)
+            } else {
+                class
+            };
+
+            let is_stateful = base_class.starts_with("bg-gradient-") ||
+                             base_class.starts_with("from-") ||
+                             base_class.starts_with("via-") ||
+                             base_class.starts_with("to-") ||
+                             base_class.starts_with("shadow-") ||
+                             base_class.starts_with("scale-") ||
+                             base_class.starts_with("rotate-") ||
+                             base_class.starts_with("translate-") ||
+                             base_class.starts_with("skew-") ||
+                             base_class.starts_with("blur-") ||
+                             base_class.starts_with("brightness-") ||
+                             base_class.starts_with("contrast-") ||
+                             base_class.starts_with("grayscale") ||
+                             base_class.starts_with("hue-rotate-") ||
+                             base_class.starts_with("invert") ||
+                             base_class.starts_with("saturate-") ||
+                             base_class.starts_with("sepia") ||
+                             base_class.starts_with("drop-shadow") ||
+                             base_class.starts_with("animate-") ||
+                             base_class.starts_with("duration-") ||
+                             base_class.starts_with("delay-") ||
+                             base_class.starts_with("ease-") ||
+                             base_class.contains('[');
+
+            if !is_stateful {
+                // Use existing class-to-css logic for non-stateful classes
+                if let Ok(rule) = self.class_to_css_rule(class) {
+                    non_stateful_css.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+                    non_stateful_css.push('\n');
+                }
+            }
+        }
+
+        // Combine element-based CSS with traditional CSS
+        css_output.push_str(&non_stateful_css);
+        css_output.trim_end().to_string()
     }
 
 }

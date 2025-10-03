@@ -6,6 +6,7 @@
 //! - AnimationReference for built-in or custom animations
 
 use serde::{Deserialize, Serialize};
+use crate::utilities::advanced_animation_utilities::TimingFunction;
 
 /// Animation composition
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -225,10 +226,10 @@ mod tests {
     fn animation_properties() {
         let props = AnimationProperties::new()
             .with_duration(2000)
-            .with_timing_function(super::timing::TimingFunction::Linear);
+            .with_timing_function(TimingFunction::Linear);
 
         assert_eq!(props.duration, Some(2000));
-        assert_eq!(props.timing_function, Some(super::timing::TimingFunction::Linear));
+        assert_eq!(props.timing_function, Some(TimingFunction::Linear));
     }
 
     #[test]

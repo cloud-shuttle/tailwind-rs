@@ -8,23 +8,11 @@ use crate::error::{Result, TailwindError};
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 use super::generator_parsers::CssGeneratorParsers;
+use super::element_context::ElementContext;
 
 // CssRule is now defined in types.rs
 
 // CssProperty is now defined in types.rs
-
-/// Context for collecting gradient stops before generating final gradient CSS
-#[derive(Debug, Clone, Default)]
-pub struct GradientContext {
-    /// Color for gradient start (from-*)
-    pub from_color: Option<String>,
-    /// Color for gradient middle (via-*)
-    pub via_color: Option<String>,
-    /// Color for gradient end (to-*)
-    pub to_color: Option<String>,
-    /// Current gradient direction
-    pub direction: Option<String>,
-}
 
 /// CSS generator that converts Tailwind classes to CSS rules
 #[derive(Debug, Clone)]
@@ -35,8 +23,8 @@ pub struct CssGenerator {
     breakpoints: HashMap<Breakpoint, String>,
     /// Custom CSS properties
     custom_properties: HashMap<String, String>,
-    /// Context for gradient state (from-*, via-*, to-* classes)
-    gradient_context: GradientContext,
+    /// Context for element state (gradients, shadows, transforms, etc.)
+    element_context: ElementContext,
 }
 
 impl Default for CssGenerator {
@@ -52,7 +40,7 @@ impl CssGenerator {
             rules: HashMap::new(),
             breakpoints: HashMap::new(),
             custom_properties: HashMap::new(),
-            gradient_context: GradientContext::default(),
+            element_context: ElementContext::default(),
         };
 
         // Initialize default breakpoints
@@ -103,27 +91,27 @@ impl CssGenerator {
     /// Add a gradient stop to the current gradient context
     pub fn add_gradient_stop(&mut self, stop_type: &str, color: String) {
         match stop_type {
-            "from" => self.gradient_context.from_color = Some(color),
-            "via" => self.gradient_context.via_color = Some(color),
-            "to" => self.gradient_context.to_color = Some(color),
+            "from" => self.element_context.gradients.from_color = Some(color),
+            "via" => self.element_context.gradients.via_color = Some(color),
+            "to" => self.element_context.gradients.to_color = Some(color),
             _ => {}
         }
     }
 
     /// Generate gradient CSS using current context and direction
     pub fn generate_gradient_css(&mut self, direction: &str) -> Option<String> {
-        self.gradient_context.direction = Some(direction.to_string());
+        self.element_context.gradients.direction = Some(direction.to_string());
 
         let mut colors = Vec::new();
 
         // Add colors in order: from, via, to
-        if let Some(from) = &self.gradient_context.from_color {
+        if let Some(from) = &self.element_context.gradients.from_color {
             colors.push(from.clone());
         }
-        if let Some(via) = &self.gradient_context.via_color {
+        if let Some(via) = &self.element_context.gradients.via_color {
             colors.push(via.clone());
         }
-        if let Some(to) = &self.gradient_context.to_color {
+        if let Some(to) = &self.element_context.gradients.to_color {
             colors.push(to.clone());
         }
 
@@ -136,14 +124,14 @@ impl CssGenerator {
         let gradient_css = format!("linear-gradient({}, {})", direction, colors.join(", "));
 
         // Reset context for next gradient
-        self.gradient_context = GradientContext::default();
+        self.element_context = ElementContext::default();
 
         Some(gradient_css)
     }
 
     /// Clear gradient context (useful for resetting between elements)
     pub fn clear_gradient_context(&mut self) {
-        self.gradient_context = GradientContext::default();
+        self.element_context = ElementContext::default();
     }
 
     /// Generate CSS from all added classes
@@ -219,9 +207,135 @@ impl CssGenerator {
         self.rules.len()
     }
 
+    /// PRIMARY API: Process multiple classes for an element (handles stateful combinations)
+    ///
+    /// This is the new architecture that matches how real Tailwind CSS works.
+    /// Classes are processed in context, allowing gradients and other stateful utilities
+    /// to work correctly together.
+    pub fn process_element_classes(&mut self, classes: &[&str]) -> String {
+        // Reset element context for new element
+        self.element_context = ElementContext::default();
+
+        // First pass: collect stateful information from all classes
+        for class in classes {
+            self.element_context.update_from_class(class);
+        }
+
+        // Generate variant-aware CSS rules for all stateful classes
+        let mut css_output = String::new();
+
+        // Collect all stateful classes (gradients, shadows, transforms)
+        let stateful_classes: Vec<&str> = classes.iter()
+            .filter(|class| {
+                class.starts_with("bg-gradient-") || class.starts_with("bg-linear-") ||
+                class.starts_with("bg-conic") || class.starts_with("bg-radial") ||
+                class.starts_with("from-") || class.starts_with("via-") || class.starts_with("to-") ||
+                class.starts_with("shadow-") || class.starts_with("scale-") ||
+                class.starts_with("rotate-") || class.starts_with("translate-") || class.starts_with("skew-")
+            })
+            .copied()
+            .collect();
+
+        // Generate variant-aware CSS for each stateful class
+        for class in stateful_classes {
+            let rules = self.element_context.generate_variant_css(class);
+            for rule in rules {
+                css_output.push_str(&self.rule_to_css(&rule));
+                css_output.push('\n');
+            }
+        }
+
+        // Handle non-stateful classes with existing logic
+        for class in classes {
+            if !class.starts_with("bg-gradient-") && !class.starts_with("bg-linear-") &&
+               !class.starts_with("bg-conic") && !class.starts_with("bg-radial") &&
+               !class.starts_with("from-") && !class.starts_with("via-") && !class.starts_with("to-") &&
+               !class.starts_with("shadow-") && !class.starts_with("scale-") &&
+               !class.starts_with("rotate-") && !class.starts_with("translate-") && !class.starts_with("skew-") {
+
+                if let Some(css) = self.generate_class_css_with_context(class) {
+                    css_output.push_str(&css);
+                    css_output.push('\n');
+                }
+            }
+        }
+
+        css_output.trim().to_string()
+    }
+
+    /// Generate CSS for a class using full element context
+    fn generate_class_css_with_context(&mut self, class: &str) -> Option<String> {
+        // Handle stateful classes that require element context
+        if class.starts_with("bg-gradient-") || class.starts_with("bg-linear-") ||
+           class.starts_with("bg-conic") || class.starts_with("bg-radial") ||
+           class.starts_with("from-") || class.starts_with("via-") || class.starts_with("to-") ||
+           class.starts_with("shadow-") || class.starts_with("scale-") ||
+           class.starts_with("rotate-") || class.starts_with("translate-") || class.starts_with("skew-") {
+
+            // Generate CSS if we have any stateful context (gradients, shadows, transforms)
+            let has_context = self.element_context.gradients.has_gradient() ||
+                            self.element_context.shadows.has_shadow() ||
+                            self.element_context.transforms.has_transform();
+
+            if has_context {
+                let properties = self.element_context.generate_css();
+                return Some(self.format_css_properties(class, &properties));
+            }
+            return None;
+        }
+
+        // For non-stateful classes, use existing logic
+        match self.class_to_css_rule(class) {
+            Ok(rule) => Some(self.rule_to_css(&rule)),
+            Err(_) => None,
+        }
+    }
+
+    /// Format CSS properties into CSS rule string
+    fn format_css_properties(&self, class: &str, properties: &[CssProperty]) -> String {
+        if properties.is_empty() {
+            return String::new();
+        }
+
+        let selector = format!(".{}", class.replace(":", "\\:"));
+        let mut css = format!("{} {{\n", selector);
+
+        for property in properties {
+            css.push_str(&format!("  {}: {};\n", property.name, property.value));
+        }
+
+        css.push('}');
+        css
+    }
+
+    /// LEGACY API: For backward compatibility (limited functionality)
+    ///
+    /// WARNING: This method cannot handle stateful utilities like gradients correctly.
+    /// Use process_element_classes() for full functionality.
+    pub fn class_to_css_rule(&self, class: &str) -> Result<CssRule> {
+        eprintln!("Warning: class_to_css_rule is deprecated. Use process_element_classes for full functionality.");
+
+        // For now, delegate to the parsers (limited functionality)
+        CssGeneratorParsers::class_to_css_rule(self, class)
+    }
+
+    /// LEGACY API: Convert CssRule to CSS string
+    ///
+    /// This is kept for backward compatibility but is deprecated.
+    pub fn rule_to_css(&self, rule: &CssRule) -> String {
+        let mut css = format!("{} {{\n", rule.selector);
+        for property in &rule.properties {
+            let important = if property.important { " !important" } else { "" };
+            css.push_str(&format!("  {}: {}{};\n", property.name, property.value, important));
+        }
+        css.push('}');
+        css
+    }
+
     /// Clear all rules
     pub fn clear(&mut self) {
         self.rules.clear();
         self.custom_properties.clear();
+        self.element_context = ElementContext::default();
     }
 }

@@ -154,7 +154,7 @@ impl PerformanceTestUtils {
                     .class("disabled:opacity-50");
 
                 // Add custom variant classes
-                builder = builder
+                builder
                     .aria("expanded", "bg-green-500")
                     .data("loading", Some("true".to_string()), "animate-spin")
                     .supports("backdrop-filter", "backdrop-blur-sm");

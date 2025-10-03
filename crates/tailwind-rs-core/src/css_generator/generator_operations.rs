@@ -399,7 +399,7 @@ impl CssGeneratorOperations for super::CssGenerator {
 
     fn add_classes_for_element(&mut self, classes: &[&str]) -> Result<()> {
         // Clear gradient context for this element
-        self.clear_gradient_context();
+        self.clear_element_context();
 
         // First pass: collect gradient stops
         for &class in classes {

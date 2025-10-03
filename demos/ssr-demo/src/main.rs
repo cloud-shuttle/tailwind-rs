@@ -106,29 +106,41 @@ fn parse_spacing_value(class: &str) -> Option<String> {
 }
 
 
-fn generate_css() -> String {
+fn generate_css() -> (String, String) {
     let mut generator = CssGenerator::new();
     let mut fallback_css = String::new();
 
     // Comprehensive list of all classes used in the HTML template
+    // MINIMAL TEST: Just a few basic classes to verify parser integration works
     let classes = vec![
         "animate-float",
         "animate-glow",
         "animate-pulse",
         "backdrop-blur-lg",
         "backdrop-blur-md",
+        "backdrop-blur-sm",
+        "backdrop-blur-xl",
         "bg-clip-text",
         "bg-gradient-to-br",
         "bg-gradient-to-r",
+        "bg-gray-700",
         "bg-gray-800",
         "bg-white/10",
+        "bg-white/5",
         "border",
+        "border-blue-400/40",
         "border-blue-500/50",
+        "border-green-400/40",
         "border-green-500/50",
+        "border-purple-400/40",
         "border-purple-500/50",
+        "border-white/10",
         "border-white/20",
+        "border-yellow-400/40",
         "container",
         "dark:bg-gray-800/20",
+        "dark:bg-gray-900/20",
+        "dark:border-gray-700/20",
         "dark:border-gray-700/30",
         "dark:from-blue-900/30",
         "dark:from-gray-900",
@@ -157,20 +169,43 @@ fn generate_css() -> String {
         "from-blue-400",
         "from-blue-500",
         "from-blue-500/20",
-        "from-gray-500",
+        "from-cyan-500",
+        "from-cyan-600/20",
+        "from-emerald-500",
+        "from-emerald-600/20",
         "from-green-400",
         "from-green-500/20",
+        "from-green-500/30",
+        "from-gray-500",
+        "from-gray-600",
+        "from-gray-700",
+        "from-gray-800",
+        "from-pink-500",
+        "from-pink-600",
+        "from-pink-600/20",
         "from-purple-400",
-        "from-purple-500/20",
+        "from-purple-500",
+        "from-purple-500/30",
+        "from-purple-600",
+        "from-purple-900",
         "from-red-500",
+        "from-red-500/20",
+        "from-red-600",
         "from-slate-900",
+        "from-teal-500",
+        "from-yellow-500/30",
         "gap-4",
         "gap-6",
+        "gap-8",
         "grid",
         "grid-cols-1",
         "hover:-rotate-3",
+        "hover:bg-gray-600",
+        "hover:bg-gray-800",
         "hover:from-blue-600",
         "hover:from-gray-600",
+        "hover:from-gray-800",
+        "hover:from-pink-700",
         "hover:from-red-600",
         "hover:rotate-2",
         "hover:rotate-3",
@@ -180,43 +215,73 @@ fn generate_css() -> String {
         "hover:shadow-gray-500/25",
         "hover:shadow-red-500/25",
         "hover:shadow-xl",
-        "hover:to-gray-800",
+        "hover:shadow-lg",
         "hover:to-pink-700",
         "hover:to-purple-700",
         "inline-block",
-        "italic",
         "items-center",
         "justify-center",
         "leading-relaxed",
         "lg:grid-cols-3",
+        "lg:grid-cols-4",
+        "m-2",
         "max-w-6xl",
         "max-w-7xl",
         "mb-12",
+        "mb-16",
         "mb-2",
         "mb-4",
         "mb-6",
         "mb-8",
+        "mb-10",
+        "md:border-gray-700/30",
+        "md:border-gray-700/20",
+        "md:bg-gray-800/20",
+        "md:bg-gray-900/20",
+        "md:from-blue-900/30",
+        "md:from-cyan-900/30",
+        "md:from-emerald-900/30",
+        "md:from-green-900/30",
+        "md:from-purple-900/30",
+        "md:from-pink-900/30",
         "md:grid-cols-2",
+        "md:grid-cols-3",
+        "md:shadow-xl",
+        "md:text-blue-200",
+        "md:text-gray-500",
+        "md:to-cyan-900/30",
+        "md:to-emerald-900/30",
+        "md:to-gray-900",
+        "md:to-pink-900/30",
+        "md:via-purple-900",
         "min-h-screen",
         "mx-auto",
         "opacity-90",
+        "overflow-hidden",
+        "overflow-x-hidden",
+        "overflow-y-hidden",
+        "p-10",
         "p-4",
         "p-6",
         "p-8",
-        "px-2",
         "px-3",
         "px-4",
         "px-6",
         "py-1",
-        "py-2",
         "py-3",
         "py-8",
-        "rounded",
+        "relative",
         "rounded-2xl",
+        "rounded-3xl",
         "rounded-full",
         "rounded-xl",
+        "rotate-2",
+        "rotate-3",
+        "scale-105",
+        "scale-110",
         "shadow-2xl",
         "shadow-lg",
+        "shadow-xl",
         "space-x-2",
         "space-y-2",
         "space-y-6",
@@ -226,27 +291,38 @@ fn generate_css() -> String {
         "text-blue-300",
         "text-blue-400",
         "text-center",
-        "text-cyan-400",
+        "text-cyan-300",
+        "text-emerald-300",
         "text-gray-300",
         "text-gray-400",
+        "text-gray-500",
+        "text-green-300",
         "text-green-400",
         "text-lg",
-        "text-pink-400",
+        "text-pink-300",
+        "text-purple-300",
         "text-purple-400",
+        "text-purple-500",
+        "text-red-500",
         "text-sm",
         "text-transparent",
         "text-white",
-        "text-xs",
+        "text-xl",
+        "text-yellow-300",
         "text-yellow-400",
+        "to-blue-500",
+        "to-cyan-500",
         "to-cyan-600/20",
         "to-emerald-500",
         "to-emerald-600/20",
         "to-gray-700",
+        "to-gray-800",
         "to-pink-500",
         "to-pink-600",
-        "to-pink-600/20",
+        "to-pink-700",
+        "to-purple-500",
         "to-purple-600",
-        "to-purple-600/20",
+        "to-purple-700",
         "to-red-500",
         "to-slate-900",
         "to-teal-500",
@@ -258,6 +334,7 @@ fn generate_css() -> String {
         "via-pink-500",
         "via-purple-500",
         "via-purple-900",
+        "z-10",
     ];
 
     // Test Tailwind-RS objects and methods
@@ -288,34 +365,59 @@ fn generate_css() -> String {
         }
     }
 
+    // 🎯 NEW: Test element-based processing with realistic element groupings
+    println!("\n🎨 Testing Element-Based Processing (NEW ARCHITECTURE)...");
+
+    let mut element_based_generator = CssGenerator::new();
+
+    // Example element groupings (simulating real HTML elements)
+    let element_groups = vec![
+        // Header element
+        vec!["text-6xl", "font-black", "text-center", "mb-12", "bg-gradient-to-r", "from-blue-400", "via-purple-500", "to-pink-500", "bg-clip-text", "text-transparent", "animate-pulse"],
+
+        // Status card element
+        vec!["bg-conic", "from-blue-500/20", "via-purple-600/20", "to-pink-500/20", "backdrop-blur-lg", "rounded-2xl", "shadow-2xl", "p-8", "border", "border-white/20", "dark:border-gray-700/30", "animate-float"],
+
+        // Interactive button element
+        vec!["px-6", "py-3", "bg-gradient-to-r", "from-purple-500", "via-pink-500", "to-red-500", "text-white", "rounded-xl", "hover:from-purple-400", "hover:via-pink-400", "hover:to-red-400", "transition-all", "duration-300", "transform", "hover:scale-105", "hover:shadow-xl", "hover:shadow-purple-500/25", "font-semibold", "tracking-wide"],
+
+        // Demo card element
+        vec!["p-6", "bg-gradient-to-br", "from-purple-500", "via-pink-500", "to-red-500", "rounded-2xl", "text-white", "text-center", "transform", "hover:scale-110", "transition-all", "duration-500", "hover:rotate-3", "shadow-2xl"],
+    ];
+
+    let mut element_css = String::new();
+    let mut element_count = 0;
+
+    for (i, element_classes) in element_groups.iter().enumerate() {
+        println!("   Element {}: {} classes", i + 1, element_classes.len());
+        let css = element_based_generator.process_element_classes(element_classes);
+        if !css.is_empty() {
+            element_css.push_str(&format!("/* Element {} */\n", i + 1));
+            element_css.push_str(&css);
+            element_css.push('\n');
+            element_count += 1;
+        }
+    }
+
+    println!("✅ Element-based processing generated CSS for {} elements", element_count);
+
+    // Add element-based CSS to the main CSS output
+    let mut combined_css = String::new();
+    combined_css.push_str("/* =========================================== */\n");
+    combined_css.push_str("/* 🎨 ELEMENT-BASED PROCESSING (NEW ARCHITECTURE) */\n");
+    combined_css.push_str("/* =========================================== */\n\n");
+    combined_css.push_str(&element_css);
+    combined_css.push_str("\n/* =========================================== */\n");
+    combined_css.push_str("/* 🔧 INDIVIDUAL CLASS PROCESSING (LEGACY) */\n");
+    combined_css.push_str("/* =========================================== */\n\n");
+
     println!("📊 Coverage Report:");
     println!("   Total classes: {}", total_classes);
     println!("   Parsed by Tailwind-RS: {} ({:.1}%)", parsed_count, (parsed_count as f64 / total_classes as f64) * 100.0);
     println!("   Handled by fallback: {} ({:.1}%)", fallback_count, (fallback_count as f64 / total_classes as f64) * 100.0);
+    println!("   Element-based processing: {} elements", element_count);
 
-    // Test additional Tailwind-RS functionality
-    let class_builder = ClassBuilder::new();
-
-    // Test building classes programmatically using the correct API
-    let _class_set = class_builder
-        .class("bg-blue-500")
-        .class("text-white")
-        .class("px-4")
-        .class("py-2")
-        .class("rounded-lg")
-        .class("hover:bg-blue-600")
-        .build();
-
-    // CssGenerator.generate_css() returns String directly, not Result
-    let mut css = generator.generate_css();
-
-    // Add fallback CSS for classes we couldn't parse
-    if !fallback_css.is_empty() {
-        css.push_str("\n\n/* Fallback CSS for unparsed classes */\n");
-        css.push_str(&fallback_css);
-    }
-
-    css
+    (combined_css, fallback_css)
 }
 
 fn generate_html() -> String {
@@ -350,7 +452,7 @@ fn generate_html() -> String {
     </style>
 </head>
 <body>
-    <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 dark:from-gray-900 dark:via-purple-900 dark:to-gray-900">
+    <div class="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 dark:from-gray-900 dark:via-purple-900 dark:to-indigo-900">
         <div class="container mx-auto px-4 py-8 max-w-7xl">
             <h1 class="text-6xl font-black text-center mb-12 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-pulse">
                 🚀 Tailwind-RS Objects Demo
@@ -358,7 +460,7 @@ fn generate_html() -> String {
             
             <div class="max-w-6xl mx-auto space-y-6">
                 <!-- Tailwind-RS Objects Status -->
-                <div class="bg-white/10 dark:bg-gray-800/20 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700/30 animate-float">
+                <div class="bg-conic from-blue-500/20 via-purple-600/20 to-pink-500/20 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700/30 animate-float">
                     <div class="flex items-center justify-center mb-6">
                         <div class="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg animate-pulse">
                             ✅ Tailwind-RS Objects Active
@@ -415,19 +517,19 @@ fn generate_html() -> String {
                     </div>
                     <div class="flex flex-wrap gap-4 justify-center">
                         <button
-                            class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 font-semibold tracking-wide"
+                            class="px-6 py-3 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white rounded-xl hover:from-purple-400 hover:via-pink-400 hover:to-red-400 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-purple-500/25 font-semibold tracking-wide"
                             onclick="increment()"
                         >
                             ⬆️ Increment
                         </button>
                         <button
-                            class="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl hover:from-red-600 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-red-500/25 font-semibold tracking-wide"
+                            class="px-6 py-3 bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 text-white rounded-xl hover:from-orange-400 hover:via-red-400 hover:to-pink-500 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-orange-500/25 font-semibold tracking-wide"
                             onclick="decrement()"
                         >
                             ⬇️ Decrement
                         </button>
                         <button
-                            class="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-xl hover:from-gray-600 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-gray-500/25 font-semibold tracking-wide"
+                            class="px-6 py-3 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-600 text-white rounded-xl hover:from-teal-400 hover:via-cyan-400 hover:to-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-teal-500/25 font-semibold tracking-wide"
                             onclick="reset()"
                         >
                             🔄 Reset
@@ -441,20 +543,20 @@ fn generate_html() -> String {
                         🎨 Tailwind-RS Generated CSS Demo
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="p-6 bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 rounded-2xl text-white text-center transform hover:scale-110 transition-all duration-500 hover:rotate-3 shadow-2xl">
+                        <div class="p-6 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 rounded-2xl text-white text-center transform hover:scale-110 transition-all duration-500 hover:rotate-3 shadow-2xl">
                             <div class="text-2xl mb-2">🌈</div>
-                            <div class="font-bold">Gradient Magic</div>
-                            <div class="text-sm opacity-90">Generated by CssGenerator</div>
+                            <div class="font-bold">Vibrant Fusion</div>
+                            <div class="text-sm opacity-90">Purple to red spectrum</div>
                         </div>
-                        <div class="p-6 bg-gradient-to-br from-blue-400 via-cyan-500 to-teal-500 rounded-2xl text-white text-center transform hover:scale-110 transition-all duration-500 hover:-rotate-3 shadow-2xl">
+                        <div class="p-6 bg-gradient-to-bl from-cyan-400 via-blue-500 to-indigo-600 rounded-2xl text-white text-center transform hover:scale-110 transition-all duration-500 hover:-rotate-3 shadow-2xl">
                             <div class="text-2xl mb-2">💫</div>
-                            <div class="font-bold">Cyan Dreams</div>
-                            <div class="text-sm opacity-90">Built with ClassBuilder</div>
+                            <div class="font-bold">Ocean Depths</div>
+                            <div class="text-sm opacity-90">Cyan to indigo waves</div>
                         </div>
-                        <div class="p-6 bg-gradient-to-br from-green-400 via-emerald-500 to-teal-500 rounded-2xl text-white text-center transform hover:scale-110 transition-all duration-500 hover:rotate-2 shadow-2xl">
+                        <div class="p-6 bg-gradient-to-tr from-emerald-400 via-teal-500 to-cyan-600 rounded-2xl text-white text-center transform hover:scale-110 transition-all duration-500 hover:rotate-2 shadow-2xl">
                             <div class="text-2xl mb-2">✨</div>
                             <div class="font-bold">Emerald Glow</div>
-                            <div class="text-sm opacity-90">Rust CSS generation</div>
+                            <div class="text-sm opacity-90">3-stop linear gradients</div>
                         </div>
                     </div>
                 </div>
@@ -567,11 +669,18 @@ fn handle_request(mut stream: TcpStream) -> std::io::Result<()> {
 
     let response = if request_line.contains("GET /styles.css") {
         println!("🎨 Serving CSS...");
-        let css = generate_css();
+        let (css, fallback_css) = generate_css();
+        let mut full_css = css;
+        if !fallback_css.is_empty() {
+            full_css.push_str("\n\n/* =========================================== */\n");
+            full_css.push_str("/* 🚨 FALLBACK CSS (unparsed classes) */\n");
+            full_css.push_str("/* =========================================== */\n\n");
+            full_css.push_str(&fallback_css);
+        }
         format!(
             "HTTP/1.1 200 OK\r\nContent-Type: text/css\r\nContent-Length: {}\r\n\r\n{}",
-            css.len(),
-            css
+            full_css.len(),
+            full_css
         )
     } else {
         println!("🌐 Serving HTML...");
@@ -592,16 +701,16 @@ fn main() -> std::io::Result<()> {
     // For coverage testing, just run the CSS generation and exit
     if std::env::args().any(|arg| arg == "--coverage-test") {
         println!("🧪 Running Tailwind-RS Coverage Test with CDN enabled");
-        let _css = generate_css();
+        let (_css, _fallback) = generate_css();
         return Ok(());
     }
 
     println!("🚀 Starting Tailwind-RS Objects Demo server...");
-    println!("📱 Open http://localhost:3000 in your browser");
+    println!("📱 Open http://localhost:3001 in your browser");
     println!("🔧 This uses REAL Tailwind-RS objects: CssGenerator, ClassBuilder, error handling!");
     println!("⚡ Process ID: {}", std::process::id());
 
-    let listener = TcpListener::bind("127.0.0.1:3000")?;
+    let listener = TcpListener::bind("127.0.0.1:3001")?;
 
     for stream in listener.incoming() {
         match stream {

@@ -27,6 +27,9 @@
 pub mod core;
 pub mod core_parsers;
 pub mod css_output;
+pub mod element_context;
+#[cfg(test)]
+pub mod element_context_test;
 pub mod flexbox_parsers;
 pub mod generator;
 pub mod generator_builders;

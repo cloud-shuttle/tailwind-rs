@@ -4,7 +4,7 @@
 //! before we implement the migration from async to sync.
 
 use crate::performance::{ClassCache, OptimizationLevel, PerformanceOptimizer};
-use crate::{css_optimizer::CssOptimizer, TailwindBuilder};
+use crate::{css_optimizer_modules::CssOptimizer, TailwindBuilder};
 use std::sync::Arc;
 use std::thread;
 

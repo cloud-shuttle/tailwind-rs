@@ -58,14 +58,19 @@
 //! ```
 
 pub mod api_contracts;
+pub mod background;
 pub mod arbitrary;
 pub mod ast_parser;
 pub mod class_scanner;
 pub mod classes;
 pub mod color;
 pub mod config;
+pub mod boundary;
 pub mod contracts;
 pub mod css_generator;
+pub mod cursor;
+pub mod multi_language;
+pub mod state_machine;
 pub mod css_optimizer_modules;
 pub mod custom_variant;
 pub mod dark_mode;

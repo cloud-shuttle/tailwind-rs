@@ -8,6 +8,7 @@
 use crate::css_generator::types::CssProperty;
 
 /// Background attachment parser
+#[derive(Debug, Clone)]
 pub struct BackgroundAttachmentParser;
 
 impl BackgroundAttachmentParser {

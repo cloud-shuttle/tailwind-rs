@@ -192,7 +192,7 @@ mod tests {
         assert_eq!(parser.get_priority(), 30);
 
         // Test category
-        assert!(matches!(parser.get_category(), ParserCategory::Filter));
+        assert!(matches!(parser.get_category(), ParserCategory::Effects));
     }
 
     #[test]

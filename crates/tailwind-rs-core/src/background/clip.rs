@@ -9,6 +9,7 @@
 use crate::css_generator::types::CssProperty;
 
 /// Background clip parser
+#[derive(Debug, Clone)]
 pub struct BackgroundClipParser;
 
 impl BackgroundClipParser {

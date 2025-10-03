@@ -2,7 +2,13 @@
 //!
 //! Comprehensive integration tests for the enhanced variant system.
 
-use super::{types::*, definitions::*, parser::*, utilities::*, combinations::*};
+use super::types::*;
+use super::definitions::*;
+use super::parser::*;
+use super::utilities::*;
+use super::combinations::*;
+use super::utilities::SuggestionType;
+use super::combinations::ConflictType;
 
 #[cfg(test)]
 mod integration_tests {
@@ -138,7 +144,7 @@ mod integration_tests {
         assert!(!suggestions.is_empty());
 
         let has_specificity_suggestion = suggestions.iter()
-            .any(|s| matches!(s.suggestion_type, super::utilities::SuggestionType::HighSpecificity));
+            .any(|s| matches!(s.suggestion_type, SuggestionType::HighSpecificity));
         assert!(has_specificity_suggestion, "Should suggest high specificity optimization");
     }
 
@@ -215,7 +221,7 @@ mod integration_tests {
 
         let conflicts = VariantConflictDetector::detect_conflicts(&conflicting_variants);
         assert_eq!(conflicts.len(), 1);
-        assert_eq!(conflicts[0].conflict_type, super::combinations::ConflictType::MutuallyExclusive);
+        assert_eq!(conflicts[0].conflict_type, ConflictType::MutuallyExclusive);
     }
 
     #[test]

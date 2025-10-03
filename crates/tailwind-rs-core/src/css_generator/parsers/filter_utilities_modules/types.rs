@@ -93,18 +93,23 @@ pub enum BlurSize {
 }
 
 impl BlurSize {
-    /// Get the CSS variable name for this blur size
-    pub fn css_variable(&self) -> &'static str {
+    /// Get the CSS value for this blur size (actual pixel values for Tailwind)
+    pub fn css_value(&self) -> &'static str {
         match self {
             BlurSize::None => "0",
-            BlurSize::Xs => "var(--blur-xs)",
-            BlurSize::Sm => "var(--blur-sm)",
-            BlurSize::Md => "var(--blur-md)",
-            BlurSize::Lg => "var(--blur-lg)",
-            BlurSize::Xl => "var(--blur-xl)",
-            BlurSize::Xxl => "var(--blur-2xl)",
-            BlurSize::Xxxl => "var(--blur-3xl)",
+            BlurSize::Xs => "4px",
+            BlurSize::Sm => "8px",
+            BlurSize::Md => "12px",
+            BlurSize::Lg => "16px",
+            BlurSize::Xl => "24px",
+            BlurSize::Xxl => "40px",
+            BlurSize::Xxxl => "64px",
         }
+    }
+
+    /// Get the CSS variable name for this blur size (legacy method)
+    pub fn css_variable(&self) -> String {
+        format!("var(--blur-{})", self.class_suffix())
     }
 
     /// Get the class suffix for this blur size

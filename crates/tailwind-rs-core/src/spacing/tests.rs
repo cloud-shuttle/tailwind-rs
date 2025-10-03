@@ -222,8 +222,9 @@ mod spacing_utilities_tests {
         // Test margin variants
         let result = utils.parse_margin_class("m-4");
         assert!(result.is_some());
-        assert_eq!(result.unwrap()[0].name, "margin");
-        assert_eq!(result.unwrap()[0].value, "1rem");
+        let properties = result.unwrap();
+        assert_eq!(properties[0].name, "margin");
+        assert_eq!(properties[0].value, "1rem");
 
         let result = utils.parse_margin_class("mx-2");
         assert!(result.is_some());
@@ -231,6 +232,8 @@ mod spacing_utilities_tests {
         assert_eq!(properties.len(), 2);
         assert_eq!(properties[0].name, "margin-left");
         assert_eq!(properties[1].name, "margin-right");
+        assert_eq!(properties[0].value, "0.5rem");
+        assert_eq!(properties[1].value, "0.5rem");
     }
 
     #[test]

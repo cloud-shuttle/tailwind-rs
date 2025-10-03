@@ -159,7 +159,7 @@ impl CssOutputGenerator {
     }
 
     /// Convert a CSS rule to CSS string
-    fn rule_to_css(rule: &CssRule) -> String {
+    pub fn rule_to_css(rule: &CssRule) -> String {
         let mut css = String::new();
         css.push_str(&format!("{} {{\n", rule.selector));
 

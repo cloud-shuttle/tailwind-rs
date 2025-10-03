@@ -145,13 +145,13 @@ impl EffectsRegistry {
     }
 
     /// Disable a specific shadow type
-    pub fn disable_shadow(mut self, shadow: ShadowType) -> Self {
+    pub fn disable_shadow(&mut self, shadow: ShadowType) -> &mut Self {
         self.available_shadows.retain(|s| s != &shadow);
         self
     }
 
     /// Disable masks
-    pub fn disable_masks(mut self, disabled: bool) -> Self {
+    pub fn disable_masks(&mut self, disabled: bool) -> &mut Self {
         self.enable_masks = !disabled;
         self
     }
@@ -208,6 +208,7 @@ pub mod accessibility {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::css_generator::parsers::UtilityParser;
 
     #[test]
     fn effects_parser_trait() {
@@ -236,10 +237,12 @@ mod tests {
         assert!(registry.is_blend_mode_available(&MixBlendMode::Multiply));
         assert!(registry.masks_enabled());
 
-        let modified_registry = registry.disable_shadow(ShadowType::Md);
+        let mut modified_registry = registry.clone();
+        modified_registry.disable_shadow(ShadowType::Md);
         assert!(!modified_registry.is_shadow_available(&ShadowType::Md));
 
-        let no_masks_registry = registry.disable_masks(true);
+        let mut no_masks_registry = registry.clone();
+        no_masks_registry.disable_masks(true);
         assert!(!no_masks_registry.masks_enabled());
     }
 

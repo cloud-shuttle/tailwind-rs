@@ -6,6 +6,7 @@
 use crate::css_generator::types::CssProperty;
 
 /// Background gradient parser
+#[derive(Debug, Clone)]
 pub struct BackgroundGradientParser;
 
 impl BackgroundGradientParser {

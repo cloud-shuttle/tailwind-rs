@@ -28,7 +28,7 @@ tokio = { workspace = true, optional = true }
 
 [features]
 default = []
-# postcss = ["tailwind-rs-postcss", "tokio"]  # Removed to avoid cyclic dependency
+postcss = ["tokio"]
 
 [dev-dependencies]
 # tailwind-rs-testing = "0.8.1"  # Will be added after publishing

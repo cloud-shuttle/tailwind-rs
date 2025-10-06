@@ -24,8 +24,13 @@
 //! // .hover\:bg-blue-600:hover { background-color: #2563eb; }
 //! ```
 
-pub mod color_cache;
+// Core modules (refactored)
+pub mod caching;
 pub mod core;
+pub mod processing;
+
+// Legacy modules (to be gradually migrated)
+pub mod color_cache;
 pub mod core_parsers;
 pub mod css_output;
 pub mod element_context;
@@ -47,8 +52,8 @@ pub mod utils;
 pub mod variants;
 
 // Re-export main types and functionality
-pub use css_output::CssOutputGenerator;
-pub use generator::CssGenerator;
+pub use core::CssGenerator;
+pub use processing::CssOutputGenerator;
 pub use parsers::*;
 pub use types::{CssGenerationConfig, CssProperty, CssRule};
 pub use variants::VariantParser;

@@ -91,6 +91,9 @@ impl TailwindRsPlugin {
         // Process @tailwind directives and expand them
         self.process_tailwind_directives(ast, classes)?;
 
+        // Process @apply directives
+        self.process_apply_directives(ast)?;
+
         Ok(())
     }
 
@@ -135,6 +138,45 @@ impl TailwindRsPlugin {
         // Remove all @tailwind directives and add generated rules
         ast.at_rules.retain(|rule| rule.name != "tailwind");
         ast.rules.extend(new_rules);
+
+        Ok(())
+    }
+
+    /// Process @apply directives in CSS rules
+    fn process_apply_directives(&self, ast: &mut CssAst) -> Result<()> {
+        for rule in &mut ast.rules {
+            let mut new_properties = Vec::new();
+
+            for property in &rule.declarations {
+                if property.property == "@apply" {
+                    // Parse @apply directive
+                    let applied_classes: Vec<&str> = property.value.split_whitespace().collect();
+
+                    // Generate CSS for each applied class and collect properties
+                    for class in applied_classes {
+                        if let Ok(css) = (self.css_generator)(class) {
+                            // Parse the generated CSS to extract properties
+                            if let Ok(css_ast) = crate::utils::parse_css_to_ast(&css) {
+                                for css_rule in css_ast.rules {
+                                    if css_rule.selectors.iter().any(|s| s.contains(&class.replace(":", "-"))) {
+                                        new_properties.extend(css_rule.declarations);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // Keep non-@apply properties
+                    new_properties.push(property.clone());
+                }
+            }
+
+            // Remove @apply properties and add the expanded properties
+            rule.declarations = new_properties.into_iter()
+                .filter(|prop| prop.property != "@apply")
+                .collect();
+        }
 
         Ok(())
     }

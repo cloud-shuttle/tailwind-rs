@@ -458,25 +458,365 @@ match generator.add_class("invalid-class") {
 
 ## 🚀 Best Practices
 
-### Performance
+## 🎯 **ADVANCED FEATURES API REFERENCE**
 
-1. **Reuse Generators**: Create generators once and reuse them
-2. **Batch Operations**: Add multiple classes at once
-3. **Use Caching**: Cache generated CSS when possible
-4. **Monitor Performance**: Use performance monitoring tools
+### Container Queries
 
-### Memory Management
+Container queries allow responsive design based on container size rather than viewport size.
 
-1. **Clear Unused Classes**: Clear generators when done
-2. **Use Memory Optimization**: Enable memory optimization features
-3. **Monitor Memory Usage**: Track memory usage
-4. **Use Weak References**: Use weak references where appropriate
+```rust
+use tailwind_rs_core::{CssGenerator, Result};
 
-### Framework Integration
+// Create generator
+let mut generator = CssGenerator::new();
 
-1. **Use Framework-Specific Crates**: Use the appropriate framework crate
-2. **Follow Framework Patterns**: Follow framework-specific patterns
-3. **Optimize for Framework**: Use framework-specific optimizations
+// Add container query classes
+let css = generator.process_element_classes(&[
+    "@container-sm:bg-green-500",
+    "@container-md:min-w-300:text-blue-600",
+    "@container-lg:flex-col"
+])?;
+```
+
+**Container Query Syntax:**
+- `@container-{size}:{utility}` - Basic container queries
+- `@container-{name}:{condition}:{utility}` - Named containers with conditions
+
+**Supported Sizes:**
+- `sm`, `md`, `lg`, `xl`, `2xl` - Standard breakpoints
+- Custom conditions: `min-w-300`, `max-h-500`, etc.
+
+### Arbitrary Value Variants
+
+Arbitrary values allow dynamic class generation with custom values.
+
+```rust
+let css = generator.process_element_classes(&[
+    "[data-state=\"open\"]:bg-green-500",
+    "[aria-expanded=\"true\"]:text-blue-600",
+    "[data-count=\"5\"]:opacity-100"
+])?;
+```
+
+**Supported Arbitrary Variants:**
+- Data attributes: `[data-*]:{utility}`
+- ARIA attributes: `[aria-*]:{utility}`
+- Custom attributes: `[custom-attr]:{utility}`
+
+### Device-Specific Variants
+
+Device-specific variants target specific device capabilities and preferences.
+
+```rust
+let css = generator.process_element_classes(&[
+    "motion-reduce:opacity-50",      // Reduced motion preference
+    "contrast-more:text-lg",         // High contrast preference
+    "pointer-coarse:p-6",           // Touch devices
+    "hover-none:hidden",            // No hover capability
+    "orientation-landscape:flex-row" // Landscape orientation
+])?;
+```
+
+**Device Variants:**
+- **Motion**: `motion-reduce`, `motion-safe`
+- **Contrast**: `contrast-more`, `contrast-less`, `contrast-custom`
+- **Pointer**: `pointer-coarse`, `pointer-fine`, `pointer-none`
+- **Hover**: `hover-none`, `hover-hover`
+- **Color Gamut**: `color-gamut-srgb`, `color-gamut-p3`, `color-gamut-rec2020`
+- **Orientation**: `orientation-portrait`, `orientation-landscape`
+- **Media**: `print`, `screen`
+
+### CSS Functions (@apply, @layer, @import)
+
+CSS functions enable advanced CSS composition and organization.
+
+#### @apply Directive
+
+```rust
+use tailwind_rs_core::css_functions::CssFunctionsProcessor;
+
+let mut processor = CssFunctionsProcessor::new();
+
+// Apply utility classes within custom CSS
+let css = processor.process_apply("bg-blue-500 text-white p-4")?;
+// Returns: "background-color: #3b82f6; color: #ffffff; padding: 1rem;"
+```
+
+#### @layer Directive
+
+```rust
+// Organize CSS into cascade layers
+let css = processor.process_layer("components", ".btn { color: blue; }")?;
+// Returns: "@layer components { .btn { color: blue; } }"
+```
+
+**Supported Layers:**
+- `base` - Reset and base styles
+- `components` - Component styles
+- `utilities` - Utility classes
+
+#### @import Directive
+
+```rust
+// Process CSS imports
+let css = processor.process_import("url('https://fonts.googleapis.com/css2?family=Inter&display=swap')")?;
+// Returns: "@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');"
+```
+
+### Transform System
+
+Advanced transform system using CSS custom properties for combination support.
+
+```rust
+let css = generator.process_element_classes(&[
+    "scale-110",      // --tw-scale-x: 1.1; --tw-scale-y: 1.1;
+    "rotate-3",       // --tw-rotate: 3deg;
+    "translate-x-2",  // --tw-translate-x: 0.5rem;
+    "transform"       // Applies all transforms via var(--tw-transform)
+])?;
+```
+
+**Transform Properties:**
+- Scale: `scale-{value}`, `scale-x-{value}`, `scale-y-{value}`
+- Rotate: `rotate-{value}`, `rotate-x-{value}`, etc.
+- Translate: `translate-{value}`, `translate-x-{value}`, etc.
+- Skew: `skew-{value}`, `skew-x-{value}`, etc.
+- Origin: `origin-{value}`
+
+### Plugin System
+
+Extensible plugin system for custom utilities and features.
+
+```rust
+use tailwind_rs_core::css_generator::plugin_system::{Plugin, PluginManager};
+
+// Implement custom plugin
+struct CustomPlugin;
+
+impl Plugin for CustomPlugin {
+    fn name(&self) -> &str { "custom" }
+    fn register_utilities(&self, _manager: &mut PluginManager) {
+        // Register custom utilities
+    }
+}
+
+// Register plugin
+let mut generator = CssGenerator::new();
+generator.register_plugin(Box::new(CustomPlugin))?;
+```
+
+## 📚 **PERFORMANCE & OPTIMIZATION**
+
+### Performance Monitoring
+
+```rust
+use std::time::Instant;
+
+let start = Instant::now();
+// Your CSS generation code
+let duration = start.elapsed();
+println!("CSS generation took: {:?}", duration);
+```
+
+### Memory Optimization
+
+```rust
+// Enable memory optimization
+let config = CssGenerationConfig {
+    memory_optimization: true,
+    ..Default::default()
+};
+let generator = CssGenerator::with_config(config);
+
+// Clear unused data
+generator.clear_cache();
+```
+
+### Caching Strategies
+
+```rust
+// Rule caching for repeated classes
+let mut generator = CssGenerator::new();
+
+// First generation (creates cache)
+let css1 = generator.process_element_classes(&["bg-blue-500", "text-white"])?;
+
+// Second generation (uses cache)
+let css2 = generator.process_element_classes(&["bg-blue-500", "text-white"])?;
+
+// Results are identical but second call is faster
+assert_eq!(css1, css2);
+```
+
+## 🔧 **FRAMEWORK INTEGRATIONS**
+
+### Leptos Integration
+
+```rust
+use tailwind_rs_leptos::tailwind_classes;
+
+// In your Leptos component
+#[component]
+pub fn MyComponent(cx: Scope) -> impl IntoView {
+    let classes = tailwind_classes!("bg-blue-500 hover:bg-blue-600 p-4");
+
+    view! { cx,
+        <div class=classes>
+            "Hello World"
+        </div>
+    }
+}
+```
+
+### Dioxus Integration
+
+```rust
+use tailwind_rs_dioxus::tw;
+
+// In your Dioxus component
+fn MyComponent() -> Element {
+    let classes = tw!("flex items-center justify-center p-4");
+
+    rsx! {
+        div { class: classes,
+            "Hello World"
+        }
+    }
+}
+```
+
+### Yew Integration
+
+```rust
+use tailwind_rs_yew::classes;
+
+// In your Yew component
+pub struct MyComponent;
+
+impl Component for MyComponent {
+    type Message = ();
+    type Properties = ();
+
+    fn view(&self, _ctx: &Context<Self>) -> Html {
+        let classes = classes!("bg-red-500 text-white p-4");
+
+        html! {
+            <div class={classes}>
+                {"Hello World"}
+            </div>
+        }
+    }
+}
+```
+
+## 🧪 **TESTING & QUALITY ASSURANCE**
+
+### Integration Testing
+
+```rust
+#[cfg(test)]
+mod tests {
+    use tailwind_rs_core::CssGenerator;
+
+    #[test]
+    fn test_css_generation() {
+        let mut generator = CssGenerator::new();
+        let css = generator.process_element_classes(&["bg-blue-500", "text-white"]).unwrap();
+
+        assert!(css.contains("background-color"));
+        assert!(css.contains("color"));
+    }
+}
+```
+
+### Performance Testing
+
+```rust
+#[test]
+fn benchmark_css_generation() {
+    let mut generator = CssGenerator::new();
+
+    let start = std::time::Instant::now();
+    for _ in 0..1000 {
+        let _css = generator.process_element_classes(&["bg-blue-500"]).unwrap();
+    }
+    let duration = start.elapsed();
+
+    assert!(duration < std::time::Duration::from_millis(100));
+}
+```
+
+## 📋 **MIGRATION GUIDE**
+
+### From Legacy API
+
+```rust
+// Old API
+let mut generator = CssGenerator::new();
+generator.add_class("bg-blue-500")?;
+
+// New API (recommended)
+let css = generator.process_element_classes(&["bg-blue-500"])?;
+```
+
+### Configuration Updates
+
+```rust
+// New configuration options
+let config = CssGenerationConfig {
+    memory_optimization: true,
+    custom_breakpoints: HashMap::new(),
+    enable_container_queries: true,
+    enable_arbitrary_values: true,
+    ..Default::default()
+};
+```
+
+## 🚀 **PRODUCTION DEPLOYMENT**
+
+### Build Optimization
+
+```bash
+# Release build with optimizations
+cargo build --release --features production
+
+# With custom feature flags
+cargo build --release --features "leptos,dioxus,yew"
+```
+
+### CI/CD Integration
+
+```yaml
+# .github/workflows/release.yml
+- name: Build and test
+  run: |
+    cargo check
+    cargo test
+    cargo build --release
+    cargo doc --no-deps
+```
+
+### Performance Benchmarking
+
+```rust
+// Continuous performance monitoring
+#[cfg(feature = "benchmarks")]
+mod benchmarks {
+    use criterion::{black_box, criterion_group, criterion_main, Criterion};
+
+    fn benchmark_css_generation(c: &mut Criterion) {
+        c.bench_function("css_generation", |b| {
+            b.iter(|| {
+                let mut generator = CssGenerator::new();
+                black_box(generator.process_element_classes(&["bg-blue-500"]))
+            })
+        });
+    }
+
+    criterion_group!(benches, benchmark_css_generation);
+    criterion_main!(benches);
+}
+```
 4. **Test Integration**: Test framework integration thoroughly
 
 ## 📚 Examples

@@ -60,7 +60,6 @@ impl EffectsParser {
         let blur_value = match class {
             "backdrop-blur" | "backdrop-blur-none" => "none",
             "backdrop-blur-sm" => "blur(4px)",
-            "backdrop-blur" => "blur(8px)",
             "backdrop-blur-md" => "blur(12px)",
             "backdrop-blur-lg" => "blur(16px)",
             "backdrop-blur-xl" => "blur(24px)",

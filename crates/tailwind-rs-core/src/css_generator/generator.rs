@@ -396,7 +396,6 @@ impl CssGenerator {
 impl super::generator_operations::CssGeneratorOperations for CssGenerator {
     fn add_class(&mut self, class: &str) -> Result<()> {
         // Delegate to core operations
-        use super::generator_operations::CssGeneratorOperations;
         let _ = <Self as super::core::operations::CssGeneratorOperations>::generate_individual_css_rule(self, class)?;
         Ok(())
     }

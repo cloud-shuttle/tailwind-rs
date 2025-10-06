@@ -19,7 +19,7 @@ impl ClassProcessor {
     }
 
     /// Process a single class into CSS properties
-    pub fn process_class(&mut self, class: &str, generator: &mut CssGenerator) -> Result<Vec<CssProperty>> {
+    pub fn process_class(&mut self, class: &str, _generator: &mut CssGenerator) -> Result<Vec<CssProperty>> {
         // This is a simplified implementation
         // In the full version, this would delegate to specific parsers
 

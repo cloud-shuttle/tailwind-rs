@@ -155,7 +155,7 @@ impl VariantProcessor {
     }
 
     /// Handle custom variants
-    pub fn apply_custom_variant(&self, variant: &str, css: &str) -> Result<String> {
+    pub fn apply_custom_variant(&self, _variant: &str, css: &str) -> Result<String> {
         // Handle custom variants defined in config
         // For now, pass through as-is - would be extended with config support
         Ok(css.to_string())

@@ -2,7 +2,6 @@
 //! Provides fluent API for generator construction
 
 use super::super::CssGenerator;
-use super::super::CssGenerationConfig;
 use super::super::trie::ParserTrie;
 use crate::css_generator::processing::*;
 use crate::css_generator::caching::*;

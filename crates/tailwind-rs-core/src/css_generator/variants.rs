@@ -8,7 +8,6 @@ use std::collections::HashMap;
 
 /// CSS Functions support for Tailwind-RS
 pub mod functions {
-    use super::*;
     use std::collections::HashMap;
 
     /// @apply directive parser and resolver
@@ -390,7 +389,7 @@ impl VariantParser {
 
         // Parse all variants iteratively until no more variants are found
         loop {
-            let mut found_variant = false;
+            let mut __found_variant = false;
 
             // Check for compound variants first (most specific)
             let compound_patterns = [
@@ -417,13 +416,13 @@ impl VariantParser {
                         .strip_prefix(prefix)
                         .unwrap_or(&remaining)
                         .to_string();
-                    found_variant = true;
+                    _found_variant = true;
                     break;
                 }
             }
 
             // If no compound variant found, check individual variants
-            if !found_variant {
+            if !_found_variant {
                 let variant_patterns = [
                     ("dark:", "dark"),
                     ("hover:", "hover"),
@@ -474,7 +473,7 @@ impl VariantParser {
                         let container_name = container_part.strip_prefix("@container-").unwrap_or("");
                         variants.push(format!("@container-{}", container_name));
                         remaining = remaining[colon_pos + 1..].to_string();
-                        found_variant = true;
+                        _found_variant = true;
                         continue;
                     }
                 }
@@ -486,7 +485,7 @@ impl VariantParser {
                             let arbitrary_part = &remaining[..end_bracket + 1];
                             variants.push(arbitrary_part.to_string());
                             remaining = remaining[end_bracket + 2..].to_string();
-                            found_variant = true;
+                            _found_variant = true;
                             continue;
                         }
                     }
@@ -498,7 +497,7 @@ impl VariantParser {
                     if remaining.starts_with(&custom_prefix) {
                         variants.push(custom_name.clone());
                         remaining = remaining.strip_prefix(&custom_prefix).unwrap_or(&remaining).to_string();
-                        found_variant = true;
+                        _found_variant = true;
                         break;
                     }
                 }
@@ -510,14 +509,14 @@ impl VariantParser {
                             .strip_prefix(prefix)
                             .unwrap_or(&remaining)
                             .to_string();
-                        found_variant = true;
+                        _found_variant = true;
                         break;
                     }
                 }
             }
 
             // If no variant found in this iteration, we're done
-            if !found_variant {
+            if !_found_variant {
                 break;
             }
         }

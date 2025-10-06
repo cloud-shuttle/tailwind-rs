@@ -63,7 +63,7 @@ impl AdvancedAnimationUtilities for crate::classes::ClassBuilder {
         self.class(&format!("animate-{}", composition.name))
     }
 
-    fn timing_function(self, timing: TimingFunction) -> Self {
+    fn timing_function(self, _timing: TimingFunction) -> Self {
         // This would need more complex logic in a real implementation
         // For now, just return self
         self

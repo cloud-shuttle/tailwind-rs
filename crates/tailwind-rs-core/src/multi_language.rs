@@ -301,29 +301,29 @@ impl MultiLanguageParser {
             let tag_part = &line[..tag_end];
 
             // Parse Haml tag syntax: %tag.class1.class2#id
-            let mut in_classes = false;
+            let mut __in_classes = false;
             let mut current_class = String::new();
 
             for ch in tag_part.chars() {
                 match ch {
-                    '%' => in_classes = false,
+                    '%' => _in_classes = false,
                     '.' => {
                         if !current_class.is_empty() {
                             classes.push(current_class);
                             current_class = String::new();
                         }
-                        in_classes = true;
+                        _in_classes = true;
                     }
                     '#' => {
                         if !current_class.is_empty() {
                             classes.push(current_class);
                             current_class = String::new();
                         }
-                        in_classes = false;
+                        _in_classes = false;
                         break; // ID part starts, no more classes
                     }
                     _ => {
-                        if in_classes {
+                        if _in_classes {
                             current_class.push(ch);
                         }
                     }

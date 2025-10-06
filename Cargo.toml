@@ -19,8 +19,9 @@ resolver = "2"
 
 [workspace.package]
 version = "0.15.4"
-edition = "2021"
+edition = "2024"
 authors = ["tailwind-rs contributors"]
+rust-version = "1.85"
 license = "MIT"
 repository = "https://github.com/cloud-shuttle/tailwind-rs"
 homepage = "https://cloud-shuttle.github.io/tailwind-rs/"
@@ -48,40 +49,40 @@ tailwind-rs-cli = { path = "crates/tailwind-rs-cli", version = "0.15.4" }
 tailwind-rs-wasm = { path = "crates/tailwind-rs-wasm", version = "0.15.4" }
 
 # External dependencies - Updated to latest available versions (September 2025)
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-uuid = { version = "1.0", features = ["v4", "serde", "js"] }
-chrono = { version = "0.4", features = ["serde"] }
-anyhow = "1.0"
-thiserror = "1.0"
-clap = { version = "4.0", features = ["derive"] }
-tokio = { version = "1.0", features = ["full"] }
-axum = "0.7"
-tower = "0.4"
-tower-http = { version = "0.5", features = ["fs", "cors"] }
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.140"
+uuid = { version = "1.16.0", features = ["v4", "serde", "js"] }
+chrono = { version = "0.4.40", features = ["serde"] }
+anyhow = "1.0.95"
+thiserror = "2.0.9"
+clap = { version = "4.5.27", features = ["derive"] }
+tokio = { version = "1.43.1", features = ["full"] }
+axum = "0.8.1"
+tower = "0.5.2"
+tower-http = { version = "0.6.2", features = ["fs", "cors"] }
 leptos = "0.8.8"
 leptos_axum = "0.8.6"
 yew = "0.21.0"
 dioxus = "0.3.0"
 dioxus-web = "0.3.0"
-wasm-bindgen = "0.2"
-web-sys = "0.3"
-js-sys = "0.3"
-console_error_panic_hook = "0.1"
-console_log = "0.2"
-toml = "0.8"
-glob = "0.3"
+wasm-bindgen = "0.2.100"
+web-sys = "0.3.72"
+js-sys = "0.3.72"
+console_error_panic_hook = "0.1.7"
+console_log = "0.2.2"
+toml = "0.8.20"
+glob = "0.3.2"
 
-# Testing dependencies - Updated to latest versions
-wasm-bindgen-test = "0.3"
-futures = "0.3"
-reqwest = { version = "0.12", features = ["json"] }
-proptest = "1.4"
+# Testing dependencies - Updated to latest versions (September 2025)
+wasm-bindgen-test = "0.3.50"
+futures = "0.3.31"
+reqwest = { version = "0.12.12", features = ["json"] }
+proptest = "1.6.0"
 
-# Development dependencies - Updated to latest versions
-cargo-watch = "8.6"
-cargo-tarpaulin = "0.27"
-cargo-nextest = "0.9"
+# Development dependencies - Updated to latest versions (September 2025)
+cargo-watch = "8.6.0"
+cargo-tarpaulin = "0.32.0"
+cargo-nextest = "0.9.91"
 
 # Root package for integration tests
 [package]

@@ -1,0 +1,8 @@
+# Rust toolchain configuration for tailwind-rs
+# Updated for September 2025 - Rust 2024 edition
+
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy", "rust-src"]
+targets = ["wasm32-unknown-unknown", "x86_64-apple-darwin", "x86_64-unknown-linux-gnu"]
+profile = "default"

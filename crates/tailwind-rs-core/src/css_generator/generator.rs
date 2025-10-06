@@ -207,7 +207,7 @@ pub struct CssGenerator {
     /// Color cache for performance optimization
     pub color_cache: ColorCache,
     /// Whether transform CSS has been generated for this instance
-    pub(crate) transform_css_generated: bool,
+    pub transform_css_generated: bool,
     /// Plugin manager for extensibility
     pub plugin_manager: super::plugin_system::PluginManager,
 }

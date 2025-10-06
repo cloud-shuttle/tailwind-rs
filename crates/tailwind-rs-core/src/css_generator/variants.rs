@@ -23,13 +23,13 @@ pub mod functions {
         }
 
         /// Parse @apply directive and resolve to CSS properties
-        pub fn parse_apply(&self, apply_value: &str) -> Result<Vec<crate::CssProperty>, ApplyError> {
+        pub fn parse_apply(&mut self, apply_value: &str) -> Result<Vec<crate::CssProperty>, ApplyError> {
             let classes: Vec<&str> = apply_value.split_whitespace().collect();
             let mut properties = Vec::new();
 
             for class in classes {
                 // Parse variants from class (if any)
-                let (variants, base_class) = self.generator.variant_parser.parse_variants(class);
+                let (_variants, _base_class) = self.generator.variant_parser.parse_variants(class);
 
                 // Generate CSS properties for this class
                 if let Ok(css) = self.generator.generate_individual_css_rule(class) {
@@ -493,7 +493,7 @@ impl VariantParser {
                 }
 
                 // Check for custom variants
-                for (custom_name, _) in &self.custom_variants {
+                for custom_name in self.custom_variants.keys() {
                     let custom_prefix = format!("{}:", custom_name);
                     if remaining.starts_with(&custom_prefix) {
                         variants.push(custom_name.clone());

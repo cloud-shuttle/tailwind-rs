@@ -225,7 +225,7 @@ pub trait AdvancedGridUtilities {
 }
 
 impl AdvancedGridUtilities for ClassBuilder {
-    fn grid_areas(self, areas: GridTemplateAreas) -> Self {
+    fn grid_areas(self, _areas: GridTemplateAreas) -> Self {
         // TODO: Implement proper string conversion when Display trait is re-enabled
         self.custom("grid-template-areas", "/* TODO: Implement GridTemplateAreas display */")
     }

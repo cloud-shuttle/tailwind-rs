@@ -77,7 +77,7 @@ pub mod dark_mode;
 pub mod error;
 // pub mod gradients; // Temporarily disabled due to API issues
 pub mod enhanced_variants;
-pub mod performance;
+// pub mod performance;
 pub mod plugin_system;
 #[cfg(feature = "postcss")]
 pub mod postcss_integration;
@@ -133,7 +133,7 @@ pub use custom_variant::{CustomVariant, CustomVariantManager, CustomVariantType}
 pub use dark_mode::{DarkModeVariant, DarkModeVariantError, DarkModeVariantUtilities};
 pub use error::{Result, TailwindError};
 // pub use gradients::{Gradient, GradientDirection, GradientError, GradientStop, GradientUtilities};
-pub use performance::{CacheStats, ClassCache, OptimizationLevel, PerformanceOptimizer};
+// pub use performance::{PerformanceOptimizer};
 pub use plugin_system::{Plugin, PluginContext, PluginHook, PluginRegistry};
 pub use responsive::{
     AlignItems, Breakpoint, FlexDirection, FlexWrap, JustifyContent, Responsive, ResponsiveBuilder,

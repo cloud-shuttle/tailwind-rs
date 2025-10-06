@@ -2,7 +2,6 @@
 //!
 //! This module contains the constructor and initialization methods for CssGenerator.
 
-use super::element_context::ElementContext;
 use super::parsers::{
     AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
@@ -26,6 +25,7 @@ use crate::background::color::BackgroundColorParser;
 use super::types::CssGenerationConfig;
 use super::variants::VariantParser;
 use super::trie::{ParserTrie, ParserType};
+use super::color_cache::ColorCache;
 use crate::transforms::TransformParser;
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
@@ -55,7 +55,6 @@ impl CssGeneratorBuilder for super::CssGenerator {
             breakpoints: HashMap::new(),
             custom_properties: HashMap::new(),
             config: CssGenerationConfig::default(),
-            element_context: ElementContext::default(),
             spacing_parser: SpacingParser::new(),
             advanced_spacing_parser: AdvancedSpacingParser::new(),
             color_parser: ColorParser::new(),
@@ -137,6 +136,8 @@ impl CssGeneratorBuilder for super::CssGenerator {
             accent_color_parser: AccentColorParser::new(),
             variant_parser: VariantParser::new(),
             parser_trie: ParserTrie::new(),
+            color_cache: ColorCache::new(),
+            transform_css_generated: false,
         };
 
         // Initialize the parser trie for fast lookups
@@ -151,7 +152,6 @@ impl CssGeneratorBuilder for super::CssGenerator {
             breakpoints: HashMap::new(),
             custom_properties: HashMap::new(),
             config,
-            element_context: ElementContext::default(),
             spacing_parser: SpacingParser::new(),
             advanced_spacing_parser: AdvancedSpacingParser::new(),
             color_parser: ColorParser::new(),
@@ -233,6 +233,8 @@ impl CssGeneratorBuilder for super::CssGenerator {
             accent_color_parser: AccentColorParser::new(),
             variant_parser: VariantParser::new(),
             parser_trie: ParserTrie::new(),
+            color_cache: ColorCache::new(),
+            transform_css_generated: false,
         };
 
         // Initialize the parser trie for fast lookups
@@ -274,9 +276,8 @@ impl CssGeneratorBuilder for super::CssGenerator {
         // Basic transforms parser
         self.parser_trie.insert("translate-x-", ParserType::BasicTransforms(self.basic_transforms_parser.clone()));
         self.parser_trie.insert("translate-y-", ParserType::BasicTransforms(self.basic_transforms_parser.clone()));
-
-        // Scale parser
-        self.parser_trie.insert("scale-", ParserType::Transform(self.transform_parser.clone()));
+        self.parser_trie.insert("scale-", ParserType::BasicTransforms(self.basic_transforms_parser.clone()));
+        self.parser_trie.insert("rotate-", ParserType::BasicTransforms(self.basic_transforms_parser.clone()));
         self.parser_trie.insert("scale-x-", ParserType::Scale(self.scale_parser.clone()));
         self.parser_trie.insert("scale-y-", ParserType::Scale(self.scale_parser.clone()));
 
@@ -284,7 +285,6 @@ impl CssGeneratorBuilder for super::CssGenerator {
         self.parser_trie.insert("mask-", ParserType::MaskUtilities(self.mask_utilities_parser.clone()));
 
         // Transform parser (including 3D transforms)
-        self.parser_trie.insert("rotate-", ParserType::Transform(self.transform_parser.clone()));
         self.parser_trie.insert("rotate-x-", ParserType::Transform(self.transform_parser.clone()));
         self.parser_trie.insert("rotate-y-", ParserType::Transform(self.transform_parser.clone()));
         self.parser_trie.insert("rotate-z-", ParserType::Transform(self.transform_parser.clone()));
@@ -293,8 +293,6 @@ impl CssGeneratorBuilder for super::CssGenerator {
         self.parser_trie.insert("perspective-", ParserType::Transform(self.transform_parser.clone()));
         self.parser_trie.insert("transform-style-", ParserType::Transform(self.transform_parser.clone()));
         self.parser_trie.insert("transform", ParserType::Transform(self.transform_parser.clone()));
-        self.parser_trie.insert("scale-", ParserType::Transform(self.transform_parser.clone()));
-        self.parser_trie.insert("rotate-", ParserType::Transform(self.transform_parser.clone()));
         self.parser_trie.insert("-rotate-", ParserType::Transform(self.transform_parser.clone()));
 
         // Gradient parser

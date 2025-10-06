@@ -104,7 +104,7 @@ impl EffectValidator {
     pub fn is_valid_backdrop_blur_class(class: &str) -> bool {
         matches!(class,
             "backdrop-blur" | "backdrop-blur-none" | "backdrop-blur-sm" |
-            "backdrop-blur" | "backdrop-blur-md" | "backdrop-blur-lg" |
+            "backdrop-blur-md" | "backdrop-blur-lg" |
             "backdrop-blur-xl" | "backdrop-blur-2xl" | "backdrop-blur-3xl"
         )
     }

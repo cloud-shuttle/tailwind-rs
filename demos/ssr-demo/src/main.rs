@@ -1,7 +1,7 @@
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::time::{SystemTime, UNIX_EPOCH};
-use tailwind_rs_core::{ClassBuilder, CssGenerator};
+use tailwind_rs_core::CssGenerator;
 
 /// Generate fallback CSS for classes that can't be parsed by our parsers
 fn generate_fallback_css(class: &str) -> Option<String> {
@@ -343,7 +343,6 @@ fn generate_css() -> (String, String) {
     let total_classes = classes.len();
 
     // Use individual processing (proven to work from integration tests)
-    println!("🔧 Processing {} classes with individual parsing...", classes.len());
 
     for class in &classes {
         match generator.add_class(class) {
@@ -366,7 +365,6 @@ fn generate_css() -> (String, String) {
     }
 
     // 🎯 NEW: Test element-based processing with realistic element groupings
-    println!("\n🎨 Testing Element-Based Processing (NEW ARCHITECTURE)...");
 
     let mut element_based_generator = CssGenerator::new();
 
@@ -389,7 +387,6 @@ fn generate_css() -> (String, String) {
     let mut element_count = 0;
 
     for (i, element_classes) in element_groups.iter().enumerate() {
-        println!("   Element {}: {} classes", i + 1, element_classes.len());
         let css = element_based_generator.process_element_classes(element_classes);
         if !css.is_empty() {
             element_css.push_str(&format!("/* Element {} */\n", i + 1));
@@ -399,7 +396,6 @@ fn generate_css() -> (String, String) {
         }
     }
 
-    println!("✅ Element-based processing generated CSS for {} elements", element_count);
 
     // Add element-based CSS to the main CSS output
     let mut combined_css = String::new();
@@ -411,11 +407,6 @@ fn generate_css() -> (String, String) {
     combined_css.push_str("/* 🔧 INDIVIDUAL CLASS PROCESSING (LEGACY) */\n");
     combined_css.push_str("/* =========================================== */\n\n");
 
-    println!("📊 Coverage Report:");
-    println!("   Total classes: {}", total_classes);
-    println!("   Parsed by Tailwind-RS: {} ({:.1}%)", parsed_count, (parsed_count as f64 / total_classes as f64) * 100.0);
-    println!("   Handled by fallback: {} ({:.1}%)", fallback_count, (fallback_count as f64 / total_classes as f64) * 100.0);
-    println!("   Element-based processing: {} elements", element_count);
 
     (combined_css, fallback_css)
 }
@@ -665,10 +656,8 @@ fn handle_request(mut stream: TcpStream) -> std::io::Result<()> {
     let request_str = String::from_utf8_lossy(&buffer[..bytes_read]);
     let request_line = request_str.lines().next().unwrap_or("");
 
-    println!("📨 Received request: {}", request_line);
 
     let response = if request_line.contains("GET /styles.css") {
-        println!("🎨 Serving CSS...");
         let (css, fallback_css) = generate_css();
         let mut full_css = css;
         if !fallback_css.is_empty() {
@@ -683,7 +672,6 @@ fn handle_request(mut stream: TcpStream) -> std::io::Result<()> {
             full_css
         )
     } else {
-        println!("🌐 Serving HTML...");
         let html = generate_html();
         format!(
             "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: {}\r\n\r\n{}",
@@ -700,15 +688,10 @@ fn handle_request(mut stream: TcpStream) -> std::io::Result<()> {
 fn main() -> std::io::Result<()> {
     // For coverage testing, just run the CSS generation and exit
     if std::env::args().any(|arg| arg == "--coverage-test") {
-        println!("🧪 Running Tailwind-RS Coverage Test with CDN enabled");
         let (_css, _fallback) = generate_css();
         return Ok(());
     }
 
-    println!("🚀 Starting Tailwind-RS Objects Demo server...");
-    println!("📱 Open http://localhost:3001 in your browser");
-    println!("🔧 This uses REAL Tailwind-RS objects: CssGenerator, ClassBuilder, error handling!");
-    println!("⚡ Process ID: {}", std::process::id());
 
     let listener = TcpListener::bind("127.0.0.1:3001")?;
 
@@ -716,11 +699,9 @@ fn main() -> std::io::Result<()> {
         match stream {
             Ok(stream) => {
                 if let Err(e) = handle_request(stream) {
-                    eprintln!("Error handling request: {}", e);
                 }
             }
             Err(e) => {
-                eprintln!("Error accepting connection: {}", e);
             }
         }
     }

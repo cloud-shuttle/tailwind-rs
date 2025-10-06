@@ -297,7 +297,7 @@ impl CssGenerator {
             return String::new();
         }
 
-        let selector = format!(".{}", class.replace(":", "\\:"));
+        let selector = format!(".{}", class.replace(":", "\\:").replace("/", "\\/"));
         let mut css = format!("{} {{\n", selector);
 
         for property in properties {
@@ -312,8 +312,8 @@ impl CssGenerator {
     ///
     /// WARNING: This method cannot handle stateful utilities like gradients correctly.
     /// Use process_element_classes() for full functionality.
-    pub fn class_to_css_rule(&self, class: &str) -> Result<CssRule> {
-        eprintln!("Warning: class_to_css_rule is deprecated. Use process_element_classes for full functionality.");
+    pub fn class_to_css_rule(&mut self, class: &str) -> Result<CssRule> {
+        // Note: class_to_css_rule is deprecated. Use process_element_classes for full functionality.
 
         // For now, delegate to the parsers (limited functionality)
         CssGeneratorParsers::class_to_css_rule(self, class)

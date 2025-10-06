@@ -124,7 +124,6 @@ impl ClassBuilderContract {
 
         match breakpoint {
             Breakpoint::Base | Breakpoint::Sm | Breakpoint::Md | Breakpoint::Lg | Breakpoint::Xl | Breakpoint::Xl2 => Ok(()),
-            _ => Err(ContractError::InvalidInput(format!("Unsupported breakpoint: {:?}", breakpoint))),
         }
     }
 }

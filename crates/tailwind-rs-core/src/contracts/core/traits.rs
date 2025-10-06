@@ -250,15 +250,15 @@ impl ContractRegistry {
             results.push((name.clone(), ValidationResult::Valid));
         }
 
-        for (name, contract) in &self.css_generator_contracts {
+        for (name, _contract) in &self.css_generator_contracts {
             results.push((name.clone(), ValidationResult::Valid));
         }
 
-        for (name, contract) in &self.theme_contracts {
+        for (name, _contract) in &self.theme_contracts {
             results.push((name.clone(), ValidationResult::Valid));
         }
 
-        for (name, contract) in &self.validation_contracts {
+        for (name, _contract) in &self.validation_contracts {
             results.push((name.clone(), ValidationResult::Valid));
         }
 

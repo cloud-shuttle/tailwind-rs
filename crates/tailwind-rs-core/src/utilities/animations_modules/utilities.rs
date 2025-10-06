@@ -105,17 +105,17 @@ impl AnimationUtilities for ClassBuilder {
 
     fn animation_with_duration(self, animation: Animation, duration_ms: u32) -> Self {
         self.class(format!("animate-{}", animation.to_class_name()))
-            .class(format!("duration-{}", duration_ms))
+            .class(format!("animate-duration-{}", duration_ms))
     }
 
     fn animation_once(self, animation: Animation) -> Self {
         self.class(format!("animate-{}", animation.to_class_name()))
-            .class("animation-iteration-count-1".to_string())
+            .class("animate-count-1".to_string())
     }
 
     fn animation_repeat(self, animation: Animation, count: u32) -> Self {
         self.class(format!("animate-{}", animation.to_class_name()))
-            .class(format!("animation-iteration-count-{}", count))
+            .class(format!("animate-count-{}", count))
     }
 
     fn fade_in(self) -> Self {
@@ -175,26 +175,26 @@ impl AnimationUtilities for ClassBuilder {
     }
 
     fn animation_pause(self) -> Self {
-        self.class("animation-paused")
+        self.class("animate-play-state-paused")
     }
 
     fn animation_resume(self) -> Self {
-        self.class("animation-running")
+        self.class("animate-play-state-running")
     }
 
     fn animation_infinite(self, animation: Animation) -> Self {
         self.class(format!("animate-{}", animation.to_class_name()))
-            .class("animation-infinite")
+            .class("animate-count-infinite")
     }
 
     fn animation_delay(self, animation: Animation, delay_ms: u32) -> Self {
         self.class(format!("animate-{}", animation.to_class_name()))
-            .class(format!("animation-delay-{}", delay_ms))
+            .class(format!("animate-delay-{}", delay_ms))
     }
 
     fn animation_timing(self, animation: Animation, timing: AnimationTiming) -> Self {
         self.class(format!("animate-{}", animation.to_class_name()))
-            .class(format!("animation-timing-{}", timing.to_css_value().replace(" ", "-").replace("(", "").replace(")", "").replace(",", "")))
+            .class(format!("animate-ease-{}", timing.to_css_value().replace(" ", "-").replace("(", "").replace(")", "").replace(",", "")))
     }
 }
 
@@ -370,32 +370,28 @@ mod tests {
 
     #[test]
     fn animation_utilities_trait() {
-        let mut builder = ClassBuilder::new();
-
         // Test basic animation methods
-        let result = builder.animation(Animation::Spin);
+        let builder = ClassBuilder::new().animation(Animation::Spin);
         // In a real test, we'd check the result has the expected classes
 
-        let result = builder.spin().bounce().fade_in();
+        let builder = ClassBuilder::new().spin().bounce().fade_in();
         // Test chaining multiple animations
     }
 
     #[test]
     fn animation_with_modifiers() {
-        let mut builder = ClassBuilder::new();
-
-        let result = builder.animation_with_duration(Animation::Bounce, 2000);
-        let result = builder.animation_once(Animation::FadeIn);
-        let result = builder.animation_repeat(Animation::Wobble, 3);
-        let result = builder.animation_infinite(Animation::Spin);
+        let builder = ClassBuilder::new()
+            .animation_with_duration(Animation::Bounce, 2000)
+            .animation_once(Animation::FadeIn)
+            .animation_repeat(Animation::Wobble, 3)
+            .animation_infinite(Animation::Spin);
     }
 
     #[test]
     fn hover_and_focus_animations() {
-        let mut builder = ClassBuilder::new();
-
-        let result = builder.hover_animation(Animation::ZoomIn);
-        let result = builder.focus_animation(Animation::Shake);
+        let builder = ClassBuilder::new()
+            .hover_animation(Animation::ZoomIn)
+            .focus_animation(Animation::Shake);
     }
 
     #[test]

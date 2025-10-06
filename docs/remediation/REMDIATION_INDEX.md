@@ -39,6 +39,12 @@
 - **Dead Code**: Multiple unused functions
 - **Ambiguous Exports**: Glob re-export conflicts
 
+#### 5. Critical CSS Generation Architecture (NEW - IMMEDIATE ACTION REQUIRED)
+- **Issue**: Core `CssGenerator::add_class()` produces malformed CSS by accumulating properties
+- **Impact**: Standard API usage generates broken CSS output
+- **Status**: Design complete, implementation pending
+- **Timeline**: 5 days critical fix
+
 ---
 
 ## 🚀 Remediation Roadmap
@@ -151,6 +157,12 @@
 **Status**: Pending creation
 **Next Step**: Audit and fix all warnings/errors
 
+### 5. Core CSS Generation Architecture Remediation Plan (CRITICAL)
+**Location**: `docs/remediation/core_css_generation_remediation.md`
+**Status**: Complete design document
+**Technical Design**: `docs/design/core_css_generation_architecture_fix.md`
+**Next Step**: Begin implementation of "One Class = One CSS Rule" architecture
+
 ---
 
 ## 🎯 Design Documents (Individual Component Designs)
@@ -254,7 +266,13 @@
 
 ## 🎯 Immediate Next Steps
 
-### Today (High Priority)
+### Today (CRITICAL PRIORITY - IMMEDIATE ACTION)
+1. **CRITICAL FIX**: Implement "One Class = One CSS Rule" architecture
+2. **Fix `add_class()` method**: Replace property accumulation with individual rule generation
+3. **Test standard API**: Verify `CssGenerator::new()` + `add_class()` works correctly
+4. **Validate CSS output**: Ensure generated CSS matches proper Tailwind patterns
+
+### Tomorrow (High Priority)
 1. **Begin Phase 1**: Start extracting `api_contracts.rs`
 2. **Create monitoring**: Set up file size tracking script
 3. **Assign ownership**: Designate responsible engineers for each file

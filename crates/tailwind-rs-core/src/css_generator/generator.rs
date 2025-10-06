@@ -24,7 +24,7 @@ use super::parsers::{
 use super::types::{CssGenerationConfig, CssProperty, CssRule};
 use super::variants::VariantParser;
 use super::trie::{ParserTrie, ParserType};
-use super::element_context::ElementContext;
+use super::color_cache::ColorCache;
 use crate::transforms::TransformParser;
 use crate::error::Result;
 use crate::responsive::Breakpoint;
@@ -41,8 +41,6 @@ pub struct CssGenerator {
     pub custom_properties: HashMap<String, String>,
     /// Generation configuration
     pub config: CssGenerationConfig,
-    /// Context for element state (gradients, shadows, transforms, etc.)
-    pub element_context: ElementContext,
     /// Spacing parser
     pub spacing_parser: SpacingParser,
     /// Advanced spacing parser
@@ -206,6 +204,10 @@ pub struct CssGenerator {
     pub variant_parser: VariantParser,
     /// Parser trie for fast lookups
     pub parser_trie: ParserTrie,
+    /// Color cache for performance optimization
+    pub color_cache: ColorCache,
+    /// Whether transform CSS has been generated for this instance
+    pub transform_css_generated: bool,
 }
 
 impl Default for CssGenerator {
@@ -329,32 +331,101 @@ impl CssGenerator {
         )
     }
 
-    /// Convert a class name to a CSS rule
-    pub fn class_to_css_rule(&self, class: &str) -> Result<CssRule> {
+    /// Generate individual CSS rule for a class - "One Class = One CSS Rule" architecture
+    pub fn generate_individual_css_rule(&mut self, class: &str) -> Result<CssRule> {
+        let (variants, base_class) = self.parse_variants(class);
+
+        // Handle gradient stops - each generates its own CSS variable rule
+        if let Some(stop_type) = Self::extract_gradient_stop_type(&base_class) {
+            if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, stop_type) {
+                let selector = self.variant_parser.build_css_selector(&base_class, &variants)?;
+                return Ok(CssRule {
+                    selector,
+                    properties: vec![CssProperty {
+                        name: format!("--tw-gradient-{}", stop_type),
+                        value: color,
+                        important: false,
+                    }],
+                    media_query: self.variant_parser.get_media_query(&variants),
+                    specificity: self.calculate_specificity(&variants),
+                });
+            }
+        }
+
+        // Handle gradient directions - each generates its own gradient rule
+        if let Some(direction) = Self::extract_gradient_direction(&base_class) {
+            let selector = self.variant_parser.build_css_selector(&base_class, &variants)?;
+            return Ok(CssRule {
+                selector,
+                properties: vec![
+                    CssProperty {
+                        name: "--tw-gradient-stops".to_string(),
+                        value: "var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to, transparent)".to_string(),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "background-image".to_string(),
+                        value: format!("linear-gradient({}, var(--tw-gradient-stops))", direction),
+                        important: false,
+                    },
+                ],
+                media_query: self.variant_parser.get_media_query(&variants),
+                specificity: self.calculate_specificity(&variants),
+            });
+        }
+
+        // Handle all other classes - get properties only for this specific class
+        let properties = self.parse_class_to_properties(&base_class)?;
+        let selector = self.variant_parser.build_css_selector(&base_class, &variants)?;
+
+        Ok(CssRule {
+            selector,
+            properties,
+            media_query: self.variant_parser.get_media_query(&variants),
+            specificity: self.calculate_specificity(&variants),
+        })
+    }
+
+    /// Parse a class to get its properties - used by generate_individual_css_rule
+    fn parse_class_to_properties(&self, base_class: &str) -> Result<Vec<CssProperty>> {
+        // Use the existing class_to_properties method for now
+        // This is a temporary solution until the parser trie is fully implemented
+        self.class_to_properties(base_class)
+    }
+
+    /// Calculate CSS specificity for a set of variants
+    fn calculate_specificity(&self, variants: &[String]) -> u32 {
+        // Base specificity is 10 for class selectors
+        let mut specificity = 10u32;
+
+        for variant in variants {
+                    match variant.as_str() {
+                // Pseudo-classes add specificity
+                "hover" | "focus" | "active" | "visited" | "disabled" |
+                "first" | "last" | "odd" | "even" => {
+                    specificity += 10; // :pseudo-class increases specificity
+                }
+                // Responsive variants don't add specificity (handled via media queries)
+                "sm" | "md" | "lg" | "xl" | "2xl" => {}
+                // Dark mode adds class specificity
+                "dark" => specificity += 10,
+                // Other variants
+                _ => specificity += 1,
+            }
+        }
+
+        specificity
+    }
+
+    /// Convert a class name to a CSS rule (legacy method - kept for compatibility)
+    pub fn class_to_css_rule(&mut self, class: &str) -> Result<CssRule> {
         let (variants, base_class) = self.parse_variants(class);
 
         // Handle gradient stops specially (with or without variants)
         if let Some(stop_type) = Self::extract_gradient_stop_type(&base_class) {
-            if let Some(color) = Self::extract_gradient_color(&base_class, stop_type) {
-                // Build selector with variants - use Tailwind's format: .escaped-class-name:modifiers
-                let escaped_class = class.replace(":", "\\:");
-                let mut selector = format!(".{}", escaped_class);
-
-                // Add variant modifiers
-                for variant in &variants {
-                    match variant.as_str() {
-                        "hover" => selector.push_str(":hover"),
-                        "focus" => selector.push_str(":focus"),
-                        "active" => selector.push_str(":active"),
-                        "visited" => selector.push_str(":visited"),
-                        "disabled" => selector.push_str(":disabled"),
-                        "first" => selector.push_str(":first-child"),
-                        "last" => selector.push_str(":last-child"),
-                        "odd" => selector.push_str(":nth-child(odd)"),
-                        "even" => selector.push_str(":nth-child(even)"),
-                        _ => {} // Other variants handled via media queries or class selectors
-                    }
-                }
+            if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, stop_type) {
+                // Use build_css_selector to properly handle variant selectors and escaping
+                let selector = self.variant_parser.build_css_selector(&base_class, &variants)?;
 
                 let properties = vec![super::types::CssProperty {
                     name: format!("--tw-gradient-{}", stop_type),
@@ -373,25 +444,8 @@ impl CssGenerator {
 
         let properties = self.class_to_properties(&base_class)?;
 
-        // Build selector with variants - use Tailwind's format: .escaped-class-name:modifiers
-        let escaped_class = class.replace(":", "\\:");
-        let mut selector = format!(".{}", escaped_class);
-
-        // Add variant modifiers
-        for variant in &variants {
-            match variant.as_str() {
-                "hover" => selector.push_str(":hover"),
-                "focus" => selector.push_str(":focus"),
-                "active" => selector.push_str(":active"),
-                "visited" => selector.push_str(":visited"),
-                "disabled" => selector.push_str(":disabled"),
-                "first" => selector.push_str(":first-child"),
-                "last" => selector.push_str(":last-child"),
-                "odd" => selector.push_str(":nth-child(odd)"),
-                "even" => selector.push_str(":nth-child(even)"),
-                _ => {} // Other variants handled via media queries or class selectors
-            }
-        }
+        // Use build_css_selector to properly handle variant selectors and escaping
+        let selector = self.variant_parser.build_css_selector(&base_class, &variants)?;
 
         // Determine media query for responsive and device variants
         let media_query = variants.iter().find_map(|variant| {
@@ -424,164 +478,457 @@ impl CssGenerator {
         <Self as CssGeneratorParsers>::class_to_properties(self, class)
     }
 
-    /// Add a gradient stop to the current gradient context
-    pub fn add_gradient_stop(&mut self, stop_type: &str, color: String) {
-        match stop_type {
-            "from" => self.element_context.gradients.from_color = Some(color),
-            "via" => self.element_context.gradients.via_color = Some(color),
-            "to" => self.element_context.gradients.to_color = Some(color),
-            _ => {}
-        }
-    }
 
-    /// Generate gradient CSS using current context and direction
-    pub fn generate_gradient_css(&mut self, direction: &str) -> Option<String> {
-        self.element_context.gradients.direction = Some(direction.to_string());
-
-        let mut colors = Vec::new();
-
-        // Add colors in order: from, via, to
-        if let Some(from) = &self.element_context.gradients.from_color {
-            colors.push(from.clone());
-        }
-        if let Some(via) = &self.element_context.gradients.via_color {
-            colors.push(via.clone());
-        }
-        if let Some(to) = &self.element_context.gradients.to_color {
-            colors.push(to.clone());
-        }
-
-        // If no colors collected, return None (let fallback handle it)
-        if colors.is_empty() {
-            return None;
-        }
-
-        // Generate the gradient CSS
-        let gradient_css = format!("linear-gradient({}, {})", direction, colors.join(", "));
-
-        // Reset context for next gradient
-        self.element_context = ElementContext::default();
-
-        Some(gradient_css)
-    }
-
-    /// Clear element context (useful for resetting between elements)
-    pub fn clear_element_context(&mut self) {
-        self.element_context = ElementContext::default();
-    }
-
-    /// Process element classes using element-based processing (new architecture)
-    /// This method handles complex class combinations including gradients, shadows, transforms, filters, animations, and arbitrary values
+    /// Process element classes using element-based processing
+    /// This method processes each class individually and generates proper CSS rules
     pub fn process_element_classes(&mut self, classes: &[&str]) -> String {
-        // Reset element context for new element
-        self.element_context = ElementContext::default();
+        use std::collections::HashMap;
 
-        // First pass: collect stateful information from all classes
+        let mut base_rules = Vec::new();
+        let mut responsive_rules: HashMap<String, Vec<super::types::CssRule>> = HashMap::new();
+
+        // Check if this element has transform classes
+        let has_transforms = classes.iter().any(|class| {
+            let (variants, base_class) = self.parse_variants(class);
+            base_class == "transform" ||
+            base_class.starts_with("translate-") ||
+            base_class.starts_with("scale-") ||
+            base_class.starts_with("rotate-") ||
+            base_class.starts_with("skew-") ||
+            base_class.starts_with("origin-")
+        });
+
+        // Handle gradient classes first (they need compound rules)
+        if classes.iter().any(|class| self.is_gradient_class(class)) {
+            if let Some(gradient_css) = self.generate_gradient_hover_rules(classes) {
+                // For now, return gradient CSS directly and process remaining classes
+                return gradient_css + &self.process_element_classes_basic(
+                    &classes.iter().filter(|class| !self.is_gradient_class(class)).cloned().collect::<Vec<_>>()
+                );
+            }
+        }
+
+        // Handle transform classes - let individual hover rules work normally
+        // The combined transform approach causes conflicts when different elements have different combinations
+
+        // Process each class individually and collect rules
         for class in classes {
-            self.element_context.update_from_class(class);
-        }
+            let (variants, base_class) = self.parse_variants(class);
 
-        // Generate variant-aware CSS rules for all stateful classes
-        let mut css_output = String::new();
-
-        // Generate CSS for gradients
-        if self.element_context.gradients.has_gradient() {
-            let gradient_rules = self.element_context.generate_variant_css("bg-gradient-to-r");
-            for rule in gradient_rules {
-                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+            // Skip gradient stop classes with hover variants (handled in compound rules)
+            if variants.contains(&"hover".to_string()) &&
+               (base_class.starts_with("from-") || base_class.starts_with("via-") || base_class.starts_with("to-")) {
+                continue;
             }
-        }
 
-        // Generate CSS for shadows
-        if self.element_context.shadows.has_shadow() {
-            let shadow_rules = self.element_context.generate_variant_css("shadow-lg");
-            for rule in shadow_rules {
-                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
-            }
-        }
-
-        // Generate CSS for transforms
-        if self.element_context.transforms.has_transform() {
-            let transform_rules = self.element_context.generate_variant_css("scale-110");
-            for rule in transform_rules {
-                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
-            }
-        }
-
-        // Generate CSS for filters
-        let filter_properties = self.element_context.filters.to_css_properties();
-        if !filter_properties.is_empty() {
-            let filter_rules = self.element_context.generate_variant_css("blur-md");
-            for rule in filter_rules {
-                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
-            }
-        }
-
-        // Generate CSS for animations
-        let animation_properties = self.element_context.animations.to_css_properties();
-        if !animation_properties.is_empty() {
-            let animation_rules = self.element_context.generate_variant_css("animate-spin");
-            for rule in animation_rules {
-                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
-            }
-        }
-
-        // Generate CSS for arbitrary values
-        let arbitrary_properties = self.element_context.arbitrary_values.to_css_properties();
-        if !arbitrary_properties.is_empty() {
-            // For arbitrary values, we need to create a representative class
-            let arbitrary_rules = self.element_context.generate_variant_css("w-[100px]");
-            for rule in arbitrary_rules {
-                css_output.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
-            }
-        }
-
-        // Second pass: handle non-stateful classes using existing logic
-        let mut non_stateful_css = String::new();
-        for class in classes {
-            // Skip classes that were handled by element context
-            let base_class = if class.contains(':') {
-                class.split(':').last().unwrap_or(class)
-            } else {
-                class
-            };
-
-            let is_stateful = base_class.starts_with("bg-gradient-") ||
-                             base_class.starts_with("from-") ||
-                             base_class.starts_with("via-") ||
-                             base_class.starts_with("to-") ||
-                             base_class.starts_with("shadow-") ||
-                             base_class.starts_with("scale-") ||
-                             base_class.starts_with("rotate-") ||
-                             base_class.starts_with("translate-") ||
-                             base_class.starts_with("skew-") ||
-                             base_class.starts_with("blur-") ||
-                             base_class.starts_with("brightness-") ||
-                             base_class.starts_with("contrast-") ||
-                             base_class.starts_with("grayscale") ||
-                             base_class.starts_with("hue-rotate-") ||
-                             base_class.starts_with("invert") ||
-                             base_class.starts_with("saturate-") ||
-                             base_class.starts_with("sepia") ||
-                             base_class.starts_with("drop-shadow") ||
-                             base_class.starts_with("animate-") ||
-                             base_class.starts_with("duration-") ||
-                             base_class.starts_with("delay-") ||
-                             base_class.starts_with("ease-") ||
-                             base_class.contains('[');
-
-            if !is_stateful {
-                // Use existing class-to-css logic for non-stateful classes
-                if let Ok(rule) = self.class_to_css_rule(class) {
-                    non_stateful_css.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
-                    non_stateful_css.push('\n');
+            // Generate CSS rule for this class using the new architecture
+            if let Ok(rule) = self.generate_individual_css_rule(class) {
+                if let Some(ref media_query) = rule.media_query {
+                    responsive_rules
+                        .entry(media_query.clone())
+                        .or_default()
+                        .push(rule);
+                } else {
+                    base_rules.push(rule);
                 }
             }
         }
 
-        // Combine element-based CSS with traditional CSS
-        css_output.push_str(&non_stateful_css);
-        css_output.trim_end().to_string()
+        // Generate final CSS with proper media query organization
+        let mut css = self.generate_organized_css(base_rules, responsive_rules);
+
+        // Add transform CSS if this element uses transforms
+        if has_transforms {
+            if let Some(transform_css) = self.generate_transform_css() {
+                css = transform_css + &css;
+            }
+        }
+
+        css
+    }
+
+    /// Basic element processing without special handling
+    fn process_element_classes_basic(&mut self, classes: &[&str]) -> String {
+        use std::collections::HashMap;
+
+        let mut base_rules = Vec::new();
+        let mut responsive_rules: HashMap<String, Vec<super::types::CssRule>> = HashMap::new();
+
+        // Process each class individually and collect rules
+        for class in classes {
+            if let Ok(rule) = self.generate_individual_css_rule(class) {
+                if let Some(ref media_query) = rule.media_query {
+                    responsive_rules
+                        .entry(media_query.clone())
+                        .or_default()
+                        .push(rule);
+                } else {
+                    base_rules.push(rule);
+                }
+            }
+        }
+
+        // Generate final CSS with proper media query organization
+        self.generate_organized_css(base_rules, responsive_rules)
+    }
+
+    /// Generate organized CSS with proper media query grouping
+    fn generate_organized_css(&self, base_rules: Vec<super::types::CssRule>, responsive_rules: std::collections::HashMap<String, Vec<super::types::CssRule>>) -> String {
+        let mut css = String::new();
+
+        // Sort base rules by specificity
+        let mut sorted_base_rules = base_rules;
+        sorted_base_rules.sort_by_key(|rule| rule.specificity);
+
+        // Generate base rules
+        for rule in sorted_base_rules {
+            css.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+        }
+
+        // Generate responsive rules grouped by media query
+        let mut sorted_media_queries: Vec<String> = responsive_rules.keys().cloned().collect();
+        sorted_media_queries.sort_by(|a, b| {
+            // Sort by min-width value for consistent ordering
+            let a_width = self.extract_min_width(a);
+            let b_width = self.extract_min_width(b);
+            a_width.cmp(&b_width)
+        });
+
+        for media_query in sorted_media_queries {
+            if let Some(mut rules) = responsive_rules.get(&media_query).cloned() {
+                // Sort rules within each media query by specificity
+                rules.sort_by_key(|rule| rule.specificity);
+
+                css.push_str(&format!("@media {} {{\n", media_query));
+                for rule in rules {
+                    css.push_str(&super::css_output::CssOutputGenerator::rule_to_css(&rule));
+                }
+                css.push_str("}\n\n");
+            }
+        }
+
+        css.trim_end().to_string()
+    }
+
+    /// Extract min-width value from media query for sorting
+    fn extract_min_width(&self, media_query: &str) -> u32 {
+        if let Some(width_str) = media_query.strip_prefix("(min-width: ").and_then(|s| s.strip_suffix("px)")) {
+            width_str.parse().unwrap_or(0)
+            } else {
+            0
+        }
+    }
+
+    /// Generate combined hover transform rules
+    fn generate_combined_hover_transforms(&mut self, hover_transforms: &[&str]) -> Option<String> {
+        if hover_transforms.is_empty() {
+            return None;
+        }
+
+        let mut transform_parts = Vec::new();
+        let mut selector_parts = Vec::new();
+
+        for &class in hover_transforms {
+            let (variants, base_class) = self.parse_variants(class);
+
+            // Build selector part
+            let selector_part = self.variant_parser.build_css_selector(&base_class, &variants).ok()?;
+            selector_parts.push(selector_part);
+
+            // Parse transform value
+            if let Some(transform_value) = self.get_transform_value_for_class(&base_class) {
+                transform_parts.push(transform_value);
+            }
+        }
+
+        if transform_parts.is_empty() {
+            return None;
+        }
+
+        let combined_selector = selector_parts.join("");
+        let combined_transform = transform_parts.join(" ");
+
+        let css = format!("{} {{\n    transform: {};\n}}\n\n", combined_selector, combined_transform);
+        Some(css)
+    }
+
+    /// Get transform value for a base class
+    fn get_transform_value_for_class(&self, base_class: &str) -> Option<String> {
+        if base_class.starts_with("scale-") {
+            if let Some(value) = base_class.strip_prefix("scale-") {
+                match value {
+                    "0" => Some("scale(0)".to_string()),
+                    "50" => Some("scale(0.5)".to_string()),
+                    "75" => Some("scale(0.75)".to_string()),
+                    "90" => Some("scale(0.9)".to_string()),
+                    "95" => Some("scale(0.95)".to_string()),
+                    "100" => Some("scale(1)".to_string()),
+                    "105" => Some("scale(1.05)".to_string()),
+                    "110" => Some("scale(1.1)".to_string()),
+                    "125" => Some("scale(1.25)".to_string()),
+                    "150" => Some("scale(1.5)".to_string()),
+                    _ => None,
+                }
+            } else {
+                None
+            }
+        } else if base_class.starts_with("rotate-") {
+            if let Some(value) = base_class.strip_prefix("rotate-") {
+                match value {
+                    "0" => Some("rotate(0deg)".to_string()),
+                    "1" => Some("rotate(1deg)".to_string()),
+                    "2" => Some("rotate(2deg)".to_string()),
+                    "3" => Some("rotate(3deg)".to_string()),
+                    "6" => Some("rotate(6deg)".to_string()),
+                    "12" => Some("rotate(12deg)".to_string()),
+                    "45" => Some("rotate(45deg)".to_string()),
+                    "90" => Some("rotate(90deg)".to_string()),
+                    "180" => Some("rotate(180deg)".to_string()),
+                    _ => None,
+                }
+            } else {
+                None
+            }
+        } else if base_class.starts_with("-rotate-") {
+            if let Some(value) = base_class.strip_prefix("-rotate-") {
+                match value {
+                    "1" => Some("rotate(-1deg)".to_string()),
+                    "2" => Some("rotate(-2deg)".to_string()),
+                    "3" => Some("rotate(-3deg)".to_string()),
+                    "6" => Some("rotate(-6deg)".to_string()),
+                    "12" => Some("rotate(-12deg)".to_string()),
+                    "45" => Some("rotate(-45deg)".to_string()),
+                    "90" => Some("rotate(-90deg)".to_string()),
+                    "180" => Some("rotate(-180deg)".to_string()),
+                    _ => None,
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
+    /// Generate transform CSS using CSS custom properties
+    fn generate_transform_css(&mut self) -> Option<String> {
+        // Only generate once per generator instance
+        if self.transform_css_generated {
+            return None;
+        }
+        self.transform_css_generated = true;
+
+        let mut css = String::new();
+
+        // CSS custom property defaults for transforms
+        css.push_str(":root {\n");
+        css.push_str("    --tw-scale-x: 1;\n");
+        css.push_str("    --tw-scale-y: 1;\n");
+        css.push_str("    --tw-rotate: 0deg;\n");
+        css.push_str("    --tw-skew-x: 0deg;\n");
+        css.push_str("    --tw-skew-y: 0deg;\n");
+        css.push_str("    --tw-translate-x: 0px;\n");
+        css.push_str("    --tw-translate-y: 0px;\n");
+        css.push_str("    --tw-transform: scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y));\n");
+        css.push_str("}\n\n");
+
+        // Base transform class
+        css.push_str(".transform {\n    transform: var(--tw-transform);\n}\n");
+
+        Some(css)
+    }
+
+
+
+    /// Check if a class is gradient-related
+    fn is_gradient_class(&self, class: &str) -> bool {
+        let (_, base_class) = self.parse_variants(class);
+        base_class.starts_with("bg-gradient-to-") ||
+        base_class.starts_with("from-") ||
+        base_class.starts_with("via-") ||
+        base_class.starts_with("to-")
+    }
+
+    /// Check if a class is transform-related
+
+    /// Generate compound gradient hover rules for elements with gradient classes
+    fn generate_gradient_hover_rules(&mut self, classes: &[&str]) -> Option<String> {
+        // Find gradient direction (without variants)
+        let gradient_direction = classes.iter()
+            .find(|class| {
+                let (variants, base_class) = self.parse_variants(class);
+                base_class.starts_with("bg-gradient-to-") && variants.is_empty()
+            })?;
+
+        let gradient_direction_str = gradient_direction.to_string();
+
+        // Find base gradient stops (without hover variants)
+        let mut base_from = None;
+        let mut base_via = None;
+        let mut base_to = None;
+
+        for class in classes {
+            let (variants, base_class) = self.parse_variants(class);
+            if variants.is_empty() {
+                if base_class.starts_with("from-") {
+                    if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, "from") {
+                        base_from = Some(color);
+                    }
+                } else if base_class.starts_with("via-") {
+                    if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, "via") {
+                        base_via = Some(color);
+                    }
+                } else if base_class.starts_with("to-") {
+                    if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, "to") {
+                        base_to = Some(color);
+                    }
+                }
+            }
+        }
+
+        // Find hover gradient stops (with hover variants)
+        let mut hover_from = None;
+        let mut hover_via = None;
+        let mut hover_to = None;
+
+        for class in classes {
+            let (variants, base_class) = self.parse_variants(class);
+            if variants.contains(&"hover".to_string()) {
+                if base_class.starts_with("from-") {
+                    if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, "from") {
+                        hover_from = Some(color);
+                    }
+                } else if base_class.starts_with("via-") {
+                    if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, "via") {
+                        hover_via = Some(color);
+                    }
+                } else if base_class.starts_with("to-") {
+                    if let Some(color) = Self::extract_gradient_color(&mut self.color_cache, &base_class, "to") {
+                        hover_to = Some(color);
+                    }
+                }
+            }
+        }
+
+        // If we have hover gradient stops, generate compound hover rule
+        if hover_from.is_some() || hover_via.is_some() || hover_to.is_some() {
+            // Get gradient direction
+            let direction = if gradient_direction_str.contains("to-r") {
+                "to right"
+            } else if gradient_direction_str.contains("to-l") {
+                "to left"
+            } else if gradient_direction_str.contains("to-t") {
+                "to top"
+            } else if gradient_direction_str.contains("to-b") {
+                "to bottom"
+            } else if gradient_direction_str.contains("to-tr") {
+                "to top right"
+            } else if gradient_direction_str.contains("to-tl") {
+                "to top left"
+            } else if gradient_direction_str.contains("to-br") {
+                "to bottom right"
+            } else if gradient_direction_str.contains("to-bl") {
+                "to bottom left"
+            } else {
+                "to right"
+            };
+
+            // Build hover gradient colors
+            let hover_colors = vec![
+                hover_from.or(base_from),
+                hover_via.or(base_via),
+                hover_to.or(base_to).or_else(|| Some("transparent".to_string()))
+            ].into_iter().flatten().collect::<Vec<_>>().join(", ");
+
+            let hover_rule = format!(".{}:hover {{\n    background-image: linear-gradient({}, {});\n}}\n",
+                gradient_direction_str,
+                direction,
+                hover_colors
+            );
+
+            return Some(hover_rule);
+        }
+
+        None
+    }
+
+    /// Generate CSS for a variant + base class combination
+
+    /// Generate fallback CSS for classes that can't be parsed by regular parsers
+    fn generate_fallback_css_for_class(&self, class: &str) -> Option<String> {
+        // Handle variant classes like hover:shadow-lg, md:text-center, etc.
+        if let Some((variant_part, base_class)) = class.split_once(':') {
+            match variant_part {
+                "hover" => {
+                    // Try to generate properties for the base class, then wrap with hover selector
+                    if let Some(properties) = self.generate_properties_for_base_class(base_class) {
+                        Some(format!(".{} {{\n{}\n}}\n", class, properties))
+                    } else {
+                        Some(format!(".{} {{\n    /* {} properties - not implemented */\n}}\n", class, base_class))
+                    }
+                }
+                "focus" => {
+                    if let Some(properties) = self.generate_properties_for_base_class(base_class) {
+                        Some(format!(".{} {{\n{}\n}}\n", class, properties))
+                    } else {
+                        Some(format!(".{} {{\n    /* {} properties - not implemented */\n}}\n", class, base_class))
+                    }
+                }
+                "active" => {
+                    if let Some(properties) = self.generate_properties_for_base_class(base_class) {
+                        Some(format!(".{} {{\n{}\n}}\n", class, properties))
+                    } else {
+                        Some(format!(".{} {{\n    /* {} properties - not implemented */\n}}\n", class, base_class))
+                    }
+                }
+                "md" => {
+                    if let Some(properties) = self.generate_properties_for_base_class(base_class) {
+                        Some(format!("@media (min-width: 768px) {{\n    .{}{{\n{}\n    }}\n}}\n", class, properties))
+                    } else {
+                        Some(format!("@media (min-width: 768px) {{\n    .{}{{}}\n}}\n", class))
+                    }
+                }
+                "lg" => {
+                    if let Some(properties) = self.generate_properties_for_base_class(base_class) {
+                        Some(format!("@media (min-width: 1024px) {{\n    .{}{{\n{}\n    }}\n}}\n", class, properties))
+                    } else {
+                        Some(format!("@media (min-width: 1024px) {{\n    .{}{{}}\n}}\n", class))
+                    }
+                }
+                "xl" => {
+                    if let Some(properties) = self.generate_properties_for_base_class(base_class) {
+                        Some(format!("@media (min-width: 1280px) {{\n    .{}{{\n{}\n    }}\n}}\n", class, properties))
+                    } else {
+                        Some(format!("@media (min-width: 1280px) {{\n    .{}{{}}\n}}\n", class))
+                    }
+                }
+                "dark" => {
+                    if let Some(properties) = self.generate_properties_for_base_class(base_class) {
+                        Some(format!(".dark .{}{{\n{}\n}}\n", class, properties))
+                    } else {
+                        Some(format!(".dark .{}{{}}\n", class))
+                    }
+                }
+                _ => None,
+            }
+        } else {
+            None
+        }
+    }
+
+    /// Generate CSS properties for a base class (used for variant fallbacks)
+    fn generate_properties_for_base_class(&self, base_class: &str) -> Option<String> {
+        // Create a temporary CSS generator to parse just this base class
+        let mut temp_generator = CssGenerator::new();
+        if let Ok(rule) = temp_generator.class_to_css_rule(base_class) {
+            let mut properties_str = String::new();
+            for prop in &rule.properties {
+                properties_str.push_str(&format!("    {}: {};\n", prop.name, prop.value));
+            }
+            Some(properties_str)
+        } else {
+            None
+        }
     }
 
 }

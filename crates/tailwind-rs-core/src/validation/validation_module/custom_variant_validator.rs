@@ -7,7 +7,7 @@ use crate::custom_variant::CustomVariantManager;
 
 /// Custom variant validator
 pub struct CustomVariantValidator {
-    rules: ValidationRules,
+    _rules: ValidationRules,
     variant_manager: CustomVariantManager,
 }
 
@@ -15,7 +15,7 @@ impl CustomVariantValidator {
     /// Create new custom variant validator
     pub fn new(rules: ValidationRules, variant_manager: CustomVariantManager) -> Self {
         Self {
-            rules,
+            _rules: rules,
             variant_manager,
         }
     }

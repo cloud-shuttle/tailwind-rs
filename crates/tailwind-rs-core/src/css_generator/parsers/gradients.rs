@@ -76,7 +76,7 @@ impl GradientParser {
     }
 
     /// Parse gradient stop classes - add to gradient context for later combination
-    pub fn parse_gradient_stop_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+    pub fn parse_gradient_stop_class(&self, _class: &str) -> Option<Vec<CssProperty>> {
         // Note: This method is now handled by the CssGenerator's context system
         // The actual parsing happens in the CssGeneratorParsers trait implementation
         None
@@ -392,14 +392,10 @@ impl UtilityParser for GradientParser {
         }
 
         // Try gradient stop classes
-        if let Some(stop_type) = CssGenerator::extract_gradient_stop_type(class) {
-            if let Some(color) = CssGenerator::extract_gradient_color(class, stop_type) {
-                return Some(vec![CssProperty {
-                    name: format!("--tw-gradient-{}", stop_type),
-                    value: color,
-                    important: false,
-                }]);
-            }
+        if let Some(_stop_type) = CssGenerator::extract_gradient_stop_type(class) {
+            // For now, skip gradient stops until we have access to color cache
+            // This will be handled by the main CssGenerator::generate_individual_css_rule method
+            return None;
         }
 
         // Return None for unknown gradient classes

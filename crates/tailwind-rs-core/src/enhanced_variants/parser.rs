@@ -62,7 +62,7 @@ impl EnhancedVariantParser {
         let mut paren_depth = 0;
         let mut bracket_depth = 0;
 
-        for (i, ch) in class.char_indices() {
+        for (_i, ch) in class.char_indices() {
             match ch {
                 '(' => paren_depth += 1,
                 ')' => paren_depth -= 1,

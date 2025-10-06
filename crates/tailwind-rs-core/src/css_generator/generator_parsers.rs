@@ -17,7 +17,7 @@ pub trait CssGeneratorParsers {
     fn parse_variants(&self, class: &str) -> (Vec<String>, String);
 
     /// Convert a class name to a CSS rule
-    fn class_to_css_rule(&self, class: &str) -> Result<super::types::CssRule>;
+    fn class_to_css_rule(&mut self, class: &str) -> Result<super::types::CssRule>;
 }
 
 
@@ -44,7 +44,7 @@ impl CssGeneratorParsers for super::core::CssGenerator {
         (variants, remaining)
     }
 
-    fn class_to_css_rule(&self, class: &str) -> Result<super::types::CssRule> {
+    fn class_to_css_rule(&mut self, class: &str) -> Result<super::types::CssRule> {
         let (variants, base_class) = self.parse_variants(class);
         let properties = self.class_to_properties(&base_class)?;
 
@@ -100,12 +100,12 @@ impl CssGeneratorParsers for super::generator::CssGenerator {
         self.variant_parser.parse_variants(class)
     }
 
-    fn class_to_css_rule(&self, class: &str) -> Result<super::types::CssRule> {
+    fn class_to_css_rule(&mut self, class: &str) -> Result<super::types::CssRule> {
         let (variants, base_class) = self.parse_variants(class);
 
         // Handle gradient stops specially - they generate CSS variables
         if let Some(stop_type) = CssGenerator::extract_gradient_stop_type(&base_class) {
-            if let Some(color) = CssGenerator::extract_gradient_color(&base_class, stop_type) {
+            if let Some(color) = CssGenerator::extract_gradient_color(&mut self.color_cache, &base_class, stop_type) {
                 // Build selector with variants - use Tailwind's format: .escaped-class-name:modifiers
                 let escaped_class = class.replace(":", "\\:");
                 let mut selector = format!(".{}", escaped_class);

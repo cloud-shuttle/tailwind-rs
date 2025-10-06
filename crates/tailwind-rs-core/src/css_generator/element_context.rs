@@ -231,7 +231,7 @@ impl ElementContext {
             }
         } else {
             // No variants - basic selector
-            let selector = format!(".{}", base_class.replace(":", "\\:"));
+            let selector = format!(".{}", base_class.replace(":", "\\:").replace("/", "\\/"));
             rules.push(CssRule {
                 selector,
                 properties,

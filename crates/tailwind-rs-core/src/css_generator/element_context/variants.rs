@@ -55,7 +55,7 @@ impl VariantContext {
 
     /// Generate CSS selector for the variants
     pub fn to_css_selector(&self, base_class: &str) -> String {
-        let mut selector = format!(".{}", base_class.replace(":", "\\:"));
+        let mut selector = format!(".{}", base_class.replace(":", "\\:").replace("/", "\\/"));
 
         // Add pseudo-selectors
         if self.hover { selector.push_str(":hover"); }
@@ -112,8 +112,8 @@ impl VariantContext {
 
     /// Generate variant CSS selector from a complex class
     pub fn to_variant_css_selector(class: &str) -> String {
-        let (variants, base_class) = Self::parse_variants_from_class(class);
-        let mut selector = format!(".{}", class.replace(":", "\\:"));
+        let (variants, _base_class) = Self::parse_variants_from_class(class);
+        let mut selector = format!(".{}", class.replace(":", "\\:").replace("/", "\\/"));
 
         // Apply variants in reverse order (innermost first)
         for variant in variants.iter().rev() {

@@ -37,7 +37,7 @@ impl OptimizationResults {
         optimized_rules: usize,
         original_properties: usize,
         optimized_properties: usize,
-        stats: OptimizationStats,
+        stats: &OptimizationStats,
     ) -> Self {
         let size_reduction = original_size.saturating_sub(optimized_size);
         let reduction_percentage = if original_size > 0 {
@@ -55,7 +55,7 @@ impl OptimizationResults {
             optimized_rules,
             original_properties,
             optimized_properties,
-            stats,
+            stats: stats.clone(),
         }
     }
 
@@ -234,7 +234,7 @@ mod tests {
     #[test]
     fn optimization_results_creation() {
         let stats = OptimizationStats::default();
-        let results = OptimizationResults::new(1000, 800, 50, 45, 200, 180, stats);
+        let results = OptimizationResults::new(1000, 800, 50, 45, 200, 180, &stats);
 
         assert_eq!(results.original_size, 1000);
         assert_eq!(results.optimized_size, 800);
@@ -249,8 +249,8 @@ mod tests {
     #[test]
     fn optimization_results_success_check() {
         let stats = OptimizationStats::default();
-        let successful = OptimizationResults::new(1000, 800, 50, 45, 200, 180, stats);
-        let unsuccessful = OptimizationResults::new(1000, 1000, 50, 50, 200, 200, stats);
+        let successful = OptimizationResults::new(1000, 800, 50, 45, 200, 180, &stats);
+        let unsuccessful = OptimizationResults::new(1000, 1000, 50, 50, 200, 200, &stats);
 
         assert!(successful.is_successful());
         assert!(!unsuccessful.is_successful());
@@ -259,7 +259,7 @@ mod tests {
     #[test]
     fn optimization_results_size_reduction_string() {
         let stats = OptimizationStats::default();
-        let results = OptimizationResults::new(2048, 1024, 50, 45, 200, 180, stats);
+        let results = OptimizationResults::new(2048, 1024, 50, 45, 200, 180, &stats);
 
         let reduction_str = results.size_reduction_string();
         assert!(reduction_str.contains("50.00%"));
@@ -321,7 +321,7 @@ mod tests {
     #[test]
     fn zero_size_handling() {
         let stats = OptimizationStats::default();
-        let results = OptimizationResults::new(0, 0, 0, 0, 0, 0, stats);
+        let results = OptimizationResults::new(0, 0, 0, 0, 0, 0, &stats);
 
         assert_eq!(results.reduction_percentage, 0.0);
         assert!(!results.is_successful());

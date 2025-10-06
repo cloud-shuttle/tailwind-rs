@@ -1,7 +1,7 @@
-//! Basic Transforms Parser
+//! Comprehensive Transforms Parser
 //!
-//! This module provides parsing logic for basic transform utilities,
-//! including translate-x and translate-y classes that were previously missing.
+//! This module provides parsing logic for comprehensive transform utilities,
+//! including translate, scale, rotate, skew, and transform-origin classes.
 
 use super::{UtilityParser, ParserCategory};
 use crate::css_generator::types::CssProperty;
@@ -11,12 +11,20 @@ use std::collections::HashMap;
 pub struct BasicTransformsParser {
     translate_x_map: HashMap<String, String>,
     translate_y_map: HashMap<String, String>,
+    scale_map: HashMap<String, String>,
+    rotate_map: HashMap<String, String>,
+    skew_map: HashMap<String, String>,
+    origin_map: HashMap<String, String>,
 }
 
 impl BasicTransformsParser {
     pub fn new() -> Self {
         let mut translate_x_map = HashMap::new();
         let mut translate_y_map = HashMap::new();
+        let mut scale_map = HashMap::new();
+        let mut rotate_map = HashMap::new();
+        let mut skew_map = HashMap::new();
+        let mut origin_map = HashMap::new();
 
         // Initialize translate-x values
         translate_x_map.insert("0".to_string(), "translateX(0)".to_string());
@@ -92,21 +100,71 @@ impl BasicTransformsParser {
         translate_y_map.insert("2.5".to_string(), "translateY(0.625rem)".to_string());
         translate_y_map.insert("3.5".to_string(), "translateY(0.875rem)".to_string());
 
+        // Initialize scale values
+        scale_map.insert("0".to_string(), "scaleX(0) scaleY(0)".to_string());
+        scale_map.insert("50".to_string(), "scaleX(0.5) scaleY(0.5)".to_string());
+        scale_map.insert("75".to_string(), "scaleX(0.75) scaleY(0.75)".to_string());
+        scale_map.insert("90".to_string(), "scaleX(0.9) scaleY(0.9)".to_string());
+        scale_map.insert("95".to_string(), "scaleX(0.95) scaleY(0.95)".to_string());
+        scale_map.insert("100".to_string(), "scaleX(1) scaleY(1)".to_string());
+        scale_map.insert("105".to_string(), "scaleX(1.05) scaleY(1.05)".to_string());
+        scale_map.insert("110".to_string(), "scaleX(1.1) scaleY(1.1)".to_string());
+        scale_map.insert("125".to_string(), "scaleX(1.25) scaleY(1.25)".to_string());
+        scale_map.insert("150".to_string(), "scaleX(1.5) scaleY(1.5)".to_string());
+
+        // Initialize rotate values
+        rotate_map.insert("0".to_string(), "rotate(0deg)".to_string());
+        rotate_map.insert("1".to_string(), "rotate(1deg)".to_string());
+        rotate_map.insert("2".to_string(), "rotate(2deg)".to_string());
+        rotate_map.insert("3".to_string(), "rotate(3deg)".to_string());
+        rotate_map.insert("6".to_string(), "rotate(6deg)".to_string());
+        rotate_map.insert("12".to_string(), "rotate(12deg)".to_string());
+        rotate_map.insert("45".to_string(), "rotate(45deg)".to_string());
+        rotate_map.insert("90".to_string(), "rotate(90deg)".to_string());
+        rotate_map.insert("180".to_string(), "rotate(180deg)".to_string());
+
+        // Initialize skew values
+        skew_map.insert("0".to_string(), "skewX(0deg) skewY(0deg)".to_string());
+        skew_map.insert("1".to_string(), "skewX(1deg) skewY(1deg)".to_string());
+        skew_map.insert("2".to_string(), "skewX(2deg) skewY(2deg)".to_string());
+        skew_map.insert("3".to_string(), "skewX(3deg) skewY(3deg)".to_string());
+        skew_map.insert("6".to_string(), "skewX(6deg) skewY(6deg)".to_string());
+        skew_map.insert("12".to_string(), "skewX(12deg) skewY(12deg)".to_string());
+
+        // Initialize transform origin values
+        origin_map.insert("center".to_string(), "center".to_string());
+        origin_map.insert("top".to_string(), "top".to_string());
+        origin_map.insert("top-right".to_string(), "top right".to_string());
+        origin_map.insert("right".to_string(), "right".to_string());
+        origin_map.insert("bottom-right".to_string(), "bottom right".to_string());
+        origin_map.insert("bottom".to_string(), "bottom".to_string());
+        origin_map.insert("bottom-left".to_string(), "bottom left".to_string());
+        origin_map.insert("left".to_string(), "left".to_string());
+        origin_map.insert("top-left".to_string(), "top left".to_string());
+
         Self {
             translate_x_map,
             translate_y_map,
+            scale_map,
+            rotate_map,
+            skew_map,
+            origin_map,
         }
     }
 
     /// Parse translate-x classes
     fn parse_translate_x_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("translate-x-") {
-            if let Some(transform_value) = self.translate_x_map.get(value) {
-                return Some(vec![CssProperty {
-                    name: "transform".to_string(),
-                    value: transform_value.clone(),
-                    important: false,
-                }]);
+            if let Some(translate_value) = self.translate_x_map.get(value) {
+                if let Some(px) = translate_value.strip_prefix("translateX(") {
+                    if let Some(px) = px.strip_suffix(")") {
+                        return Some(vec![CssProperty {
+                            name: "--tw-translate-x".to_string(),
+                            value: px.to_string(),
+                            important: false,
+                        }]);
+                    }
+                }
             }
         }
         None
@@ -115,9 +173,158 @@ impl BasicTransformsParser {
     /// Parse translate-y classes
     fn parse_translate_y_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         if let Some(value) = class.strip_prefix("translate-y-") {
-            if let Some(transform_value) = self.translate_y_map.get(value) {
+            if let Some(translate_value) = self.translate_y_map.get(value) {
+                if let Some(px) = translate_value.strip_prefix("translateY(") {
+                    if let Some(px) = px.strip_suffix(")") {
+                        return Some(vec![CssProperty {
+                            name: "--tw-translate-y".to_string(),
+                            value: px.to_string(),
+                            important: false,
+                        }]);
+                    }
+                }
+            }
+        }
+        None
+    }
+
+    /// Parse scale classes
+    fn parse_scale_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // scale-x-<value>
+        if let Some(value) = class.strip_prefix("scale-x-") {
+            if let Some(scale_value) = self.scale_map.get(value) {
+                if let Some(scale_num) = scale_value.split(" ").next() {
+                    if let Some(num) = scale_num.strip_prefix("scaleX(") {
+                        if let Some(num) = num.strip_suffix(")") {
+                            return Some(vec![CssProperty {
+                                name: "--tw-scale-x".to_string(),
+                                value: num.to_string(),
+                                important: false,
+                            }]);
+                        }
+                    }
+                }
+            }
+        }
+
+        // scale-y-<value>
+        if let Some(value) = class.strip_prefix("scale-y-") {
+            if let Some(scale_value) = self.scale_map.get(value) {
+                if let Some(scale_num) = scale_value.split(" ").last() {
+                    if let Some(num) = scale_num.strip_prefix("scaleY(") {
+                        if let Some(num) = num.strip_suffix(")") {
+                            return Some(vec![CssProperty {
+                                name: "--tw-scale-y".to_string(),
+                                value: num.to_string(),
+                                important: false,
+                            }]);
+                        }
+                    }
+                }
+            }
+        }
+
+        // scale-<value>
+        if let Some(value) = class.strip_prefix("scale-") {
+            let scale_num = match value {
+                "0" => "0",
+                "50" => "0.5",
+                "75" => "0.75",
+                "90" => "0.9",
+                "95" => "0.95",
+                "100" => "1",
+                "105" => "1.05",
+                "110" => "1.1",
+                "125" => "1.25",
+                "150" => "1.5",
+                _ => return None,
+            };
+            return Some(vec![
+                CssProperty {
+                    name: "--tw-scale-x".to_string(),
+                    value: scale_num.to_string(),
+                    important: false,
+                },
+                CssProperty {
+                    name: "--tw-scale-y".to_string(),
+                    value: scale_num.to_string(),
+                    important: false,
+                },
+            ]);
+        }
+        None
+    }
+
+    /// Parse rotate classes
+    fn parse_rotate_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        if let Some(value) = class.strip_prefix("rotate-") {
+            let deg = match value {
+                "0" => "0deg",
+                "1" => "1deg",
+                "2" => "2deg",
+                "3" => "3deg",
+                "6" => "6deg",
+                "12" => "12deg",
+                "45" => "45deg",
+                "90" => "90deg",
+                "180" => "180deg",
+                _ => return None,
+            };
+            return Some(vec![
+                CssProperty {
+                    name: "--tw-rotate".to_string(),
+                    value: deg.to_string(),
+                    important: false,
+                },
+            ]);
+        }
+        None
+    }
+
+    /// Parse skew classes
+    fn parse_skew_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // skew-x-<value>
+        if let Some(value) = class.strip_prefix("skew-x-") {
+            if let Some(skew_value) = self.skew_map.get(value) {
+                if let Some(skew_num) = skew_value.split(" ").next() {
+                    if let Some(num) = skew_num.strip_prefix("skewX(") {
+                        if let Some(num) = num.strip_suffix(")") {
+                            return Some(vec![CssProperty {
+                                name: "--tw-skew-x".to_string(),
+                                value: num.to_string(),
+                                important: false,
+                            }]);
+                        }
+                    }
+                }
+            }
+        }
+
+        // skew-y-<value>
+        if let Some(value) = class.strip_prefix("skew-y-") {
+            if let Some(skew_value) = self.skew_map.get(value) {
+                if let Some(skew_num) = skew_value.split(" ").last() {
+                    if let Some(num) = skew_num.strip_prefix("skewY(") {
+                        if let Some(num) = num.strip_suffix(")") {
+                            return Some(vec![CssProperty {
+                                name: "--tw-skew-y".to_string(),
+                                value: num.to_string(),
+                                important: false,
+                            }]);
+                        }
+                    }
+                }
+            }
+        }
+        None
+    }
+
+    /// Parse transform origin classes
+    fn parse_origin_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        if let Some(value) = class.strip_prefix("origin-") {
+            if let Some(transform_value) = self.origin_map.get(value) {
                 return Some(vec![CssProperty {
-                    name: "transform".to_string(),
+                    name: "transform-origin".to_string(),
                     value: transform_value.clone(),
                     important: false,
                 }]);
@@ -131,10 +338,15 @@ impl UtilityParser for BasicTransformsParser {
     fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         self.parse_translate_x_class(class)
             .or_else(|| self.parse_translate_y_class(class))
+            .or_else(|| self.parse_scale_class(class))
+            .or_else(|| self.parse_rotate_class(class))
+            .or_else(|| self.parse_skew_class(class))
+            .or_else(|| self.parse_origin_class(class))
     }
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
+            // Translate patterns
             "translate-x-0", "translate-x-1", "translate-x-2", "translate-x-3", "translate-x-4",
             "translate-x-5", "translate-x-6", "translate-x-7", "translate-x-8", "translate-x-9",
             "translate-x-10", "translate-x-11", "translate-x-12", "translate-x-14", "translate-x-16",
@@ -149,6 +361,27 @@ impl UtilityParser for BasicTransformsParser {
             "translate-y-40", "translate-y-44", "translate-y-48", "translate-y-52", "translate-y-56",
             "translate-y-60", "translate-y-64", "translate-y-72", "translate-y-80", "translate-y-96",
             "translate-y-px", "translate-y-0.5", "translate-y-1.5", "translate-y-2.5", "translate-y-3.5",
+
+            // Scale patterns
+            "scale-0", "scale-50", "scale-75", "scale-90", "scale-95", "scale-100",
+            "scale-105", "scale-110", "scale-125", "scale-150",
+            "scale-x-0", "scale-x-50", "scale-x-75", "scale-x-90", "scale-x-95", "scale-x-100",
+            "scale-x-105", "scale-x-110", "scale-x-125", "scale-x-150",
+            "scale-y-0", "scale-y-50", "scale-y-75", "scale-y-90", "scale-y-95", "scale-y-100",
+            "scale-y-105", "scale-y-110", "scale-y-125", "scale-y-150",
+
+            // Rotate patterns
+            "rotate-0", "rotate-1", "rotate-2", "rotate-3", "rotate-6", "rotate-12",
+            "rotate-45", "rotate-90", "rotate-180",
+
+            // Skew patterns
+            "skew-x-0", "skew-x-1", "skew-x-2", "skew-x-3", "skew-x-6", "skew-x-12",
+            "skew-y-0", "skew-y-1", "skew-y-2", "skew-y-3", "skew-y-6", "skew-y-12",
+
+            // Transform origin patterns
+            "origin-center", "origin-top", "origin-top-right", "origin-right",
+            "origin-bottom-right", "origin-bottom", "origin-bottom-left", "origin-left",
+            "origin-top-left",
         ]
     }
 

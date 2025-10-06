@@ -43,13 +43,19 @@ impl CssOutputGenerator {
             }
         }
 
+        // Sort base rules by specificity (lower specificity first)
+        base_rules.sort_by_key(|rule| rule.specificity);
+
         // Generate base rules
         for rule in base_rules {
             css.push_str(&Self::rule_to_css(rule));
         }
 
         // Generate responsive rules
-        for (media_query, rules) in responsive_rules {
+        for (media_query, mut rules) in responsive_rules {
+            // Sort rules by specificity within each media query
+            rules.sort_by_key(|rule| rule.specificity);
+
             css.push_str(&format!("@media {} {{\n", media_query));
             for rule in rules {
                 css.push_str(&Self::rule_to_css(rule));

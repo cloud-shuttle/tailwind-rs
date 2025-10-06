@@ -20,7 +20,7 @@ impl BasicTransformParser {
         match class {
             "transform" => Some(vec![CssProperty {
                 name: "transform".to_string(),
-                value: "translate(0px, 0px) rotate(0deg) skewX(0deg) skewY(0deg) scaleX(1) scaleY(1)".to_string(),
+                value: "var(--tw-transform)".to_string(),
                 important: false,
             }]),
             "transform-gpu" => Some(vec![CssProperty {
@@ -73,8 +73,7 @@ mod tests {
         let properties = result.unwrap();
         assert_eq!(properties.len(), 1);
         assert_eq!(properties[0].name, "transform");
-        assert!(properties[0].value.contains("translate(0px, 0px)"));
-        assert!(properties[0].value.contains("scaleX(1)"));
+        assert_eq!(properties[0].value, "var(--tw-transform)");
         assert!(!properties[0].important);
 
         // Test transform-gpu

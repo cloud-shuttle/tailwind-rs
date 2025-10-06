@@ -5,7 +5,7 @@ mod integration_test {
 
     #[test]
     fn test_ssr_demo_comprehensive_regression() {
-        let generator = CssGenerator::new();
+        let mut generator = CssGenerator::new();
 
         // This is the complete HTML from the SSR demo - our regression test
         let demo_html = r#"<!DOCTYPE html>
@@ -323,7 +323,7 @@ mod integration_test {
 
     #[test]
     fn test_ssr_demo_classes() {
-        let generator = CssGenerator::new();
+        let mut generator = CssGenerator::new();
 
         // Test classes from the SSR demo
         let test_classes = vec![

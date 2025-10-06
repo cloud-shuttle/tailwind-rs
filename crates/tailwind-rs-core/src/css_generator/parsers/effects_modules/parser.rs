@@ -67,7 +67,6 @@ impl EffectsParser {
             let value = match blur_value {
                 "" | "-none" => "none",
                 "-sm" => "blur(4px)",
-                "" => "blur(8px)",
                 "-md" => "blur(12px)",
                 "-lg" => "blur(16px)",
                 "-xl" => "blur(24px)",

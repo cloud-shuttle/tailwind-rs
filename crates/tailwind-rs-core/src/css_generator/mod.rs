@@ -24,6 +24,7 @@
 //! // .hover\:bg-blue-600:hover { background-color: #2563eb; }
 //! ```
 
+pub mod color_cache;
 pub mod core;
 pub mod core_parsers;
 pub mod css_output;

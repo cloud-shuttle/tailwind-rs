@@ -40,7 +40,7 @@ pub struct GradientMachine {
     state: GradientParseState,
     direction: Option<String>,
     stops: Vec<GradientStop>,
-    current_stop: Option<PartialStop>,
+    _current_stop: Option<PartialStop>,
 }
 
 #[derive(Debug, Clone)]
@@ -59,8 +59,8 @@ pub struct GradientStop {
 
 #[derive(Debug, Clone)]
 struct PartialStop {
-    color_part: String,
-    position_part: Option<String>,
+    _color_part: String,
+    _position_part: Option<String>,
 }
 
 impl Default for GradientMachine {
@@ -69,7 +69,7 @@ impl Default for GradientMachine {
             state: GradientParseState::ExpectingDirection,
             direction: None,
             stops: Vec::new(),
-            current_stop: None,
+            _current_stop: None,
         }
     }
 }
@@ -308,7 +308,7 @@ impl ArbitraryValueMachine {
 #[derive(Debug, Clone)]
 pub struct VariantCombinationMachine {
     variants: Vec<ParsedVariant>,
-    current_variant: Option<String>,
+    _current_variant: Option<String>,
     state: VariantParseState,
 }
 
@@ -337,7 +337,7 @@ impl Default for VariantCombinationMachine {
     fn default() -> Self {
         Self {
             variants: Vec::new(),
-            current_variant: None,
+            _current_variant: None,
             state: VariantParseState::ExpectingVariant,
         }
     }

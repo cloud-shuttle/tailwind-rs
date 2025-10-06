@@ -87,7 +87,7 @@ impl CssOptimizer {
             optimized_rules.len(),
             original_properties,
             optimized_properties,
-            stats,
+            &stats,
         ))
     }
 
@@ -273,9 +273,9 @@ pub trait CssOptimization {
 
 impl CssOptimization for CssGenerator {
     fn optimize_css(&self, config: OptimizationConfig) -> Result<OptimizationResults> {
-        let optimizer = CssOptimizer::with_config(config);
+        let _optimizer = CssOptimizer::with_config(config);
         // This would need access to the internal rules - simplified for now
-        Ok(OptimizationResults::new(0, 0, 0, 0, 0, 0, OptimizationStats::default()))
+        Ok(OptimizationResults::new(0, 0, 0, 0, 0, 0, &OptimizationStats::default()))
     }
 }
 
@@ -310,12 +310,14 @@ mod tests {
                     value: "red".to_string(),
                     important: false,
                 }],
-                important: false,
+                media_query: None,
+                specificity: 0,
             },
             CssRule {
                 selector: ".empty".to_string(),
                 properties: vec![],
-                important: false,
+                media_query: None,
+                specificity: 0,
             },
         ];
 
@@ -344,7 +346,8 @@ mod tests {
                         important: false,
                     },
                 ],
-                important: false,
+                media_query: None,
+                specificity: 0,
             },
         ];
 
@@ -365,7 +368,8 @@ mod tests {
                     value: "red".to_string(),
                     important: false,
                 }],
-                important: false,
+                media_query: None,
+                specificity: 0,
             },
             CssRule {
                 selector: ".test".to_string(),
@@ -374,7 +378,8 @@ mod tests {
                     value: "blue".to_string(),
                     important: false,
                 }],
-                important: false,
+                media_query: None,
+                specificity: 0,
             },
         ];
 
@@ -395,7 +400,8 @@ mod tests {
                     value: "red".to_string(),
                     important: false,
                 }],
-                important: false,
+                media_query: None,
+                specificity: 0,
             },
         ];
 
@@ -422,7 +428,8 @@ mod tests {
                         important: false,
                     },
                 ],
-                important: false,
+                media_query: None,
+                specificity: 0,
             },
         ];
 

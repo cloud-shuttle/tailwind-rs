@@ -302,6 +302,81 @@ impl VariantParser {
     pub fn get_supported_breakpoints(&self) -> &[Breakpoint] {
         &self.breakpoints
     }
+
+    /// Build CSS selector from class name and variants - "One Class = One CSS Rule" architecture
+    pub fn build_css_selector(&self, class: &str, variants: &[String]) -> crate::error::Result<String> {
+        // Escape special characters in CSS selectors (but not colons which are valid in class names)
+        let escaped_class = class.replace("/", "\\/");
+        let mut selector = format!(".{}", escaped_class);
+
+        // Add pseudo-classes for state variants (in proper order)
+        let mut pseudo_selectors = Vec::new();
+
+        for variant in variants {
+            match variant.as_str() {
+                "hover" => pseudo_selectors.push(":hover"),
+                "focus" => pseudo_selectors.push(":focus"),
+                "active" => pseudo_selectors.push(":active"),
+                "visited" => pseudo_selectors.push(":visited"),
+                "disabled" => pseudo_selectors.push(":disabled"),
+                "first" => pseudo_selectors.push(":first-child"),
+                "last" => pseudo_selectors.push(":last-child"),
+                "odd" => pseudo_selectors.push(":nth-child(odd)"),
+                "even" => pseudo_selectors.push(":nth-child(even)"),
+                // Group variants
+                "group-hover" => {
+                    // For group variants, we need the full selector
+                    return Ok(format!(".group:hover .{}", class));
+                }
+                "group-focus" => {
+                    return Ok(format!(".group:focus .{}", class));
+                }
+                "group-active" => {
+                    return Ok(format!(".group:active .{}", class));
+                }
+                "group-disabled" => {
+                    return Ok(format!(".group:disabled .{}", class));
+                }
+                // Peer variants
+                "peer-hover" => {
+                    return Ok(format!(".peer:hover ~ .{}", class));
+                }
+                "peer-focus" => {
+                    return Ok(format!(".peer:focus ~ .{}", class));
+                }
+                "peer-active" => {
+                    return Ok(format!(".peer:active ~ .{}", class));
+                }
+                "peer-disabled" => {
+                    return Ok(format!(".peer:disabled ~ .{}", class));
+                }
+                // Dark mode
+                "dark" => {
+                    return Ok(format!(".dark .{}", class));
+                }
+                // Responsive variants are handled via media queries, not selectors
+                "sm" | "md" | "lg" | "xl" | "2xl" => {}
+                // Device variants are handled via media queries
+                "pointer-coarse" | "pointer-fine" | "motion-reduce" | "motion-safe" | "light" => {}
+                _ => {
+                    // Unknown variant - log warning but continue
+                    // Unknown variant encountered, continuing with base class
+                }
+            }
+        }
+
+        // Add pseudo-classes to the selector
+        for pseudo in pseudo_selectors {
+            selector.push_str(pseudo);
+        }
+
+        Ok(selector)
+    }
+
+    /// Get media query for variants (alias for get_variant_media_query)
+    pub fn get_media_query(&self, variants: &[String]) -> Option<String> {
+        self.get_variant_media_query(variants)
+    }
 }
 
 impl Default for VariantParser {

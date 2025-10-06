@@ -4,7 +4,7 @@ use tailwind_rs_core::css_generator::CssGenerator;
 use std::collections::HashMap;
 
 fn main() {
-    let generator = CssGenerator::new();
+    let mut generator = CssGenerator::new();
 
     // REAL FAILURE DATA FROM SSR DEMO - These are the classes that actually failed in production
     let real_world_failures = vec![
@@ -70,13 +70,13 @@ fn main() {
     // Test real-world failures first
     println!("\n🚨 TESTING REAL-WORLD FAILURES ({} classes):", real_world_failures.len());
     for class in &real_world_failures {
-        test_class(&generator, class, &mut results);
+        test_class(&mut generator, class, &mut results);
     }
 
     // Test baseline success classes
     println!("\n✅ TESTING BASELINE SUCCESS CLASSES ({} classes):", baseline_success_classes.len());
     for class in &baseline_success_classes {
-        test_class(&generator, class, &mut results);
+        test_class(&mut generator, class, &mut results);
     }
 
     // Analyze results
@@ -86,7 +86,7 @@ fn main() {
     provide_actionable_recommendations(&results);
 }
 
-fn test_class(generator: &CssGenerator, class: &str, results: &mut TestResults) {
+fn test_class(generator: &mut CssGenerator, class: &str, results: &mut TestResults) {
     match generator.class_to_css_rule(class) {
         Ok(rule) => {
             // Validate that CSS properties contain actual values, not CSS variables

@@ -117,7 +117,7 @@ impl TextShadowParser {
     }
 
     /// Get color value for text shadow with color
-    fn get_color_value(&self, class: &str) -> Option<String> {
+    fn get_color_value(&self, _class: &str) -> Option<String> {
         // This would typically delegate to a color parser
         // For now, return None as this would need color parsing logic
         // that should be handled by a dedicated color module

@@ -217,7 +217,7 @@ mod sync_performance_optimizer_tests {
     fn test_performance_optimizer_thread_safety() {
         // Test: PerformanceOptimizer should be thread-safe
         use std::sync::Mutex;
-        let optimizer = Arc::new(Mutex::new(PerformanceOptimizer::new()));
+        let optimizer: Arc<Mutex<PerformanceOptimizer>> = Arc::new(Mutex::new(PerformanceOptimizer::new()));
         let mut handles = vec![];
 
         // Spawn multiple threads to test thread safety

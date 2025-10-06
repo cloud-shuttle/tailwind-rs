@@ -94,6 +94,7 @@ pub enum ParserType {
 
 /// Trie node containing child nodes and an optional parser
 #[derive(Debug)]
+#[derive(Default)]
 struct TrieNode {
     children: HashMap<char, TrieNode>,
     parser: Option<ParserType>,
@@ -246,20 +247,12 @@ impl ParserTrie {
 
 impl Default for ParserTrie {
     fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl TrieNode {
-    /// Create a new trie node
-    fn new() -> Self {
         Self {
-            children: HashMap::new(),
-            parser: None,
-            is_end_of_prefix: false,
+            root: TrieNode::default(),
         }
     }
 }
+
 
 #[cfg(test)]
 mod tests {

@@ -162,4 +162,28 @@ impl ClassProcessor {
 }
 "#.to_string())
     }
+
+    /// Extract gradient stop type from class (legacy method)
+    pub fn extract_gradient_stop_type(&self, class: &str) -> Option<String> {
+        // Placeholder implementation for backward compatibility
+        if class.starts_with("from-") {
+            Some("from".to_string())
+        } else if class.starts_with("via-") {
+            Some("via".to_string())
+        } else if class.starts_with("to-") {
+            Some("to".to_string())
+        } else {
+            None
+        }
+    }
+
+    /// Extract gradient direction from class (legacy method)
+    pub fn extract_gradient_direction(&self, class: &str) -> Option<String> {
+        // Placeholder implementation for backward compatibility
+        if class.starts_with("bg-gradient-to-") {
+            Some(class.strip_prefix("bg-gradient-to-").unwrap_or("").to_string())
+        } else {
+            None
+        }
+    }
 }

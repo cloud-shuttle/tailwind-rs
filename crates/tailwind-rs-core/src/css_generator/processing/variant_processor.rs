@@ -75,7 +75,7 @@ impl VariantProcessor {
         };
 
         // Simple implementation - in reality this would need more sophisticated parsing
-        Ok(css.replace("}", format!("}}\n\n{}{{", pseudo_class)))
+        Ok(css.replace("}", &format!("}}\n\n{}{{", pseudo_class)))
     }
 
     /// Handle container query variants

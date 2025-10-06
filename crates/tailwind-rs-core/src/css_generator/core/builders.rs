@@ -17,19 +17,22 @@ pub trait CssGeneratorBuilder {
 
 /// Default implementation for CssGenerator
 impl CssGeneratorBuilder for super::super::CssGenerator {
-    fn new() -> super::super::CssGenerator {
-        let mut generator = super::super::CssGenerator {
-            rules: std::collections::HashMap::new(),
-            config: super::super::CssGenerationConfig::default(),
-            parser_trie: ParserTrie::new(),
-            variant_parser: VariantParser::new(),
-            class_processor: ClassProcessor::new(),
-            variant_processor: VariantProcessor::new(),
-            css_output: CssOutputGenerator::new(),
-            color_cache: ColorCache::new(),
-            rule_cache: RuleCache::new(),
-            transform_css_generated: false,
-        };
+           fn new() -> super::super::CssGenerator {
+               let mut generator = super::super::CssGenerator {
+                   rules: std::collections::HashMap::new(),
+                   breakpoints: Some(std::collections::HashMap::new()),
+                   custom_properties: Some(std::collections::HashMap::new()),
+                   config: super::super::CssGenerationConfig::default(),
+                   parser_trie: ParserTrie::new(),
+                   variant_parser: VariantParser::new(),
+                   class_processor: ClassProcessor::new(),
+                   variant_processor: VariantProcessor::new(),
+                   css_output: CssOutputGenerator::new(),
+                   color_cache: ColorCache::new(),
+                   rule_cache: RuleCache::new(),
+                   transform_css_generated: false,
+                   plugin_manager: super::super::plugin_system::PluginManager::new(),
+               };
 
         // Initialize parser trie
         generator.initialize_parser_trie();
@@ -37,19 +40,22 @@ impl CssGeneratorBuilder for super::super::CssGenerator {
         generator
     }
 
-    fn with_config(config: super::super::CssGenerationConfig) -> super::super::CssGenerator {
-        let mut generator = super::super::CssGenerator {
-            rules: std::collections::HashMap::new(),
-            config,
-            parser_trie: ParserTrie::new(),
-            variant_parser: VariantParser::new(),
-            class_processor: ClassProcessor::new(),
-            variant_processor: VariantProcessor::new(),
-            css_output: CssOutputGenerator::new(),
-            color_cache: ColorCache::new(),
-            rule_cache: RuleCache::new(),
-            transform_css_generated: false,
-        };
+           fn with_config(config: super::super::CssGenerationConfig) -> super::super::CssGenerator {
+               let mut generator = super::super::CssGenerator {
+                   rules: std::collections::HashMap::new(),
+                   breakpoints: Some(std::collections::HashMap::new()),
+                   custom_properties: Some(std::collections::HashMap::new()),
+                   config,
+                   parser_trie: ParserTrie::new(),
+                   variant_parser: VariantParser::new(),
+                   class_processor: ClassProcessor::new(),
+                   variant_processor: VariantProcessor::new(),
+                   css_output: CssOutputGenerator::new(),
+                   color_cache: ColorCache::new(),
+                   rule_cache: RuleCache::new(),
+                   transform_css_generated: false,
+                   plugin_manager: super::super::plugin_system::PluginManager::new(),
+               };
 
         // Initialize parser trie
         generator.initialize_parser_trie();

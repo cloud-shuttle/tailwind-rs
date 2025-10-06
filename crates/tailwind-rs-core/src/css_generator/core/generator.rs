@@ -14,6 +14,10 @@ pub struct CssGenerator {
     // Generated CSS rules (for backward compatibility)
     pub rules: HashMap<String, super::super::types::CssRule>,
 
+    // Legacy fields for backward compatibility
+    pub breakpoints: Option<HashMap<crate::responsive::Breakpoint, String>>,
+    pub custom_properties: Option<HashMap<String, String>>,
+
     // Core components
     config: CssGenerationConfig,
     parser_trie: ParserTrie,
@@ -30,6 +34,9 @@ pub struct CssGenerator {
 
     // State
     pub transform_css_generated: bool,
+
+    // Plugin system
+    plugin_manager: super::super::plugin_system::PluginManager,
 }
 
 impl Default for CssGenerator {

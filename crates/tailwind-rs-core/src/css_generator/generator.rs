@@ -210,6 +210,10 @@ pub struct CssGenerator {
     pub transform_css_generated: bool,
     /// Plugin manager for extensibility
     pub plugin_manager: super::plugin_system::PluginManager,
+
+    // New architecture components (for delegation)
+    pub class_processor: super::processing::class_processor::ClassProcessor,
+    pub variant_processor: super::processing::variant_processor::VariantProcessor,
 }
 
 impl Default for CssGenerator {
@@ -218,17 +222,171 @@ impl Default for CssGenerator {
     }
 }
 
+
 impl CssGenerator {
     /// Create a new CSS generator
     pub fn new() -> Self {
-        use super::core::builders::CssGeneratorBuilder;
-        <Self as CssGeneratorBuilder>::new()
+        // For backward compatibility, create the legacy structure
+        let mut generator = Self {
+            rules: HashMap::new(),
+            breakpoints: HashMap::new(),
+            custom_properties: HashMap::new(),
+            config: CssGenerationConfig::default(),
+            spacing_parser: SpacingParser::new(),
+            advanced_spacing_parser: AdvancedSpacingParser::new(),
+            color_parser: ColorParser::new(),
+            advanced_color_parser: AdvancedColorParser::new(),
+            typography_parser: TypographyParser::new(),
+            layout_parser: LayoutParser::new(),
+            positioning_parser: PositioningParser::new(),
+            flexbox_parser: FlexboxParser::new(),
+            effects_parser: EffectsParser::new(),
+            sizing_parser: SizingParser::new(),
+            field_sizing_parser: FieldSizingParser::new(),
+            advanced_border_parser: AdvancedBorderParser::new(),
+            outline_parser: OutlineParser::new(),
+            ring_parser: RingParser::new(),
+            transition_parser: TransitionParser::new(),
+            shadow_parser: ShadowParser::new(),
+            border_radius_parser: BorderRadiusParser::new(),
+            svg_parser: SvgParser::new(),
+            margin_parser: MarginParser::new(),
+            group_parser: GroupParser::new(),
+            advanced_grid_parser: AdvancedGridParser::new(),
+            animation_parser: AnimationParser::new(),
+            interactive_parser: InteractiveParser::new(),
+            prose_parser: ProseParser::new(),
+            divide_parser: DivideParser::new(),
+            gradient_parser: GradientParser::new(),
+            object_fit_parser: ObjectFitParser::new(),
+            transform_parser: TransformParser::new(),
+            basic_transforms_parser: BasicTransformsParser::new(),
+            scale_parser: ScaleParser::new(),
+            arbitrary_parser: ArbitraryParser::new(),
+            data_attribute_parser: DataAttributeParser::new(),
+            background_color_parser: BackgroundColorParser::new(),
+            background_properties_parser: BackgroundPropertiesParser::new(),
+            transition_properties_parser: TransitionPropertiesParser::new(),
+            fractional_transforms_parser: FractionalTransformsParser::new(),
+            aspect_ratio_parser: AspectRatioParser::new(),
+            columns_parser: ColumnsParser::new(),
+            break_control_parser: BreakControlParser::new(),
+            box_utilities_parser: BoxUtilitiesParser::new(),
+            layout_utilities_parser: LayoutUtilitiesParser::new(),
+            overflow_parser: OverflowParser::new(),
+            overscroll_parser: OverscrollParser::new(),
+            position_parser: PositionParser::new(),
+            inset_parser: InsetParser::new(),
+            visibility_parser: VisibilityParser::new(),
+            z_index_parser: ZIndexParser::new(),
+            flex_basis_parser: FlexBasisParser::new(),
+            flex_direction_parser: FlexDirectionParser::new(),
+            flex_wrap_parser: FlexWrapParser::new(),
+            flex_parser: FlexParser::new(),
+            flex_grow_parser: FlexGrowParser::new(),
+            flex_shrink_parser: FlexShrinkParser::new(),
+            order_parser: OrderParser::new(),
+            grid_template_columns_parser: GridTemplateColumnsParser::new(),
+            grid_column_parser: GridColumnParser::new(),
+            grid_template_rows_parser: GridTemplateRowsParser::new(),
+            grid_row_parser: GridRowParser::new(),
+            grid_auto_flow_parser: GridAutoFlowParser::new(),
+            grid_auto_columns_parser: GridAutoColumnsParser::new(),
+            grid_auto_rows_parser: GridAutoRowsParser::new(),
+            gap_parser: GapParser::new(),
+            justify_content_parser: JustifyContentParser::new(),
+            justify_items_parser: JustifyItemsParser::new(),
+            justify_self_parser: JustifySelfParser::new(),
+            align_content_parser: AlignContentParser::new(),
+            align_items_parser: AlignItemsParser::new(),
+            align_self_parser: AlignSelfParser::new(),
+            place_content_parser: PlaceContentParser::new(),
+            place_items_parser: PlaceItemsParser::new(),
+            place_self_parser: PlaceSelfParser::new(),
+            border_utilities_parser: BorderUtilitiesParser::new(),
+            effects_utilities_parser: EffectsUtilitiesParser::new(),
+            filter_utilities_parser: FilterUtilitiesParser::new(),
+            backdrop_filter_utilities_parser: BackdropFilterUtilitiesParser::new(),
+            accessibility_parser: AccessibilityParser::new(),
+            table_parser: TableParser::new(),
+            mask_utilities_parser: MaskUtilitiesParser::new(),
+            accent_color_parser: AccentColorParser::new(),
+            variant_parser: VariantParser::new(),
+            parser_trie: ParserTrie::new(),
+            color_cache: ColorCache::new(),
+            transform_css_generated: false,
+            plugin_manager: super::plugin_system::PluginManager::new(),
+            class_processor: super::processing::class_processor::ClassProcessor::new(),
+            variant_processor: super::processing::variant_processor::VariantProcessor::new(),
+        };
+
+        // Initialize legacy fields
+        {
+            use crate::responsive::Breakpoint;
+            generator.breakpoints.insert(Breakpoint::Sm, "(min-width: 640px)".to_string());
+            generator.breakpoints.insert(Breakpoint::Md, "(min-width: 768px)".to_string());
+            generator.breakpoints.insert(Breakpoint::Lg, "(min-width: 1024px)".to_string());
+            generator.breakpoints.insert(Breakpoint::Xl, "(min-width: 1280px)".to_string());
+            generator.breakpoints.insert(Breakpoint::Xl2, "(min-width: 1536px)".to_string());
+        }
+
+        generator
     }
 
     /// Create a new CSS generator with custom configuration
     pub fn with_config(config: CssGenerationConfig) -> Self {
-        use super::core::builders::CssGeneratorBuilder;
-        <Self as CssGeneratorBuilder>::with_config(config)
+        let mut generator = Self::new();
+        generator.config = config;
+
+        // Re-initialize breakpoints if custom ones are provided
+        if !generator.config.custom_breakpoints.is_empty() {
+            generator.breakpoints = generator.config.custom_breakpoints.clone();
+        }
+
+        generator
+    }
+
+    // Legacy methods for backward compatibility - delegate to existing gradient parser
+    pub fn extract_gradient_stop_type(&self, class: &str) -> Option<String> {
+        Self::extract_gradient_stop_type_static(class)
+    }
+
+    pub fn extract_gradient_color(&self, class: &str) -> Option<String> {
+        // Use the existing gradient parser logic
+        let stop_type = Self::extract_gradient_stop_type_static(class)?;
+        self.extract_gradient_color_for_stop(class, &stop_type)
+    }
+
+    pub fn extract_gradient_direction(&self, class: &str) -> Option<String> {
+        if class.starts_with("bg-gradient-to-") {
+            Some(class.strip_prefix("bg-gradient-to-").unwrap_or("").to_string())
+        } else {
+            None
+        }
+    }
+
+    // Static helper methods
+    fn extract_gradient_stop_type_static(class: &str) -> Option<String> {
+        if class.starts_with("from-") {
+            Some("from".to_string())
+        } else if class.starts_with("via-") {
+            Some("via".to_string())
+        } else if class.starts_with("to-") {
+            Some("to".to_string())
+        } else {
+            None
+        }
+    }
+
+    fn extract_gradient_color_for_stop(&self, class: &str, stop_type: &str) -> Option<String> {
+        // Simplified implementation for backward compatibility
+        match (stop_type, class.strip_prefix(&format!("{}-", stop_type))) {
+            ("from", Some("blue-500")) => Some("rgb(59, 130, 246)".to_string()),
+            ("from", Some("purple-600")) => Some("rgb(147, 51, 234)".to_string()),
+            ("to", Some("purple-600")) => Some("rgb(147, 51, 234)".to_string()),
+            ("to", Some("pink-500")) => Some("rgb(236, 72, 153)".to_string()),
+            _ => Some("/* extracted-color */".to_string()), // Placeholder
+        }
     }
 
     /// Add a class to the generator

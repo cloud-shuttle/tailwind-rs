@@ -1,103 +1,234 @@
-//! # tailwind-rs-postcss
+//! PostCSS Plugin for Tailwind-RS
 //!
-//! PostCSS integration for Tailwind-RS Core, providing advanced CSS processing
-//! capabilities with plugin ecosystem compatibility.
-//!
-//! This crate provides the foundation for PostCSS integration, enabling:
-//! - Advanced CSS processing with AST manipulation
-//! - Plugin ecosystem compatibility (NPM plugins)
-//! - Source map generation
-//! - Performance optimization
-//!
-//! ## Features
-//!
-//! - **PostCSS Engine**: Full PostCSS integration with Rust bindings
-//! - **Plugin System**: Support for NPM plugins and native Rust plugins
-//! - **AST Processing**: Advanced CSS AST parsing and manipulation
-//! - **Source Maps**: Complete source map generation and support
-//! - **Performance**: Optimized for large-scale CSS processing
-//!
-//! ## Example
-//!
-//! ```rust
-//! use tailwind_rs_postcss::*;
-//!
-//! #[tokio::main]
-//! async fn main() -> Result<()> {
-//!     let engine = PostCSSEngine::new(PostCSSConfig::default())?;
-//!     
-//!     let input_css = "@tailwind base; @tailwind components; @tailwind utilities;";
-//!     let result = engine.process_css(input_css).await?;
-//!     
-//!     println!("Generated CSS: {}", result.css);
-//!     println!("Source map: {:?}", result.source_map);
-//!     
-//!     Ok(())
-//! }
-//! ```
+//! This crate provides a PostCSS plugin interface for Tailwind-RS,
+//! enabling seamless integration with existing build toolchains like
+//! Webpack, Vite, Rollup, and other PostCSS-compatible tools.
 
-pub mod advanced_features;
-pub mod ast;
-pub mod autoprefixer;
-pub mod css_optimizer;
-pub mod engine;
-pub mod enhanced_plugin_loader;
-pub mod error;
-pub mod import_processor;
-pub mod js_bridge;
-pub mod parser;
-pub mod plugin_loader;
-pub mod purger;
-pub mod source_map;
-pub mod tailwind_processor;
-pub mod test_integration;
-pub mod transformer;
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::path::PathBuf;
 
-// Re-export main types
-pub use advanced_features::{
-    AdvancedSourceMapGenerator, CSSLinter, LintResult, LinterConfig, PostCSSDevTools,
-    PostCSSPerformanceMonitor,
-};
-pub use ast::{CSSAtRule, CSSDeclaration, CSSNode, CSSRule};
-pub use autoprefixer::{
-    Autoprefixer, AutoprefixerConfig,
-};
-pub use autoprefixer::core::{PrefixOptions, PrefixResult, PrefixStatistics};
-pub use css_optimizer::{
-    CSSOptimizer, OptimizationConfig, OptimizationMetrics, OptimizationResult,
-};
-pub use engine::{PostCSSConfig, PostCSSEngine, ProcessedCSS};
-pub use enhanced_plugin_loader::{EnhancedPluginLoader};
-pub use enhanced_plugin_loader::core::{PluginInstance, PluginMetrics};
-pub use error::{PostCSSError, Result};
-pub use import_processor::{
-    ImportConfig, ImportOptions, ImportProcessor, ImportResult, ImportStatistics,
-};
-pub use js_bridge::{JSBridge, JSRuntime};
-pub use parser::{CSSParser, ParseOptions};
-pub use plugin_loader::{PluginConfig, PluginLoader, PluginResult};
-pub use purger::{CSSPurger, PurgeConfig, PurgeOptions, PurgeResult};
-pub use source_map::{SourceMap, SourceMapGenerator};
-pub use tailwind_processor::{ProcessingResult, TailwindConfig, TailwindProcessor};
-pub use transformer::{CSSTransformer, TransformOptions};
+pub mod plugin;
+pub mod cache;
+pub mod config;
 
-/// Version information
-pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+// Re-export main types for easier access
+pub use plugin::TailwindRsPlugin;
+pub use config::{PostCssConfig, ConfigSource};
 
-/// Default configuration for PostCSS processing
-pub fn default_config() -> PostCSSConfig {
-    PostCSSConfig::default()
+/// Error types for PostCSS operations
+#[derive(Debug, thiserror::Error)]
+pub enum PostCssError {
+    #[error("CSS processing error: {0}")]
+    Processing(String),
+
+    #[error("Content extraction error: {0}")]
+    Extraction(String),
+
+    #[error("Configuration error: {0}")]
+    Config(String),
+
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
+
+    #[error("JSON error: {0}")]
+    Json(#[from] serde_json::Error),
+
+    #[error("Regex error: {0}")]
+    Regex(#[from] regex::Error),
+
+    #[error("Glob pattern error: {0}")]
+    Glob(#[from] glob::PatternError),
+
+    #[error("Plugin error: {0}")]
+    Plugin(String),
 }
 
-/// Create a new PostCSS engine with default configuration
-pub fn new_engine() -> Result<PostCSSEngine> {
-    PostCSSEngine::new(PostCSSConfig::default())
+/// Result type alias for PostCSS operations
+pub type Result<T> = std::result::Result<T, PostCssError>;
+
+/// CSS AST representation (simplified for PostCSS integration)
+#[derive(Debug, Clone)]
+pub struct CssAst {
+    pub rules: Vec<CssRule>,
+    pub at_rules: Vec<AtRule>,
 }
 
-/// Process CSS with PostCSS using default configuration
-pub async fn process_css(input: &str) -> Result<ProcessedCSS> {
-    let engine = new_engine()?;
-    engine.process_css(input).await
+#[derive(Debug, Clone)]
+pub struct CssRule {
+    pub selectors: Vec<String>,
+    pub declarations: Vec<CssDeclaration>,
+}
+
+#[derive(Debug, Clone)]
+pub struct CssDeclaration {
+    pub property: String,
+    pub value: String,
+    pub important: bool,
+}
+
+#[derive(Debug, Clone)]
+pub struct AtRule {
+    pub name: String,
+    pub params: String,
+    pub rules: Vec<CssRule>,
+}
+
+/// CSS generation callback type
+pub type CssGeneratorFn = Box<dyn Fn(&str) -> Result<String> + Send + Sync>;
+
+/// Content extraction callback type
+pub type ContentExtractorFn = Box<dyn Fn(&[String]) -> Result<std::collections::HashSet<String>> + Send + Sync>;
+
+/// PostCSS plugin options
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PostCssOptions {
+    /// Content file patterns to scan
+    pub content: Option<Vec<String>>,
+
+    /// Configuration file path
+    pub config: Option<String>,
+
+    /// Theme configuration
+    pub theme: Option<serde_json::Value>,
+
+    /// Plugin configurations
+    pub plugins: Option<Vec<serde_json::Value>>,
+
+    /// Safelist patterns
+    pub safelist: Option<Vec<String>>,
+
+    /// Blocklist patterns
+    pub blocklist: Option<Vec<String>>,
+
+    /// Enable debug mode
+    #[serde(default)]
+    pub debug: bool,
+
+    /// Enable minification
+    #[serde(default)]
+    pub minify: bool,
+}
+
+impl Default for PostCssOptions {
+    fn default() -> Self {
+        Self {
+            content: Some(vec![
+                "./src/**/*.{html,js,ts,jsx,tsx}".to_string(),
+                "./public/index.html".to_string(),
+            ]),
+            config: None,
+            theme: None,
+            plugins: None,
+            safelist: None,
+            blocklist: None,
+            debug: false,
+            minify: false,
+        }
+    }
+}
+
+/// Plugin trait for extending PostCSS functionality
+pub trait PostCssPlugin: Send + Sync {
+    /// Plugin name
+    fn name(&self) -> &str;
+
+    /// Plugin version
+    fn version(&self) -> &str;
+
+    /// Process CSS AST
+    fn process_css(&self, ast: &mut CssAst, config: &PostCssConfig) -> Result<()> {
+        Ok(())
+    }
+
+    /// Add custom utilities
+    fn add_utilities(&self, utilities: &mut HashMap<String, Vec<CssDeclaration>>) -> Result<()> {
+        Ok(())
+    }
+
+    /// Extract additional content
+    fn extract_content(&self, content: &mut Vec<String>) -> Result<()> {
+        Ok(())
+    }
+}
+
+/// Utility functions for PostCSS integration
+pub mod utils {
+    use super::*;
+
+    /// Convert CSS AST to string
+    pub fn css_ast_to_string(ast: &CssAst) -> String {
+        let mut output = String::new();
+
+        // Process at-rules first (like @tailwind directives)
+        for at_rule in &ast.at_rules {
+            output.push_str(&format!("@{} {} {{\n", at_rule.name, at_rule.params));
+
+            for rule in &at_rule.rules {
+                output.push_str(&css_rule_to_string(rule));
+            }
+
+            output.push_str("}\n\n");
+        }
+
+        // Process regular rules
+        for rule in &ast.rules {
+            output.push_str(&css_rule_to_string(rule));
+        }
+
+        output
+    }
+
+    /// Convert CSS rule to string
+    pub fn css_rule_to_string(rule: &CssRule) -> String {
+        if rule.selectors.is_empty() {
+            return String::new();
+        }
+
+        let selectors = rule.selectors.join(", ");
+        let mut output = format!("{} {{\n", selectors);
+
+        for decl in &rule.declarations {
+            let important = if decl.important { " !important" } else { "" };
+            output.push_str(&format!("  {}: {}{};\n", decl.property, decl.value, important));
+        }
+
+        output.push_str("}\n\n");
+        output
+    }
+
+    /// Parse CSS string into AST (basic implementation)
+    pub fn parse_css_to_ast(css: &str) -> Result<CssAst> {
+        let mut ast = CssAst {
+            rules: Vec::new(),
+            at_rules: Vec::new(),
+        };
+
+        // Basic CSS parsing (simplified)
+        // In a real implementation, this would use a proper CSS parser
+
+        for line in css.lines() {
+            let line = line.trim();
+
+            if line.starts_with("@tailwind") {
+                // Handle @tailwind directives
+                let parts: Vec<&str> = line.split_whitespace().collect();
+                if parts.len() >= 2 {
+                    // Strip trailing semicolon from parameter
+                    let param = parts[1].trim_end_matches(';');
+                    let at_rule = AtRule {
+                        name: "tailwind".to_string(),
+                        params: param.to_string(),
+                        rules: Vec::new(), // Will be filled by processor
+                    };
+                    ast.at_rules.push(at_rule);
+                }
+            }
+        }
+
+        Ok(ast)
+    }
 }
 
 #[cfg(test)]
@@ -105,26 +236,25 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_version_constant() {
-        assert!(!VERSION.is_empty());
-        assert!(VERSION.chars().any(|c| c.is_ascii_digit()));
-    }
+    fn test_css_ast_to_string() {
+        let mut ast = CssAst {
+            rules: vec![
+                CssRule {
+                    selectors: vec![".bg-blue-500".to_string()],
+                    declarations: vec![
+                        CssDeclaration {
+                            property: "background-color".to_string(),
+                            value: "rgb(59, 130, 246)".to_string(),
+                            important: false,
+                        }
+                    ],
+                }
+            ],
+            at_rules: Vec::new(),
+        };
 
-    #[test]
-    fn test_default_config() {
-        let config = default_config();
-        assert!(config.plugins.is_empty());
-        assert!(config.source_map);
-    }
-
-    #[tokio::test]
-    async fn test_process_css() {
-        let input = ".test { color: red; }";
-        let result = process_css(input).await;
-        assert!(result.is_ok());
-
-        let css = result.unwrap();
-        assert!(css.css.contains(".test"));
-        assert!(css.css.contains("color: red"));
+        let css = utils::css_ast_to_string(&ast);
+        assert!(css.contains(".bg-blue-500"));
+        assert!(css.contains("background-color: rgb(59, 130, 246);"));
     }
 }

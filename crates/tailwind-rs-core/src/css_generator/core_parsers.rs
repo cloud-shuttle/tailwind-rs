@@ -42,11 +42,13 @@ pub trait CoreParsers {
 
 impl CoreParsers for super::CssGenerator {
     fn parse_spacing_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.spacing_parser.parse_class(class)
+        // Delegate to class_processor in the new architecture
+        self.class_processor.process_class(class, &mut self.clone()).ok()
     }
 
     fn parse_animation_class(&self, class: &str) -> Option<Vec<CssProperty>> {
-        self.animation_parser.parse_class(class)
+        // Delegate to class_processor in the new architecture
+        self.class_processor.process_class(class, &mut self.clone()).ok()
     }
 
     fn parse_color_class(&self, class: &str) -> Option<Vec<CssProperty>> {

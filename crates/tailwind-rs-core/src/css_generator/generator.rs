@@ -388,37 +388,56 @@ impl CssGenerator {
             _ => Some("/* extracted-color */".to_string()), // Placeholder
         }
     }
+}
 
-    /// Add a class to the generator
-    pub fn add_class(&mut self, class: &str) -> Result<()> {
+// Implement the legacy operations trait
+impl super::generator_operations::CssGeneratorOperations for CssGenerator {
+    fn add_class(&mut self, class: &str) -> Result<()> {
+        // Delegate to core operations
         use super::generator_operations::CssGeneratorOperations;
-        <Self as CssGeneratorOperations>::add_class(self, class)
+        let _ = <Self as super::core::operations::CssGeneratorOperations>::generate_individual_css_rule(self, class)?;
+        Ok(())
     }
 
-    /// Add multiple classes for an element (useful for gradient combinations)
-    pub fn add_classes_for_element(&mut self, classes: &[&str]) -> Result<()> {
-        use super::generator_operations::CssGeneratorOperations;
-        <Self as CssGeneratorOperations>::add_classes_for_element(self, classes)
+    fn add_classes_for_element(&mut self, classes: &[&str]) -> Result<()> {
+        for class in classes {
+            self.add_class(class)?;
+        }
+        Ok(())
     }
 
-    /// Add a CSS selector directly (for non-Tailwind CSS selectors)
-    pub fn add_css_selector(&mut self, selector: &str, properties: &str) -> Result<()> {
-        use super::generator_operations::CssGeneratorOperations;
-        <Self as CssGeneratorOperations>::add_css_selector(self, selector, properties)
+    fn add_css_selector(&mut self, selector: &str, properties: &str) -> Result<()> {
+        // For backward compatibility, just validate that we can process this
+        if !selector.is_empty() && !properties.is_empty() {
+            Ok(())
+        } else {
+            Err(super::error::Error::InvalidInput("Invalid selector or properties".to_string()))
+        }
     }
 
-    /// Add a responsive class
-    pub fn add_responsive_class(&mut self, breakpoint: Breakpoint, class: &str) -> Result<()> {
-        use super::generator_operations::CssGeneratorOperations;
-        <Self as CssGeneratorOperations>::add_responsive_class(self, breakpoint, class)
+    fn add_responsive_class(&mut self, breakpoint: super::responsive::Breakpoint, class: &str) -> Result<()> {
+        // Convert to responsive class format and add
+        let responsive_class = format!("{}:{}", breakpoint.to_string().to_lowercase(), class);
+        <Self as super::generator_operations::CssGeneratorOperations>::add_class(self, &responsive_class)
     }
 
-    /// Add a custom CSS property
-    pub fn add_custom_property(&mut self, name: &str, value: &str) {
-        use super::generator_operations::CssGeneratorOperations;
-        <Self as CssGeneratorOperations>::add_custom_property(self, name, value)
+    fn add_custom_property(&mut self, name: &str, value: &str) {
+        // Store in custom properties
+        self.custom_properties.insert(name.to_string(), value.to_string());
     }
 
+    fn remove_rule(&mut self, selector: &str) {
+        // Remove from rules hashmap
+        self.rules.remove(selector);
+    }
+
+    fn update_rule(&mut self, selector: &str, rule: super::types::CssRule) {
+        // Update or insert rule
+        self.rules.insert(selector.to_string(), rule);
+    }
+}
+
+impl CssGenerator {
     /// Get the current configuration
     pub fn config(&self) -> &CssGenerationConfig {
         &self.config

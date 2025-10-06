@@ -207,7 +207,9 @@ pub struct CssGenerator {
     /// Color cache for performance optimization
     pub color_cache: ColorCache,
     /// Whether transform CSS has been generated for this instance
-    pub transform_css_generated: bool,
+    pub(crate) transform_css_generated: bool,
+    /// Plugin manager for extensibility
+    pub plugin_manager: super::plugin_system::PluginManager,
 }
 
 impl Default for CssGenerator {
@@ -320,15 +322,118 @@ impl CssGenerator {
 
     /// Generate CSS from all added classes
     pub fn generate_css(&self) -> String {
-        super::css_output::CssOutputGenerator::generate_css(&self.rules, &self.custom_properties)
+        let mut css = super::css_output::CssOutputGenerator::generate_css(&self.rules, &self.custom_properties);
+
+        // Add plugin-generated CSS
+        css.push_str(&self.generate_plugin_css());
+
+        css
+    }
+
+    /// Register a plugin with the CSS generator
+    pub fn register_plugin(&mut self, plugin: Box<dyn super::plugin_system::Plugin>) -> std::result::Result<(), super::plugin_system::PluginError> {
+        self.plugin_manager.register(plugin)?;
+        self.plugin_manager.initialize()?;
+        Ok(())
+    }
+
+    /// Get access to the plugin manager
+    pub fn plugin_manager(&self) -> &super::plugin_system::PluginManager {
+        &self.plugin_manager
+    }
+
+    /// Get mutable access to the plugin manager
+    pub fn plugin_manager_mut(&mut self) -> &mut super::plugin_system::PluginManager {
+        &mut self.plugin_manager
+    }
+
+    /// Generate CSS from plugin utilities and components
+    fn generate_plugin_css(&self) -> String {
+        let mut css = String::new();
+        let plugin_config = self.plugin_manager.config();
+
+        // Generate CSS for plugin utilities
+        for (class_name, properties) in &plugin_config.utilities {
+            css.push_str(&format!(".{} {{\n", class_name));
+            for property in properties {
+                css.push_str(&format!("    {}: {};\n",
+                    property.name,
+                    property.value
+                ));
+            }
+            css.push_str("}\n\n");
+        }
+
+        // Generate CSS for plugin components
+        for (component_name, component_def) in &plugin_config.components {
+            css.push_str(&format!("/* Plugin component: {} */\n", component_name));
+            css.push_str(&format!(".{} {{\n", component_def.selector));
+
+            for property in &component_def.properties {
+                css.push_str(&format!("    {}: {};\n",
+                    property.name,
+                    property.value
+                ));
+            }
+            css.push_str("}\n\n");
+
+            // Generate variant versions if specified
+            for variant in &component_def.variants {
+                let variant_selector = format!(".{}{}:{}",
+                    variant,
+                    component_def.selector,
+                    self.get_pseudo_class_for_variant(variant)
+                );
+                css.push_str(&format!("{} {{\n", variant_selector));
+                for property in &component_def.properties {
+                    css.push_str(&format!("    {}: {};\n",
+                        property.name,
+                        property.value
+                    ));
+                }
+                css.push_str("}\n\n");
+            }
+        }
+
+        css
+    }
+
+    /// Helper to get pseudo-class for variant
+    fn get_pseudo_class_for_variant(&self, variant: &str) -> &str {
+        match variant {
+            "hover" => "hover",
+            "focus" => "focus",
+            "active" => "active",
+            "visited" => "visited",
+            "disabled" => ":disabled",
+            _ => "", // Default to no pseudo-class
+        }
     }
 
     /// Generate minified CSS from all added classes
     pub fn generate_minified_css(&self) -> String {
-        super::css_output::CssOutputGenerator::generate_minified_css(
+        let mut css = super::css_output::CssOutputGenerator::generate_minified_css(
             &self.rules,
             &self.custom_properties,
-        )
+        );
+
+        // Add minified plugin CSS
+        let plugin_css = self.generate_plugin_css();
+        if !plugin_css.trim().is_empty() {
+            // Simple minification: remove extra whitespace
+            let minified_plugin = plugin_css
+                .lines()
+                .map(|line| line.trim())
+                .filter(|line| !line.is_empty() && !line.starts_with("/*"))
+                .collect::<Vec<_>>()
+                .join("");
+
+            if !minified_plugin.is_empty() {
+                css.push_str(&minified_plugin);
+            }
+        }
+
+        css
     }
 
     /// Generate individual CSS rule for a class - "One Class = One CSS Rule" architecture
@@ -562,7 +667,7 @@ impl CssGenerator {
                         .entry(media_query.clone())
                         .or_default()
                         .push(rule);
-                } else {
+            } else {
                     base_rules.push(rule);
                 }
             }

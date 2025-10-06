@@ -138,6 +138,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
             parser_trie: ParserTrie::new(),
             color_cache: ColorCache::new(),
             transform_css_generated: false,
+            plugin_manager: super::plugin_system::PluginManager::new(),
         };
 
         // Initialize the parser trie for fast lookups
@@ -235,6 +236,7 @@ impl CssGeneratorBuilder for super::CssGenerator {
             parser_trie: ParserTrie::new(),
             color_cache: ColorCache::new(),
             transform_css_generated: false,
+            plugin_manager: super::plugin_system::PluginManager::new(),
         };
 
         // Initialize the parser trie for fast lookups

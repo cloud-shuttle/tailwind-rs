@@ -11,22 +11,25 @@ use std::collections::HashMap;
 /// Main CSS generator for converting Tailwind classes to CSS
 #[derive(Debug)]
 pub struct CssGenerator {
+    // Generated CSS rules (for backward compatibility)
+    pub rules: HashMap<String, super::super::types::CssRule>,
+
     // Core components
     config: CssGenerationConfig,
     parser_trie: ParserTrie,
-    variant_parser: VariantParser,
+    pub variant_parser: VariantParser,
 
     // Processing components
-    class_processor: ClassProcessor,
-    variant_processor: VariantProcessor,
-    css_output: CssOutputGenerator,
+    pub class_processor: ClassProcessor,
+    pub variant_processor: VariantProcessor,
+    pub css_output: CssOutputGenerator,
 
     // Caching
     color_cache: ColorCache,
     rule_cache: RuleCache,
 
     // State
-    transform_css_generated: bool,
+    pub transform_css_generated: bool,
 }
 
 impl Default for CssGenerator {
@@ -39,13 +42,13 @@ impl CssGenerator {
     /// Create a new CSS generator with default configuration
     pub fn new() -> Self {
         // Use builder pattern from builders.rs
-        use super::super::generator_builders::CssGeneratorBuilder;
+        use super::builders::CssGeneratorBuilder;
         <Self as CssGeneratorBuilder>::new()
     }
 
     /// Create a new CSS generator with custom configuration
     pub fn with_config(config: CssGenerationConfig) -> Self {
-        use super::super::generator_builders::CssGeneratorBuilder;
+        use super::builders::CssGeneratorBuilder;
         <Self as CssGeneratorBuilder>::with_config(config)
     }
 

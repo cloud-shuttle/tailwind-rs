@@ -221,13 +221,13 @@ impl Default for CssGenerator {
 impl CssGenerator {
     /// Create a new CSS generator
     pub fn new() -> Self {
-        use super::generator_builders::CssGeneratorBuilder;
+        use super::core::builders::CssGeneratorBuilder;
         <Self as CssGeneratorBuilder>::new()
     }
 
     /// Create a new CSS generator with custom configuration
     pub fn with_config(config: CssGenerationConfig) -> Self {
-        use super::generator_builders::CssGeneratorBuilder;
+        use super::core::builders::CssGeneratorBuilder;
         <Self as CssGeneratorBuilder>::with_config(config)
     }
 

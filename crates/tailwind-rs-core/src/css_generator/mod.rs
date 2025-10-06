@@ -38,7 +38,6 @@ pub mod element_context;
 pub mod element_context_test;
 pub mod flexbox_parsers;
 pub mod generator;
-pub mod generator_builders;
 pub mod generator_operations;
 pub mod generator_parsers;
 pub mod grid_parsers;
@@ -51,9 +50,12 @@ pub mod types;
 pub mod utils;
 pub mod variants;
 
-// Re-export main types and functionality
+// Re-export main types and functionality (new refactored structure)
 pub use core::CssGenerator;
 pub use processing::CssOutputGenerator;
 pub use parsers::*;
 pub use types::{CssGenerationConfig, CssProperty, CssRule};
 pub use variants::VariantParser;
+
+// Re-export legacy types for backward compatibility
+pub use generator::CssGenerator as LegacyCssGenerator;

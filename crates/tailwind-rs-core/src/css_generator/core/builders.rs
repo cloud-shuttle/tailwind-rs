@@ -7,30 +7,40 @@ use super::super::trie::ParserTrie;
 use crate::css_generator::processing::*;
 use crate::css_generator::caching::*;
 
-/// Builder for CSS generator configuration
-#[derive(Debug, Default)]
-pub struct CssGeneratorBuilder {
-    config: CssGenerationConfig,
+/// Builder trait for CSS generator configuration
+pub trait CssGeneratorBuilder {
+    /// Create new builder with defaults
+    fn new() -> super::super::CssGenerator;
+    /// Configure generation settings and build
+    fn with_config(config: super::super::CssGenerationConfig) -> super::super::CssGenerator;
 }
 
-impl CssGeneratorBuilder {
-    /// Create new builder with defaults
-    pub fn new() -> Self {
-        Self {
-            config: CssGenerationConfig::default(),
-        }
+/// Default implementation for CssGenerator
+impl CssGeneratorBuilder for super::super::CssGenerator {
+    fn new() -> super::super::CssGenerator {
+        let mut generator = super::super::CssGenerator {
+            rules: std::collections::HashMap::new(),
+            config: super::super::CssGenerationConfig::default(),
+            parser_trie: ParserTrie::new(),
+            variant_parser: VariantParser::new(),
+            class_processor: ClassProcessor::new(),
+            variant_processor: VariantProcessor::new(),
+            css_output: CssOutputGenerator::new(),
+            color_cache: ColorCache::new(),
+            rule_cache: RuleCache::new(),
+            transform_css_generated: false,
+        };
+
+        // Initialize parser trie
+        generator.initialize_parser_trie();
+
+        generator
     }
 
-    /// Configure generation settings
-    pub fn with_config(mut self, config: CssGenerationConfig) -> Self {
-        self.config = config;
-        self
-    }
-
-    /// Build the final generator
-    pub fn build(self) -> CssGenerator {
-        let mut generator = CssGenerator {
-            config: self.config,
+    fn with_config(config: super::super::CssGenerationConfig) -> super::super::CssGenerator {
+        let mut generator = super::super::CssGenerator {
+            rules: std::collections::HashMap::new(),
+            config,
             parser_trie: ParserTrie::new(),
             variant_parser: VariantParser::new(),
             class_processor: ClassProcessor::new(),

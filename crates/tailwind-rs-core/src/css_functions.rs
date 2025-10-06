@@ -128,4 +128,78 @@ mod tests {
         let result = processor.process_apply("unknown-class", &available_classes);
         assert!(result.is_err());
     }
+
+    #[test]
+    fn test_generate_final_css_with_layers() {
+        let mut processor = CssFunctionsProcessor::new();
+
+        // Add content to different layers
+        processor.process_layer("base", "* { box-sizing: border-box; }").unwrap();
+        processor.process_layer("components", ".btn { color: blue; }").unwrap();
+        processor.process_layer("utilities", ".text-red { color: red; }").unwrap();
+
+        let final_css = processor.generate_final_css();
+
+        // Should contain layers in correct order
+        assert!(final_css.contains("@layer base"));
+        assert!(final_css.contains("@layer components"));
+        assert!(final_css.contains("@layer utilities"));
+        assert!(final_css.contains("box-sizing"));
+        assert!(final_css.contains(".btn"));
+        assert!(final_css.contains(".text-red"));
+    }
+
+    #[test]
+    fn test_imports_ordering() {
+        let mut processor = CssFunctionsProcessor::new();
+
+        processor.process_import("url('font1.css')").unwrap();
+        processor.process_import("url('font2.css')").unwrap();
+
+        let final_css = processor.generate_final_css();
+
+        // Imports should be at the beginning
+        let import_pos = final_css.find("@import").unwrap();
+        assert_eq!(import_pos, 0);
+        assert!(final_css.contains("font1.css"));
+        assert!(final_css.contains("font2.css"));
+    }
+
+    #[test]
+    fn test_layer_custom_ordering() {
+        let mut processor = CssFunctionsProcessor::new();
+
+        processor.process_layer("custom", ".custom { color: purple; }").unwrap();
+        processor.process_layer("components", ".btn { color: blue; }").unwrap();
+
+        let final_css = processor.generate_final_css();
+
+        // Standard layers should come first, then custom
+        let components_pos = final_css.find("@layer components").unwrap();
+        let custom_pos = final_css.find("@layer custom").unwrap();
+        assert!(components_pos < custom_pos);
+    }
+
+    #[test]
+    fn test_empty_apply_directive() {
+        let mut processor = CssFunctionsProcessor::new();
+        let available_classes = HashMap::new();
+        let result = processor.process_apply("", &available_classes);
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), "");
+    }
+
+    #[test]
+    fn test_apply_with_whitespace() {
+        let mut processor = CssFunctionsProcessor::new();
+        let mut available_classes = HashMap::new();
+        available_classes.insert("bg-blue-500".to_string(), ".bg-blue-500 { background-color: #3b82f6; }".to_string());
+        available_classes.insert("text-white".to_string(), ".text-white { color: #ffffff; }".to_string());
+
+        let result = processor.process_apply("  bg-blue-500   text-white  ", &available_classes);
+        assert!(result.is_ok());
+        let css = result.unwrap();
+        assert!(css.contains("background-color"));
+        assert!(css.contains("color"));
+    }
 }

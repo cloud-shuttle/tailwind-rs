@@ -185,3 +185,189 @@ impl VariantProcessor {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::error::Result;
+
+    #[test]
+    fn test_basic_selector_building() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let selector = processor.build_css_selector("bg-blue-500", &[])?;
+        assert_eq!(selector, ".bg-blue-500");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_state_variant_selectors() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let selector = processor.build_css_selector("bg-blue-600", &["hover".to_string()])?;
+        assert_eq!(selector, ".hover\\:bg-blue-600:hover");
+
+        let selector = processor.build_css_selector("text-red-500", &["focus".to_string()])?;
+        assert_eq!(selector, ".focus\\:text-red-500:focus");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_group_variant_selectors() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let selector = processor.build_css_selector("bg-blue-600", &["group-hover".to_string()])?;
+        assert_eq!(selector, ".group-hover\\:bg-blue-600 .group:hover");
+
+        let selector = processor.build_css_selector("text-red-500", &["peer-focus".to_string()])?;
+        assert_eq!(selector, ".peer-focus\\:text-red-500 .peer:focus");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_arbitrary_value_variants() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let selector = processor.build_css_selector("bg-green-500", &["[data-state=\"open\"]".to_string()])?;
+        assert_eq!(selector, ".[data-state\\=\\\"open\\\"]\\:bg-green-500 [data-state=\"open\"]");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_combined_variants() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let selector = processor.build_css_selector("bg-blue-600", &["hover".to_string(), "sm".to_string()])?;
+        // Responsive variants are handled separately, so should just be hover
+        assert_eq!(selector, ".hover\\:bg-blue-600:hover");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_responsive_variant_media_queries() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let media_query = processor.apply_responsive_variant("sm", ".bg-red-500 { background-color: red; }")?;
+        assert!(media_query.contains("@media (min-width: 640px)"));
+        assert!(media_query.contains(".bg-red-500"));
+
+        let media_query = processor.apply_responsive_variant("md", ".text-blue-500 { color: blue; }")?;
+        assert!(media_query.contains("@media (min-width: 768px)"));
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_container_query_variants() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let css = processor.apply_container_variant("@container-sm", ".bg-green-500 { background-color: green; }")?;
+        assert!(css.contains("@container"));
+        assert!(!css.contains("(min-width"));
+        assert!(css.contains(".bg-green-500"));
+
+        let css = processor.apply_container_variant("@container-md:min-w-300", ".text-blue-600 { color: blue; }")?;
+        assert!(css.contains("@container md"));
+        assert!(css.contains("(min-width: 300px)"));
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_device_variant_media_queries() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let css = processor.apply_device_variant("motion-reduce:", ".opacity-50 { opacity: 0.5; }")?;
+        assert!(css.contains("@media (prefers-reduced-motion: reduce)"));
+        assert!(css.contains(".opacity-50"));
+
+        let css = processor.apply_device_variant("pointer-coarse:", ".p-6 { padding: 1.5rem; }")?;
+        assert!(css.contains("@media (pointer: coarse)"));
+
+        let css = processor.apply_device_variant("contrast-more:", ".text-lg { font-size: 1.125rem; }")?;
+        assert!(css.contains("@media (prefers-contrast: more)"));
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_pseudo_class_variant_application() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let css = processor.apply_pseudo_class_variant("hover", ".bg-blue-500 { background-color: blue; }")?;
+        assert!(css.contains(".bg-blue-500:hover"));
+        assert!(css.contains("background-color: blue"));
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_is_device_variant_detection() {
+        let processor = VariantProcessor::new();
+
+        assert!(processor.is_device_variant("motion-reduce:"));
+        assert!(processor.is_device_variant("pointer-coarse:"));
+        assert!(processor.is_device_variant("contrast-more:"));
+        assert!(processor.is_device_variant("orientation-landscape:"));
+        assert!(processor.is_device_variant("print:"));
+        assert!(processor.is_device_variant("screen:"));
+
+        assert!(!processor.is_device_variant("hover"));
+        assert!(!processor.is_device_variant("sm"));
+        assert!(!processor.is_device_variant("@container-sm"));
+    }
+
+    #[test]
+    fn test_unknown_variants() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        // Unknown variants should be ignored
+        let selector = processor.build_css_selector("bg-blue-500", &["unknown-variant".to_string()])?;
+        assert_eq!(selector, ".bg-blue-500");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_responsive_variants_are_handled_separately() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        // Responsive variants return base selector since they're handled by media queries
+        let selector = processor.build_css_selector("bg-red-500", &["sm".to_string()])?;
+        assert_eq!(selector, ".bg-red-500");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_container_variants_are_handled_separately() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        // Container variants return base selector since they're handled separately
+        let selector = processor.build_css_selector("bg-green-500", &["@container-sm".to_string()])?;
+        assert_eq!(selector, ".bg-green-500");
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_complex_variant_combinations() -> Result<()> {
+        let processor = VariantProcessor::new();
+
+        let selector = processor.build_css_selector("bg-blue-600", &[
+            "hover".to_string(),
+            "group-focus".to_string(),
+            "[data-active=\"true\"]".to_string()
+        ])?;
+        assert!(selector.contains(":hover"));
+        assert!(selector.contains(".group:focus"));
+        assert!(selector.contains("[data-active=\"true\"]"));
+
+        Ok(())
+    }
+}

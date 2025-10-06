@@ -6,7 +6,6 @@
 //! - AnimationReference for built-in or custom animations
 
 use serde::{Deserialize, Serialize};
-use crate::utilities::advanced_animation_utilities::TimingFunction;
 
 /// Animation composition
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

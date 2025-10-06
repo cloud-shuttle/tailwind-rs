@@ -9,7 +9,7 @@
 use crate::css_generator::{CssGenerator, CssProperty, CssRule};
 use crate::error::Result;
 use std::collections::HashMap;
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 // Re-export all optimization utility types and traits
 pub mod config;

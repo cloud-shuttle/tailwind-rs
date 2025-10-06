@@ -6,7 +6,6 @@
 use super::parsers::*;
 use super::types::CssProperty;
 use crate::transforms::TransformParser;
-use crate::error::{Result, TailwindError};
 use std::collections::HashMap;
 
 /// Represents different parser types that can be stored in the trie

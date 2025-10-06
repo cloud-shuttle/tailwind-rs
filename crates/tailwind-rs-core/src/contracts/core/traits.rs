@@ -245,7 +245,7 @@ impl ContractRegistry {
     pub fn validate_all(&self) -> Vec<(String, ValidationResult)> {
         let mut results = Vec::new();
 
-        for (name, contract) in &self.class_builder_contracts {
+        for (name, _contract) in &self.class_builder_contracts {
             // Basic validation - in real implementation would call contract methods
             results.push((name.clone(), ValidationResult::Valid));
         }

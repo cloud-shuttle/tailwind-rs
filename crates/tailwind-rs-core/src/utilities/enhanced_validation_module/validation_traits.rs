@@ -6,7 +6,6 @@
 use crate::classes::ClassBuilder;
 use std::collections::HashMap;
 
-use super::validation_types::*;
 
 /// Trait for adding enhanced validation to ClassBuilder
 pub trait EnhancedValidationUtilities {

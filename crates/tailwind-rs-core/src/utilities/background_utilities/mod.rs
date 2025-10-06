@@ -8,8 +8,6 @@
 //! - Display trait implementations
 
 use crate::classes::ClassBuilder;
-use serde::{Deserialize, Serialize};
-use std::fmt;
 
 // Re-export all background utility types and traits
 pub mod attachment;
@@ -33,7 +31,6 @@ pub use repeat::BackgroundRepeat;
 pub use size::BackgroundSize;
 
 // Import display implementations
-pub use display::*;
 
 /// Background utilities trait for extending ClassBuilder
 pub trait BackgroundUtilities {

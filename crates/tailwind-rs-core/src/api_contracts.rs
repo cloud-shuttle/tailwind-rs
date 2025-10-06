@@ -7,8 +7,7 @@ use crate::classes::{ClassBuilder, ClassSet};
 use crate::css_generator::CssGenerator;
 use crate::error::TailwindError;
 use crate::responsive::Breakpoint;
-use crate::theme::{ThemeConfig, ThemeValue};
-use crate::validation::ValidationEngine;
+use crate::theme::ThemeConfig;
 use std::collections::HashMap;
 use std::result::Result;
 
@@ -352,13 +351,13 @@ impl ApiContract for ThemeContract {
         theme.name = input.name;
 
         // Add colors
-        for (name, value) in input.colors {
+        for (_name, _value) in input.colors {
             // In a real implementation, this would use theme.add_color()
             // For now, we'll skip the actual implementation
         }
 
         // Add spacing
-        for (name, value) in input.spacing {
+        for (_name, _value) in input.spacing {
             // In a real implementation, this would use theme.add_spacing()
         }
 
@@ -421,7 +420,7 @@ impl ApiContract for ValidationContract {
         Ok(())
     }
 
-    fn process(&self, input: Self::Input) -> Result<Self::Output, Self::Error> {
+    fn process(&self, _input: Self::Input) -> Result<Self::Output, Self::Error> {
         // In a real implementation, this would use ValidationEngine
         // For now, return a dummy result
         Ok(ValidationResult {

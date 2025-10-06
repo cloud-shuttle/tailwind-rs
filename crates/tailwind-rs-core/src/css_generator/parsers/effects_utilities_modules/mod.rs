@@ -6,9 +6,6 @@
 //! - mix-blend-* (mix blend modes), bg-blend-* (background blend modes)
 //! - mask-clip-* (mask clipping), mask-* (mask compositing)
 
-use crate::css_generator::types::CssProperty;
-use super::super::ParserCategory;
-use super::super::UtilityParser;
 
 // Re-export all effects utility types and traits
 pub mod blend_modes;

@@ -6,8 +6,7 @@
 //! - CI/CD integration for continuous contract verification
 //! - Comprehensive reporting and failure analysis
 
-use super::core::{traits::*, errors::*};
-use std::collections::HashMap;
+use super::core::traits::*;
 
 // Re-export all testing utilities
 pub mod runner;
@@ -78,7 +77,7 @@ pub mod property_testing {
     ) -> Vec<ContractTestResult> {
         let mut results = Vec::new();
 
-        for (i, (input, output)) in input_output_pairs.into_iter().enumerate() {
+        for (i, (_input, output)) in input_output_pairs.into_iter().enumerate() {
             let start_time = std::time::Instant::now();
             let test_name = format!("property_output_validation_{}", i);
 

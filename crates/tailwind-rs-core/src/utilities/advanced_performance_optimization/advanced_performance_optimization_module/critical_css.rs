@@ -2,7 +2,6 @@
 //!
 //! This module provides critical CSS extraction functionality.
 
-use std::collections::HashMap;
 
 /// Critical CSS extractor
 pub struct CriticalCssExtractor {

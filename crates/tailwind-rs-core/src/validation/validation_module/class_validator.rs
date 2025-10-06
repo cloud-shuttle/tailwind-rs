@@ -3,7 +3,6 @@
 //! This module provides class validation functionality.
 
 use super::{ValidationError, ValidationRules};
-use std::collections::HashSet;
 
 /// Class validator
 pub struct ClassValidator {

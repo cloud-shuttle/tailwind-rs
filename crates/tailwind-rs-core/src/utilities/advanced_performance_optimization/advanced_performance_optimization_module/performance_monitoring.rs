@@ -2,7 +2,6 @@
 //!
 //! This module provides performance monitoring functionality.
 
-use std::time::Duration;
 
 /// Performance monitor
 pub struct PerformanceMonitor {

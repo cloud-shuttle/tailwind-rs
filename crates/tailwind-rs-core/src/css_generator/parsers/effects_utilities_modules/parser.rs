@@ -1,4 +1,4 @@
-use super::utilities::{EffectClassParser, EffectCssGenerator, EffectValidator};
+use super::utilities::EffectClassParser;
 use super::box_shadow::BoxShadowParser;
 use crate::css_generator::types::CssProperty;
 use crate::css_generator::parsers::{UtilityParser, ParserCategory};

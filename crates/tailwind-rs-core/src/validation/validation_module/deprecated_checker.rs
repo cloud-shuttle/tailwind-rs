@@ -3,7 +3,6 @@
 //! This module provides deprecated class checking functionality.
 
 use super::{ValidationError, ValidationRules};
-use std::collections::HashSet;
 
 /// Deprecated checker
 pub struct DeprecatedChecker {

@@ -1,9 +1,5 @@
 //! Theme system for tailwind-rs
 
-use crate::error::{Result, TailwindError};
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::str::FromStr;
 
 pub mod color;
 pub mod spacing;

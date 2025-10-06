@@ -236,7 +236,7 @@ impl ApiContract for CssGeneratorContract {
         }
 
         // Add media queries (if any)
-        for media_query in input.media_queries {
+        for _media_query in input.media_queries {
             // For now, media queries are not fully integrated into CssGenerator
             // This would need extension of the CssGenerator API
         }

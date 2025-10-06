@@ -4,9 +4,6 @@
 //! SpacingValue conversions, padding utilities, margin utilities, gap utilities,
 //! space-between utilities, and divide utilities.
 
-use super::spacing_values::SpacingValue;
-use super::spacing_utilities::*;
-use crate::classes::ClassBuilder;
 
 #[cfg(test)]
 mod tests {

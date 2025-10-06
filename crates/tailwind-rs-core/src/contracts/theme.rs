@@ -239,22 +239,22 @@ impl ApiContract for ThemeContract {
         // For now, we create a basic theme configuration
 
         // Add colors (would use theme.add_color() in real implementation)
-        for (name, value) in input.colors {
+        for (_name, _value) in input.colors {
             // theme.add_color(name, value);
         }
 
         // Add spacing (would use theme.add_spacing() in real implementation)
-        for (name, value) in input.spacing {
+        for (_name, _value) in input.spacing {
             // theme.add_spacing(name, value);
         }
 
         // Add typography (would use theme.add_typography() in real implementation)
-        for (name, value) in input.typography {
+        for (_name, _value) in input.typography {
             // theme.add_typography(name, value);
         }
 
         // Add breakpoints (would use theme.add_breakpoint() in real implementation)
-        for (name, value) in input.breakpoints {
+        for (_name, _value) in input.breakpoints {
             // theme.add_breakpoint(name, value);
         }
 

@@ -3,7 +3,7 @@
 //! This module provides class conflict detection functionality.
 
 use super::{ValidationError, ValidationRules};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 /// Conflict detector
 pub struct ConflictDetector {

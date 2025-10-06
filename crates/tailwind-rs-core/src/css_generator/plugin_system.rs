@@ -4,7 +4,6 @@
 //! tailwind-rs with custom utilities, components, and variants.
 
 use super::types::CssProperty;
-use crate::error::TailwindError;
 use crate::enhanced_variants::types::VariantDefinition;
 use std::collections::HashMap;
 use std::result::Result as StdResult;

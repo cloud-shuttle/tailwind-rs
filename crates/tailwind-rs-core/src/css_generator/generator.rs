@@ -23,7 +23,7 @@ use super::parsers::{
 };
 use super::types::{CssGenerationConfig, CssProperty, CssRule};
 use super::variants::VariantParser;
-use super::trie::{ParserTrie, ParserType};
+use super::trie::ParserTrie;
 use super::color_cache::ColorCache;
 use crate::transforms::TransformParser;
 use crate::error::Result;
@@ -207,7 +207,7 @@ pub struct CssGenerator {
     /// Color cache for performance optimization
     pub color_cache: ColorCache,
     /// Whether transform CSS has been generated for this instance
-    pub(crate) transform_css_generated: bool,
+    pub transform_css_generated: bool,
     /// Plugin manager for extensibility
     pub plugin_manager: super::plugin_system::PluginManager,
 }
@@ -594,7 +594,7 @@ impl CssGenerator {
 
         // Check if this element has transform classes
         let has_transforms = classes.iter().any(|class| {
-            let (variants, base_class) = self.parse_variants(class);
+            let (_variants, base_class) = self.parse_variants(class);
             base_class == "transform" ||
             base_class.starts_with("translate-") ||
             base_class.starts_with("scale-") ||

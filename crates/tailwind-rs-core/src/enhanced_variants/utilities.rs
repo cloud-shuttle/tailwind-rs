@@ -4,7 +4,6 @@
 //! caching, and advanced variant manipulation.
 
 use super::types::*;
-use super::definitions::*;
 use std::collections::HashMap;
 
 /// Variant optimization utilities

@@ -4,7 +4,7 @@
 //! orchestrating parsers and generating final CSS output.
 
 use crate::css_generator::types::{CssProperty, CssRule};
-use crate::error::{Result, TailwindError};
+use crate::error::Result;
 use crate::responsive::Breakpoint;
 use std::collections::HashMap;
 use super::generator_parsers::CssGeneratorParsers;

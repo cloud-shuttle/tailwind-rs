@@ -17,7 +17,6 @@ pub mod parser;
 // Re-export all types and utilities for easy access
 pub use types::*;
 pub use utilities::*;
-pub use parser::*;
 
 /// Main filter utilities parser that implements UtilityParser trait
 #[derive(Debug, Clone)]

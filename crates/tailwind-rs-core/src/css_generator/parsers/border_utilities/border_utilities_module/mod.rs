@@ -3,8 +3,6 @@
 //! This module provides parsing logic for border-related Tailwind CSS utilities,
 //! including border-radius, border-width, border-color, border-style, and border utilities.
 
-use crate::css_generator::parsers::{ParserCategory, UtilityParser};
-use crate::css_generator::types::CssProperty;
 
 pub mod border_radius;
 pub mod border_width;

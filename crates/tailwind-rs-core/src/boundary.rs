@@ -3,7 +3,6 @@
 //! Context-aware boundary checking for accurate Tailwind class extraction.
 //! Inspired by the official Tailwind Oxide implementation.
 
-use std::fmt;
 
 /// Boundary classification for characters around potential class names
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

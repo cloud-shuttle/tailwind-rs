@@ -1,7 +1,4 @@
 use crate::css_generator::types::CssProperty;
-use crate::css_generator::parsers::effects_utilities_modules::utilities::{
-    EffectClassParser, EffectCssGenerator, EffectValidator
-};
 
 /// Box shadow parser for Tailwind CSS shadow utilities
 #[derive(Debug, Clone)]

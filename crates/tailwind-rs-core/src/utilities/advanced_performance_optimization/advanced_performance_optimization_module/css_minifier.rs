@@ -3,7 +3,6 @@
 //! This module provides advanced CSS minification functionality.
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 /// Advanced CSS minifier with multiple optimization strategies
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

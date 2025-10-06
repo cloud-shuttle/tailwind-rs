@@ -1,5 +1,4 @@
 use crate::css_generator::types::CssProperty;
-use crate::css_generator::trie::ParserType;
 use crate::css_generator::parsers::{UtilityParser, ParserCategory};
 
 /// Parser for CSS `field-sizing` utilities

@@ -3,7 +3,6 @@
 //! Utility functions and helpers for background parsing,
 //! including color mapping, validation, and common operations.
 
-use std::collections::HashMap;
 
 /// Color mapping utilities for background colors
 pub struct BackgroundColorUtils;

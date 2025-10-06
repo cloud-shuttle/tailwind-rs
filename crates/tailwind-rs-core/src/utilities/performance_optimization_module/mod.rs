@@ -10,4 +10,3 @@ pub mod performance_monitoring;
 // Re-export the main components
 pub use core_structures::*;
 pub use bundle_analysis::*;
-pub use performance_monitoring::*;

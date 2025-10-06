@@ -2,13 +2,6 @@
 //!
 //! Comprehensive integration tests for the enhanced variant system.
 
-use super::types::*;
-use super::definitions::*;
-use super::parser::*;
-use super::utilities::*;
-use super::combinations::*;
-use super::utilities::SuggestionType;
-use super::combinations::ConflictType;
 
 #[cfg(test)]
 mod integration_tests {

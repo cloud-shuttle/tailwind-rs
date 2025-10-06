@@ -7,7 +7,6 @@
 //! - Animation control properties (direction, fill mode, play state)
 //! - Flexible animation iteration and delay controls
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 // Re-export all animation utility types and traits
@@ -40,7 +39,7 @@ pub trait AdvancedAnimationUtilities {
     fn animation_composition(self, composition: &AnimationComposition) -> Self;
 
     /// Add timing function class
-    fn timing_function(self, timing: TimingFunction) -> Self;
+    fn timing_function(self, _timing: TimingFunction) -> Self;
 
     /// Add animation direction class
     fn animation_direction(self, direction: AnimationDirection) -> Self;

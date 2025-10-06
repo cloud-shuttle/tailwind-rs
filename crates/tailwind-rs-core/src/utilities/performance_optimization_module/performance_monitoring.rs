@@ -2,13 +2,8 @@
 //! 
 //! This module contains performance monitoring functionality and comprehensive tests.
 
-use serde::{Deserialize, Serialize};
-use std::collections::{HashMap, HashSet};
-use std::fmt;
 
 // Re-export types from other modules for testing
-use super::core_structures::{ClassAnalyzer, CssPurger, OptimizationResult};
-use super::bundle_analysis::{BundleAnalyzer, PerformanceMetrics};
 
 #[cfg(test)]
 mod tests {

@@ -35,21 +35,17 @@ pub mod transitions;
 pub mod typography;
 
 // Re-export all utility traits for easy access
-pub use advanced_animation_utilities::*;
+// Note: Avoiding glob re-exports to prevent naming conflicts
+pub use advanced_animation_utilities::AdvancedAnimationUtilities;
 pub use advanced_performance_optimization::*;
 pub use advanced_plugin_system_modules::*;
-pub use animations_modules::*;
-pub use background_utilities::*;
-pub use borders::*;
+pub use animations_modules::AnimationUtilities;
 pub use color_functions::*;
-pub use colors::*;
 pub use container_queries::*;
 pub use css_nesting::*;
 pub use device_variants::*;
-pub use effects::*;
 pub use enhanced_backdrop_filters::*;
 pub use enhanced_validation_module::*;
-pub use filters_modules::*;
 pub use flexbox::*;
 pub use grid::*;
 pub use interactivity::*;

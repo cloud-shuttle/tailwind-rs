@@ -3,7 +3,6 @@
 //! Specialized state machines for complex parsing scenarios,
 //! inspired by the official Tailwind Oxide implementation.
 
-use crate::css_generator::types::CssProperty;
 use crate::cursor::Cursor;
 
 /// Result of a state machine operation

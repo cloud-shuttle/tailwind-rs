@@ -7,7 +7,6 @@
 use crate::classes::ClassBuilder;
 use serde::{Deserialize, Serialize};
 use std::fmt;
-use std::fmt::Write;
 
 /// Advanced Grid Template Areas
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -185,7 +184,7 @@ impl fmt::Display for SubgridConfig {
 /// Advanced Grid Utilities Trait
 pub trait AdvancedGridUtilities {
     // Grid Template Areas
-    fn grid_areas(self, areas: GridTemplateAreas) -> Self;
+    fn grid_areas(self, _areas: GridTemplateAreas) -> Self;
     fn grid_areas_custom(self, pattern: &str) -> Self;
 
     // Advanced Auto Columns/Rows

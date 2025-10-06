@@ -3,7 +3,7 @@
 //! Parse Tailwind CSS classes embedded in various web frameworks and templating languages.
 //! Inspired by the official Tailwind Oxide implementation.
 
-use crate::boundary::{BoundaryClass, BoundaryValidator, LanguageBoundaryRules, TemplateLanguage};
+use crate::boundary::{LanguageBoundaryRules, TemplateLanguage};
 use std::collections::HashMap;
 
 /// Language-specific parser for extracting Tailwind classes from templates
@@ -343,7 +343,7 @@ impl MultiLanguageParser {
         // Pug syntax: .class1.class2 or tag.class1#id
         let mut chars = trimmed.chars().peekable();
         let mut current_class = String::new();
-        let mut in_tag_name = true;
+        let mut _in_tag_name = true;
 
         while let Some(ch) = chars.next() {
             match ch {
@@ -352,14 +352,14 @@ impl MultiLanguageParser {
                         classes.push(current_class);
                         current_class = String::new();
                     }
-                    in_tag_name = false;
+                    _in_tag_name = false;
                 }
                 '#' => {
                     if !current_class.is_empty() {
                         classes.push(current_class);
                         current_class = String::new();
                     }
-                    in_tag_name = false;
+                    _in_tag_name = false;
                     break; // ID part starts
                 }
                 '(' => {
@@ -367,10 +367,10 @@ impl MultiLanguageParser {
                     break;
                 }
                 _ => {
-                    if !in_tag_name {
+                    if !_in_tag_name {
                         current_class.push(ch);
                     } else if ch.is_whitespace() {
-                        in_tag_name = false;
+                        _in_tag_name = false;
                         current_class = String::new();
                     }
                 }

@@ -2,7 +2,6 @@
 //!
 //! This module provides memory optimization functionality.
 
-use std::collections::HashMap;
 
 /// Memory optimizer
 pub struct MemoryOptimizer {

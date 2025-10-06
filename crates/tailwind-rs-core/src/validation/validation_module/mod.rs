@@ -3,9 +3,6 @@
 //! This module provides class validation functionality to ensure that
 //! generated Tailwind CSS classes are valid and don't conflict.
 
-use crate::custom_variant::CustomVariantManager;
-use std::collections::{HashMap, HashSet};
-use thiserror::Error;
 
 pub mod validation_errors;
 pub mod validation_rules;

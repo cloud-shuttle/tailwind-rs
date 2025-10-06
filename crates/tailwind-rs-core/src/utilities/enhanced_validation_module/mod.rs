@@ -10,5 +10,4 @@ pub mod validation_traits;
 pub mod validation_tests;
 
 // Re-export the public API
-pub use validation_types::*;
 pub use validation_traits::*;

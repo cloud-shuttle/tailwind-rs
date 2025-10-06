@@ -4,7 +4,7 @@
 //! all spacing-related parsing functionality.
 
 use crate::css_generator::types::CssProperty;
-use super::{utilities::*, constants::*, values::*};
+use super::{utilities::*, constants::*};
 use super::super::css_generator::parsers::{ParserCategory, UtilityParser};
 
 /// Main spacing parser implementation

@@ -3,7 +3,6 @@
 //! Comprehensive tests for the spacing system to ensure correctness
 //! and prevent regressions.
 
-use super::{parser::*, utilities::*, values::*, constants::*};
 
 #[cfg(test)]
 mod spacing_parser_tests {

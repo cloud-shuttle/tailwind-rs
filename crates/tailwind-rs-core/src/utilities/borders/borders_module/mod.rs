@@ -3,9 +3,6 @@
 //! This module provides utilities for border width, border style, border radius,
 //! border color, outline, and divide utilities.
 
-use crate::classes::ClassBuilder;
-use serde::{Deserialize, Serialize};
-use std::fmt;
 
 pub mod border_width;
 pub mod border_style;

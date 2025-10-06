@@ -2,7 +2,6 @@
 //!
 //! This module provides bundle splitting functionality.
 
-use std::collections::HashMap;
 
 /// Bundle splitter
 pub struct BundleSplitter {

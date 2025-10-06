@@ -19,8 +19,8 @@ pub struct CssGenerator {
     pub custom_properties: Option<HashMap<String, String>>,
 
     // Core components
-    config: CssGenerationConfig,
-    parser_trie: ParserTrie,
+    pub config: CssGenerationConfig,
+    pub parser_trie: ParserTrie,
     pub variant_parser: VariantParser,
 
     // Processing components
@@ -29,14 +29,17 @@ pub struct CssGenerator {
     pub css_output: CssOutputGenerator,
 
     // Caching
-    color_cache: ColorCache,
-    rule_cache: RuleCache,
+    pub color_cache: ColorCache,
+    pub rule_cache: RuleCache,
 
     // State
     pub transform_css_generated: bool,
 
     // Plugin system
-    plugin_manager: super::super::plugin_system::PluginManager,
+    pub plugin_manager: super::super::plugin_system::PluginManager,
+
+    // CSS functions processor
+    pub css_functions: crate::css_functions::CssFunctionsProcessor,
 }
 
 impl Default for CssGenerator {

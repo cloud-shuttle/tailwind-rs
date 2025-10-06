@@ -214,6 +214,7 @@ pub struct CssGenerator {
     // New architecture components (for delegation)
     pub class_processor: super::processing::class_processor::ClassProcessor,
     pub variant_processor: super::processing::variant_processor::VariantProcessor,
+    pub css_functions: crate::css_functions::CssFunctionsProcessor,
 }
 
 impl Default for CssGenerator {
@@ -318,6 +319,7 @@ impl CssGenerator {
             plugin_manager: super::plugin_system::PluginManager::new(),
             class_processor: super::processing::class_processor::ClassProcessor::new(),
             variant_processor: super::processing::variant_processor::VariantProcessor::new(),
+            css_functions: crate::css_functions::CssFunctionsProcessor::new(),
         };
 
         // Initialize legacy fields
@@ -411,11 +413,11 @@ impl super::generator_operations::CssGeneratorOperations for CssGenerator {
         if !selector.is_empty() && !properties.is_empty() {
             Ok(())
         } else {
-            Err(super::error::Error::InvalidInput("Invalid selector or properties".to_string()))
+            Err(crate::error::TailwindError::Validation { message: "Invalid selector or properties".to_string() })
         }
     }
 
-    fn add_responsive_class(&mut self, breakpoint: super::responsive::Breakpoint, class: &str) -> Result<()> {
+    fn add_responsive_class(&mut self, breakpoint: crate::responsive::Breakpoint, class: &str) -> Result<()> {
         // Convert to responsive class format and add
         let responsive_class = format!("{}:{}", breakpoint.to_string().to_lowercase(), class);
         <Self as super::generator_operations::CssGeneratorOperations>::add_class(self, &responsive_class)

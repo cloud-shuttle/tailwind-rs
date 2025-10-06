@@ -67,6 +67,7 @@ pub mod color;
 pub mod config;
 pub mod boundary;
 pub mod contracts;
+pub mod css_functions;
 pub mod css_generator;
 pub mod cursor;
 pub mod multi_language;

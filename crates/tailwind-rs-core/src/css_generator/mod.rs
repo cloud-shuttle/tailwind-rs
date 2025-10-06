@@ -22,7 +22,10 @@
 //! // .bg-blue-500 { background-color: #3b82f6; }
 //! // .text-white { color: #ffffff; }
 //! // .hover\:bg-blue-600:hover { background-color: #2563eb; }
-//! ```
+//! */
+
+// CSS functions for @apply, @layer, @import
+// Note: css_functions is declared in the parent lib.rs
 
 // Core modules (refactored)
 pub mod caching;

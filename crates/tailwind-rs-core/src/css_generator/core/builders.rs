@@ -32,6 +32,7 @@ impl CssGeneratorBuilder for super::super::CssGenerator {
                    rule_cache: RuleCache::new(),
                    transform_css_generated: false,
                    plugin_manager: super::super::plugin_system::PluginManager::new(),
+                   css_functions: crate::css_functions::CssFunctionsProcessor::new(),
                };
 
         // Initialize parser trie
@@ -55,6 +56,7 @@ impl CssGeneratorBuilder for super::super::CssGenerator {
                    rule_cache: RuleCache::new(),
                    transform_css_generated: false,
                    plugin_manager: super::super::plugin_system::PluginManager::new(),
+                   css_functions: crate::css_functions::CssFunctionsProcessor::new(),
                };
 
         // Initialize parser trie

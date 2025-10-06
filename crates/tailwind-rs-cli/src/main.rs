@@ -1,130 +1,181 @@
-//! # Tailwind-rs CLI
+//! Tailwind-RS CLI Tool
 //!
-//! This is the main CLI tool for the Tailwind-rs build system.
-//! It follows our TDD-first approach (ADR-001) and comprehensive testing pyramid strategy (ADR-002).
+//! A command-line interface for building and managing Tailwind CSS with Rust.
+//! Provides build, watch, and development utilities for the Tailwind-RS framework.
 
-use anyhow::Result;
 use clap::{Parser, Subcommand};
+use std::path::PathBuf;
 
-mod build;
+mod commands;
 mod config;
-mod optimize;
-mod stats;
-mod utils;
-mod watch;
+mod css_processor;
+mod file_watcher;
 
-use build::BuildCommand;
-use config::ConfigCommand;
-use optimize::OptimizeCommand;
-use stats::StatsCommand;
-use watch::WatchCommand;
+use commands::{build, init, watch};
 
-/// Tailwind-rs CLI - The first-class Tailwind CSS integration for Rust web frameworks
+/// Tailwind-RS CLI - A fast, Rust-powered Tailwind CSS build tool
 #[derive(Parser)]
 #[command(name = "tailwind-rs")]
-#[command(about = "Tailwind-rs CLI - Build and optimize Tailwind CSS for Rust web frameworks")]
-#[command(version)]
-pub struct Cli {
+#[command(version, about = "A fast, Rust-powered Tailwind CSS build tool", long_about = None)]
+struct Cli {
     #[command(subcommand)]
-    pub command: Commands,
+    command: Commands,
 }
 
+/// Available CLI commands
 #[derive(Subcommand)]
-pub enum Commands {
-    /// Build Tailwind CSS from Rust source files
-    Build(BuildCommand),
-    /// Watch for changes and rebuild automatically
-    Watch(WatchCommand),
-    /// Optimize CSS output
-    Optimize(OptimizeCommand),
-    /// Manage configuration
-    Config(ConfigCommand),
-    /// Show build statistics and project information
-    Stats(StatsCommand),
+enum Commands {
+    /// Build CSS from source files
+    Build {
+        /// Input CSS file (default: stdin or tailwind.css)
+        #[arg(short, long)]
+        input: Option<PathBuf>,
+
+        /// Output CSS file (default: stdout or dist/output.css)
+        #[arg(short, long)]
+        output: Option<PathBuf>,
+
+        /// Content file patterns to scan for classes
+        #[arg(short, long)]
+        content: Vec<String>,
+
+        /// Configuration file
+        #[arg(short, long)]
+        config: Option<PathBuf>,
+
+        /// Minify the output CSS
+        #[arg(long)]
+        minify: bool,
+
+        /// Enable verbose output
+        #[arg(short, long)]
+        verbose: bool,
+    },
+
+    /// Initialize a new Tailwind-RS project
+    Init {
+        /// Configuration file to create (default: tailwind.config.js)
+        #[arg(short, long)]
+        config: Option<PathBuf>,
+
+        /// Create TypeScript config instead of JavaScript
+        #[arg(long)]
+        typescript: bool,
+
+        /// Force overwrite existing files
+        #[arg(short, long)]
+        force: bool,
+    },
+
+    /// Watch source files and rebuild on changes
+    Watch {
+        /// Input CSS file
+        #[arg(short, long)]
+        input: Option<PathBuf>,
+
+        /// Output CSS file
+        #[arg(short, long)]
+        output: Option<PathBuf>,
+
+        /// Content file patterns to scan for classes
+        #[arg(short, long)]
+        content: Vec<String>,
+
+        /// Configuration file
+        #[arg(short, long)]
+        config: Option<PathBuf>,
+
+        /// Minify the output CSS
+        #[arg(long)]
+        minify: bool,
+
+        /// Enable verbose output
+        #[arg(short, long)]
+        verbose: bool,
+
+        /// Polling interval in milliseconds (default: 100)
+        #[arg(long, default_value = "100")]
+        poll: u64,
+    },
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Initialize logging
-    env_logger::init();
-
     let cli = Cli::parse();
 
+    // Initialize logging based on verbose flag
+    let verbose = matches!(cli.command, Commands::Build { verbose: true, .. } | Commands::Watch { verbose: true, .. });
+
+    if verbose {
+        env_logger::Builder::new()
+            .filter_level(log::LevelFilter::Info)
+            .init();
+    } else {
+        env_logger::Builder::new()
+            .filter_level(log::LevelFilter::Warn)
+            .init();
+    }
+
     match cli.command {
-        Commands::Build(cmd) => cmd.execute().await,
-        Commands::Watch(cmd) => cmd.execute().await,
-        Commands::Optimize(cmd) => cmd.execute().await,
-        Commands::Config(cmd) => cmd.execute().await,
-        Commands::Stats(cmd) => cmd.execute().await,
+        Commands::Build { input, output, content, config, minify, .. } => {
+            build::execute(build::BuildArgs {
+                input,
+                output,
+                content,
+                config,
+                minify,
+            }).await?;
+        }
+
+        Commands::Init { config, typescript, force } => {
+            init::execute(init::InitArgs {
+                config,
+                typescript,
+                force,
+            }).await?;
+        }
+
+        Commands::Watch { input, output, content, config, minify, poll, .. } => {
+            watch::execute(watch::WatchArgs {
+                input,
+                output,
+                content,
+                config,
+                minify,
+                poll_interval: poll,
+            }).await?;
+        }
     }
+
+    Ok(())
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use assert_cmd::Command;
-    use predicates::prelude::*;
+/// CLI-specific error types
+#[derive(Debug, thiserror::Error)]
+pub enum CliError {
+    #[error("Build error: {0}")]
+    Build(#[from] build::BuildError),
 
-    #[test]
-    fn test_cli_help() {
-        let mut cmd = Command::new("cargo");
-        cmd.args(&["run", "--bin", "tailwind-rs", "--", "--help"]);
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("Tailwind-rs CLI"));
-    }
+    #[error("Init error: {0}")]
+    Init(#[from] init::InitError),
 
-    #[test]
-    fn test_cli_version() {
-        let mut cmd = Command::new("cargo");
-        cmd.args(&["run", "--bin", "tailwind-rs", "--", "--version"]);
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("tailwind-rs"));
-    }
+    #[error("Watch error: {0}")]
+    Watch(#[from] watch::WatchError),
 
-    #[test]
-    fn test_build_command_help() {
-        let mut cmd = Command::new("cargo");
-        cmd.args(&["run", "--bin", "tailwind-rs", "--", "build", "--help"]);
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("Build Tailwind CSS"));
-    }
+    #[error("Configuration error: {0}")]
+    Config(#[from] config::ConfigError),
 
-    #[test]
-    fn test_watch_command_help() {
-        let mut cmd = Command::new("cargo");
-        cmd.args(&["run", "--bin", "tailwind-rs", "--", "watch", "--help"]);
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("Watch for changes"));
-    }
+    #[error("CSS processing error: {0}")]
+    CssProcessor(#[from] css_processor::CssProcessorError),
 
-    #[test]
-    fn test_optimize_command_help() {
-        let mut cmd = Command::new("cargo");
-        cmd.args(&["run", "--bin", "tailwind-rs", "--", "optimize", "--help"]);
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("Optimize CSS output"));
-    }
+    #[error("File watcher error: {0}")]
+    FileWatcher(#[from] file_watcher::FileWatcherError),
 
-    #[test]
-    fn test_config_command_help() {
-        let mut cmd = Command::new("cargo");
-        cmd.args(&["run", "--bin", "tailwind-rs", "--", "config", "--help"]);
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("Manage configuration"));
-    }
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
 
-    #[test]
-    fn test_stats_command_help() {
-        let mut cmd = Command::new("cargo");
-        cmd.args(&["run", "--bin", "tailwind-rs", "--", "stats", "--help"]);
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("Show build statistics"));
-    }
+    #[error("Anyhow error: {0}")]
+    Anyhow(#[from] anyhow::Error),
 }
+
+pub type Result<T> = std::result::Result<T, CliError>;

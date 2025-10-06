@@ -30,6 +30,8 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 toml = { workspace = true }
 glob = { workspace = true }
+regex = "1.10"
+log = "0.4"
 
 # File system and process dependencies
 walkdir = "2.4"

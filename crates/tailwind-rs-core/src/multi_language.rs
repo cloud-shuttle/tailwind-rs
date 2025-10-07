@@ -301,7 +301,7 @@ impl MultiLanguageParser {
             let tag_part = &line[..tag_end];
 
             // Parse Haml tag syntax: %tag.class1.class2#id
-            let mut __in_classes = false;
+            let mut _in_classes = false;
             let mut current_class = String::new();
 
             for ch in tag_part.chars() {

@@ -392,7 +392,7 @@ impl UtilityParser for GradientParser {
         }
 
         // Try gradient stop classes
-        if let Some(_stop_type) = CssGenerator::extract_gradient_stop_type(class) {
+        if let Some(_stop_type) = crate::css_generator::generator::CssGenerator::extract_gradient_stop_type_static(class) {
             // For now, skip gradient stops until we have access to color cache
             // This will be handled by the main CssGenerator::generate_individual_css_rule method
             return None;

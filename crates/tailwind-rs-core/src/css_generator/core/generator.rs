@@ -114,4 +114,22 @@ impl CssGenerator {
     pub fn variant_parser(&self) -> &VariantParser {
         &self.variant_parser
     }
+
+    /// Process @apply directive
+    pub fn process_apply_directive(&mut self, apply_value: &str) -> Result<String> {
+        // Create a mock available classes map for now
+        // In a real implementation, this would be populated with all known classes
+        let available_classes = std::collections::HashMap::new();
+        self.css_functions.process_apply(apply_value, &available_classes)
+    }
+
+    /// Process @layer directive
+    pub fn process_layer_directive(&mut self, layer_name: &str, css_content: &str) -> Result<String> {
+        self.css_functions.process_layer(layer_name, css_content)
+    }
+
+    /// Process @import directive
+    pub fn process_import_directive(&mut self, import_value: &str) -> Result<String> {
+        self.css_functions.process_import(import_value)
+    }
 }

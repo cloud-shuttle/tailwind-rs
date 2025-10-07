@@ -3,7 +3,6 @@
 //! This module contains the add/remove/update operations for CssGenerator.
 
 use super::types::{CssProperty, CssRule};
-use super::generator_parsers::CssGeneratorParsers;
 use crate::error::Result;
 use crate::responsive::Breakpoint;
 
@@ -81,57 +80,55 @@ impl super::CssGenerator {
 
 impl CssGeneratorOperations for super::CssGenerator {
     fn add_class(&mut self, class: &str) -> Result<()> {
-        // Generate individual rule for this class only - "One Class = One CSS Rule"
-        let rule = self.generate_individual_css_rule(class)?;
+        // Generate individual rule and store it
+        // For the core generator, delegate to the core operations
+        let rule = <Self as super::core::operations::CssGeneratorOperations>::generate_individual_css_rule(self, class)?;
         self.rules.insert(class.to_string(), rule);
         Ok(())
     }
 
     fn add_classes_for_element(&mut self, classes: &[&str]) -> Result<()> {
-        // Process each class individually using the "One Class = One CSS Rule" architecture
+        // Process each class individually
         for &class in classes {
-            // Skip gradient stops - they only set CSS variables and don't generate individual rules
-            if Self::extract_gradient_stop_type(class).is_some() {
-                continue;
-            }
-
-            // Generate individual rule for each class (including gradient directions)
-            let rule = self.generate_individual_css_rule(class)?;
-            self.rules.insert(class.to_string(), rule);
+            self.add_class(class)?;
         }
-
         Ok(())
     }
 
     fn add_css_selector(&mut self, selector: &str, properties: &str) -> Result<()> {
+        // Parse properties and create a rule
+        let properties_vec = properties.split(';')
+            .filter(|s| !s.trim().is_empty())
+            .map(|s| {
+                let parts: Vec<&str> = s.splitn(2, ':').collect();
+                CssProperty {
+                    name: parts[0].trim().to_string(),
+                    value: parts[1].trim().to_string(),
+                    important: false,
+                }
+            })
+            .collect();
+
         let rule = CssRule {
             selector: selector.to_string(),
-            properties: vec![CssProperty {
-                name: "content".to_string(),
-                value: properties.to_string(),
-                important: false,
-            }],
+            properties: properties_vec,
             media_query: None,
-            specificity: 0, // CSS selectors have low specificity
+            specificity: 1,
         };
         self.rules.insert(selector.to_string(), rule);
         Ok(())
     }
 
     fn add_responsive_class(&mut self, breakpoint: Breakpoint, class: &str) -> Result<()> {
-        let mut rule = self.class_to_css_rule(class)?;
-        rule.selector = format!("{}{}", breakpoint.prefix(), class);
-        rule.media_query = self.breakpoints.get(&breakpoint).cloned();
-        rule.specificity = 20; // Higher specificity for responsive rules
-
-        let responsive_class = format!("{}:{}", breakpoint.prefix().trim_end_matches(':'), class);
-        self.rules.insert(responsive_class, rule);
-        Ok(())
+        // Construct responsive class and add it
+        let responsive_class = format!("{}:{}", breakpoint.to_string().to_lowercase(), class);
+        self.add_class(&responsive_class)
     }
 
     fn add_custom_property(&mut self, name: &str, value: &str) {
-        self.custom_properties
-            .insert(name.to_string(), value.to_string());
+        if let Some(ref mut props) = self.custom_properties {
+            props.insert(name.to_string(), value.to_string());
+        }
     }
 
     fn remove_rule(&mut self, selector: &str) {

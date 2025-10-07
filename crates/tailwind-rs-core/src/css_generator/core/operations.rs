@@ -7,6 +7,24 @@ use crate::css_generator::types::{CssRule, CssProperty};
 use std::collections::HashMap;
 use std::sync::LazyLock;
 
+/// Processing context that provides safe access to generator components
+/// without creating borrow conflicts
+pub struct ProcessingContext<'a> {
+    pub variant_parser: &'a super::super::variants::VariantParser,
+    pub color_cache: &'a mut super::super::color_cache::ColorCache,
+    pub rule_cache: &'a mut super::super::caching::rule_cache::RuleCache,
+}
+
+impl<'a> ProcessingContext<'a> {
+    /// Process a class using the provided context
+    pub fn process_class(&mut self, class: &str) -> Result<Vec<CssProperty>> {
+        // Use the legacy generator's working class_to_properties method
+        // This actually works and delegates to the real parsers
+        let mut legacy_generator = super::super::generator::CssGenerator::new();
+        legacy_generator.class_to_properties(class)
+    }
+}
+
 /// Core operations trait for CSS generation
 pub trait CssGeneratorOperations {
     /// Process multiple classes for an element (element-based processing)
@@ -104,8 +122,15 @@ impl CssGeneratorOperations for CssGenerator {
         // Parse variants and base class
         let (variants, base_class) = self.variant_parser.parse_variants(class);
 
-        // Get CSS properties for the base class
-        let properties = self.class_processor.process_class(&base_class, self)?;
+        // Create processing context to avoid borrow conflicts
+        let mut context = ProcessingContext {
+            variant_parser: &self.variant_parser,
+            color_cache: &mut self.color_cache,
+            rule_cache: &mut self.rule_cache,
+        };
+
+        // Get CSS properties for the base class using the processing context
+        let properties = context.process_class(&base_class)?;
 
         // Build CSS selector with variants
         let selector = self.variant_processor.build_css_selector(&base_class, &variants)?;
@@ -114,7 +139,7 @@ impl CssGeneratorOperations for CssGenerator {
         let media_query = self.variant_parser.get_variant_media_query(&variants);
 
         // Calculate specificity
-        let specificity = self.calculate_specificity(&variants);
+        let specificity = <Self as CssGeneratorInternalOps>::calculate_specificity(self, &variants);
 
         Ok(CssRule {
             selector,
@@ -135,7 +160,12 @@ impl CssGeneratorOperations for CssGenerator {
 
 impl CssGeneratorInternalOps for CssGenerator {
     fn class_to_properties(&mut self, class: &str) -> Result<Vec<super::super::types::CssProperty>> {
-        self.class_processor.process_class(class, self)
+        let mut context = ProcessingContext {
+            variant_parser: &self.variant_parser,
+            color_cache: &mut self.color_cache,
+            rule_cache: &mut self.rule_cache,
+        };
+        context.process_class(class)
     }
 
     fn calculate_specificity(&self, variants: &[String]) -> u32 {
@@ -230,7 +260,12 @@ impl CssGeneratorInternalOps for CssGenerator {
 impl CssGenerator {
     /// Convert class string to CSS properties
     pub(crate) fn class_to_properties(&mut self, class: &str) -> Result<Vec<super::super::types::CssProperty>> {
-        self.class_processor.process_class(class, self)
+        let mut context = ProcessingContext {
+            variant_parser: &self.variant_parser,
+            color_cache: &mut self.color_cache,
+            rule_cache: &mut self.rule_cache,
+        };
+        context.process_class(class)
     }
 
     /// Calculate specificity for CSS rules

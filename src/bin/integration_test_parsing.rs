@@ -1,6 +1,6 @@
 extern crate tailwind_rs_core;
 
-use tailwind_rs_core::css_generator::CssGenerator;
+use tailwind_rs_core::css_generator::LegacyCssGenerator as CssGenerator;
 use std::collections::HashMap;
 
 fn main() {

@@ -389,7 +389,7 @@ impl VariantParser {
 
         // Parse all variants iteratively until no more variants are found
         loop {
-            let mut __found_variant = false;
+            let mut _found_variant = false;
 
             // Check for compound variants first (most specific)
             let compound_patterns = [

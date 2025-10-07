@@ -4,7 +4,7 @@
 //! optimizing the final CSS bundle size.
 
 use crate::class_scanner::ClassScanner;
-use crate::css_generator::CssGenerator;
+use crate::css_generator::{CssGenerator, bridge::LegacyBridge};
 use crate::error::Result;
 use std::collections::{HashMap, HashSet};
 use std::path::Path;

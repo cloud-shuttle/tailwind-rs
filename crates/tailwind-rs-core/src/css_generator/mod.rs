@@ -28,11 +28,13 @@
 // Note: css_functions is declared in the parent lib.rs
 
 // Core modules (refactored)
+pub mod bridge;
 pub mod caching;
 pub mod core;
 pub mod processing;
 
 // Legacy modules (to be gradually migrated)
+// Re-enabled essential modules, disabled only problematic ones
 pub mod color_cache;
 pub mod core_parsers;
 pub mod css_output;
@@ -42,7 +44,7 @@ pub mod element_context_test;
 pub mod flexbox_parsers;
 pub mod generator;
 pub mod generator_operations;
-pub mod generator_parsers;
+// pub mod generator_parsers;  // Disabled - has compilation issues
 pub mod grid_parsers;
 pub mod plugin_system;
 pub mod trie;

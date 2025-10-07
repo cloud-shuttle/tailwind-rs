@@ -335,6 +335,21 @@ fn generate_css() -> (String, String) {
         "via-purple-500",
         "via-purple-900",
         "z-10",
+        // Modern Tailwind features
+        "@container-sm:bg-green-500",
+        "@container-md:bg-blue-500",
+        "@container-lg:bg-purple-500",
+        "[data-active=\"true\"]:ring-2",
+        "[data-active=\"true\"]:ring-purple-500",
+        "[aria-expanded=\"false\"]:opacity-50",
+        "top-[100px]",
+        "left-[50px]",
+        "motion-reduce:transition-none",
+        "contrast-more:ring-4",
+        "contrast-more:ring-yellow-400",
+        "pointer-coarse:p-8",
+        "orientation-landscape:flex-row",
+        "container",
     ];
 
     // Test Tailwind-RS objects and methods
@@ -364,23 +379,23 @@ fn generate_css() -> (String, String) {
         }
     }
 
-    // 🎯 NEW: Test element-based processing with realistic element groupings
+    // 🎯 ADVANCED: Test modern Tailwind features with element-based processing
 
     let mut element_based_generator = CssGenerator::new();
 
-    // Example element groupings (simulating real HTML elements)
+    // Example element groupings showcasing modern Tailwind features
     let element_groups = vec![
-        // Header element
+        // Header element with modern features
         vec!["text-6xl", "font-black", "text-center", "mb-12", "bg-gradient-to-r", "from-blue-400", "via-purple-500", "to-pink-500", "bg-clip-text", "text-transparent", "animate-pulse"],
 
-        // Status card element
-        vec!["bg-conic", "from-blue-500/20", "via-purple-600/20", "to-pink-500/20", "backdrop-blur-lg", "rounded-2xl", "shadow-2xl", "p-8", "border", "border-white/20", "dark:border-gray-700/30", "animate-float"],
+        // Status card with container queries
+        vec!["@container-sm:bg-green-500", "@container-md:bg-blue-500", "@container-lg:bg-purple-500", "bg-conic", "from-blue-500/20", "via-purple-600/20", "to-pink-500/20", "backdrop-blur-lg", "rounded-2xl", "shadow-2xl", "p-8", "border", "border-white/20", "dark:border-gray-700/30", "animate-float"],
 
-        // Interactive button element
-        vec!["px-6", "py-3", "bg-gradient-to-r", "from-purple-500", "via-pink-500", "to-red-500", "text-white", "rounded-xl", "hover:from-purple-400", "hover:via-pink-400", "hover:to-red-400", "transition-all", "duration-300", "transform", "hover:scale-105", "hover:shadow-xl", "hover:shadow-purple-500/25", "font-semibold", "tracking-wide"],
+        // Interactive button with arbitrary values and device variants
+        vec!["px-6", "py-3", "bg-gradient-to-r", "from-purple-500", "via-pink-500", "to-red-500", "text-white", "rounded-xl", "hover:from-purple-400", "hover:via-pink-400", "hover:to-red-400", "transition-all", "duration-300", "transform", "hover:scale-105", "hover:shadow-xl", "hover:shadow-purple-500/25", "font-semibold", "tracking-wide", "motion-reduce:transition-none", "[data-active=\"true\"]:ring-2", "[data-active=\"true\"]:ring-purple-500"],
 
-        // Demo card element
-        vec!["p-6", "bg-gradient-to-br", "from-purple-500", "via-pink-500", "to-red-500", "rounded-2xl", "text-white", "text-center", "transform", "hover:scale-110", "transition-all", "duration-500", "hover:rotate-3", "shadow-2xl"],
+        // Demo card with device-specific variants
+        vec!["p-6", "bg-gradient-to-br", "from-purple-500", "via-pink-500", "to-red-500", "rounded-2xl", "text-white", "text-center", "transform", "hover:scale-110", "transition-all", "duration-500", "hover:rotate-3", "shadow-2xl", "contrast-more:ring-4", "contrast-more:ring-yellow-400", "pointer-coarse:p-8", "orientation-landscape:flex-row"],
     ];
 
     let mut element_css = String::new();
@@ -389,7 +404,7 @@ fn generate_css() -> (String, String) {
     for (i, element_classes) in element_groups.iter().enumerate() {
         let css = element_based_generator.process_element_classes(element_classes);
         if !css.is_empty() {
-            element_css.push_str(&format!("/* Element {} */\n", i + 1));
+            element_css.push_str(&format!("/* Element {} - Modern Features */\n", i + 1));
             element_css.push_str(&css);
             element_css.push('\n');
             element_count += 1;
@@ -397,12 +412,36 @@ fn generate_css() -> (String, String) {
     }
 
 
+    // 🎯 ADVANCED: Test CSS Functions (@apply, @layer, @import)
+    let mut css_functions_generator = CssGenerator::new();
+
+    // Test @apply directive
+    let apply_css = css_functions_generator.process_apply_directive("bg-blue-500 text-white p-4 rounded-lg shadow-md").unwrap_or_default();
+
+    // Test @layer directive
+    let layer_css = css_functions_generator.process_layer_directive("components", ".btn { @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600; }").unwrap_or_default();
+
+    // Test @import directive
+    let import_css = css_functions_generator.process_import_directive("url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap')").unwrap_or_default();
+
     // Add element-based CSS to the main CSS output
     let mut combined_css = String::new();
     combined_css.push_str("/* =========================================== */\n");
     combined_css.push_str("/* 🎨 ELEMENT-BASED PROCESSING (NEW ARCHITECTURE) */\n");
     combined_css.push_str("/* =========================================== */\n\n");
     combined_css.push_str(&element_css);
+
+    // Add CSS Functions section
+    combined_css.push_str("\n/* =========================================== */\n");
+    combined_css.push_str("/* 🎯 CSS FUNCTIONS (@apply, @layer, @import) */\n");
+    combined_css.push_str("/* =========================================== */\n\n");
+    combined_css.push_str("/* @apply directive result */\n");
+    combined_css.push_str(&apply_css);
+    combined_css.push_str("\n\n/* @layer directive result */\n");
+    combined_css.push_str(&layer_css);
+    combined_css.push_str("\n\n/* @import directive result */\n");
+    combined_css.push_str(&import_css);
+
     combined_css.push_str("\n/* =========================================== */\n");
     combined_css.push_str("/* 🔧 INDIVIDUAL CLASS PROCESSING (LEGACY) */\n");
     combined_css.push_str("/* =========================================== */\n\n");
@@ -577,6 +616,88 @@ fn generate_html() -> String {
                             <div class="text-4xl mb-4 font-medium text-white">Medium</div>
                             <div class="text-lg font-semibold text-yellow-300 mb-2">Font Medium (500)</div>
                             <div class="text-sm text-gray-400 font-sans bg-gray-800 px-3 py-1 rounded mt-3">Sphinx of black quartz, judge my vow</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modern Tailwind Features Showcase -->
+                <div class="space-y-6">
+                    <!-- Container Queries Demo -->
+                    <div class="bg-gradient-to-r from-green-500/20 to-emerald-600/20 dark:from-green-900/30 dark:to-emerald-900/30 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-green-500/50">
+                        <h3 class="text-xl font-semibold text-white mb-4 text-center drop-shadow-lg">
+                            📐 Container Queries (Modern CSS)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="container @container-sm:bg-green-500 @container-md:bg-blue-500 @container-lg:bg-purple-500 p-4 rounded-lg text-white text-center font-medium transition-colors">
+                                Resize container to see color changes
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-300 mt-4 text-center">
+                            Uses <code class="bg-gray-800 px-2 py-1 rounded text-xs">@container-sm:bg-green-500</code> etc.
+                        </p>
+                    </div>
+
+                    <!-- Arbitrary Values Demo -->
+                    <div class="bg-gradient-to-r from-purple-500/20 to-pink-600/20 dark:from-purple-900/30 dark:to-pink-900/30 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-purple-500/50">
+                        <h3 class="text-xl font-semibold text-white mb-4 text-center drop-shadow-lg">
+                            🎯 Arbitrary Values
+                        </h3>
+                        <div class="flex flex-wrap gap-4 justify-center">
+                            <button class="[data-active='true']:ring-2 [data-active='true']:ring-purple-500 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors" data-active="true">
+                                Active Button
+                            </button>
+                            <button class="[aria-expanded='false']:opacity-50 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors" aria-expanded="false">
+                                Inactive Button
+                            </button>
+                            <div class="top-[100px] left-[50px] absolute bg-yellow-500 text-black px-3 py-1 rounded text-sm font-mono">
+                                Custom positioned
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-300 mt-4 text-center">
+                            Uses arbitrary selectors like <code class="bg-gray-800 px-2 py-1 rounded text-xs">[data-active="true"]:ring-2</code>
+                        </p>
+                    </div>
+
+                    <!-- Device Variants Demo -->
+                    <div class="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 dark:from-cyan-900/30 dark:to-blue-900/30 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-cyan-500/50">
+                        <h3 class="text-xl font-semibold text-white mb-4 text-center drop-shadow-lg">
+                            📱 Device-Specific Variants
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="motion-reduce:transition-none contrast-more:ring-4 contrast-more:ring-yellow-400 p-4 bg-white/10 rounded-lg border border-white/20 text-center">
+                                <div class="text-2xl mb-2">🎭</div>
+                                <div class="text-white font-medium">Accessibility Features</div>
+                                <div class="text-sm text-gray-300">motion-reduce, contrast-more</div>
+                            </div>
+                            <div class="pointer-coarse:p-8 orientation-landscape:flex-row p-4 bg-white/10 rounded-lg border border-white/20 text-center">
+                                <div class="text-2xl mb-2">📱</div>
+                                <div class="text-white font-medium">Device Adaptation</div>
+                                <div class="text-sm text-gray-300">pointer-coarse, orientation</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CSS Functions Demo -->
+                    <div class="bg-gradient-to-r from-orange-500/20 to-red-600/20 dark:from-orange-900/30 dark:to-red-900/30 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-orange-500/50">
+                        <h3 class="text-xl font-semibold text-white mb-4 text-center drop-shadow-lg">
+                            🎨 CSS Functions (@apply, @layer, @import)
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <div class="text-sm text-gray-300 mb-2">@apply directive:</div>
+                                <code class="text-orange-300 text-sm">
+                                    @apply bg-blue-500 text-white p-4 rounded-lg shadow-md;
+                                </code>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <div class="text-sm text-gray-300 mb-2">@layer directive:</div>
+                                <code class="text-orange-300 text-sm">
+                                    @layer components {{ .btn {{ @apply px-4 py-2 bg-blue-500 text-white rounded; }} }}
+                                </code>
+                            </div>
+                            <button class="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-400 hover:to-red-400 transition-all duration-300 font-medium">
+                                Generated with @apply
+                            </button>
                         </div>
                     </div>
                 </div>

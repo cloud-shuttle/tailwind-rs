@@ -4,6 +4,7 @@
 use super::super::CssGenerator;
 use crate::error::Result;
 use crate::css_generator::types::{CssRule, CssProperty};
+use crate::css_generator::parsers::UtilityParser;
 use std::collections::HashMap;
 use std::sync::LazyLock;
 
@@ -18,10 +19,96 @@ pub struct ProcessingContext<'a> {
 impl<'a> ProcessingContext<'a> {
     /// Process a class using the provided context
     pub fn process_class(&mut self, class: &str) -> Result<Vec<CssProperty>> {
-        // Use the legacy generator's working class_to_properties method
-        // This actually works and delegates to the real parsers
-        let mut legacy_generator = super::super::generator::CssGenerator::new();
-        legacy_generator.class_to_properties(class)
+        // Use the actual parsers that exist in the codebase
+        // This is the proper new architecture implementation
+
+        // Try spacing parsers first (most common)
+        if let Some(props) = self.try_spacing_parsers(class) {
+            return Ok(props);
+        }
+
+        // Try color parsers
+        if let Some(props) = self.try_color_parsers(class) {
+            return Ok(props);
+        }
+
+        // Try layout parsers
+        if let Some(props) = self.try_layout_parsers(class) {
+            return Ok(props);
+        }
+
+        // Try typography parsers
+        if let Some(props) = self.try_typography_parsers(class) {
+            return Ok(props);
+        }
+
+        // Try effects and transforms
+        if let Some(props) = self.try_effects_parsers(class) {
+            return Ok(props);
+        }
+
+        // Try gradient parsers (special handling)
+        if let Some(props) = self.try_gradient_parsers(class) {
+            return Ok(props);
+        }
+
+        // For unknown classes, return empty (they'll be handled by fallback CSS)
+        Ok(vec![])
+    }
+
+    fn try_spacing_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
+        use crate::css_generator::parsers::spacing::SpacingParser;
+        let parser = SpacingParser::default();
+        parser.parse_class(class)
+    }
+
+    fn try_color_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
+        use crate::css_generator::parsers::color::ColorParser;
+        let parser = ColorParser::default();
+        parser.parse_class(class)
+    }
+
+    fn try_layout_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
+        use crate::css_generator::parsers::layout::LayoutParser;
+        let parser = LayoutParser::default();
+        parser.parse_class(class)
+    }
+
+    fn try_typography_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
+        use crate::css_generator::parsers::typography::TypographyParser;
+        let parser = TypographyParser::default();
+        parser.parse_class(class)
+    }
+
+    fn try_effects_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Try shadows
+        use crate::css_generator::parsers::shadows::ShadowParser;
+        let shadow_parser = ShadowParser::default();
+        if let Some(props) = shadow_parser.parse_class(class) {
+            return Some(props);
+        }
+
+        // Try borders
+        use crate::css_generator::parsers::borders::BorderParser;
+        let border_parser = BorderParser::default();
+        if let Some(props) = border_parser.parse_class(class) {
+            return Some(props);
+        }
+
+        // Try transforms
+        use crate::css_generator::parsers::basic_transforms::BasicTransformsParser;
+        let transform_parser = BasicTransformsParser::default();
+        if let Some(props) = transform_parser.parse_class(class) {
+            return Some(props);
+        }
+
+        None
+    }
+
+    fn try_gradient_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
+        use crate::css_generator::parsers::gradients::GradientParser;
+        let parser = GradientParser::default();
+        parser.parse_class(class)
     }
 }
 

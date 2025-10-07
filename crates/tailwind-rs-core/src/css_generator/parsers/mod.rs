@@ -3,7 +3,7 @@
 //! This module provides the main interface for all utility parsers.
 
 pub mod accessibility;
-// pub mod generator_parsers; // Disabled - broken and incomplete
+// pub mod generator_parsers; // Disabled - completely broken and assumes non-existent fields
 pub mod backdrop_filter_utilities;
 pub mod border_radius_parser;
 pub mod borders;

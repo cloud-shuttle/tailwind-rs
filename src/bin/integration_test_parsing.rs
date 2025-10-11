@@ -25,12 +25,37 @@ fn main() {
         "transform", "transition-all", "rounded-2xl", "rounded-xl", "rounded-full", "rounded",
         "hover:scale-105", "hover:scale-110", "hover:-rotate-3", "tracking-wide", "italic",
         "flex-wrap", "drop-shadow-lg", "drop-shadow-xl", "drop-shadow-2xl",
+        "translate-x-4", "translate-y-2", "-translate-x-1", "translate-x-full", "translate-y-8",
 
         // ===== HOVER STATE FAILURES =====
         "hover:to-pink-700", "hover:from-gray-600", "hover:to-gray-800",
 
         // ===== OUTLINE FAILURES =====
         "outline-none", "focus:outline-none",
+
+        // ===== INTERACTIVITY CLASSES =====
+        "cursor-pointer", "cursor-wait", "pointer-events-none", "resize-none", "select-none", "scroll-smooth",
+
+        // ===== SVG CLASSES =====
+        "fill-current", "stroke-current", "stroke-2", "stroke-red-500",
+
+        // ===== ACCESSIBILITY CLASSES =====
+        "sr-only", "not-sr-only", "forced-color-adjust-none", "motion-reduce",
+
+        // ===== SIZING CLASSES =====
+        "w-4", "w-full", "h-8", "h-screen", "max-w-sm", "min-h-full",
+
+        // ===== BORDER CLASSES =====
+        "border", "border-2", "border-t", "border-blue-500", "divide-y", "ring-2", "ring-blue-500",
+
+        // ===== ARBITRARY VALUES =====
+        "w-[100px]", "h-[50px]", "top-[10px]", "bg-[#ff0000]", "opacity-[0.75]",
+
+        // ===== VARIANTS =====
+        "hover:bg-blue-500", "focus:ring-2", "sm:w-full", "dark:text-white", "group-hover:opacity-75",
+
+        // ===== CSS VALIDATION CHECKS =====
+        "w-16", "text-center", "flex", "items-center", "justify-center",
 
         // ===== BORDER & SHADOW WITH OPACITY FAILURES =====
         "border-white/30", "dark:border-gray-600/30", "border-green-500/50", "border-blue-500/50", "border-purple-500/50",

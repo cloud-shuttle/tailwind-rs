@@ -213,6 +213,8 @@ impl TypographyParser {
             "align-*",
             "decoration-*",
             "underline-*",
+            "italic",
+            "not-italic",
             "uppercase",
             "lowercase",
             "capitalize",

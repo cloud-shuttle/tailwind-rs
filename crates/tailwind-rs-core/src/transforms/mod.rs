@@ -21,6 +21,7 @@ pub mod rotate;
 pub mod scale;
 pub mod skew;
 pub mod style;
+pub mod translate;
 pub mod utils;
 
 pub use basic::BasicTransformParser;
@@ -31,6 +32,7 @@ pub use rotate::RotationParser;
 pub use scale::ScaleParser;
 pub use skew::SkewParser;
 pub use style::TransformStyleParser;
+pub use translate::TranslateParser;
 pub use utils::TransformValidation;
 
 /// Main transform parser that coordinates all transform utilities
@@ -44,6 +46,7 @@ pub struct TransformParser {
     scale_parser: ScaleParser,
     rotate_parser: RotationParser,
     skew_parser: SkewParser,
+    translate_parser: TranslateParser,
 }
 
 impl TransformParser {
@@ -58,6 +61,7 @@ impl TransformParser {
             scale_parser: ScaleParser::new(),
             rotate_parser: RotationParser::new(),
             skew_parser: SkewParser::new(),
+            translate_parser: TranslateParser::new(),
         }
     }
 
@@ -120,6 +124,21 @@ impl TransformParser {
     pub fn parse_skew_y_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         self.skew_parser.parse_skew_y_class(class)
     }
+
+    /// Parse translate classes
+    pub fn parse_translate_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        self.translate_parser.parse_translate_class(class)
+    }
+
+    /// Parse X-axis translate classes
+    pub fn parse_translate_x_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        self.translate_parser.parse_translate_x_class(class)
+    }
+
+    /// Parse Y-axis translate classes
+    pub fn parse_translate_y_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        self.translate_parser.parse_translate_y_class(class)
+    }
 }
 
 impl UtilityParser for TransformParser {
@@ -144,6 +163,9 @@ impl UtilityParser for TransformParser {
             return Some(properties);
         }
         if let Some(properties) = self.parse_scale_class(class) {
+            return Some(properties);
+        }
+        if let Some(properties) = self.parse_translate_class(class) {
             return Some(properties);
         }
         if let Some(properties) = self.parse_rotate_3d_class(class) {
@@ -179,6 +201,9 @@ impl UtilityParser for TransformParser {
             "scale-100",
             "scale-x-50",
             "scale-y-75",
+            "translate-x-4",
+            "translate-y-2",
+            "-translate-x-1",
         ]);
         patterns.extend(self.style_parser.supported_patterns());
         patterns.extend(self.origin_parser.supported_patterns());

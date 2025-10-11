@@ -5,7 +5,6 @@
 
 use super::{ParserCategory, UtilityParser};
 use crate::css_generator::types::CssProperty;
-use super::super::generator::CssGenerator;
 
 #[derive(Debug, Clone)]
 pub struct GradientParser;
@@ -75,10 +74,57 @@ impl GradientParser {
         ])
     }
 
-    /// Parse gradient stop classes - add to gradient context for later combination
-    pub fn parse_gradient_stop_class(&self, _class: &str) -> Option<Vec<CssProperty>> {
-        // Note: This method is now handled by the CssGenerator's context system
-        // The actual parsing happens in the CssGeneratorParsers trait implementation
+    /// Parse Tailwind color names to hex values
+    fn parse_tailwind_color(&self, color: &str) -> Option<String> {
+        self.get_base_color_value(color)
+    }
+
+    /// Parse gradient stop classes - set CSS custom properties
+    pub fn parse_gradient_stop_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Handle from-* classes
+        if let Some(color_part) = class.strip_prefix("from-") {
+            if let Some(color_value) = self.get_gradient_color_value(color_part) {
+                return Some(vec![
+                    CssProperty {
+                        name: "--tw-gradient-from".to_string(),
+                        value: color_value,
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "--tw-gradient-stops".to_string(),
+                        value: "var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to, transparent)".to_string(),
+                        important: false,
+                    }
+                ]);
+            }
+        }
+
+        // Handle via-* classes
+        if let Some(color_part) = class.strip_prefix("via-") {
+            if let Some(color_value) = self.get_gradient_color_value(color_part) {
+                return Some(vec![
+                    CssProperty {
+                        name: "--tw-gradient-via".to_string(),
+                        value: color_value,
+                        important: false,
+                    }
+                ]);
+            }
+        }
+
+        // Handle to-* classes
+        if let Some(color_part) = class.strip_prefix("to-") {
+            if let Some(color_value) = self.get_gradient_color_value(color_part) {
+                return Some(vec![
+                    CssProperty {
+                        name: "--tw-gradient-to".to_string(),
+                        value: color_value,
+                        important: false,
+                    }
+                ]);
+            }
+        }
+
         None
     }
 
@@ -392,10 +438,8 @@ impl UtilityParser for GradientParser {
         }
 
         // Try gradient stop classes
-        if let Some(_stop_type) = crate::css_generator::generator::CssGenerator::extract_gradient_stop_type_static(class) {
-            // For now, skip gradient stops until we have access to color cache
-            // This will be handled by the main CssGenerator::generate_individual_css_rule method
-            return None;
+        if let Some(properties) = self.parse_gradient_stop_class(class) {
+            return Some(properties);
         }
 
         // Return None for unknown gradient classes

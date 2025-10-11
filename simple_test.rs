@@ -1,50 +1,27 @@
-use tailwind_rs_core::css_generator::CssGenerator;
+use tailwind_rs_core::css_generator::core::operations::ParserRegistry;
 
 fn main() {
-    let mut generator = CssGenerator::new();
+    let registry = ParserRegistry::new();
 
-    // Test some basic classes first
-    println!("Testing basic classes:");
-    let basic_classes = vec![
-        "text-red-500", "bg-blue-500", "p-4", "m-2", "flex", "block", "hidden"
-    ];
+    println!("Testing animate-pulse...");
 
-    for class in &basic_classes {
-        match generator.add_class(class) {
-            Ok(_) => println!("✅ {}", class),
-            Err(e) => println!("❌ {} - {}", class, e),
+    if let Some(properties) = registry.parse_class("animate-pulse") {
+        println!("✅ SUCCESS: animate-pulse parsed!");
+        for prop in properties {
+            println!("  {}: {}", prop.name, prop.value);
         }
+    } else {
+        println!("❌ FAILED: animate-pulse not parsed");
     }
 
-    // Test advanced features
-    println!("\nTesting advanced features:");
-    let advanced_classes = vec![
-        "perspective-1000",
-        "rotate-x-12",
-        "transform-style-preserve-3d",
-        "animate-float",
-        "animate-twinkle",
-        "animate-rainbow",
-        "bg-gradient-conic",
-        "from-50%",
-        "animate-particle-float",
-    ];
+    println!("\nTesting animate-spin...");
 
-    for class in &advanced_classes {
-        match generator.add_class(class) {
-            Ok(_) => println!("✅ {}", class),
-            Err(e) => println!("❌ {} - {}", class, e),
+    if let Some(properties) = registry.parse_class("animate-spin") {
+        println!("✅ SUCCESS: animate-spin parsed!");
+        for prop in properties {
+            println!("  {}: {}", prop.name, prop.value);
         }
+    } else {
+        println!("❌ FAILED: animate-spin not parsed");
     }
-
-    let css = generator.generate_css();
-    println!("\nGenerated CSS length: {} characters", css.len());
-
-    // Check for specific CSS features
-    println!("\nChecking for CSS features:");
-    println!("perspective: {}", css.contains("perspective:"));
-    println!("rotateX: {}", css.contains("rotateX"));
-    println!("preserve-3d: {}", css.contains("preserve-3d"));
-    println!("conic-gradient: {}", css.contains("conic-gradient"));
-    println!("50%: {}", css.contains("50%"));
 }

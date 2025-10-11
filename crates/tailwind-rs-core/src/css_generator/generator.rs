@@ -3,6 +3,8 @@
 //! This module contains the core CssGenerator struct and its main functionality.
 
 use super::generator_operations::CssGeneratorOperations;
+use crate::responsive;
+use super::parsers::UtilityParser;
 use super::parsers::{
     AccentColorParser, AccessibilityParser, AdvancedBorderParser, AdvancedColorParser,
     AdvancedGridParser, AdvancedSpacingParser, AlignContentParser, AlignItemsParser,
@@ -396,10 +398,245 @@ impl CssGenerator {
 // Implement the legacy operations trait
 impl super::generator_operations::CssGeneratorOperations for CssGenerator {
     fn add_class(&mut self, class: &str) -> Result<()> {
-        // For the legacy generator, we need to parse the class and add the rule
-        // This is a simplified implementation for backward compatibility
-        // In practice, this would delegate to the parsers
+        // Try to parse the class using available parsers
+        let properties = if class.starts_with("animate-") {
+            // Use animation parser for animation classes
+            self.animation_parser.parse_class(class)
+        } else if class.starts_with("p-") || class.starts_with("m-") ||
+                  class.starts_with("px-") || class.starts_with("py-") ||
+                  class.starts_with("pt-") || class.starts_with("pb-") ||
+                  class.starts_with("pl-") || class.starts_with("pr-") ||
+                  class.starts_with("mx-") || class.starts_with("my-") ||
+                  class.starts_with("mt-") || class.starts_with("mb-") ||
+                  class.starts_with("ml-") || class.starts_with("mr-") ||
+                  class.starts_with("gap-") || class.starts_with("gap-x-") || class.starts_with("gap-y-") {
+            // Use spacing parser for spacing classes
+            self.spacing_parser.parse_class(class)
+        } else if class.starts_with("bg-") || class.starts_with("text-") ||
+                  class.starts_with("border-") || class.starts_with("outline-") {
+            // Use color parser for color classes
+            self.color_parser.parse_class(class)
+        } else if class == "flex" || class.starts_with("flex-") ||
+                  class == "grid" || class.starts_with("grid-") ||
+                  class == "block" || class == "inline" || class == "inline-block" ||
+                  class == "hidden" || class.starts_with("justify-") ||
+                  class.starts_with("items-") || class.starts_with("self-") ||
+                  class.starts_with("place-") || class.starts_with("order-") {
+            // Use layout parser for layout classes
+            self.layout_parser.parse_class(class)
+        } else if class.starts_with("shadow-") || class.starts_with("drop-shadow-") {
+            // Use shadow parser for shadow classes
+            self.shadow_parser.parse_class(class)
+        } else if class.starts_with("rounded") || (class.starts_with("border-") && class.contains("width")) {
+            // Use border utilities parser for border classes
+            self.border_utilities_parser.parse_class(class)
+        } else if class.starts_with("z-") || class.starts_with("top-") ||
+                  class.starts_with("right-") || class.starts_with("bottom-") ||
+                  class.starts_with("left-") || class.starts_with("inset-") {
+            // Use positioning parser for positioning classes
+            self.positioning_parser.parse_class(class)
+        } else if class == "relative" || class == "absolute" || class == "fixed" || class == "sticky" {
+            // Use position parser for position classes
+            self.position_parser.parse_class(class)
+        } else if class == "visible" || class == "invisible" ||
+                  class.starts_with("overflow") || class.starts_with("object-") {
+            // Use layout utilities parser for various utility classes
+            self.layout_utilities_parser.parse_class(class)
+        } else if class.starts_with("from-") || class.starts_with("via-") || class.starts_with("to-") ||
+                  class.starts_with("bg-gradient-") || class == "bg-linear-to-r" || class == "bg-linear-to-l" ||
+                  class == "bg-linear-to-t" || class == "bg-linear-to-b" || class == "bg-radial" {
+            // Use gradient parser for gradient classes
+            self.gradient_parser.parse_class(class)
+        } else if class.starts_with("scale-") || class.starts_with("rotate-") || class.starts_with("translate-") ||
+                  class.starts_with("skew-") || class == "transform" || class.starts_with("origin-") {
+            // Handle transform classes with CSS custom properties
+            if class == "transform" {
+                Some(vec![CssProperty {
+                    name: "transform".to_string(),
+                    value: "var(--tw-transform)".to_string(),
+                    important: false,
+                }])
+            } else {
+                self.parse_transform_class_helper(class)
+            }
+        } else {
+            // For other classes, try typography parser
+            self.typography_parser.parse_class(class)
+        };
+
+        if let Some(props) = properties {
+            // Create a CSS rule for this class
+            let rule = CssRule {
+                selector: format!(".{}", class),
+                properties: props,
+                media_query: None,
+                specificity: 1,
+            };
+            // Add the rule to our rules map
+            self.rules.insert(class.to_string(), rule);
+        }
+        // If no parser could handle it, that's fine - it will fall back to other CSS
+
         Ok(())
+    }
+
+    fn add_classes_for_element(&mut self, classes: &[&str]) -> Result<()> {
+        // Process each class individually
+        for &class in classes {
+            self.add_class(class)?;
+        }
+        Ok(())
+    }
+
+    fn add_css_selector(&mut self, selector: &str, properties: &str) -> Result<()> {
+        // Parse properties and create a rule
+        let properties_vec = properties.split(';')
+            .filter(|s| !s.trim().is_empty())
+            .map(|s| {
+                let parts: Vec<&str> = s.splitn(2, ':').collect();
+                CssProperty {
+                    name: parts[0].trim().to_string(),
+                    value: parts[1].trim().to_string(),
+                    important: false,
+                }
+            })
+            .collect();
+
+        let rule = CssRule {
+            selector: selector.to_string(),
+            properties: properties_vec,
+            media_query: None,
+            specificity: 1,
+        };
+        self.rules.insert(selector.to_string(), rule);
+        Ok(())
+    }
+
+    fn add_responsive_class(&mut self, breakpoint: responsive::Breakpoint, class: &str) -> Result<()> {
+        // Construct responsive class and add it
+        let responsive_class = format!("{}:{}", breakpoint.to_string().to_lowercase(), class);
+        self.add_class(&responsive_class)
+    }
+
+    fn add_custom_property(&mut self, name: &str, value: &str) {
+        self.custom_properties.insert(name.to_string(), value.to_string());
+    }
+
+    fn remove_rule(&mut self, selector: &str) {
+        self.rules.remove(selector);
+    }
+
+    fn update_rule(&mut self, selector: &str, rule: CssRule) {
+        self.rules.insert(selector.to_string(), rule);
+    }
+}
+
+impl CssGenerator {
+    /// Parse transform class to CSS custom property
+    fn parse_transform_class_helper(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Scale classes - set both x and y scales
+        if let Some(scale_part) = class.strip_prefix("scale-") {
+            if let Ok(scale) = scale_part.parse::<f32>() {
+                let scale_value = scale / 100.0;
+                return Some(vec![
+                    CssProperty {
+                        name: "--tw-scale-x".to_string(),
+                        value: format!("{}", scale_value),
+                        important: false,
+                    },
+                    CssProperty {
+                        name: "--tw-scale-y".to_string(),
+                        value: format!("{}", scale_value),
+                        important: false,
+                    }
+                ]);
+            }
+        }
+
+        // Rotate classes
+        if let Some(rotate_part) = class.strip_prefix("rotate-") {
+            if let Ok(degrees) = rotate_part.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "--tw-rotate".to_string(),
+                    value: format!("{}deg", degrees),
+                    important: false,
+                }]);
+            }
+        }
+
+        // Translate classes
+        if let Some(translate_part) = class.strip_prefix("translate-x-") {
+            if let Some(value) = self.parse_spacing_value_helper(translate_part) {
+                return Some(vec![CssProperty {
+                    name: "--tw-translate-x".to_string(),
+                    value,
+                    important: false,
+                }]);
+            }
+        }
+        if let Some(translate_part) = class.strip_prefix("translate-y-") {
+            if let Some(value) = self.parse_spacing_value_helper(translate_part) {
+                return Some(vec![CssProperty {
+                    name: "--tw-translate-y".to_string(),
+                    value,
+                    important: false,
+                }]);
+            }
+        }
+
+        // Skew classes
+        if let Some(skew_part) = class.strip_prefix("skew-x-") {
+            if let Ok(degrees) = skew_part.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "--tw-skew-x".to_string(),
+                    value: format!("{}deg", degrees),
+                    important: false,
+                }]);
+            }
+        }
+        if let Some(skew_part) = class.strip_prefix("skew-y-") {
+            if let Ok(degrees) = skew_part.parse::<f32>() {
+                return Some(vec![CssProperty {
+                    name: "--tw-skew-y".to_string(),
+                    value: format!("{}deg", degrees),
+                    important: false,
+                }]);
+            }
+        }
+
+        // Origin classes
+        if let Some(origin) = class.strip_prefix("origin-") {
+            let origin_value = match origin {
+                "center" => "center",
+                "top" => "top",
+                "bottom" => "bottom",
+                "left" => "left",
+                "right" => "right",
+                "top-left" => "top left",
+                "top-right" => "top right",
+                "bottom-left" => "bottom left",
+                "bottom-right" => "bottom right",
+                _ => return None,
+            };
+            return Some(vec![CssProperty {
+                name: "transform-origin".to_string(),
+                value: origin_value.to_string(),
+                important: false,
+            }]);
+        }
+
+        None
+    }
+
+    /// Parse spacing value for transforms
+    fn parse_spacing_value_helper(&self, value: &str) -> Option<String> {
+        if let Ok(num) = value.parse::<f32>() {
+            // Assuming rem units like Tailwind
+            let rem_value = num * 0.25;
+            Some(format!("{}rem", rem_value))
+        } else {
+            None
+        }
     }
 
     fn add_classes_for_element(&mut self, classes: &[&str]) -> Result<()> {
@@ -429,15 +666,6 @@ impl super::generator_operations::CssGeneratorOperations for CssGenerator {
         self.custom_properties.insert(name.to_string(), value.to_string());
     }
 
-    fn remove_rule(&mut self, selector: &str) {
-        // Remove from rules hashmap
-        self.rules.remove(selector);
-    }
-
-    fn update_rule(&mut self, selector: &str, rule: super::types::CssRule) {
-        // Update or insert rule
-        self.rules.insert(selector.to_string(), rule);
-    }
 }
 
 impl CssGenerator {
@@ -672,7 +900,7 @@ impl CssGenerator {
     }
 
     /// Parse a class to get its properties - used by generate_individual_css_rule
-    fn parse_class_to_properties(&self, base_class: &str) -> Result<Vec<CssProperty>> {
+    fn parse_class_to_properties(&mut self, base_class: &str) -> Result<Vec<CssProperty>> {
         // Use the existing class_to_properties method for now
         // This is a temporary solution until the parser trie is fully implemented
         self.class_to_properties(base_class)
@@ -758,9 +986,19 @@ impl CssGenerator {
     }
 
     /// Convert a class name to CSS properties
-    pub fn class_to_properties(&self, class: &str) -> Result<Vec<CssProperty>> {
-        // Temporarily simplified implementation
-        Ok(vec![])
+    pub fn class_to_properties(&mut self, class: &str) -> Result<Vec<CssProperty>> {
+        // Use the new ProcessingContext system
+        use super::caching::rule_cache::RuleCache;
+        use super::core::operations::ParserRegistry;
+        let mut temp_rule_cache = RuleCache::new();
+        let parser_registry = ParserRegistry::new();
+        let mut context = super::core::operations::ProcessingContext {
+            variant_parser: &self.variant_parser,
+            color_cache: &mut self.color_cache,
+            rule_cache: &mut temp_rule_cache,
+            parser_registry: &parser_registry,
+        };
+        context.process_class(class)
     }
 
 
@@ -985,7 +1223,7 @@ impl CssGenerator {
                     "45" => Some("rotate(-45deg)".to_string()),
                     "90" => Some("rotate(-90deg)".to_string()),
                     "180" => Some("rotate(-180deg)".to_string()),
-                    _ => None,
+                _ => None,
                 }
             } else {
                 None

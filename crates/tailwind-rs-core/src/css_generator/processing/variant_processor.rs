@@ -21,20 +21,34 @@ impl VariantProcessor {
             return Ok(format!(".{}", base_selector));
         }
 
-        // Build selector from variants
-        let mut selector_parts = Vec::new();
+        // Build the full class name with variants for selector
+        let mut full_class_name = String::new();
+        for variant in variants {
+            full_class_name.push_str(&format!("{}:", variant));
+        }
+        full_class_name.push_str(base_selector);
+
+        // Escape colons in the class name for CSS selector
+        let escaped_class_name = full_class_name.replace(":", "\\:");
+
+        // Build the actual CSS selector parts
+        let mut selector_parts: Vec<String> = Vec::new();
+        let mut has_dark_mode = false;
 
         for variant in variants {
             match variant.as_str() {
-                // Basic state variants
+                // Basic state variants - add pseudo-classes at end
                 "hover" => selector_parts.push(":hover".to_string()),
                 "focus" => selector_parts.push(":focus".to_string()),
                 "active" => selector_parts.push(":active".to_string()),
                 "visited" => selector_parts.push(":visited".to_string()),
                 "disabled" => selector_parts.push(":disabled".to_string()),
 
-                // Dark mode
-                "dark" => selector_parts.push(".dark".to_string()),
+                // Dark mode - prepend .dark
+                "dark" => {
+                    has_dark_mode = true;
+                    selector_parts.insert(0, ".dark".to_string());
+                },
 
                 // Group variants
                 "group-hover" => selector_parts.push(".group:hover".to_string()),
@@ -44,14 +58,14 @@ impl VariantProcessor {
                 "peer-focus" => selector_parts.push(".peer:focus".to_string()),
                 "peer-active" => selector_parts.push(".peer:active".to_string()),
 
-                // Device and media variants - handled separately
+                // Device and media variants - handled separately via media queries
                 variant if self.is_device_variant(variant) => {
-                    return Ok(format!(".{}", base_selector));
+                    return Ok(format!(".{}", escaped_class_name));
                 },
 
                 // Container queries - handled separately
                 variant if variant.starts_with("@container-") => {
-                    return Ok(format!(".{}", base_selector));
+                    return Ok(format!(".{}", escaped_class_name));
                 },
 
                 // Arbitrary variants
@@ -60,20 +74,31 @@ impl VariantProcessor {
                     selector_parts.push(format!("[{}]", arbitrary_selector));
                 },
 
-                // Responsive variants - handled separately
+                // Responsive variants - handled separately via media queries
                 "sm" | "md" | "lg" | "xl" | "2xl" => {
-                    return Ok(format!(".{}", base_selector));
+                    return Ok(format!(".{}", escaped_class_name));
                 },
 
                 _ => {
-                    // Custom variants or unknown - try to handle as custom
-                    // For now, skip unknown variants
+                    // Custom variants or unknown - for now, escape them
+                    selector_parts.push(format!(":{}", variant));
                 }
             }
         }
 
-        let variant_prefix = selector_parts.join(" ");
-        Ok(format!(".{}{}{}", variant_prefix, if variant_prefix.is_empty() { "" } else { " " }, base_selector))
+        // Build the final CSS selector
+        let final_selector = if has_dark_mode {
+            selector_parts.join(" ")
+        } else {
+            selector_parts.join("")
+        };
+
+        // Add the escaped class name
+        if final_selector.is_empty() {
+            Ok(format!(".{}", escaped_class_name))
+        } else {
+            Ok(format!(".{}{}", escaped_class_name, final_selector))
+        }
     }
 
     /// Check if variant is a device/media variant

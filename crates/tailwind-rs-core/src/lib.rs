@@ -106,7 +106,7 @@ pub use color::Color;
 pub use config::parser::ConfigParser;
 pub use config::{BuildConfig, TailwindConfig};
 // Use the modular CssGenerator structure
-pub use css_generator::{CssGenerationConfig, CssGenerator, CssProperty, CssRule};
+pub use css_generator::{CssGenerationConfig, CssGenerator, CssProperty, CssRule, LegacyCssGenerator};
 pub use css_generator::bridge::LegacyBridge;
 pub use css_generator::generator_operations::CssGeneratorOperations;
 

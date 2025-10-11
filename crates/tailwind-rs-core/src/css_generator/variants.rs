@@ -447,6 +447,9 @@ impl VariantParser {
                     ("pointer-fine:", "pointer-fine"),
                     ("motion-reduce:", "motion-reduce"),
                     ("motion-safe:", "motion-safe"),
+                    ("contrast-more:", "contrast-more"),
+                    ("contrast-less:", "contrast-less"),
+                    ("contrast-custom:", "contrast-custom"),
                     ("light:", "light"),
                     // Advanced variants
                     ("pointer-coarse:", "pointer-coarse"),
@@ -722,6 +725,9 @@ impl VariantParser {
             "pointer-fine" => Some("(pointer: fine)".to_string()),
             "motion-reduce" => Some("(prefers-reduced-motion: reduce)".to_string()),
             "motion-safe" => Some("(prefers-reduced-motion: no-preference)".to_string()),
+            "contrast-more" => Some("(prefers-contrast: more)".to_string()),
+            "contrast-less" => Some("(prefers-contrast: less)".to_string()),
+            "contrast-custom" => Some("(prefers-contrast: custom)".to_string()),
             "light" => Some("(prefers-color-scheme: light)".to_string()),
             _ => None,
         }
@@ -821,7 +827,7 @@ impl VariantParser {
                 // Responsive variants are handled via media queries, not selectors
                 "sm" | "md" | "lg" | "xl" | "2xl" => {}
                 // Device variants are handled via media queries
-                "pointer-coarse" | "pointer-fine" | "motion-reduce" | "motion-safe" | "light" => {}
+                "pointer-coarse" | "pointer-fine" | "motion-reduce" | "motion-safe" | "contrast-more" | "contrast-less" | "contrast-custom" | "light" => {}
                 _ => {
                     // Unknown variant - log warning but continue
                     // Unknown variant encountered, continuing with base class

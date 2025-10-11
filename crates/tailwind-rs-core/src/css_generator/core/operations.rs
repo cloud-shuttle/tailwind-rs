@@ -8,108 +8,208 @@ use crate::css_generator::parsers::UtilityParser;
 use std::collections::HashMap;
 use std::sync::LazyLock;
 
+/// Comprehensive parser registry for all utility parsers
+pub struct ParserRegistry {
+    parsers: Vec<Box<dyn UtilityParser>>,
+}
+
+impl std::fmt::Debug for ParserRegistry {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ParserRegistry")
+            .field("parser_count", &self.parsers.len())
+            .finish()
+    }
+}
+
+impl ParserRegistry {
+    pub fn new() -> Self {
+        let mut registry = Self {
+            parsers: Vec::new(),
+        };
+        registry.register_all_parsers();
+        registry.sort_by_priority();
+        registry
+    }
+
+    fn register_all_parsers(&mut self) {
+        // PHASE 1: Register ALL available parsers (Phase 1 of Tailwind CSS v4.1.13 alignment)
+
+        // Core Layout & Display
+        self.parsers.push(Box::new(crate::css_generator::parsers::layout::LayoutParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::layout_utilities::LayoutUtilitiesParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::position::PositionParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::positioning::PositioningParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::box_utilities::BoxUtilitiesParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::visibility::VisibilityParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::z_index::ZIndexParser::default()));
+
+        // Spacing & Sizing
+        self.parsers.push(Box::new(crate::css_generator::parsers::spacing::SpacingParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::spacing_advanced::AdvancedSpacingParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::gap::GapParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::sizing::SizingParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::aspect_ratio::AspectRatioParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::field_sizing::FieldSizingParser::new()));
+
+        // Flexbox & Grid
+        self.parsers.push(Box::new(crate::css_generator::parsers::flexbox::FlexboxParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::flex::FlexParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::flex_direction::FlexDirectionParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::flex_wrap::FlexWrapParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::flex_grow::FlexGrowParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::flex_shrink::FlexShrinkParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::flex_basis::FlexBasisParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::order::OrderParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid::GridParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_advanced::AdvancedGridParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_template_columns::GridTemplateColumnsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_template_rows::GridTemplateRowsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_column::GridColumnParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_row::GridRowParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_auto_columns::GridAutoColumnsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_auto_flow::GridAutoFlowParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::grid_auto_rows::GridAutoRowsParser::default()));
+
+        // Alignment & Justification
+        self.parsers.push(Box::new(crate::css_generator::parsers::align_content::AlignContentParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::align_items::AlignItemsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::align_self::AlignSelfParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::justify_content::JustifyContentParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::justify_items::JustifyItemsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::justify_self::JustifySelfParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::place_content::PlaceContentParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::place_items::PlaceItemsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::place_self::PlaceSelfParser::default()));
+
+        // Colors & Background
+        self.parsers.push(Box::new(crate::css_generator::parsers::color::ColorParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::colors_advanced::AdvancedColorParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::accent_color::AccentColorParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::BackgroundParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::background_properties::BackgroundPropertiesParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::gradients::GradientParser::default()));
+
+        // Typography
+        self.parsers.push(Box::new(crate::css_generator::parsers::typography::TypographyParser::default()));
+
+        // Borders & Rings
+        self.parsers.push(Box::new(crate::css_generator::parsers::borders::BorderParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::borders_advanced::AdvancedBorderParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::OutlineParser::new()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::border_radius_parser::BorderRadiusParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::divide::DivideParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::rings::RingParser::default()));
+
+        // Effects & Shadows
+        self.parsers.push(Box::new(crate::css_generator::parsers::shadows::ShadowParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::effects_modules::EffectsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::effects_utilities_modules::EffectsParser::new()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::backdrop_filter_utilities::BackdropFilterUtilitiesParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::filter_utilities_modules::FilterUtilitiesParser::default()));
+
+        // Transforms & Animations
+        self.parsers.push(Box::new(crate::css_generator::parsers::TransformParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::basic_transforms::BasicTransformsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::scale_parser::ScaleParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::fractional_transforms::FractionalTransformsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::animations::AnimationParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::transitions::TransitionParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::transition_properties::TransitionPropertiesParser::default()));
+
+        // Interactivity
+        self.parsers.push(Box::new(crate::css_generator::parsers::interactive::InteractiveParser::default()));
+
+        // Tables & Layout
+        self.parsers.push(Box::new(crate::css_generator::parsers::table::TableParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::columns::ColumnsParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::break_control::BreakControlParser::default()));
+
+        // Overflow & Scrolling
+        self.parsers.push(Box::new(crate::css_generator::parsers::overflow::OverflowParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::overscroll::OverscrollParser::default()));
+
+        // Masks & Clipping
+        self.parsers.push(Box::new(crate::css_generator::parsers::mask_utilities::MaskUtilitiesParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::mask_image_parser::MaskImageParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::mask_properties_parser::MaskPropertiesParser::default()));
+
+        // Object & Image
+        self.parsers.push(Box::new(crate::css_generator::parsers::object_fit::ObjectFitParser::default()));
+
+        // Prose & Content
+        self.parsers.push(Box::new(crate::css_generator::parsers::prose::ProseParser::default()));
+
+        // Data Attributes & Arbitrary
+        self.parsers.push(Box::new(crate::css_generator::parsers::data_attributes::DataAttributeParser::default()));
+        self.parsers.push(Box::new(crate::css_generator::parsers::arbitrary::ArbitraryParser::default()));
+
+        // Accessibility
+        self.parsers.push(Box::new(crate::css_generator::parsers::accessibility::AccessibilityParser::default()));
+
+        // SVG
+        self.parsers.push(Box::new(crate::css_generator::parsers::svg::SvgParser::default()));
+
+        // Inset utilities (top, right, bottom, left)
+        self.parsers.push(Box::new(crate::css_generator::parsers::inset_utilities::InsetParser::default()));
+    }
+
+    fn sort_by_priority(&mut self) {
+        self.parsers.sort_by(|a, b| b.get_priority().cmp(&a.get_priority()));
+    }
+
+    pub fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        for (i, parser) in self.parsers.iter().enumerate() {
+            // Check if this parser supports this class pattern
+            let patterns = parser.get_supported_patterns();
+            let supports_class = patterns.iter().any(|pattern| {
+                if pattern.ends_with("-*") {
+                    // Pattern like "p-*" matches "p-4", "px-*", etc.
+                    let prefix = &pattern[..pattern.len() - 2];
+                    class.starts_with(prefix) && class.len() > prefix.len()
+                } else if pattern.ends_with("*") {
+                    // Pattern like "animate*" matches "animate-spin", etc.
+                    let prefix = &pattern[..pattern.len() - 1];
+                    class.starts_with(prefix)
+                } else if pattern.ends_with("-") {
+                    // Pattern like "animate-" matches "animate-pulse", "animate-spin", etc.
+                    class.starts_with(pattern)
+                } else {
+                    // Exact match
+                    class == *pattern
+                }
+            });
+
+            if supports_class {
+                if let Some(properties) = parser.parse_class(class) {
+                    return Some(properties);
+                }
+            }
+        }
+        None
+    }
+}
+
 /// Processing context that provides safe access to generator components
 /// without creating borrow conflicts
 pub struct ProcessingContext<'a> {
     pub variant_parser: &'a super::super::variants::VariantParser,
     pub color_cache: &'a mut super::super::color_cache::ColorCache,
     pub rule_cache: &'a mut super::super::caching::rule_cache::RuleCache,
+    pub parser_registry: &'a ParserRegistry,
 }
 
 impl<'a> ProcessingContext<'a> {
     /// Process a class using the provided context
     pub fn process_class(&mut self, class: &str) -> Result<Vec<CssProperty>> {
-        // Use the actual parsers that exist in the codebase
-        // This is the proper new architecture implementation
-
-        // Try spacing parsers first (most common)
-        if let Some(props) = self.try_spacing_parsers(class) {
-            return Ok(props);
+        // Use the parser registry to find the right parser for this class
+        if let Some(properties) = self.parser_registry.parse_class(class) {
+            Ok(properties)
+        } else {
+            // For unknown classes, return empty (they'll be handled by fallback CSS)
+            Ok(vec![])
         }
-
-        // Try color parsers
-        if let Some(props) = self.try_color_parsers(class) {
-            return Ok(props);
-        }
-
-        // Try layout parsers
-        if let Some(props) = self.try_layout_parsers(class) {
-            return Ok(props);
-        }
-
-        // Try typography parsers
-        if let Some(props) = self.try_typography_parsers(class) {
-            return Ok(props);
-        }
-
-        // Try effects and transforms
-        if let Some(props) = self.try_effects_parsers(class) {
-            return Ok(props);
-        }
-
-        // Try gradient parsers (special handling)
-        if let Some(props) = self.try_gradient_parsers(class) {
-            return Ok(props);
-        }
-
-        // For unknown classes, return empty (they'll be handled by fallback CSS)
-        Ok(vec![])
     }
 
-    fn try_spacing_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
-        use crate::css_generator::parsers::spacing::SpacingParser;
-        let parser = SpacingParser::default();
-        parser.parse_class(class)
-    }
-
-    fn try_color_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
-        use crate::css_generator::parsers::color::ColorParser;
-        let parser = ColorParser::default();
-        parser.parse_class(class)
-    }
-
-    fn try_layout_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
-        use crate::css_generator::parsers::layout::LayoutParser;
-        let parser = LayoutParser::default();
-        parser.parse_class(class)
-    }
-
-    fn try_typography_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
-        use crate::css_generator::parsers::typography::TypographyParser;
-        let parser = TypographyParser::default();
-        parser.parse_class(class)
-    }
-
-    fn try_effects_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
-        // Try shadows
-        use crate::css_generator::parsers::shadows::ShadowParser;
-        let shadow_parser = ShadowParser::default();
-        if let Some(props) = shadow_parser.parse_class(class) {
-            return Some(props);
-        }
-
-        // Try borders
-        use crate::css_generator::parsers::borders::BorderParser;
-        let border_parser = BorderParser::default();
-        if let Some(props) = border_parser.parse_class(class) {
-            return Some(props);
-        }
-
-        // Try transforms
-        use crate::css_generator::parsers::basic_transforms::BasicTransformsParser;
-        let transform_parser = BasicTransformsParser::default();
-        if let Some(props) = transform_parser.parse_class(class) {
-            return Some(props);
-        }
-
-        None
-    }
-
-    fn try_gradient_parsers(&self, class: &str) -> Option<Vec<CssProperty>> {
-        use crate::css_generator::parsers::gradients::GradientParser;
-        let parser = GradientParser::default();
-        parser.parse_class(class)
-    }
 }
 
 /// Core operations trait for CSS generation
@@ -214,6 +314,7 @@ impl CssGeneratorOperations for CssGenerator {
             variant_parser: &self.variant_parser,
             color_cache: &mut self.color_cache,
             rule_cache: &mut self.rule_cache,
+            parser_registry: &self.parser_registry,
         };
 
         // Get CSS properties for the base class using the processing context
@@ -251,6 +352,7 @@ impl CssGeneratorInternalOps for CssGenerator {
             variant_parser: &self.variant_parser,
             color_cache: &mut self.color_cache,
             rule_cache: &mut self.rule_cache,
+            parser_registry: &self.parser_registry,
         };
         context.process_class(class)
     }
@@ -351,6 +453,7 @@ impl CssGenerator {
             variant_parser: &self.variant_parser,
             color_cache: &mut self.color_cache,
             rule_cache: &mut self.rule_cache,
+            parser_registry: &self.parser_registry,
         };
         context.process_class(class)
     }

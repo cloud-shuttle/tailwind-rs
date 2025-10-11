@@ -32,6 +32,9 @@ pub struct CssGenerator {
     pub color_cache: ColorCache,
     pub rule_cache: RuleCache,
 
+    // Parser registry for comprehensive parsing
+    pub parser_registry: super::operations::ParserRegistry,
+
     // State
     pub transform_css_generated: bool,
 

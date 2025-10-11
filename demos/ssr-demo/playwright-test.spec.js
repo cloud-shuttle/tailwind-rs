@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
   test.describe('Tailwind-RS SSR Demo', () => {
     test.beforeEach(async ({ page }) => {
       // Wait for the server to be ready
-      await page.goto('http://localhost:3000', {
+      await page.goto('http://localhost:3001', {
         waitUntil: 'domcontentloaded',
         timeout: 10000
       });
@@ -58,7 +58,7 @@ const { test, expect } = require('@playwright/test');
 
   test('should verify font classes are applied correctly', async ({ page }) => {
     // Check that CSS is loaded
-    const cssResponse = await page.request.get('http://localhost:3000/styles.css');
+    const cssResponse = await page.request.get('http://localhost:3001/styles.css');
     expect(cssResponse.ok()).toBeTruthy();
 
     const cssContent = await cssResponse.text();

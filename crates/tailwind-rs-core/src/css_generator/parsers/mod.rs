@@ -32,6 +32,12 @@ pub mod svg;
 pub mod table;
 pub mod typography;
 
+// External transform parser
+pub use crate::transforms::TransformParser;
+
+// External background parser
+pub use crate::background::BackgroundParser;
+
 pub use accessibility::AccessibilityParser;
 pub use backdrop_filter_utilities::BackdropFilterUtilitiesParser;
 pub use field_sizing::FieldSizingParser;

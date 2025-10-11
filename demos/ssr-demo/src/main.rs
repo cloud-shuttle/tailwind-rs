@@ -1,7 +1,7 @@
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::time::{SystemTime, UNIX_EPOCH};
-use tailwind_rs_core::CssGenerator;
+use tailwind_rs_core::{CssGenerator, LegacyCssGenerator, CssGeneratorOperations};
 
 /// Generate fallback CSS for classes that can't be parsed by our parsers
 fn generate_fallback_css(class: &str) -> Option<String> {
@@ -107,7 +107,7 @@ fn parse_spacing_value(class: &str) -> Option<String> {
 
 
 fn generate_css() -> (String, String) {
-    let mut generator = CssGenerator::new();
+    let mut generator = LegacyCssGenerator::new();
     let mut fallback_css = String::new();
 
     // Comprehensive list of all classes used in the HTML template
@@ -446,6 +446,9 @@ fn generate_css() -> (String, String) {
     combined_css.push_str("/* 🔧 INDIVIDUAL CLASS PROCESSING (LEGACY) */\n");
     combined_css.push_str("/* =========================================== */\n\n");
 
+    // Add the generator's CSS (from processed classes)
+    let generator_css = generator.generate_css();
+    combined_css.push_str(&generator_css);
 
     (combined_css, fallback_css)
 }
@@ -461,7 +464,7 @@ fn generate_html() -> String {
     format!(
         r#"
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

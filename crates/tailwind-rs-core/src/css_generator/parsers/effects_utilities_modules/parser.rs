@@ -59,12 +59,12 @@ impl EffectsParser {
     fn parse_backdrop_blur_class(&self, class: &str) -> Option<Vec<CssProperty>> {
         let blur_value = match class {
             "backdrop-blur" | "backdrop-blur-none" => "none",
-            "backdrop-blur-sm" => "blur(4px)",
-            "backdrop-blur-md" => "blur(12px)",
-            "backdrop-blur-lg" => "blur(16px)",
-            "backdrop-blur-xl" => "blur(24px)",
-            "backdrop-blur-2xl" => "blur(40px)",
-            "backdrop-blur-3xl" => "blur(64px)",
+            "backdrop-blur-sm" => "4px",
+            "backdrop-blur-md" => "12px",
+            "backdrop-blur-lg" => "16px",
+            "backdrop-blur-xl" => "24px",
+            "backdrop-blur-2xl" => "40px",
+            "backdrop-blur-3xl" => "64px",
             _ => return None,
         };
 

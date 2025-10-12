@@ -1,0 +1,1 @@
+use tailwind_rs_core::css_generator::CssGenerator; fn main() { let gen = CssGenerator::new(); let (variants, base) = gen.parse_variants("contrast-more:ring-4"); println!("Variants: {:?}, Base: {}", variants, base); }

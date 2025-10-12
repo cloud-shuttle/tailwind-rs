@@ -336,6 +336,15 @@ impl BasicTransformsParser {
 
 impl UtilityParser for BasicTransformsParser {
     fn parse_class(&self, class: &str) -> Option<Vec<CssProperty>> {
+        // Handle basic transform class that enables CSS transforms
+        if class == "transform" {
+            return Some(vec![CssProperty {
+                name: "transform".to_string(),
+                value: "var(--tw-transform)".to_string(),
+                important: false,
+            }]);
+        }
+
         self.parse_translate_x_class(class)
             .or_else(|| self.parse_translate_y_class(class))
             .or_else(|| self.parse_scale_class(class))
@@ -346,6 +355,8 @@ impl UtilityParser for BasicTransformsParser {
 
     fn get_supported_patterns(&self) -> Vec<&'static str> {
         vec![
+            // Basic transform class
+            "transform",
             // Translate patterns
             "translate-x-0", "translate-x-1", "translate-x-2", "translate-x-3", "translate-x-4",
             "translate-x-5", "translate-x-6", "translate-x-7", "translate-x-8", "translate-x-9",

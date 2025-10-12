@@ -1,0 +1,1 @@
+extern crate tailwind_rs_core; use tailwind_rs_core::css_generator::CssGenerator; fn main() { let mut gen = CssGenerator::new(); gen.add_class("transform").unwrap(); gen.add_class("divide-y").unwrap(); let css = gen.generate_css().unwrap(); println!("CSS Output:"); println!("{}", css); }

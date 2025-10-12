@@ -730,11 +730,37 @@ impl CssGenerator {
 
     /// Generate CSS from all added classes
     pub fn generate_css(&self) -> String {
-        let mut css = super::css_output::CssOutputGenerator::generate_css(&self.rules, &self.custom_properties);
+        println!("DEBUG: generate_css method called!");
+        let mut css = String::new();
+
+        // Debug: print rules count
+        println!("DEBUG generate_css: rules count = {}", self.rules.len());
+
+        // Generate CSS from rules
+        for (class_name, rule) in &self.rules {
+            eprintln!("DEBUG generate_css: processing rule for class '{}'", class_name);
+            css.push_str(&format!("{} {{\n", rule.selector));
+            for property in &rule.properties {
+                css.push_str(&format!("  {}: {};\n", property.name, property.value));
+            }
+            css.push_str("}\n\n");
+        }
+
+        eprintln!("DEBUG generate_css: CSS length so far = {}", css.len());
+
+        // Add custom properties
+        if !self.custom_properties.is_empty() {
+            css.push_str(":root {\n");
+            for (name, value) in &self.custom_properties {
+                css.push_str(&format!("  {}: {};\n", name, value));
+            }
+            css.push_str("}\n\n");
+        }
 
         // Add plugin-generated CSS
         css.push_str(&self.generate_plugin_css());
 
+        eprintln!("DEBUG generate_css: final CSS length = {}", css.len());
         css
     }
 

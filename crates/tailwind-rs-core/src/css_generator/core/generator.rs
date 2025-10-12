@@ -86,16 +86,26 @@ impl CssGenerator {
 
     /// Legacy method for backward compatibility - add a class
     pub fn add_class(&mut self, class: &str) -> Result<()> {
-        // For backward compatibility, just validate that the class can be processed
-        self.generate_individual_css_rule(class)?;
+        // Generate the CSS rule and store it
+        let rule = self.generate_individual_css_rule(class)?;
+        self.rules.insert(class.to_string(), rule);
         Ok(())
     }
 
     /// Legacy method for backward compatibility - generate CSS
     pub fn generate_css(&self) -> String {
-        // For backward compatibility, return empty string
-        // Real implementation would need to track added classes
-        String::new()
+        let mut css = String::new();
+
+        // Generate CSS from stored rules
+        for rule in self.rules.values() {
+            css.push_str(&format!("{} {{\n", rule.selector));
+            for property in &rule.properties {
+                css.push_str(&format!("  {}: {};\n", property.name, property.value));
+            }
+            css.push_str("}\n\n");
+        }
+
+        css
     }
 
     /// Legacy method for backward compatibility - add classes for element

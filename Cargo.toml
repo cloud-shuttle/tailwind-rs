@@ -9,6 +9,7 @@ members = [
     "crates/tailwind-rs-yew",
     "crates/tailwind-rs-dioxus",
     "crates/tailwind-rs-cli",
+    "crates/tailwind-rs-devtools",
     "crates/tailwind-rs-wasm",
     "demos/leptos-demo",
     "demos/ssr-demo",
@@ -47,6 +48,9 @@ tailwind-rs-cli = { path = "crates/tailwind-rs-cli", version = "0.15.4" }
 
 # WASM-optimized crate
 tailwind-rs-wasm = { path = "crates/tailwind-rs-wasm", version = "0.15.4" }
+
+# DevTools and browser automation
+tailwind-rs-devtools = { path = "crates/tailwind-rs-devtools", version = "0.15.4" }
 
 # External dependencies - Updated to latest available versions (September 2025)
 serde = { version = "1.0.218", features = ["derive"] }
@@ -90,9 +94,14 @@ name = "tailwind-rs-integration-tests"
 version = "0.15.4"
 edition = "2021"
 
+[[bin]]
+name = "test_demo_colors"
+path = "test_demo_colors.rs"
+
 [dependencies]
 rayon = "1.11.0"
 tailwind-rs-core = { workspace = true }
+regex = "1.10"
 
 [profile.dev]
 opt-level = 0

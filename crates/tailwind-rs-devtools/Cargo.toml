@@ -1,0 +1,47 @@
+[package]
+name = "tailwind-rs-devtools"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Chrome DevTools MCP integration for tailwind-rs"
+rust-version = "1.85"
+
+[dependencies]
+# Core dependencies
+tailwind-rs-core = { workspace = true }
+tailwind-rs-testing = { workspace = true }
+
+# MCP and Chrome DevTools Protocol dependencies
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+tokio-tungstenite = "0.21"
+futures-util = "0.3"
+uuid = { workspace = true, features = ["v4"] }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# HTTP client for WebSocket connections
+reqwest = { workspace = true, features = ["json", "stream"] }
+
+# Additional utilities
+log = "0.4"
+regex = "1.10"
+base64 = "0.22"
+url = "2.5"
+
+# Image processing for screenshots
+image = "0.25"
+
+[dev-dependencies]
+tempfile = "3.8"
+
+[lib]
+name = "tailwind_rs_devtools"
+path = "src/lib.rs"

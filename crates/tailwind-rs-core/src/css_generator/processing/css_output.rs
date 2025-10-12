@@ -20,6 +20,14 @@ impl CssOutputGenerator {
         }
     }
 
+    /// Generate final CSS string from rules (static method for compatibility)
+    pub fn generate_css_from_rules(rules: &HashMap<String, CssRule>, custom_properties: &HashMap<String, String>) -> String {
+        let output_generator = Self::new();
+        let base_rules: Vec<_> = rules.values().cloned().collect();
+        let responsive_rules = HashMap::new(); // For now, no responsive rules
+        output_generator.generate_css(base_rules, responsive_rules)
+    }
+
     /// Generate final CSS string from rules
     pub fn generate_css(&self, base_rules: Vec<CssRule>, responsive_rules: HashMap<String, Vec<CssRule>>) -> String {
         let mut output = String::new();

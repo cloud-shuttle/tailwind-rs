@@ -94,10 +94,6 @@ name = "tailwind-rs-integration-tests"
 version = "0.15.4"
 edition = "2021"
 
-[[bin]]
-name = "test_demo_colors"
-path = "test_demo_colors.rs"
-
 [dependencies]
 rayon = "1.11.0"
 tailwind-rs-core = { workspace = true }
